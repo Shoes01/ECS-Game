@@ -11,3 +11,6 @@ class MovementProcessor(esper.Processor):
         for ent, (vel, pos) in self.world.get_components(Velocity, Position):
             pos.x += vel.dx
             pos.y += vel.dy
+
+            vel.dx = 0
+            vel.dy = 0
