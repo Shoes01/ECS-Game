@@ -23,7 +23,12 @@ def main():
         while True:
             # Handle input.
             libtcod.sys_check_for_event(libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
-            world.get_processor(InputProcessor).action = handle_keys(game_state, key)
+            action = handle_keys(game_state, key)
+            
+            if action.get('exit'):
+                return False
+            
+            world.get_processor(InputProcessor).action = action
             
             # Do literally everything else.
             world.process()
@@ -34,5 +39,4 @@ def main():
 
 if __name__ == '__main__':
     # cProfile.run('main()') # This runs the profiler
-    print("\nPress Ctrl+C to quit!\n")
     main()
