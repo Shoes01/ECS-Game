@@ -7,20 +7,23 @@ from components.render import Render
 from components.turn import Turn
 from components.velocity import Velocity
 from processors.action import ActionProcessor
+from processors.fov import FovProcessor
 from processors.input import InputProcessor
 from processors.movement import MovementProcessor
 from processors.render import RenderProcessor
 
-def build_world(tiles, root):
+def build_world(fov_map, tiles, root):
     world = esper.World()
 
     # Instantiate Processors.
     action_processor = ActionProcessor()
+    fov_processor = FovProcessor(fov_map=fov_map)
     input_processor = InputProcessor()
-    movement_processor = MovementProcessor()
-    render_processor = RenderProcessor(console=root, tiles=tiles)
+    movement_processor = MovementProcessor(tiles=tiles)
+    render_processor = RenderProcessor(console=root, fov_map=fov_map, tiles=tiles)
     
     # Add them to the world.
+    world.add_processor(fov_processor, 110)
     world.add_processor(render_processor, 100)
     world.add_processor(input_processor, 99)
     world.add_processor(action_processor, 90)

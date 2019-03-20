@@ -23,7 +23,7 @@ def main():
     game_map.make_debug_map()
 
     # Prepare world.
-    world = build_world(game_map.tiles, root)
+    world = build_world(game_map.fov_map, game_map.tiles, root)
 
     while True:
         # Handle input.
