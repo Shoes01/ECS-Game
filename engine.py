@@ -2,6 +2,7 @@ import cProfile
 import time
 import tcod as libtcod
 
+from game import Game
 from input_handler import handle_keys
 from processors.input import InputProcessor
 from world import build_world
@@ -12,7 +13,7 @@ def main():
     root = libtcod.console_init_root(80, 60, title='v0.0.0', order='F')
 
     # Prepare input related objects.
-    game_state = 'Game'
+    game = Game(state='Game')
     key = libtcod.Key()
     mouse = libtcod.Mouse()
 
@@ -22,7 +23,7 @@ def main():
     while True:
         # Handle input.
         libtcod.sys_check_for_event(libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
-        action = handle_keys(game_state, key)
+        action = handle_keys(game.state, key)
         
         if action.get('exit'):
             return False
