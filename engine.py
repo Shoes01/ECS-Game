@@ -1,18 +1,10 @@
 import cProfile
-import esper
 import time
 import tcod as libtcod
 
-from components.player import Player
-from components.position import Position
-from components.render import Render
-from components.turn import Turn
-from components.velocity import Velocity
 from input_handler import handle_keys
-from processors.action import ActionProcessor
 from processors.input import InputProcessor
-from processors.movement import MovementProcessor
-from processors.render import RenderProcessor
+from world import build_world
 
 def main():
     # Prepare console.
@@ -25,33 +17,13 @@ def main():
     mouse = libtcod.Mouse()
 
     # Prepare world.
-    world = esper.World()
-
-    # Instantiate Processors.
-    action_processor = ActionProcessor()
-    input_processor = InputProcessor()
-    movement_processor = MovementProcessor()
-    render_processor = RenderProcessor(root)
-    
-    world.add_processor(render_processor, 100)
-    world.add_processor(input_processor, 99)
-    world.add_processor(action_processor, 90)
-    world.add_processor(movement_processor, 50)
-
-    # Create entities and assign them components.
-    player = world.create_entity()
-    world.add_component(player, Player())
-    world.add_component(player, Position(x=15, y=15))
-    world.add_component(player, Render('@', libtcod.white))
-    world.add_component(player, Turn())
-    world.add_component(player, Velocity())
+    world = build_world(root)
 
     try:
         while True:
             # Handle input.
             libtcod.sys_check_for_event(libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
-            action = handle_keys(game_state, key)
-            world.get_processor(InputProcessor).action = action
+            world.get_processor(InputProcessor).action = handle_keys(game_state, key)
             
             # Do literally everything else.
             world.process()
