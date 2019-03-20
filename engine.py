@@ -4,6 +4,7 @@ import tcod as libtcod
 
 from game import Game
 from input_handler import handle_keys
+from map import Map
 from processors.input import InputProcessor
 from world import build_world
 
@@ -15,10 +16,14 @@ def main():
     # Prepare input related objects.
     game = Game(state='Game')
     key = libtcod.Key()
+    game_map = Map(80, 60)
     mouse = libtcod.Mouse()
 
+    # Make a debug map to test things...
+    game_map.make_debug_map()
+
     # Prepare world.
-    world = build_world(root)
+    world = build_world(game_map.tiles, root)
 
     while True:
         # Handle input.

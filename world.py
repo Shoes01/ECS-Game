@@ -11,14 +11,14 @@ from processors.input import InputProcessor
 from processors.movement import MovementProcessor
 from processors.render import RenderProcessor
 
-def build_world(root):
+def build_world(tiles, root):
     world = esper.World()
 
     # Instantiate Processors.
     action_processor = ActionProcessor()
     input_processor = InputProcessor()
     movement_processor = MovementProcessor()
-    render_processor = RenderProcessor(root)
+    render_processor = RenderProcessor(console=root, tiles=tiles)
     
     # Add them to the world.
     world.add_processor(render_processor, 100)
