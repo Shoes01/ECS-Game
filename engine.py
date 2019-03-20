@@ -19,23 +19,18 @@ def main():
     # Prepare world.
     world = build_world(root)
 
-    try:
-        while True:
-            # Handle input.
-            libtcod.sys_check_for_event(libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
-            action = handle_keys(game_state, key)
-            
-            if action.get('exit'):
-                return False
-            
-            world.get_processor(InputProcessor).action = action
-            
-            # Do literally everything else.
-            world.process()
-    
-    except KeyboardInterrupt:
-        return
-
+    while True:
+        # Handle input.
+        libtcod.sys_check_for_event(libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
+        action = handle_keys(game_state, key)
+        
+        if action.get('exit'):
+            return False
+        
+        world.get_processor(InputProcessor).action = action
+        
+        # Do literally everything else.
+        world.process()
 
 if __name__ == '__main__':
     # cProfile.run('main()') # This runs the profiler
