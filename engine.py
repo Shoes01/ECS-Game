@@ -2,7 +2,7 @@ import cProfile
 import time
 import tcod as libtcod
 
-from input_handler import handle_keys
+from components.game.state import StateComponent
 from map import Map
 from processors.input import InputProcessor
 from world import build_world
@@ -23,12 +23,12 @@ def main():
     while True:
         # Handle input.
         libtcod.sys_check_for_event(libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
-        action = handle_keys(key)
+        world.get_processor(InputProcessor).key = key
         
-        if action.get('exit'):
+        # Is there a way to exit the game from inside the processors?
+        game_state = world.component_for_entity(1, StateComponent).state
+        if game_state == 'Exit':
             return False
-        
-        world.get_processor(InputProcessor).action = action
         
         # Do literally everything else.
         world.process()

@@ -35,7 +35,7 @@ class RenderProcessor(esper.Processor):
                     self.console.print(pos.x, pos.y, ren.char, ren.color)
         
         elif game_state == 'MainMenu':
-            self.console.print(3, 3, 'Welcome to the Main Menu.', libtcod.grey)
+            self.console.print(3, 3, 'Welcome to the Main Menu.\nPress any key to begin.', libtcod.grey)
         
         # Blit console.
         self.console.blit(self.console)
