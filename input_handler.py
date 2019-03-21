@@ -1,6 +1,6 @@
 import tcod as libtcod
 
-def handle_keys(game_state, key):
+def handle_keys(key):
     # These keys should always work, regardless of state
     if chr(key.c) == 'd' and key.lctrl:
         # Ctrl+d: toggle debug mode
@@ -12,21 +12,8 @@ def handle_keys(game_state, key):
         # Exit the game
         return {'exit': True}
 
-    if game_state == 'MainMenu':
-        return handle_main_menu(key)
-    else:
-        return handle_general_keys(key)
+    return handle_general_keys(key)
     
-def handle_main_menu(key):
-    key_char = chr(key.c)
-
-    if key_char == 'n':
-        return {'new_game': True}
-    elif key_char == 'c':
-        return {'continue_game': True}
-
-    return {}
-
 def handle_general_keys(key):
     # Movement keys
     movement = handle_generic_movement(key)

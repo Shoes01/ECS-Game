@@ -3,6 +3,7 @@ import numpy as np
 import tcod as libtcod
 
 from components.actor import Actor
+from components.game.state import StateComponent
 from components.player import Player
 from components.position import Position
 from components.render import Render
@@ -14,9 +15,14 @@ from processors.input import InputProcessor
 from processors.movement import MovementProcessor
 from processors.prerender import PrerenderProcessor
 from processors.render import RenderProcessor
+from processors.state import StateProcessor
 
 def build_world(game_map, root):
     world = esper.World()
+
+    # Create game meta-entity.
+    game = world.create_entity()
+    world.add_component(game, StateComponent())
 
     # Create the player entity.
     player = world.create_entity()
@@ -53,8 +59,10 @@ def build_world(game_map, root):
     input_processor = InputProcessor()
     movement_processor = MovementProcessor()
     render_processor = RenderProcessor(console=root)
+    state_processor = StateProcessor()
     
     # Add them to the world.
+    world.add_processor(state_processor, 999)
     world.add_processor(prerender_processor, 110)
     world.add_processor(render_processor, 100)
     world.add_processor(input_processor, 99)
