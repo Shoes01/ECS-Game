@@ -8,10 +8,9 @@ from components.render import Render
 from components.tile import Tile
 
 class RenderProcessor(esper.Processor):
-    def __init__(self, console, fov_map):
+    def __init__(self, console):
         super().__init__()
         self.console = console
-        self.fov_map = fov_map
     
     def process(self):
         # Prepare the console.
@@ -19,18 +18,17 @@ class RenderProcessor(esper.Processor):
 
         # Print walls and stuff.
         for ent, (pos, ren, tile) in self.world.get_components(Position, Render, Tile):
-            visible = self.fov_map.fov[pos.x, pos.y]
-
-            if visible:
-                tile.explored = True
+            
+            if ren.visible:
                 self.console.print(pos.x, pos.y, ren.char, ren.color)
             
-            elif tile.explored:
+            elif ren.explored:
                 self.console.print(pos.x, pos.y, ren.char, ren.explored_color)            
 
         # Print entities to the console.
         for ent, (actor, pos, ren) in self.world.get_components(Actor, Position, Render):
-            self.console.print(pos.x, pos.y, ren.char, ren.color)
+            if ren.visible:
+                self.console.print(pos.x, pos.y, ren.char, ren.color)
         
         # Blit console.
         self.console.blit(self.console)

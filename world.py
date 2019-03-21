@@ -10,12 +10,12 @@ from components.tile import Tile
 from components.turn import Turn
 from components.velocity import Velocity
 from processors.action import ActionProcessor
-from processors.fov import FovProcessor
 from processors.input import InputProcessor
 from processors.movement import MovementProcessor
+from processors.prerender import PrerenderProcessor
 from processors.render import RenderProcessor
 
-def build_world(fov_map, tiles, root):
+def build_world(game_map, root):
     world = esper.World()
 
     # Create the player entity.
@@ -28,18 +28,19 @@ def build_world(fov_map, tiles, root):
     world.add_component(player, Velocity())
 
     # Create floor.
-    for (x, y), (_, _, _) in np.ndenumerate(tiles):
-        floor = world.create_entity()
-        world.add_component(floor, Position(x=x, y=y))
-        world.add_component(floor, Render(char='.', color=libtcod.white, explored_color=libtcod.darkest_grey))
-        world.add_component(floor, Tile(False, False, False))
+    for (x, y), _ in np.ndenumerate(game_map.tiles):
+        if x == 17 and y == 17:
+            wall = world.create_entity()
+            world.add_component(wall, Position(x=x, y=y))
+            world.add_component(wall, Render(char='#', color=libtcod.white, explored_color=libtcod.darkest_grey))
+            world.add_component(wall, Tile())
+        else:
+            floor = world.create_entity()
+            world.add_component(floor, Position(x=x, y=y))
+            world.add_component(floor, Render(char='.', color=libtcod.white, explored_color=libtcod.darkest_grey))
+            world.add_component(floor, Tile(False, False))
 
-    # Create a pillar.
-    wall = world.create_entity()
-    world.add_component(wall, Position(x=17, y=17))
-    world.add_component(wall, Render(char='I', color=libtcod.white, explored_color=libtcod.darkest_grey))
-    world.add_component(wall, Tile())
-
+    fov_map = libtcod.map.Map(game_map.width, game_map.height, order='F')
     for ent, (pos, tile) in world.get_components(Position, Tile):
         fov_map.walkable[pos.x, pos.y] = not tile.blocks_path
         fov_map.transparent[pos.x, pos.y] = not tile.blocks_sight
@@ -48,13 +49,13 @@ def build_world(fov_map, tiles, root):
 
     # Instantiate Processors.
     action_processor = ActionProcessor()
-    fov_processor = FovProcessor(fov_map=fov_map)
+    prerender_processor = PrerenderProcessor(fov_map=fov_map)
     input_processor = InputProcessor()
     movement_processor = MovementProcessor()
-    render_processor = RenderProcessor(console=root, fov_map=fov_map)
+    render_processor = RenderProcessor(console=root)
     
     # Add them to the world.
-    world.add_processor(fov_processor, 110)
+    world.add_processor(prerender_processor, 110)
     world.add_processor(render_processor, 100)
     world.add_processor(input_processor, 99)
     world.add_processor(action_processor, 90)

@@ -20,7 +20,7 @@ def main():
     mouse = libtcod.Mouse()
 
     # Prepare world.
-    world = build_world(game_map.fov_map, game_map.tiles, root)
+    world = build_world(game_map, root)
 
     while True:
         # Handle input.
