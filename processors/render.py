@@ -8,11 +8,10 @@ from components.render import Render
 from components.tile import Tile
 
 class RenderProcessor(esper.Processor):
-    def __init__(self, console, fov_map, tiles):
+    def __init__(self, console, fov_map):
         super().__init__()
         self.console = console
         self.fov_map = fov_map
-        self.tiles = tiles
     
     def process(self):
         # Prepare the console.

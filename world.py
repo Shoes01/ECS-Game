@@ -50,8 +50,8 @@ def build_world(fov_map, tiles, root):
     action_processor = ActionProcessor()
     fov_processor = FovProcessor(fov_map=fov_map)
     input_processor = InputProcessor()
-    movement_processor = MovementProcessor(tiles=tiles)
-    render_processor = RenderProcessor(console=root, fov_map=fov_map, tiles=tiles)
+    movement_processor = MovementProcessor()
+    render_processor = RenderProcessor(console=root, fov_map=fov_map)
     
     # Add them to the world.
     world.add_processor(fov_processor, 110)
