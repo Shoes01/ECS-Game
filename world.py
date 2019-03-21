@@ -12,6 +12,7 @@ from components.turn import Turn
 from components.velocity import Velocity
 from processors.action import ActionProcessor
 from processors.input import InputProcessor
+from processors.level import LevelProcessor
 from processors.movement import MovementProcessor
 from processors.prerender import PrerenderProcessor
 from processors.render import RenderProcessor
@@ -33,19 +34,6 @@ def build_world(game_map, root):
     world.add_component(player, Turn())
     world.add_component(player, Velocity())
 
-    # Create floor.
-    for (x, y), _ in np.ndenumerate(game_map.tiles):
-        if x == 17 and y == 17:
-            wall = world.create_entity()
-            world.add_component(wall, Position(x=x, y=y))
-            world.add_component(wall, Render(char='#', color=libtcod.white, explored_color=libtcod.darkest_grey))
-            world.add_component(wall, Tile())
-        else:
-            floor = world.create_entity()
-            world.add_component(floor, Position(x=x, y=y))
-            world.add_component(floor, Render(char='.', color=libtcod.white, explored_color=libtcod.darkest_grey))
-            world.add_component(floor, Tile(False, False))
-
     fov_map = libtcod.map.Map(game_map.width, game_map.height, order='F')
     for ent, (pos, tile) in world.get_components(Position, Tile):
         fov_map.walkable[pos.x, pos.y] = not tile.blocks_path
@@ -57,12 +45,14 @@ def build_world(game_map, root):
     action_processor = ActionProcessor()
     prerender_processor = PrerenderProcessor(fov_map=fov_map)
     input_processor = InputProcessor()
+    level_processor = LevelProcessor(tiles=game_map.tiles)
     movement_processor = MovementProcessor()
     render_processor = RenderProcessor(console=root)
     state_processor = StateProcessor()
     
     # Add them to the world.
-    world.add_processor(state_processor, 999)
+    world.add_processor(level_processor, 999)
+    world.add_processor(state_processor, 998)
     world.add_processor(prerender_processor, 110)
     world.add_processor(render_processor, 100)
     world.add_processor(input_processor, 99)

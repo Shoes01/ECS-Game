@@ -2,6 +2,7 @@ import esper
 import tcod as libtcod
 
 from components.action import Action
+from components.game.level import LevelComponent
 from components.game.state import StateComponent
 from components.player import Player
 from components.turn import Turn
@@ -24,7 +25,8 @@ class InputProcessor(esper.Processor):
 
         if game_state_component.state == 'MainMenu':
             if key.pressed:
-                game_state_component.state = 'Game'
+                # Tag the game entity with the LevelComponent; this will generate a new map.
+                self.world.add_component(1, LevelComponent())
 
         elif game_state_component.state == 'Game':
             if key.vk == libtcod.KEY_UP or key_char == 'k' or key.vk == libtcod.KEY_KP8:

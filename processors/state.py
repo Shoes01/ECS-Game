@@ -9,7 +9,8 @@ class StateProcessor(esper.Processor):
         super().__init__()
     
     def process(self):
-        game_state = self.world.component_for_entity(1, StateComponent).state
+        game_state_component = self.world.component_for_entity(1, StateComponent)
 
-        if self.world.try_component(1, LevelComponent()):
-            game_state = 'Game'
+        if self.world.has_component(1, LevelComponent):
+            game_state_component.state = 'Game'
+            self.world.remove_component(1, LevelComponent)
