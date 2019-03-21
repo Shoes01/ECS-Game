@@ -2,8 +2,10 @@ import esper
 import numpy as np
 import tcod as libtcod
 
+from components.actor import Actor
 from components.position import Position
 from components.render import Render
+from components.tile import Tile
 
 class RenderProcessor(esper.Processor):
     def __init__(self, console, fov_map, tiles):
@@ -17,16 +19,18 @@ class RenderProcessor(esper.Processor):
         self.console.clear(bg=libtcod.black, fg=libtcod.white)
 
         # Print walls and stuff.
-        for (x, y), (blocks_path, _, _) in np.ndenumerate(self.tiles):
-            visible = self.fov_map.fov[x, y]
-            
+        for ent, (pos, ren, tile) in self.world.get_components(Position, Render, Tile):
+            visible = self.fov_map.fov[pos.x, pos.y]
+
             if visible:
-                self.console.print(x, y, ' ', bg=libtcod.dark_grey, bg_blend=libtcod.BKGND_SET)
-            if blocks_path:
-                self.console.print(x, y, '#', libtcod.white)
+                tile.explored = True
+                self.console.print(pos.x, pos.y, ren.char, ren.color)
+            
+            elif tile.explored:
+                self.console.print(pos.x, pos.y, ren.char, ren.explored_color)            
 
         # Print entities to the console.
-        for ent, (pos, ren) in self.world.get_components(Position, Render):
+        for ent, (actor, pos, ren) in self.world.get_components(Actor, Position, Render):
             self.console.print(pos.x, pos.y, ren.char, ren.color)
         
         # Blit console.

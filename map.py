@@ -22,10 +22,5 @@ class Map():
         return fov_map
 
     def make_debug_map(self):
-        self.tiles[17, 17] = True, True, True
-        self.tiles[17, 18] = True, True, True
-        self.tiles[17, 19] = True, True, True
-        self.tiles[17, 20] = True, True, True
-        
-        self.fov_map = self.initialize_fov()
+        pass
     
