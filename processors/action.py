@@ -1,16 +1,17 @@
 import esper
 
+from components.actor.has_turn import HasTurnComponent
 from components.action import ActionComponent
 from components.player import PlayerComponent
-from components.turn import TurnComponent
 from components.velocity import VelocityComponent
+from processors.ai_input import AiInputProcessor
 
 class ActionProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
     
     def process(self):
-        for ent, (action, turn) in self.world.get_components(ActionComponent, TurnComponent):
+        for ent, (action, turn) in self.world.get_components(ActionComponent, HasTurnComponent):
             _move = action.value.get('move')
 
             if _move:
@@ -18,3 +19,5 @@ class ActionProcessor(esper.Processor):
                 self.world.add_component(ent, VelocityComponent(dx=dx, dy=dy))
 
             self.world.remove_component(ent, ActionComponent)
+            self.world.remove_component(ent, HasTurnComponent)
+            self.world.add_processor(AiInputProcessor())

@@ -2,7 +2,7 @@ import esper
 import numpy as np
 import tcod as libtcod
 
-from components.actor import ActorComponent
+from components.actor.actor import ActorComponent
 from components.game.state import StateComponent
 from components.position import PositionComponent
 from components.render import RenderComponent

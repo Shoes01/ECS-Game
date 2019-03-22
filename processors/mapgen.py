@@ -8,6 +8,7 @@ from components.persist import PersistComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
 from components.tile import TileComponent
+from fabricator import fabricate_entity
 from processors.prerender import PrerenderProcessor
 
 class MapgenProcessor(esper.Processor):
@@ -52,11 +53,10 @@ class MapgenProcessor(esper.Processor):
             else:
                 self.dig_room(node)
         
-        self.place_player()
         self.clear_entities()
         self.place_tiles()
-        
-        # Place monsters
+        self.place_player()
+        self.place_monsters()
 
     def connect_rooms(self, node1, node2):
         ' Connect the middle of the rooms. Or nodes. '
@@ -126,6 +126,14 @@ class MapgenProcessor(esper.Processor):
                     RenderComponent(char='#', color=libtcod.white, explored_color=libtcod.darkest_grey),
                     TileComponent(blocks_path=True, blocks_sight=True)
                 )
+
+    def place_monsters(self):
+        for ent, (pos, tile) in self.world.get_components(PositionComponent, TileComponent):
+            if tile.blocks_path == False and random.randint(0, 10) > 8:
+                new_ent = fabricate_entity('zombie', self.world)
+                new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
+                new_ent_pos.x = pos.x
+                new_ent_pos.y = pos.y
 
     def create_fov_map(self):
         fov_map = libtcod.map.Map(self.width, self.height, order='F')

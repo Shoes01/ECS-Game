@@ -9,6 +9,7 @@ from processors.movement import MovementProcessor
 from processors.prerender import PrerenderProcessor
 from processors.render import RenderProcessor
 from processors.state import StateProcessor
+from processors.turn import TurnProcessor
 
 CONSOLE_HEIGHT = 60
 CONSOLE_WIDTH = 80
@@ -28,6 +29,7 @@ def build_world():
     movement_processor = MovementProcessor()
     render_processor = RenderProcessor(console=root)
     state_processor = StateProcessor()
+    turn_processor = TurnProcessor()
     
     # Add them to the world.
     world.add_processor(initial_processor, 999)
@@ -35,6 +37,7 @@ def build_world():
     world.add_processor(mapgen_processor, 60)
     world.add_processor(prerender_processor, 50)
     world.add_processor(render_processor, 40)
+    world.add_processor(turn_processor, 35)
     world.add_processor(input_processor, 30)
     world.add_processor(action_processor, 20)
     world.add_processor(movement_processor, 10)

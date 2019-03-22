@@ -1,6 +1,6 @@
 import esper
 
-from components.actor import ActorComponent
+from components.actor.actor import ActorComponent
 from components.position import PositionComponent
 from components.tile import TileComponent
 from components.velocity import VelocityComponent
