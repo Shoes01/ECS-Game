@@ -129,7 +129,9 @@ class MapgenProcessor(esper.Processor):
 
     def create_fov_map(self):
         fov_map = libtcod.map.Map(self.width, self.height, order='F')
+
         for ent, (pos, tile) in self.world.get_components(PositionComponent, TileComponent):
             fov_map.walkable[pos.x, pos.y] = not tile.blocks_path
             fov_map.transparent[pos.x, pos.y] = not tile.blocks_sight
+        
         self.world.get_processor(PrerenderProcessor).fov_map = fov_map
