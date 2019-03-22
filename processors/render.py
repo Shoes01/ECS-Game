@@ -2,11 +2,11 @@ import esper
 import numpy as np
 import tcod as libtcod
 
-from components.actor import Actor
+from components.actor import ActorComponent
 from components.game.state import StateComponent
-from components.position import Position
-from components.render import Render
-from components.tile import Tile
+from components.position import PositionComponent
+from components.render import RenderComponent
+from components.tile import TileComponent
 
 class RenderProcessor(esper.Processor):
     def __init__(self, console):
@@ -21,7 +21,7 @@ class RenderProcessor(esper.Processor):
 
         if game_state == 'Game':
             # Print walls and stuff.
-            for ent, (pos, ren, tile) in self.world.get_components(Position, Render, Tile):
+            for ent, (pos, ren, tile) in self.world.get_components(PositionComponent, RenderComponent, TileComponent):
                 
                 if ren.visible:
                     self.console.print(pos.x, pos.y, ren.char, ren.color)
@@ -30,7 +30,7 @@ class RenderProcessor(esper.Processor):
                     self.console.print(pos.x, pos.y, ren.char, ren.explored_color)            
 
             # Print entities to the console.
-            for ent, (actor, pos, ren) in self.world.get_components(Actor, Position, Render):
+            for ent, (actor, pos, ren) in self.world.get_components(ActorComponent, PositionComponent, RenderComponent):
                 if ren.visible:
                     self.console.print(pos.x, pos.y, ren.char, ren.color)
         

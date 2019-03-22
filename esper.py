@@ -15,7 +15,7 @@ class Processor:
     method will be called by each call to `World.process`, so you will
     generally want to iterate over entities with one (or more) calls to the
     appropriate world methods there, such as
-    `for ent, (rend, vel) in self.world.get_components(Renderable, Velocity):`
+    `for ent, (rend, vel) in self.world.get_components(RenderComponentable, VelocityComponent):`
     """
     world = None # type: World
 
@@ -200,8 +200,8 @@ class World:
         """Remove a Component instance from an Entity, by type.
 
         A Component instance can be removed by providing it's type.
-        For example: world.delete_component(enemy_a, Velocity) will remove
-        the Velocity instance from the Entity enemy_a.
+        For example: world.delete_component(enemy_a, VelocityComponent) will remove
+        the VelocityComponent instance from the Entity enemy_a.
 
         Raises a KeyError if either the given entity or Component type does
         not exist in the database.

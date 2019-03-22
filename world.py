@@ -2,14 +2,14 @@ import esper
 import numpy as np
 import tcod as libtcod
 
-from components.actor import Actor
+from components.actor import ActorComponent
 from components.game.state import StateComponent
-from components.player import Player
-from components.position import Position
-from components.render import Render
-from components.tile import Tile
-from components.turn import Turn
-from components.velocity import Velocity
+from components.player import PlayerComponent
+from components.position import PositionComponent
+from components.render import RenderComponent
+from components.tile import TileComponent
+from components.turn import TurnComponent
+from components.velocity import VelocityComponent
 from processors.action import ActionProcessor
 from processors.input import InputProcessor
 from processors.level import LevelProcessor
@@ -27,12 +27,12 @@ def build_world(game_map, root):
 
     # Create the player entity.
     player = world.create_entity()
-    world.add_component(player, Actor())
-    world.add_component(player, Player())
-    world.add_component(player, Position(x=15, y=15))
-    world.add_component(player, Render(char='@', color=libtcod.white))
-    world.add_component(player, Turn())
-    world.add_component(player, Velocity())
+    world.add_component(player, ActorComponent())
+    world.add_component(player, PlayerComponent())
+    world.add_component(player, PositionComponent(x=15, y=15))
+    world.add_component(player, RenderComponent(char='@', color=libtcod.white))
+    world.add_component(player, TurnComponent())
+    world.add_component(player, VelocityComponent())
 
     ############==================== The stuff above will eventually be moved into either a game starting processor, or it's own little game starting function.
 
