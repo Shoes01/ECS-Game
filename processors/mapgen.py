@@ -4,6 +4,7 @@ import random
 import tcod as libtcod
 
 from components.game.mapgen import MapgenComponent
+from components.persist import PersistComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
 from components.tile import TileComponent
@@ -107,7 +108,9 @@ class MapgenProcessor(esper.Processor):
 
     def clear_entities(self):
         # Clear literally all entities, except game and player.
-
+        for ent in self.world._entities.keys():
+            if not self.world.has_component(ent, PersistComponent):
+                self.world.delete_entity(ent)
 
     def place_tiles(self):
         for (x, y), value in np.ndenumerate(self.tiles):

@@ -16,18 +16,20 @@ class InitialProcessor(esper.Processor):
         super().__init__()
 
     def process(self):
-        if self.world._entities == {}:
-            # Create game meta-entity. It is ID 1.
-            self.world.create_entity(
-                PersistComponent(),
-                StateComponent()
-            )
+        # Create game meta-entity. It is ID 1.
+        self.world.create_entity(
+            PersistComponent(),
+            StateComponent()
+        )
 
-            # Create the player entity. It is ID 2.
-            self.world.create_entity(
-                ActorComponent(),
-                PlayerComponent(),
-                PositionComponent(),
-                RenderComponent(char='@', color=libtcod.white),
-                TurnComponent()
-            )
+        # Create the player entity. It is ID 2.
+        self.world.create_entity(
+            ActorComponent(),
+            PersistComponent(),
+            PlayerComponent(),
+            PositionComponent(),
+            RenderComponent(char='@', color=libtcod.white),
+            TurnComponent()
+        )
+
+        self.world.remove_processor(InitialProcessor) # Only needs to be done once per session.
