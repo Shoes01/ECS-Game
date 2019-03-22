@@ -13,4 +13,4 @@ class StateProcessor(esper.Processor):
 
         if self.world.has_component(1, LevelComponent):
             game_state_component.state = 'Game'
-            self.world.remove_component(1, LevelComponent)
+            self.world.remove_component(1, LevelComponent) # The StateProcessor removes this component due to the order of the processors.
