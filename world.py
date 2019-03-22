@@ -34,18 +34,13 @@ def build_world(game_map, root):
     world.add_component(player, Turn())
     world.add_component(player, Velocity())
 
-    fov_map = libtcod.map.Map(game_map.width, game_map.height, order='F')
-    for ent, (pos, tile) in world.get_components(Position, Tile):
-        fov_map.walkable[pos.x, pos.y] = not tile.blocks_path
-        fov_map.transparent[pos.x, pos.y] = not tile.blocks_sight
-
     ############==================== The stuff above will eventually be moved into either a game starting processor, or it's own little game starting function.
 
     # Instantiate Processors.
     action_processor = ActionProcessor()
-    prerender_processor = PrerenderProcessor(fov_map=fov_map)
+    prerender_processor = PrerenderProcessor()
     input_processor = InputProcessor()
-    level_processor = LevelProcessor(tiles=game_map.tiles)
+    level_processor = LevelProcessor(height=game_map.height, tiles=game_map.tiles, width=game_map.width)
     movement_processor = MovementProcessor()
     render_processor = RenderProcessor(console=root)
     state_processor = StateProcessor()
