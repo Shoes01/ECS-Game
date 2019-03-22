@@ -24,14 +24,14 @@ def main():
         # Handle input.
         libtcod.sys_check_for_event(libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
         world.get_processor(InputProcessor).key = key
-        
+               
+        # Do literally everything else.
+        world.process()
+
         # Is there a way to exit the game from inside the processors?
         game_state = world.component_for_entity(1, StateComponent).state
         if game_state == 'Exit':
             return False
-        
-        # Do literally everything else.
-        world.process()
 
 if __name__ == '__main__':
     # cProfile.run('main()') # This runs the profiler
