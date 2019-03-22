@@ -24,7 +24,7 @@ def build_world():
     prerender_processor = PrerenderProcessor()
     initial_processor = InitialProcessor()
     input_processor = InputProcessor()
-    level_processor = MapgenProcessor(width=CONSOLE_WIDTH, height=CONSOLE_HEIGHT)
+    mapgen_processor = MapgenProcessor(width=CONSOLE_WIDTH, height=CONSOLE_HEIGHT)
     movement_processor = MovementProcessor()
     render_processor = RenderProcessor(console=root)
     state_processor = StateProcessor()
@@ -32,7 +32,7 @@ def build_world():
     # Add them to the world.
     world.add_processor(initial_processor, 999)
     world.add_processor(state_processor, 70)
-    world.add_processor(level_processor, 60)
+    world.add_processor(mapgen_processor, 60)
     world.add_processor(prerender_processor, 50)
     world.add_processor(render_processor, 40)
     world.add_processor(input_processor, 30)
