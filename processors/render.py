@@ -33,7 +33,13 @@ class RenderProcessor(esper.Processor):
             for ent, (actor, pos, ren) in self.world.get_components(ActorComponent, PositionComponent, RenderComponent):
                 if ren.visible:
                     self.console.print(pos.x, pos.y, ren.char, ren.color)
-        
+
+            # Print the player.
+            player_pos = self.world.component_for_entity(2, PositionComponent)
+            player_ren = self.world.component_for_entity(2, RenderComponent)
+            self.console.print(player_pos.x, player_pos.y, player_ren.char, player_ren.color)
+            
+
         elif game_state == 'MainMenu':
             self.console.print(3, 3, 'Welcome to the Main Menu.\nPress any key to begin.', libtcod.grey)
         
