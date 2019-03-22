@@ -18,4 +18,5 @@ class AiInputProcessor(esper.Processor):
         self.world.remove_processor(AiInputProcessor)
     
     def take_turn(self):
-        print('AI thinks.')
+        # print('AI thinks.')
+        pass
