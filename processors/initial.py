@@ -3,6 +3,7 @@ import tcod as libtcod
 
 from components.actor import ActorComponent
 from components.game.state import StateComponent
+from components.persist import PersistComponent
 from components.player import PlayerComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
@@ -17,13 +18,16 @@ class InitialProcessor(esper.Processor):
     def process(self):
         if self.world._entities == {}:
             # Create game meta-entity. It is ID 1.
-            game = self.world.create_entity()
-            self.world.add_component(game, StateComponent())
+            self.world.create_entity(
+                PersistComponent(),
+                StateComponent()
+            )
 
             # Create the player entity. It is ID 2.
-            player = self.world.create_entity()
-            self.world.add_component(player, ActorComponent())
-            self.world.add_component(player, PlayerComponent())
-            self.world.add_component(player, PositionComponent(x=15, y=15))
-            self.world.add_component(player, RenderComponent(char='@', color=libtcod.white))
-            self.world.add_component(player, TurnComponent())
+            self.world.create_entity(
+                ActorComponent(),
+                PlayerComponent(),
+                PositionComponent(),
+                RenderComponent(char='@', color=libtcod.white),
+                TurnComponent()
+            )

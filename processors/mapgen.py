@@ -52,11 +52,9 @@ class MapgenProcessor(esper.Processor):
                 self.dig_room(node)
         
         self.place_player()
+        self.clear_entities()
         self.place_tiles()
         
-
-        # Add floor and wall entities
-        # Ensure that there are no non-player entities on the map
         # Place monsters
 
     def connect_rooms(self, node1, node2):
@@ -106,6 +104,10 @@ class MapgenProcessor(esper.Processor):
 
         player_pos.x = random.randint(room.x, room.x + room.w - 1)
         player_pos.y = random.randint(room.y, room.y + room.h - 1)
+
+    def clear_entities(self):
+        # Clear literally all entities, except game and player.
+
 
     def place_tiles(self):
         for (x, y), value in np.ndenumerate(self.tiles):
