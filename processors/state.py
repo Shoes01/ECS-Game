@@ -3,6 +3,7 @@ import esper
 from components.game.event import EventComponent
 from components.game.mapgen import MapgenComponent
 from components.game.state import StateComponent
+from processors.dijkstra import DijkstraProcessor
 from processors.render import RenderProcessor
 
 class StateProcessor(esper.Processor):
@@ -24,5 +25,6 @@ class StateProcessor(esper.Processor):
         if state_component.state == 'Game':
             if event_component.event == 'Exit':
                 state_component.state = 'MainMenu'
+                self.world.remove_processor(DijkstraProcessor)
 
         event_component.event = None

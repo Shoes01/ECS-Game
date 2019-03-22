@@ -8,6 +8,7 @@ from components.player import PlayerComponent
 class AiInputProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
+        self.dijkstra_map = []
     
     def process(self):
         for ent, (brain) in self.world.get_components(ActorComponent, BrainComponent):

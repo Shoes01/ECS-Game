@@ -20,4 +20,4 @@ class ActionProcessor(esper.Processor):
 
             self.world.remove_component(ent, ActionComponent)
             self.world.remove_component(ent, HasTurnComponent)
-            self.world.add_processor(AiInputProcessor())
+            self.world.add_processor(AiInputProcessor(), 35)
