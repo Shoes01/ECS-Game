@@ -51,6 +51,6 @@ class InputProcessor(esper.Processor):
             
             # Attach action component to player entity.
             if action:
-                self.world.add_component(2, ActionComponent(value=action)) # 2 is player entity
+                self.world.add_component(2, ActionComponent(action=action)) # 2 is player entity
                 
             self.key = None

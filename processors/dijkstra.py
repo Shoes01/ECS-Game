@@ -13,7 +13,7 @@ class DijkstraProcessor(esper.Processor):
         self.blank_dijkstra_map = []
 
     def process(self):
-        if AiInputProcessor in self.world._processors:
+        if self.world.get_processor(AiInputProcessor):
             # Recalculate dijkstra map.
             dijkstra_map = self.blank_dijkstra_map
             player_pos = self.world.component_for_entity(2, PositionComponent)

@@ -12,7 +12,7 @@ class ActionProcessor(esper.Processor):
     
     def process(self):
         for ent, (action, turn) in self.world.get_components(ActionComponent, HasTurnComponent):
-            _move = action.value.get('move')
+            _move = action.action.get('move')
 
             if _move:
                 dx, dy = _move
