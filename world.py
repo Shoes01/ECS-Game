@@ -12,7 +12,7 @@ from components.turn import TurnComponent
 from components.velocity import VelocityComponent
 from processors.action import ActionProcessor
 from processors.input import InputProcessor
-from processors.level import LevelProcessor
+from processors.mapgen import MapgenProcessor
 from processors.movement import MovementProcessor
 from processors.prerender import PrerenderProcessor
 from processors.render import RenderProcessor
@@ -40,7 +40,7 @@ def build_world(game_map, root):
     action_processor = ActionProcessor()
     prerender_processor = PrerenderProcessor()
     input_processor = InputProcessor()
-    level_processor = LevelProcessor(height=game_map.height, tiles=game_map.tiles, width=game_map.width)
+    level_processor = MapgenProcessor(height=game_map.height, tiles=game_map.tiles, width=game_map.width)
     movement_processor = MovementProcessor()
     render_processor = RenderProcessor(console=root)
     state_processor = StateProcessor()

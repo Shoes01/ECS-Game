@@ -2,13 +2,13 @@ import esper
 import numpy as np
 import tcod as libtcod
 
-from components.game.level import LevelComponent
+from components.game.mapgen import MapgenComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
 from components.tile import TileComponent
 from processors.prerender import PrerenderProcessor
 
-class LevelProcessor(esper.Processor):
+class MapgenProcessor(esper.Processor):
     def __init__(self, height, tiles, width):
         super().__init__()
         self.height = height
@@ -16,8 +16,8 @@ class LevelProcessor(esper.Processor):
         self.width = width
 
     def process(self):
-        if self.world.has_component(1, LevelComponent):
-            # Create level.
+        if self.world.has_component(1, MapgenComponent):
+            # Create mapgen.
             for (x, y), _ in np.ndenumerate(self.tiles):
                 if x == 17 and y == 17:
                     wall = self.world.create_entity()
@@ -38,4 +38,4 @@ class LevelProcessor(esper.Processor):
             self.world.get_processor(PrerenderProcessor).fov_map = fov_map
             
             # Finished. Remove the component.
-            self.world.remove_component(1, LevelComponent)
+            self.world.remove_component(1, MapgenComponent)
