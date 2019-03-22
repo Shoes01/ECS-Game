@@ -2,6 +2,7 @@ import esper
 import tcod as libtcod
 
 from components.actor import ActorComponent
+from components.game.event import EventComponent
 from components.game.state import StateComponent
 from components.persist import PersistComponent
 from components.player import PlayerComponent
@@ -18,6 +19,7 @@ class InitialProcessor(esper.Processor):
     def process(self):
         # Create game meta-entity. It is ID 1.
         self.world.create_entity(
+            EventComponent(),
             PersistComponent(),
             StateComponent()
         )

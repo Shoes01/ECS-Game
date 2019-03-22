@@ -2,7 +2,7 @@ import esper
 import tcod as libtcod
 
 from components.action import ActionComponent
-from components.game.mapgen import MapgenComponent
+from components.game.event import EventComponent
 from components.game.state import StateComponent
 from components.player import PlayerComponent
 from components.turn import TurnComponent
@@ -13,22 +13,22 @@ class InputProcessor(esper.Processor):
         self.key = key
     
     def process(self):
+        event_component = self.world.component_for_entity(1, EventComponent)
         game_state_component = self.world.component_for_entity(1, StateComponent) # 1 is game entity
+
         key = self.key
         key_char = chr(key.c)
         action = None
 
-        # Manage input based on game state.
-        if game_state_component.state:
-            if key.vk == libtcod.KEY_ESCAPE:
-                game_state_component.state = 'Exit'
-
         if game_state_component.state == 'MainMenu':
-            if key.pressed:
-                # Tag the game entity with the MapgenComponent; this will generate a new map.
-                self.world.add_component(1, MapgenComponent())
+            if key.vk == libtcod.KEY_ESCAPE:
+                event_component.event = 'Exit'
+            elif key.pressed:
+                event_component.event = 'New_map'
 
         elif game_state_component.state == 'Game':
+            if key.vk == libtcod.KEY_ESCAPE:
+                event_component.event = 'Exit'
             if key.vk == libtcod.KEY_UP or key_char == 'k' or key.vk == libtcod.KEY_KP8:
                 action = {'move': (0, -1)}
             elif key.vk == libtcod.KEY_DOWN or key_char == 'j' or key.vk == libtcod.KEY_KP2:
@@ -51,3 +51,4 @@ class InputProcessor(esper.Processor):
         # Attach action component to player entity.
         if action:
             self.world.add_component(2, ActionComponent(value=action)) # 2 is player entity
+        self.key = None

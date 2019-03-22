@@ -1,4 +1,5 @@
 import cProfile
+import time
 import tcod as libtcod
 
 from components.game.state import StateComponent
