@@ -1,4 +1,5 @@
 import esper
+import tcod as libtcod
 
 from processors.action import ActionProcessor
 from processors.initial import InitialProcessor
@@ -9,7 +10,12 @@ from processors.prerender import PrerenderProcessor
 from processors.render import RenderProcessor
 from processors.state import StateProcessor
 
-def build_world(game_map, root):
+CONSOLE_HEIGHT = 60
+CONSOLE_WIDTH = 80
+
+def build_world():
+    root = libtcod.console_init_root(CONSOLE_WIDTH, CONSOLE_HEIGHT, title='v0.0.0', order='F')
+
     # Create world.
     world = esper.World()
 
@@ -18,7 +24,7 @@ def build_world(game_map, root):
     prerender_processor = PrerenderProcessor()
     initial_processor = InitialProcessor()
     input_processor = InputProcessor()
-    level_processor = MapgenProcessor(height=game_map.height, tiles=game_map.tiles, width=game_map.width)
+    level_processor = MapgenProcessor(width=CONSOLE_WIDTH, height=CONSOLE_HEIGHT)
     movement_processor = MovementProcessor()
     render_processor = RenderProcessor(console=root)
     state_processor = StateProcessor()
