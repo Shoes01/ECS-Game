@@ -1,6 +1,6 @@
 import tcod as libtcod
 
-from components.actor import ActorComponent
+from components.actor.actor import ActorComponent
 from components.actor.has_turn import HasTurnComponent
 from components.actor.waiting_turn import WaitingTurnComponent
 from components.game.event import EventComponent
