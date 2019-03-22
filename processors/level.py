@@ -36,3 +36,6 @@ class LevelProcessor(esper.Processor):
                 fov_map.walkable[pos.x, pos.y] = not tile.blocks_path
                 fov_map.transparent[pos.x, pos.y] = not tile.blocks_sight
             self.world.get_processor(PrerenderProcessor).fov_map = fov_map
+            
+            # Finished. Remove the component.
+            self.world.remove_component(1, LevelComponent)

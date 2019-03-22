@@ -46,8 +46,8 @@ def build_world(game_map, root):
     state_processor = StateProcessor()
     
     # Add them to the world.
-    world.add_processor(level_processor, 70)
-    world.add_processor(state_processor, 60)
+    world.add_processor(state_processor, 70)
+    world.add_processor(level_processor, 60)
     world.add_processor(prerender_processor, 50)
     world.add_processor(render_processor, 40)
     world.add_processor(input_processor, 30)
