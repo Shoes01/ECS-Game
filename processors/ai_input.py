@@ -17,6 +17,7 @@ class AiInputProcessor(esper.Processor):
         for ent, (actor, brain, pos) in self.world.get_components(ActorComponent, BrainComponent, PositionComponent):
             if brain.brain == 'zombie':
                 self.take_turn_zombie( brain, ent, pos)
+                self.world.add_component(ent, HasTurnComponent())
         
         self.world.add_component(2, HasTurnComponent())
         self.world.remove_processor(AiInputProcessor)
