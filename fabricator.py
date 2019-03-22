@@ -1,6 +1,8 @@
 import tcod as libtcod
 
 from components.actor import ActorComponent
+from components.actor.has_turn import HasTurnComponent
+from components.actor.waiting_turn import WaitingTurnComponent
 from components.game.event import EventComponent
 from components.game.state import StateComponent
 from components.persist import PersistComponent
@@ -8,7 +10,6 @@ from components.player import PlayerComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
 from components.tile import TileComponent
-from components.turn import TurnComponent
 from components.velocity import VelocityComponent
 
 def fabricate_entity(ent, world):
@@ -22,11 +23,12 @@ def fabricate_entity(ent, world):
     if ent == 'player':
         world.create_entity(
             ActorComponent(),
+            HasTurnComponent(),
             PersistComponent(),
             PlayerComponent(),
             PositionComponent(),
             RenderComponent(char='@', color=libtcod.white),
-            TurnComponent()
+            WaitingTurnComponent()
         )
     
     if ent == 'zombie':
@@ -34,5 +36,5 @@ def fabricate_entity(ent, world):
             ActorComponent(),
             PositionComponent(),
             RenderComponent(char='Z', color=libtcod.green),
-            TurnComponent()
+            WaitingTurnComponent()
         )
