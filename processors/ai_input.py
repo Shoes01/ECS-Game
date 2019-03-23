@@ -17,19 +17,20 @@ class AiInputProcessor(esper.Processor):
         if not self.world.has_component(2, HasTurnComponent):
             for ent, (actor, brain, pos) in self.world.get_components(ActorComponent, BrainComponent, PositionComponent):
                 if brain.brain == 'zombie':
-                    self.take_turn_zombie( brain, ent, pos)
-                    self.world.add_component(ent, HasTurnComponent())
+                    action = self.take_turn_zombie(brain, pos)
+                    if action:
+                        self.world.add_component(ent, HasTurnComponent())
+                        self.world.add_component(ent, ActionComponent(action))
             
             self.world.add_component(2, HasTurnComponent())
-            self.world.remove_processor(AiInputProcessor)
     
-    def take_turn_zombie(self, brain, ent, pos):
+    def take_turn_zombie(self, brain, pos):
         if brain.awake is False and LOS(pos, self.world.component_for_entity(2, PositionComponent)):
             brain.awake = True
-            return
+            return None
     
         action = self.hunt_player(pos)
-        self.world.add_component(ent, ActionComponent(action))
+        return action
                 
     def hunt_player(self, pos):
         x, y = pos.x, pos.y
@@ -44,6 +45,10 @@ class AiInputProcessor(esper.Processor):
             if new_value != 999 and new_value <= lowest_value:
                 lowest_value = new_value
                 best_direction = neighbour[0] - x, neighbour[1] - y
+
+        if best_direction == (0, 0):
+            neighbour = random.choice(directory[x, y])
+            best_direction = neighbour[0] - x, neighbour[1] - y
 
         return {'move': best_direction}
 
