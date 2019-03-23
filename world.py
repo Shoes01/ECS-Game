@@ -2,6 +2,7 @@ import esper
 import tcod as libtcod
 
 from processors.action import ActionProcessor
+from processors.dijkstra import DijkstraProcessor
 from processors.initial import InitialProcessor
 from processors.input import InputProcessor
 from processors.mapgen import MapgenProcessor
@@ -10,30 +11,26 @@ from processors.prerender import PrerenderProcessor
 from processors.render import RenderProcessor
 from processors.state import StateProcessor
 
-CONSOLE_HEIGHT = 60
-CONSOLE_WIDTH = 80
-
 def build_world():
-    root = libtcod.console_init_root(CONSOLE_WIDTH, CONSOLE_HEIGHT, title='v0.0.0', order='F')
-
     # Create world.
     world = esper.World()
 
     # Instantiate Processors.
     action_processor = ActionProcessor()
+    dijkstra_processor = DijkstraProcessor()
     initial_processor = InitialProcessor()
     input_processor = InputProcessor()
     mapgen_processor = MapgenProcessor()
     movement_processor = MovementProcessor()
     prerender_processor = PrerenderProcessor()
-    render_processor = RenderProcessor(console=root)
+    render_processor = RenderProcessor()
     state_processor = StateProcessor()
     
     # Add them to the world.
     world.add_processor(initial_processor, 999)
     world.add_processor(state_processor, 70)
     world.add_processor(mapgen_processor, 60)
-    world.add_processor(DijkstraProcessor(), 55)
+    world.add_processor(dijkstra_processor, 55)
     world.add_processor(prerender_processor, 50)
     world.add_processor(render_processor, 40)
     # debug_processor goes here, with priority 39.

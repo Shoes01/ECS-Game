@@ -17,7 +17,6 @@ from processors.prerender import PrerenderProcessor
 class MapgenProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
-        self.tiles = None
         self.rooms = []
         self.leaf_rooms = []
 
