@@ -5,9 +5,6 @@ import tcod as libtcod
 from components.game.console import ConsoleComponent
 from components.game.debug import DebugComponent
 from components.game.map import MapComponent
-from processors.ai_input import AiInputProcessor
-from processors.dijkstra import DijkstraProcessor
-from processors.render import RenderProcessor
 
 class DebugProcessor(esper.Processor):
     def __init__(self):

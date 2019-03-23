@@ -5,8 +5,6 @@ from components.game.dijgen import DijgenComponent
 from components.game.event import EventComponent
 from components.game.mapgen import MapgenComponent
 from components.game.state import StateComponent
-from processors.dijkstra import DijkstraProcessor
-from processors.render import RenderProcessor
 
 class StateProcessor(esper.Processor):
     def __init__(self):

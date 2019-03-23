@@ -11,8 +11,6 @@ from components.position import PositionComponent
 from components.render import RenderComponent
 from components.tile import TileComponent
 from fabricator import fabricate_entity
-from processors.dijkstra import DijkstraProcessor
-from processors.prerender import PrerenderProcessor
 
 class MapgenProcessor(esper.Processor):
     def __init__(self):

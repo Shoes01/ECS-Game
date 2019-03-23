@@ -14,13 +14,14 @@ class AiInputProcessor(esper.Processor):
         super().__init__()
     
     def process(self):
-        for ent, (actor, brain, pos) in self.world.get_components(ActorComponent, BrainComponent, PositionComponent):
-            if brain.brain == 'zombie':
-                self.take_turn_zombie( brain, ent, pos)
-                self.world.add_component(ent, HasTurnComponent())
-        
-        self.world.add_component(2, HasTurnComponent())
-        self.world.remove_processor(AiInputProcessor)
+        if not self.world.has_component(2, HasTurnComponent):
+            for ent, (actor, brain, pos) in self.world.get_components(ActorComponent, BrainComponent, PositionComponent):
+                if brain.brain == 'zombie':
+                    self.take_turn_zombie( brain, ent, pos)
+                    self.world.add_component(ent, HasTurnComponent())
+            
+            self.world.add_component(2, HasTurnComponent())
+            self.world.remove_processor(AiInputProcessor)
     
     def take_turn_zombie(self, brain, ent, pos):
         if brain.awake is False and LOS(pos, self.world.component_for_entity(2, PositionComponent)):

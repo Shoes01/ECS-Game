@@ -5,7 +5,6 @@ from components.action import ActionComponent
 from components.game.dijgen import DijgenComponent
 from components.player import PlayerComponent
 from components.velocity import VelocityComponent
-from processors.ai_input import AiInputProcessor
 
 class ActionProcessor(esper.Processor):
     def __init__(self):
@@ -26,6 +25,3 @@ class ActionProcessor(esper.Processor):
 
             self.world.remove_component(ent, ActionComponent)
             self.world.remove_component(ent, HasTurnComponent)
-            
-            if self.world.has_component(ent, PlayerComponent):
-                self.world.add_processor(AiInputProcessor(), 35)
