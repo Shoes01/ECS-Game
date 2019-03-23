@@ -109,8 +109,8 @@ class MapgenProcessor(esper.Processor):
         room = self.leaf_rooms.pop(random.randint(0, len(self.leaf_rooms) - 1))
         self.rooms.remove(room)
 
-        player_pos.x = random.randint(room.x, room.x + room.w - 1)
-        player_pos.y = random.randint(room.y, room.y + room.h - 1)
+        player_pos.x = random.randint(room.x + 1, room.x + room.w - 2)
+        player_pos.y = random.randint(room.y + 1, room.y + room.h - 2)
 
     def clear_entities(self):
         # Clear literally all entities, except game and player.
@@ -136,6 +136,12 @@ class MapgenProcessor(esper.Processor):
                 )
 
     def place_monsters(self):
+        new_ent = fabricate_entity('zombie', self.world)
+        new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
+        new_ent_pos.x = 3
+        new_ent_pos.y = 3
+
+        """
         for room in self.rooms:
             size = room.h + room.w
             number_of_monsters = size // 5  # This controls monster density
@@ -151,6 +157,7 @@ class MapgenProcessor(esper.Processor):
                     new_ent_pos.y = y
                     
                 number_of_monsters -= 1
+        """
 
     def create_fov_map(self):
         fov_map = libtcod.map.Map(self.width, self.height, order='F')
