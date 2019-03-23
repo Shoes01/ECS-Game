@@ -33,7 +33,7 @@ def build_world():
     world.add_processor(initial_processor, 999)
     world.add_processor(state_processor, 70)
     world.add_processor(mapgen_processor, 60)
-    # dijkstra_processor goes here, with priority 55.
+    world.add_processor(DijkstraProcessor(), 55)
     world.add_processor(prerender_processor, 50)
     world.add_processor(render_processor, 40)
     # debug_processor goes here, with priority 39.

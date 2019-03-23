@@ -1,5 +1,6 @@
 import esper
 
+from components.game.dijgen import DijgenComponent
 from components.game.event import EventComponent
 from components.game.mapgen import MapgenComponent
 from components.game.state import StateComponent
@@ -21,6 +22,7 @@ class StateProcessor(esper.Processor):
                 state_component.state = 'Exit'
             if event_component.event == 'New_map':
                 self.world.add_component(1, MapgenComponent())
+                self.world.add_component(1, DijgenComponent())
                 state_component.state = 'Game'
 
         if state_component.state == 'Game':

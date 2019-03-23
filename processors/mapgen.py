@@ -30,11 +30,7 @@ class MapgenProcessor(esper.Processor):
             
             # Create fov map.
             self.create_fov_map()
-
-            # Create dijkstra map directory.
-            self.world.add_processor(DijkstraProcessor(), 55)
-            self.create_directory()
-            
+           
             # Finished. Remove the component.
             self.world.remove_component(1, MapgenComponent)
 
@@ -141,7 +137,6 @@ class MapgenProcessor(esper.Processor):
         new_ent_pos.x = 3
         new_ent_pos.y = 3
 
-        """
         for room in self.rooms:
             size = room.h + room.w
             number_of_monsters = size // 5  # This controls monster density
@@ -157,7 +152,6 @@ class MapgenProcessor(esper.Processor):
                     new_ent_pos.y = y
                     
                 number_of_monsters -= 1
-        """
 
     def create_fov_map(self):
         fov_map = libtcod.map.Map(self.width, self.height, order='F')
@@ -167,20 +161,3 @@ class MapgenProcessor(esper.Processor):
             fov_map.transparent[pos.x, pos.y] = not tile.blocks_sight
         
         self.world.get_processor(PrerenderProcessor).fov_map = fov_map
-    
-    def create_directory(self):
-        directory = {}
-
-        directions = [(1, -1), (1, 1), (-1, -1), (-1, 1), (1, 0), (-1, 0), (0, -1), (0, 1)]
-        # Build neighborhood directory.
-        for (x, y), _ in np.ndenumerate(self.tiles):
-            results = []
-            for direction in directions:
-                neighbor = (x + direction[0], y + direction[1])
-                if 0 <= neighbor[0] < self.width and 0 <= neighbor[1] < self.height and self.tiles[neighbor[0], neighbor[1]] == 0:
-                    results.append(neighbor)
-            
-            directory[(x, y)] = results
-        
-        self.world.get_processor(DijkstraProcessor).directory = directory
-        self.world.get_processor(DijkstraProcessor).blank_dijkstra_map = np.ones((self.width, self.height), dtype=int, order='F') * 999
