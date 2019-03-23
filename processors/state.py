@@ -33,6 +33,7 @@ class StateProcessor(esper.Processor):
             debug_processor = self.world.get_processor(DebugProcessor)
 
             if debug_processor:
+                debug_processor.kill()
                 self.world.remove_processor(DebugProcessor)
             else:
                 self.world.add_processor(DebugProcessor(), 39)

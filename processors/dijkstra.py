@@ -5,6 +5,7 @@ from collections import deque
 from components.actor.actor import ActorComponent
 from components.position import PositionComponent
 from processors.ai_input import AiInputProcessor
+from processors.debug import DebugProcessor
 
 class DijkstraProcessor(esper.Processor):
     def __init__(self):
@@ -43,6 +44,9 @@ class DijkstraProcessor(esper.Processor):
                         visited[neighbor] = True
             
             self.world.get_processor(AiInputProcessor).dijkstra_map = dijkstra_map
+            if self.world.get_processor(DebugProcessor):
+                self.world.get_processor(DebugProcessor).dijkstra_map = dijkstra_map
+
     
     def tile_occupied(self, x, y):
         for ent, (actor, pos) in self.world.get_components(ActorComponent, PositionComponent):

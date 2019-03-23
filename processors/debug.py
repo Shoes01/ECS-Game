@@ -6,15 +6,16 @@ from processors.ai_input import AiInputProcessor
 from processors.render import RenderProcessor
 
 class DebugProcessor(esper.Processor):
-    def __init_(self):
+    def __init__(self):
         super().__init__()
+        self.dijkstra_map = np.array([])
     
     def process(self):
-        if self.world.get_processor(AiInputProcessor):
-            dijkstra_map = self.world.get_processor(AiInputProcessor).dijkstra_map
+        if self.dijkstra_map.size:
+            self.world.get_processor(RenderProcessor).debug_mode = True
             console = self.world.get_processor(RenderProcessor).console
 
-            for (x, y), value in np.ndenumerate(dijkstra_map):
+            for (x, y), value in np.ndenumerate(self.dijkstra_map):
                 if value == 999:
                     console.print(x, y, '#', libtcod.pink)
                 else:
@@ -22,6 +23,9 @@ class DebugProcessor(esper.Processor):
             
             console.blit(console)
             libtcod.console_flush()
+    
+    def kill(self):
+        self.world.get_processor(RenderProcessor).debug_mode = False
 
 def baseN(num,b,numerals="0123456789abcdefghijklmnopqrstuvwxyz"):
     return ((num == 0) and numerals[0]) or (baseN(num // b, b, numerals).lstrip(numerals[0]) + numerals[num % b])

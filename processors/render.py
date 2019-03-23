@@ -5,17 +5,21 @@ import tcod as libtcod
 from components.actor.actor import ActorComponent
 from components.game.state import StateComponent
 from components.position import PositionComponent
-from components.render import RenderComponent
 from components.tile import TileComponent
+from components.render import RenderComponent
 
 class RenderProcessor(esper.Processor):
     def __init__(self, console):
         super().__init__()
         self.console = console
+        self.debug_mode = False # The DebugProcessor changes this.
     
     def process(self):
         # Prepare the console.
         self.console.clear(bg=libtcod.black, fg=libtcod.white)
+
+        if self.debug_mode:
+            return 0
 
         game_state = self.world.component_for_entity(1, StateComponent).state
 
