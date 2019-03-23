@@ -21,6 +21,9 @@ class InputProcessor(esper.Processor):
             key_char = chr(key.c)
             action = None
 
+            if key_char == 'd' and key.lctrl:
+                event_component.event = 'Toggle_debug_mode'
+
             if game_state_component.state == 'MainMenu':
                 if key.vk == libtcod.KEY_ESCAPE:
                     event_component.event = 'Exit'

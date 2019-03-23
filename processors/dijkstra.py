@@ -9,8 +9,8 @@ from processors.ai_input import AiInputProcessor
 class DijkstraProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
-        self.directory = []
         self.blank_dijkstra_map = []
+        self.directory = []
 
     def process(self):
         if self.world.get_processor(AiInputProcessor):
