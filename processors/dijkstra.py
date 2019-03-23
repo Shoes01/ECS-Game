@@ -10,8 +10,8 @@ from processors.debug import DebugProcessor
 class DijkstraProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
-        self.blank_dijkstra_map = []
-        self.directory = []
+        self.blank_dijkstra_map = [] # Injected via MapgenProcessor
+        self.directory = [] # Injected via MapgenProcessor
 
     def process(self):
         if self.world.get_processor(AiInputProcessor):
@@ -43,6 +43,7 @@ class DijkstraProcessor(esper.Processor):
                         visited[neighbor] = True
             
             self.world.get_processor(AiInputProcessor).dijkstra_map = dijkstra_map
+            self.world.get_processor(AiInputProcessor).directory = self.directory
             if self.world.get_processor(DebugProcessor):
                 self.world.get_processor(DebugProcessor).dijkstra_map = dijkstra_map
 

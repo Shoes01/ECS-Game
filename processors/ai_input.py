@@ -11,7 +11,8 @@ from components.player import PlayerComponent
 class AiInputProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
-        self.dijkstra_map = []
+        self.dijkstra_map = [] # Injected by the DijkstraProcessor
+        self.directory = [] # Injected by the DijkstraProcessor
     
     def process(self):
         for ent, (actor, brain, pos) in self.world.get_components(ActorComponent, BrainComponent, PositionComponent):
@@ -33,17 +34,16 @@ class AiInputProcessor(esper.Processor):
     def hunt_player(self, pos):
         x, y = pos.x, pos.y
         lowest_value = self.dijkstra_map[y, x]
-        directions = [(-1, 1), (1, -1), (1, 1), (-1, -1), (0, -1), (0, 1), (-1, 0), (1, 0)]
         best_direction = (0, 0)
 
-        for direction in directions:
+        for direction in self.directory[(y, x)]:
             new_value = self.dijkstra_map[y + direction[1], x + direction[0]]
             if new_value != 999 and new_value <= lowest_value:
                 lowest_value = new_value
                 best_direction = direction
                 
         if best_direction == (0, 0):
-            best_direction = random.choice(directions)
+            best_direction = random.choice(self.directory[(x, y)])
 
         return {'move': direction}
 
