@@ -24,7 +24,7 @@ class AiInputProcessor(esper.Processor):
         self.world.remove_processor(AiInputProcessor)
     
     def take_turn_zombie(self, brain, ent, pos):
-        if brain.awake is False and LOS(pos, self.world.component_for_entity(ent, PositionComponent)):
+        if brain.awake is False and LOS(pos, self.world.component_for_entity(2, PositionComponent)):
             brain.awake = True
             return
     
@@ -36,15 +36,17 @@ class AiInputProcessor(esper.Processor):
         lowest_value = self.dijkstra_map[x, y]
         best_direction = (0, 0)
 
-        for neighbour in self.directory[(x, y)]:
-            new_value = self.dijkstra_map[neighbour[0], neighbour[1]]
+        directions = [(-1, 1), (1, -1), (1, 1), (-1, -1), (0, -1), (0, 1), (-1, 0), (1, 0)]
+
+        for neighbour in directions:
+            new_value = self.dijkstra_map[x + neighbour[0], y + neighbour[1]]
             if new_value != 999 and new_value <= lowest_value:
                 lowest_value = new_value
-                best_direction = neighbour[0] - x, neighbour[1] - y
+                best_direction = neighbour[0], neighbour[1]
                 
         if best_direction == (0, 0):
-            neighbour = random.choice(self.directory[(x, y)])
-            best_direction = neighbour[0] - x, neighbour[1] - y
+            neighbour = random.choice(directions)
+            best_direction = neighbour[0], neighbour[1]
 
         return {'move': best_direction}
 

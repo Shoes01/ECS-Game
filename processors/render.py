@@ -12,7 +12,7 @@ class RenderProcessor(esper.Processor):
     def __init__(self, console):
         super().__init__()
         self.console = console
-        self.debug_mode = False # The DebugProcessor changes this.
+        self.debug_mode = False # Injected via DebugProcessor
     
     def process(self):
         # Prepare the console.

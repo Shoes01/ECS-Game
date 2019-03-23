@@ -3,6 +3,7 @@ import time
 import tcod as libtcod
 
 from components.game.state import StateComponent
+from processors.debug import DebugProcessor
 from processors.input import InputProcessor
 from world import build_world
 
@@ -21,6 +22,9 @@ def main():
         # Handle input.
         libtcod.sys_check_for_event(libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
         world.get_processor(InputProcessor).key = key
+        if world.get_processor(DebugProcessor):
+            world.get_processor(DebugProcessor).mouse = mouse
+
                
         # Do literally everything else.
         world.process()

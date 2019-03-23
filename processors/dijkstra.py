@@ -6,12 +6,12 @@ from collections import deque
 from components.actor.actor import ActorComponent
 from components.position import PositionComponent
 from processors.ai_input import AiInputProcessor
-from processors.debug import DebugProcessor
 
 class DijkstraProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
         self.blank_dijkstra_map = [] # Injected via MapgenProcessor
+        self.dijkstra_map = np.array([])
         self.directory = [] # Injected via MapgenProcessor
 
     def process(self):
@@ -38,12 +38,11 @@ class DijkstraProcessor(esper.Processor):
                         else:
                             dijkstra_map[neighbor[0], neighbor[1]] = dijkstra_map[current[0], current[1]] + 1
                         
-                            if not dijkstra_map[neighbor[0], neighbor[1]] > 20: # Cheap optimization.
+                            if not dijkstra_map[neighbor[0], neighbor[1]] > 30: # Cheap optimization.
                                 frontier.append(neighbor)
                         
                         visited[neighbor] = True
             
+            self.dijkstra_map = dijkstra_map
             self.world.get_processor(AiInputProcessor).dijkstra_map = dijkstra_map
             self.world.get_processor(AiInputProcessor).directory = self.directory
-            if self.world.get_processor(DebugProcessor):
-                self.world.get_processor(DebugProcessor).dijkstra_map = dijkstra_map
