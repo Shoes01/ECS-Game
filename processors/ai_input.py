@@ -36,16 +36,17 @@ class AiInputProcessor(esper.Processor):
         lowest_value = self.dijkstra_map[x, y]
         best_direction = (0, 0)
 
-        for direction in self.directory[(x, y)]:
-            new_value = self.dijkstra_map[x + direction[0], y + direction[1]]
+        for neighbour in self.directory[(x, y)]:
+            new_value = self.dijkstra_map[neighbour[0], neighbour[1]]
             if new_value != 999 and new_value <= lowest_value:
                 lowest_value = new_value
-                best_direction = direction
+                best_direction = neighbour[0] - x, neighbour[1] - y
                 
         if best_direction == (0, 0):
-            best_direction = random.choice(self.directory[(x, y)])
+            neighbour = random.choice(self.directory[(x, y)])
+            best_direction = neighbour[0] - x, neighbour[1] - y
 
-        return {'move': direction}
+        return {'move': best_direction}
 
 def LOS(pos1, pos2):
     return True

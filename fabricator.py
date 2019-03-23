@@ -27,7 +27,7 @@ def fabricate_entity(ent, world):
             PersistComponent(),
             PlayerComponent(),
             PositionComponent(),
-            RenderComponent(char='@', color=libtcod.white)
+            RenderComponent(char='@', color=libtcod.pink)
         )
     
     if ent == 'zombie':

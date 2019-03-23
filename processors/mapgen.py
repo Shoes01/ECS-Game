@@ -134,7 +134,7 @@ class MapgenProcessor(esper.Processor):
 
     def place_monsters(self):
         for ent, (pos, tile) in self.world.get_components(PositionComponent, TileComponent):
-            if tile.blocks_path == False and random.randint(0, 10) > 8:
+            if tile.blocks_path == False and random.randint(0, 10) > 9:
                 new_ent = fabricate_entity('zombie', self.world)
                 new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                 new_ent_pos.x = pos.x
