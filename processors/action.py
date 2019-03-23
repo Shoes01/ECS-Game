@@ -2,6 +2,7 @@ import esper
 
 from components.actor.has_turn import HasTurnComponent
 from components.action import ActionComponent
+from components.game.dijgen import DijgenComponent
 from components.player import PlayerComponent
 from components.velocity import VelocityComponent
 from processors.ai_input import AiInputProcessor
@@ -18,6 +19,7 @@ class ActionProcessor(esper.Processor):
             if _move:
                 dx, dy = _move
                 self.world.add_component(ent, VelocityComponent(dx=dx, dy=dy))
+                self.world.add_component(1, DijgenComponent())
             
             if _wait:
                 pass

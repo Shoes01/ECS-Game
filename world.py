@@ -36,7 +36,6 @@ def build_world():
     world.add_processor(prerender_processor, 50)
     world.add_processor(render_processor, 40)
     world.add_processor(debug_processor, 39)
-    # debug_processor goes here, with priority 39.
     # ai_input_processor goes here, with priority at 35.
     world.add_processor(input_processor, 30)
     world.add_processor(action_processor, 20)
