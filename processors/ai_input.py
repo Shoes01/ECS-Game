@@ -42,22 +42,6 @@ class AiInputProcessor(esper.Processor):
             if new_value != 999 and new_value <= lowest_value:
                 lowest_value = new_value
                 best_direction = neighbour[0] - x, neighbour[1] - y
-        
-        print(best_direction, (x, y), lowest_value)
-
-        """
-        directions = [(-1, 1), (1, -1), (1, 1), (-1, -1), (0, -1), (0, 1), (-1, 0), (1, 0)]
-
-        for neighbour in directions:
-            new_value = self.dijkstra_map[x + neighbour[0], y + neighbour[1]]
-            if new_value != 999 and new_value <= lowest_value:
-                lowest_value = new_value
-                best_direction = neighbour[0], neighbour[1]
-                
-        if best_direction == (0, 0):
-            neighbour = random.choice(directions)
-            best_direction = neighbour[0], neighbour[1]
-        """
 
         return {'move': best_direction}
 

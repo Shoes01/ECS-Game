@@ -136,12 +136,6 @@ class MapgenProcessor(esper.Processor):
                 )
 
     def place_monsters(self):
-        new_ent = fabricate_entity('zombie', self.world)
-        new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
-        new_ent_pos.x = 3
-        new_ent_pos.y = 3
-
-        """
         for room in self.rooms:
             size = room.h + room.w
             number_of_monsters = size // 5  # This controls monster density
@@ -157,7 +151,6 @@ class MapgenProcessor(esper.Processor):
                     new_ent_pos.y = y
                     
                 number_of_monsters -= 1
-        """
 
     def create_fov_map(self):
         fov_map = libtcod.map.Map(self.width, self.height, order='F')
@@ -171,7 +164,7 @@ class MapgenProcessor(esper.Processor):
     def create_directory(self):
         directory = {}
 
-        directions = [(1, -1), (1, 0), (1, 1), (0, -1), (0, 1), (-1, -1), (-1, 0), (-1, 1)]
+        directions = [(1, -1), (1, 1), (-1, -1), (-1, 1), (1, 0), (-1, 0), (0, -1), (0, 1)]
         # Build neighborhood directory.
         for (x, y), _ in np.ndenumerate(self.tiles):
             results = []
