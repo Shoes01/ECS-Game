@@ -24,7 +24,7 @@ class DijkstraProcessor(esper.Processor):
             visited = {}
             visited[start] = True
 
-            dijkstra_map[start[1], start[0]] = 0
+            dijkstra_map[start[0], start[1]] = 0
 
             while len(frontier):
                 current = frontier.popleft()
@@ -32,12 +32,12 @@ class DijkstraProcessor(esper.Processor):
                 for neighbor in self.directory[current]:
                     if neighbor not in visited:
                         if self.tile_occupied(neighbor[0], neighbor[1]):
-                            dijkstra_map[neighbor[1], neighbor[0]] = dijkstra_map[current[1], current[0]] + 15
+                            dijkstra_map[neighbor[0], neighbor[1]] = dijkstra_map[current[0], current[1]] + 15
                             
                         else:
-                            dijkstra_map[neighbor[1], neighbor[0]] = dijkstra_map[current[1], current[0]] + 1
+                            dijkstra_map[neighbor[0], neighbor[1]] = dijkstra_map[current[0], current[1]] + 1
                         
-                            if not dijkstra_map[neighbor[1], neighbor[0]] > 20: # Cheap optimization.
+                            if not dijkstra_map[neighbor[0], neighbor[1]] > 20: # Cheap optimization.
                                 frontier.append(neighbor)
                         
                         visited[neighbor] = True

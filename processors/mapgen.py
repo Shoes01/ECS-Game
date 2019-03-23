@@ -164,4 +164,4 @@ class MapgenProcessor(esper.Processor):
             directory[(x, y)] = results
         
         self.world.get_processor(DijkstraProcessor).directory = directory
-        self.world.get_processor(DijkstraProcessor).blank_dijkstra_map = np.ones((self.height, self.width), dtype=int, order='F') * 999
+        self.world.get_processor(DijkstraProcessor).blank_dijkstra_map = np.ones((self.width, self.height), dtype=int, order='F') * 999

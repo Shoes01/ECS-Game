@@ -15,7 +15,7 @@ class DebugProcessor(esper.Processor):
             self.world.get_processor(RenderProcessor).debug_mode = True
             console = self.world.get_processor(RenderProcessor).console
 
-            for (y, x), value in np.ndenumerate(self.dijkstra_map):
+            for (x, y), value in np.ndenumerate(self.dijkstra_map):
                 if value == 999:
                     console.print(x, y, '#', libtcod.pink)
                 else:

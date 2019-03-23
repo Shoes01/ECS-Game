@@ -33,11 +33,11 @@ class AiInputProcessor(esper.Processor):
                 
     def hunt_player(self, pos):
         x, y = pos.x, pos.y
-        lowest_value = self.dijkstra_map[y, x]
+        lowest_value = self.dijkstra_map[x, y]
         best_direction = (0, 0)
 
-        for direction in self.directory[(y, x)]:
-            new_value = self.dijkstra_map[y + direction[1], x + direction[0]]
+        for direction in self.directory[(x, y)]:
+            new_value = self.dijkstra_map[x + direction[0], y + direction[1]]
             if new_value != 999 and new_value <= lowest_value:
                 lowest_value = new_value
                 best_direction = direction
