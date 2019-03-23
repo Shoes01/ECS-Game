@@ -15,13 +15,14 @@ class MovementProcessor(esper.Processor):
             
             for ent_blocker, (actor, pos_blocker) in self.world.get_components(ActorComponent, PositionComponent):
                 if pos_blocker.x == pos.x + vel.dx and pos_blocker.y == pos.y + vel.dy:
-                    return
+                    # Trigger a bump-attack here.
+                    vel.dx, vel.dy = 0, 0
             
             if self.world.has_component(ent, PlayerComponent):
                 # Player may run into walls, whereas AI uses the dijkstra map to navigate.
                 for ent_tile, (pos_tile, tile) in self.world.get_components(PositionComponent, TileComponent):
                     if pos_tile.x == pos.x + vel.dx and pos_tile.y == pos.y + vel.dy and tile.blocks_path:
-                        return
+                        vel.dx, vel.dy = 0, 0
 
             pos.x += vel.dx
             pos.y += vel.dy

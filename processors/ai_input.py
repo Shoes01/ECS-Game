@@ -25,7 +25,7 @@ class AiInputProcessor(esper.Processor):
             self.world.add_component(2, HasTurnComponent())
     
     def take_turn_zombie(self, brain, pos):
-        if brain.awake is False and LOS(pos, self.world.component_for_entity(2, PositionComponent)):
+        if brain.awake is False and self.world.component_for_entity(1, MapComponent).fov_map.fov[pos.x, pos.y]:
             brain.awake = True
             return None
     
@@ -39,7 +39,7 @@ class AiInputProcessor(esper.Processor):
         directory = game_map.directory
         lowest_value = dijkstra_map[x, y]
         best_direction = (0, 0)
-        
+
         for neighbour in directory[x, y]:
             new_value = dijkstra_map[neighbour[0], neighbour[1]]
             if new_value != 999 and new_value <= lowest_value:
@@ -51,6 +51,3 @@ class AiInputProcessor(esper.Processor):
             best_direction = neighbour[0] - x, neighbour[1] - y
 
         return {'move': best_direction}
-
-def LOS(pos1, pos2):
-    return True

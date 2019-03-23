@@ -122,14 +122,12 @@ class MapgenProcessor(esper.Processor):
 
     def place_tiles(self, tiles):
         for (x, y), value in np.ndenumerate(tiles):
-            """
             if value == 0:
                 self.world.create_entity(
                     PositionComponent(x=x, y=y),
                     RenderComponent(char='.', color=libtcod.white, explored_color=libtcod.darkest_grey),
                     TileComponent(blocks_path=False, blocks_sight=False)
                 )
-            """
             if value == 1:
                 self.world.create_entity(
                     PositionComponent(x=x, y=y),

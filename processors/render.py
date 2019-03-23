@@ -28,7 +28,7 @@ class RenderProcessor(esper.Processor):
             # Print walls and stuff.
             for ent, (pos, ren, tile) in self.world.get_components(PositionComponent, RenderComponent, TileComponent):
                 
-                if ren.visible or True: # DEBUG
+                if ren.visible:
                     console.print(pos.x, pos.y, ren.char, ren.color)
                 
                 elif ren.explored:
@@ -36,7 +36,7 @@ class RenderProcessor(esper.Processor):
 
             # Print entities to the console.
             for ent, (actor, pos, ren) in self.world.get_components(ActorComponent, PositionComponent, RenderComponent):
-                if ren.visible or True: # DEBUG
+                if ren.visible:
                     console.print(pos.x, pos.y, ren.char, ren.color)
 
             # Print the player.
