@@ -7,12 +7,11 @@ from components.actor.brain import BrainComponent
 from components.actor.has_turn import HasTurnComponent
 from components.position import PositionComponent
 from components.player import PlayerComponent
+from processors.dijkstra import DijkstraProcessor
 
 class AiInputProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
-        self.dijkstra_map = [] # Injected by the DijkstraProcessor
-        self.directory = [] # Injected by the DijkstraProcessor
     
     def process(self):
         for ent, (actor, brain, pos) in self.world.get_components(ActorComponent, BrainComponent, PositionComponent):
@@ -33,9 +32,20 @@ class AiInputProcessor(esper.Processor):
                 
     def hunt_player(self, pos):
         x, y = pos.x, pos.y
-        lowest_value = self.dijkstra_map[x, y]
+        dijkstra_map = self.world.get_processor(DijkstraProcessor).dijkstra_map
+        directory = self.world.get_processor(DijkstraProcessor).directory
+        lowest_value = dijkstra_map[x, y]
         best_direction = (0, 0)
+        
+        for neighbour in directory[x, y]:
+            new_value = dijkstra_map[neighbour[0], neighbour[1]]
+            if new_value != 999 and new_value <= lowest_value:
+                lowest_value = new_value
+                best_direction = neighbour[0] - x, neighbour[1] - y
+        
+        print(best_direction, (x, y), lowest_value)
 
+        """
         directions = [(-1, 1), (1, -1), (1, 1), (-1, -1), (0, -1), (0, 1), (-1, 0), (1, 0)]
 
         for neighbour in directions:
@@ -47,6 +57,7 @@ class AiInputProcessor(esper.Processor):
         if best_direction == (0, 0):
             neighbour = random.choice(directions)
             best_direction = neighbour[0], neighbour[1]
+        """
 
         return {'move': best_direction}
 
