@@ -4,6 +4,7 @@ import random
 import tcod as libtcod
 
 from _helper_functions import tile_occupied
+from components.game.map import MapComponent
 from components.game.mapgen import MapgenComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
@@ -14,32 +15,31 @@ from processors.dijkstra import DijkstraProcessor
 from processors.prerender import PrerenderProcessor
 
 class MapgenProcessor(esper.Processor):
-    def __init__(self, height, width):
+    def __init__(self):
         super().__init__()
-        self.height = height        
-        self.width = width
-
         self.tiles = None
         self.rooms = []
         self.leaf_rooms = []
 
     def process(self):
         if self.world.has_component(1, MapgenComponent):
+            game_map = self.world.component_for_entity(1, MapComponent)
+
             # Create new map.
-            self.create_map()
+            game_map.tiles = self.create_map(game_map.height, game_map.width)
             
             # Create fov map.
-            self.create_fov_map()
+            game_map.fov_map = self.create_fov_map(game_map.height, game_map.width)
            
             # Finished. Remove the component.
             self.world.remove_component(1, MapgenComponent)
 
-    def create_map(self):
-        self.tiles = np.ones([self.width, self.height], dtype=int, order='F')
+    def create_map(self, h, w):
+        tiles = np.ones([w, h], dtype=int, order='F')
         self.rooms = []
         self.leaf_rooms = []
 
-        bsp = libtcod.bsp.BSP(x=0, y=0, width=self.width, height=self.height)
+        bsp = libtcod.bsp.BSP(x=0, y=0, width=w, height=h)
         bsp.split_recursive(
             depth=5,
             min_width=6,
@@ -51,16 +51,18 @@ class MapgenProcessor(esper.Processor):
         for node in bsp.pre_order():
             if node.children:
                 node1, node2 = node.children
-                self.connect_rooms(node1, node2)
+                tiles = self.connect_rooms(node1, node2, tiles)
             else:
-                self.dig_room(node)
+                tiles = self.dig_room(node, tiles)
         
         self.clear_entities()
-        self.place_tiles()
+        self.place_tiles(tiles)
         self.place_player()
-        self.place_monsters()
+        self.place_monsters(tiles)
 
-    def connect_rooms(self, node1, node2):
+        return tiles
+
+    def connect_rooms(self, node1, node2, tiles):
         ' Connect the middle of the rooms. Or nodes. '
         x1c = node1.x + ( node1.w ) // 2
         y1c = node1.y + ( node1.h ) // 2
@@ -77,7 +79,7 @@ class MapgenProcessor(esper.Processor):
                 start = y2c
         
             for y in range(start + 1, end):
-                self.tiles[x1c, y] = 0
+                tiles[x1c, y] = 0
         if y1c == y2c:
             start = 99
             end = 0
@@ -89,16 +91,20 @@ class MapgenProcessor(esper.Processor):
                 start = x2c
         
             for x in range(start + 1, end):
-                self.tiles[x, y1c] = 0
+                tiles[x, y1c] = 0
+        
+        return tiles
     
-    def dig_room(self, node):
+    def dig_room(self, node, tiles):
         ' Dig out a room in the center. Nothing fancy. '
         self.rooms.append(node)
         if len(node.children) == 0:
             self.leaf_rooms.append(node)
         for x in range(node.x + 1, node.x + node.w - 1):
             for y in range(node.y + 1, node.y + node.h - 1):
-                self.tiles[x, y] = 0
+                tiles[x, y] = 0
+        
+        return tiles
 
     def place_player(self):
         player_pos = self.world.component_for_entity(2, PositionComponent)
@@ -114,8 +120,8 @@ class MapgenProcessor(esper.Processor):
             if not self.world.has_component(ent, PersistComponent):
                 self.world.delete_entity(ent)
 
-    def place_tiles(self):
-        for (x, y), value in np.ndenumerate(self.tiles):
+    def place_tiles(self, tiles):
+        for (x, y), value in np.ndenumerate(tiles):
             """
             if value == 0:
                 self.world.create_entity(
@@ -131,12 +137,7 @@ class MapgenProcessor(esper.Processor):
                     TileComponent(blocks_path=True, blocks_sight=True)
                 )
 
-    def place_monsters(self):
-        new_ent = fabricate_entity('zombie', self.world)
-        new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
-        new_ent_pos.x = 3
-        new_ent_pos.y = 3
-
+    def place_monsters(self, tiles):
         for room in self.rooms:
             size = room.h + room.w
             number_of_monsters = size // 5  # This controls monster density
@@ -145,7 +146,7 @@ class MapgenProcessor(esper.Processor):
                 x = random.randint(room.x, room.x + room.w - 1)
                 y = random.randint(room.y, room.y + room.h - 1)
                 
-                if not self.tiles[x, y] and not tile_occupied(self.world, x, y):
+                if not tiles[x, y] and not tile_occupied(self.world, x, y):
                     new_ent = fabricate_entity('zombie', self.world)
                     new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                     new_ent_pos.x = x
@@ -153,11 +154,11 @@ class MapgenProcessor(esper.Processor):
                     
                 number_of_monsters -= 1
 
-    def create_fov_map(self):
-        fov_map = libtcod.map.Map(self.width, self.height, order='F')
+    def create_fov_map(self, h, w):
+        fov_map = libtcod.map.Map(w, h, order='F')
 
         for ent, (pos, tile) in self.world.get_components(PositionComponent, TileComponent):
             fov_map.walkable[pos.x, pos.y] = not tile.blocks_path
             fov_map.transparent[pos.x, pos.y] = not tile.blocks_sight
         
-        self.world.get_processor(PrerenderProcessor).fov_map = fov_map
+        return fov_map

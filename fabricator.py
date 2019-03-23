@@ -13,12 +13,13 @@ from components.position import PositionComponent
 from components.render import RenderComponent
 from components.tile import TileComponent
 from components.velocity import VelocityComponent
+from world import CONSOLE_HEIGHT, CONSOLE_WIDTH
 
 def fabricate_entity(ent, world):
     if ent == 'game':
         return world.create_entity(
             EventComponent(),
-            MapComponent(),
+            MapComponent(height=CONSOLE_HEIGHT, width=CONSOLE_WIDTH),
             PersistComponent(),
             StateComponent()
         )

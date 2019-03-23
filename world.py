@@ -23,7 +23,7 @@ def build_world():
     action_processor = ActionProcessor()
     initial_processor = InitialProcessor()
     input_processor = InputProcessor()
-    mapgen_processor = MapgenProcessor(width=CONSOLE_WIDTH, height=CONSOLE_HEIGHT)
+    mapgen_processor = MapgenProcessor()
     movement_processor = MovementProcessor()
     prerender_processor = PrerenderProcessor()
     render_processor = RenderProcessor(console=root)
