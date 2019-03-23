@@ -31,8 +31,6 @@ class DijkstraProcessor(esper.Processor):
 
                 for neighbor in self.directory[current]:
                     if neighbor not in visited:
-
-                        
                         if self.tile_occupied(neighbor[0], neighbor[1]):
                             dijkstra_map[neighbor[1], neighbor[0]] = dijkstra_map[current[1], current[0]] + 15
                             
@@ -41,6 +39,7 @@ class DijkstraProcessor(esper.Processor):
                         
                             if not dijkstra_map[neighbor[1], neighbor[0]] > 20: # Cheap optimization.
                                 frontier.append(neighbor)
+                        
                         visited[neighbor] = True
             
             self.world.get_processor(AiInputProcessor).dijkstra_map = dijkstra_map
