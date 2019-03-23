@@ -19,21 +19,9 @@ class DijkstraProcessor(esper.Processor):
             player_pos = self.world.component_for_entity(2, PositionComponent)
 
             dijkstra_map = np.ones((game_map.width, game_map.height), dtype=int, order='F') * 999
-
-            # Build neighborhood.
-            directory = {}
-            directions = [(1, -1), (1, 1), (-1, -1), (-1, 1), (1, 0), (-1, 0), (0, -1), (0, 1)]
-            
-            for (x, y), _ in np.ndenumerate(game_map.tiles):
-                results = []
-                for direction in directions:
-                    neighbor = (x + direction[0], y + direction[1])
-                    if 0 <= neighbor[0] < game_map.width and 0 <= neighbor[1] < game_map.height and game_map.tiles[neighbor[0], neighbor[1]] == 0:
-                        results.append(neighbor)
-                
-                directory[(x, y)] = results
             
             # Build dijkstra map.
+            directory = game_map.directory
             start = player_pos.x, player_pos.y
             frontier = deque()
             frontier.append(start)

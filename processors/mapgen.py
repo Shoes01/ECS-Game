@@ -27,6 +27,9 @@ class MapgenProcessor(esper.Processor):
             # Create new map.
             game_map.tiles = self.create_map(game_map.height, game_map.width)
             
+            # Create directory of map.
+            game_map.directory = self.create_directory(game_map.height, game_map.tiles, game_map.width)
+
             # Create fov map.
             game_map.fov_map = self.create_fov_map(game_map.height, game_map.width)
            
@@ -152,6 +155,21 @@ class MapgenProcessor(esper.Processor):
                     new_ent_pos.y = y
                     
                 number_of_monsters -= 1
+
+    def create_directory(self, h, tiles, w):
+        directory = {}
+        directions = [(1, -1), (1, 1), (-1, -1), (-1, 1), (1, 0), (-1, 0), (0, -1), (0, 1)]
+        
+        for (x, y), _ in np.ndenumerate(tiles):
+            results = []
+            for direction in directions:
+                neighbor = (x + direction[0], y + direction[1])
+                if 0 <= neighbor[0] < w and 0 <= neighbor[1] < h and tiles[neighbor[0], neighbor[1]] == 0:
+                    results.append(neighbor)
+            
+            directory[(x, y)] = results
+        
+        return directory
 
     def create_fov_map(self, h, w):
         fov_map = libtcod.map.Map(w, h, order='F')
