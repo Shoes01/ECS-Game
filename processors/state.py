@@ -1,10 +1,10 @@
 import esper
 
+from components.game.debug import DebugComponent
 from components.game.dijgen import DijgenComponent
 from components.game.event import EventComponent
 from components.game.mapgen import MapgenComponent
 from components.game.state import StateComponent
-from processors.debug import DebugProcessor
 from processors.dijkstra import DijkstraProcessor
 from processors.render import RenderProcessor
 
@@ -32,12 +32,9 @@ class StateProcessor(esper.Processor):
         
         # Special debug event
         if event_component.event == 'Toggle_debug_mode':
-            debug_processor = self.world.get_processor(DebugProcessor)
-
-            if debug_processor:
-                debug_processor.kill()
-                self.world.remove_processor(DebugProcessor)
+            if self.world.has_component(1, DebugComponent):
+                self.world.remove_component(1, DebugComponent)
             else:
-                self.world.add_processor(DebugProcessor(), 39)
+                self.world.add_component(1, DebugComponent())
 
         event_component.event = None

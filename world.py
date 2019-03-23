@@ -2,6 +2,7 @@ import esper
 import tcod as libtcod
 
 from processors.action import ActionProcessor
+from processors.debug import DebugProcessor
 from processors.dijkstra import DijkstraProcessor
 from processors.initial import InitialProcessor
 from processors.input import InputProcessor
@@ -17,6 +18,7 @@ def build_world():
 
     # Instantiate Processors.
     action_processor = ActionProcessor()
+    debug_processor = DebugProcessor()
     dijkstra_processor = DijkstraProcessor()
     initial_processor = InitialProcessor()
     input_processor = InputProcessor()
@@ -33,6 +35,7 @@ def build_world():
     world.add_processor(dijkstra_processor, 55)
     world.add_processor(prerender_processor, 50)
     world.add_processor(render_processor, 40)
+    world.add_processor(debug_processor, 39)
     # debug_processor goes here, with priority 39.
     # ai_input_processor goes here, with priority at 35.
     world.add_processor(input_processor, 30)

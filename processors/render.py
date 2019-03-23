@@ -4,6 +4,7 @@ import tcod as libtcod
 
 from components.actor.actor import ActorComponent
 from components.game.console import ConsoleComponent
+from components.game.debug import DebugComponent
 from components.game.state import StateComponent
 from components.position import PositionComponent
 from components.tile import TileComponent
@@ -12,14 +13,13 @@ from components.render import RenderComponent
 class RenderProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
-        self.debug_mode = False # Injected via DebugProcessor
     
     def process(self):
         console = self.world.component_for_entity(1, ConsoleComponent).console
         # Prepare the console.
         console.clear(bg=libtcod.black, fg=libtcod.white)
 
-        if self.debug_mode:
+        if self.world.has_component(1, DebugComponent):
             return 0
 
         game_state = self.world.component_for_entity(1, StateComponent).state

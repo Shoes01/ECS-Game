@@ -5,9 +5,9 @@ from components.action import ActionComponent
 from components.actor.actor import ActorComponent
 from components.actor.brain import BrainComponent
 from components.actor.has_turn import HasTurnComponent
+from components.game.map import MapComponent
 from components.position import PositionComponent
 from components.player import PlayerComponent
-from processors.dijkstra import DijkstraProcessor
 
 class AiInputProcessor(esper.Processor):
     def __init__(self):
@@ -32,8 +32,9 @@ class AiInputProcessor(esper.Processor):
                 
     def hunt_player(self, pos):
         x, y = pos.x, pos.y
-        dijkstra_map = self.world.get_processor(DijkstraProcessor).dijkstra_map
-        directory = self.world.get_processor(DijkstraProcessor).directory
+        game_map = self.world.component_for_entity(1, MapComponent)
+        dijkstra_map = game_map.dijkstra_map
+        directory = game_map.directory
         lowest_value = dijkstra_map[x, y]
         best_direction = (0, 0)
         
