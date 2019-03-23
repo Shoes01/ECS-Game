@@ -25,6 +25,5 @@ class MovementProcessor(esper.Processor):
 
             pos.x += vel.dx
             pos.y += vel.dy
-            print('Entity {0} now has position {1}'.format(ent, (pos.x, pos.y)))
 
             self.world.remove_component(ent, VelocityComponent)

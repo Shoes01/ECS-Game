@@ -1,6 +1,7 @@
 import esper
 import numpy as np
 
+from _helper_functions import tile_occupied
 from collections import deque
 from components.actor.actor import ActorComponent
 from components.position import PositionComponent
@@ -31,7 +32,7 @@ class DijkstraProcessor(esper.Processor):
 
                 for neighbor in self.directory[current]:
                     if neighbor not in visited:
-                        if self.tile_occupied(neighbor[0], neighbor[1]):
+                        if tile_occupied(self.world, neighbor[0], neighbor[1]):
                             dijkstra_map[neighbor[0], neighbor[1]] = dijkstra_map[current[0], current[1]] + 15
                             
                         else:
@@ -46,11 +47,3 @@ class DijkstraProcessor(esper.Processor):
             self.world.get_processor(AiInputProcessor).directory = self.directory
             if self.world.get_processor(DebugProcessor):
                 self.world.get_processor(DebugProcessor).dijkstra_map = dijkstra_map
-
-    
-    def tile_occupied(self, x, y):
-        for ent, (actor, pos) in self.world.get_components(ActorComponent, PositionComponent):
-            if pos.x == x and pos.y == y:
-                return True
-        
-        return False

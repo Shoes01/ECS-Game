@@ -3,6 +3,7 @@ import numpy as np
 import random
 import tcod as libtcod
 
+from _helper_functions import tile_occupied
 from components.game.mapgen import MapgenComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
@@ -119,12 +120,14 @@ class MapgenProcessor(esper.Processor):
 
     def place_tiles(self):
         for (x, y), value in np.ndenumerate(self.tiles):
+            """
             if value == 0:
                 self.world.create_entity(
                     PositionComponent(x=x, y=y),
                     RenderComponent(char='.', color=libtcod.white, explored_color=libtcod.darkest_grey),
                     TileComponent(blocks_path=False, blocks_sight=False)
                 )
+            """
             if value == 1:
                 self.world.create_entity(
                     PositionComponent(x=x, y=y),
@@ -133,12 +136,21 @@ class MapgenProcessor(esper.Processor):
                 )
 
     def place_monsters(self):
-        for ent, (pos, tile) in self.world.get_components(PositionComponent, TileComponent):
-            if tile.blocks_path == False and random.randint(0, 10) > 9:
-                new_ent = fabricate_entity('zombie', self.world)
-                new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
-                new_ent_pos.x = pos.x
-                new_ent_pos.y = pos.y
+        for room in self.rooms:
+            size = room.h + room.w
+            number_of_monsters = size // 5  # This controls monster density
+
+            while number_of_monsters > 0:
+                x = random.randint(room.x, room.x + room.w - 1)
+                y = random.randint(room.y, room.y + room.h - 1)
+                
+                if not self.tiles[x, y] and not tile_occupied(self.world, x, y):
+                    new_ent = fabricate_entity('zombie', self.world)
+                    new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
+                    new_ent_pos.x = x
+                    new_ent_pos.y = y
+                    
+                number_of_monsters -= 1
 
     def create_fov_map(self):
         fov_map = libtcod.map.Map(self.width, self.height, order='F')
