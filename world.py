@@ -3,6 +3,7 @@ import tcod as libtcod
 
 from processors.action import ActionProcessor
 from processors.ai_input import AiInputProcessor
+from processors.combat import CombatProcessor
 from processors.debug import DebugProcessor
 from processors.dijkstra import DijkstraProcessor
 from processors.initial import InitialProcessor
@@ -20,6 +21,7 @@ def build_world():
     # Instantiate Processors.
     action_processor = ActionProcessor()
     ai_input_processor = AiInputProcessor()
+    combat_processor = CombatProcessor()
     debug_processor = DebugProcessor()
     dijkstra_processor = DijkstraProcessor()
     initial_processor = InitialProcessor()
@@ -42,5 +44,6 @@ def build_world():
     world.add_processor(input_processor, 30)
     world.add_processor(action_processor, 20)
     world.add_processor(movement_processor, 10)
+    world.add_processor(combat_processor, 5)
 
     return world
