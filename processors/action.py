@@ -11,7 +11,10 @@ class ActionProcessor(esper.Processor):
         super().__init__()
     
     def process(self):
-        for ent, (action, turn) in self.world.get_components(ActionComponent, HasTurnComponent):
+        for ent, (action) in self.world.get_component(ActionComponent):
+            if ent == 2 and not self.world.has_component(2, HasTurnComponent):
+                continue
+            
             _move = action.action.get('move')
             _wait = action.action.get('wait')
 

@@ -22,7 +22,7 @@ class DeathProcessor(esper.Processor):
             render_component.color = libtcod.red
 
             if ent == 2:
-                self.world.get_component(1, EventComponent).event = 'PlayerKilled'
+                self.world.component_for_entity(1, EventComponent).event = 'PlayerKilled'
             else:
                 self.world.remove_component(ent, BrainComponent)
             

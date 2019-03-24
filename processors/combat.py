@@ -24,3 +24,5 @@ class CombatProcessor(esper.Processor):
 
             if defender_stats.hp <= 0:
                 self.world.add_component(defender_ID, DeadComponent())
+
+            print('Entity #{0} hits Entity #{1} ({2}/{3} hp).'.format(attacker_ID, defender_ID, defender_stats.hp, defender_stats.hp_max))

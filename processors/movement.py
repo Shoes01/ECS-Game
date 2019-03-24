@@ -1,5 +1,6 @@
 import esper
 
+from _helper_functions import tile_occupied
 from components.actor.actor import ActorComponent
 from components.actor.combat import CombatComponent
 from components.player import PlayerComponent
@@ -14,10 +15,10 @@ class MovementProcessor(esper.Processor):
     def process(self):
         for ent, (actor, vel, pos) in self.world.get_components(ActorComponent, VelocityComponent, PositionComponent):
             
-            for ent_blocker, (actor, pos_blocker) in self.world.get_components(ActorComponent, PositionComponent):
-                if pos_blocker.x == pos.x + vel.dx and pos_blocker.y == pos.y + vel.dy:
-                    self.world.add_component(ent, CombatComponent(defender_ID=ent_blocker))
-                    vel.dx, vel.dy = 0, 0
+            occupying_entity = tile_occupied(self.world, pos.x + vel.dx, pos.y + vel.dy)
+            if occupying_entity:
+                self.world.add_component(ent, CombatComponent(defender_ID=occupying_entity))
+                vel.dx, vel.dy = 0, 0
             
             if self.world.has_component(ent, PlayerComponent):
                 # Player may run into walls, whereas AI uses the dijkstra map to navigate.
