@@ -1,6 +1,7 @@
 import esper
 
 from components.actor.actor import ActorComponent
+from components.actor.combat import CombatComponent
 from components.player import PlayerComponent
 from components.position import PositionComponent
 from components.tile import TileComponent
@@ -15,7 +16,7 @@ class MovementProcessor(esper.Processor):
             
             for ent_blocker, (actor, pos_blocker) in self.world.get_components(ActorComponent, PositionComponent):
                 if pos_blocker.x == pos.x + vel.dx and pos_blocker.y == pos.y + vel.dy:
-                    # TODO: Trigger a bump-attack here.
+                    self.world.add_component(ent, CombatComponent(defender_ID=ent_blocker))
                     vel.dx, vel.dy = 0, 0
             
             if self.world.has_component(ent, PlayerComponent):
