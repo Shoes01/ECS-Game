@@ -5,6 +5,7 @@ from processors.action import ActionProcessor
 from processors.ai_input import AiInputProcessor
 from processors.combat import CombatProcessor
 from processors.debug import DebugProcessor
+from processors.death import DeathProcessor
 from processors.dijkstra import DijkstraProcessor
 from processors.initial import InitialProcessor
 from processors.input import InputProcessor
@@ -23,6 +24,7 @@ def build_world():
     ai_input_processor = AiInputProcessor()
     combat_processor = CombatProcessor()
     debug_processor = DebugProcessor()
+    death_processor = DeathProcessor()
     dijkstra_processor = DijkstraProcessor()
     initial_processor = InitialProcessor()
     input_processor = InputProcessor()
@@ -45,5 +47,6 @@ def build_world():
     world.add_processor(action_processor, 20)
     world.add_processor(movement_processor, 10)
     world.add_processor(combat_processor, 5)
+    world.add_processor(death_processor, 1)
 
     return world

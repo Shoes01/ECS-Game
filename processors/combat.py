@@ -1,18 +1,26 @@
 import esper
 
+from components.actor.actor import ActorComponent
 from components.actor.combat import CombatComponent
-from components.actor.stats import StatsComponents
+from components.actor.dead import DeadComponent
+from components.actor.stats import StatsComponent
 
 class CombatProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
     
     def process(self):
-        for ent, (com) in self.world.get_component(CombatComponent):
+        for ent, (act, com) in self.world.get_components(ActorComponent, CombatComponent):
             attacker_ID = ent
             defender_ID = self.world.component_for_entity(attacker_ID, CombatComponent).defender_ID
 
-            attacker_stats = self.world.component_for_entity(attacker_ID, StatsComponents)
-            defender_stats = self.world.component_for_entity(defender_ID, StatsComponents)
+            if not self.world.has_component(defender_ID, ActorComponent):
+                return 0
+
+            attacker_stats = self.world.component_for_entity(attacker_ID, StatsComponent)
+            defender_stats = self.world.component_for_entity(defender_ID, StatsComponent)
 
             defender_stats.hp -= attacker_stats.power
+
+            if defender_stats.hp <= 0:
+                self.world.add_component(defender_ID, DeadComponent())

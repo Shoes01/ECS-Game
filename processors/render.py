@@ -3,6 +3,7 @@ import numpy as np
 import tcod as libtcod
 
 from components.actor.actor import ActorComponent
+from components.corpse import CorpseComponent
 from components.game.console import ConsoleComponent
 from components.game.debug import DebugComponent
 from components.game.state import StateComponent
@@ -34,6 +35,11 @@ class RenderProcessor(esper.Processor):
                 
                 elif ren.explored:
                     console.print(pos.x, pos.y, ren.char, ren.explored_color)            
+
+            # Print corpses to the console.
+            for ent, (corpse, pos, ren) in self.world.get_components(CorpseComponent, PositionComponent, RenderComponent):
+                if ren.visible:
+                    console.print(pos.x, pos.y, ren.char, ren.color)
 
             # Print entities to the console.
             for ent, (actor, pos, ren) in self.world.get_components(ActorComponent, PositionComponent, RenderComponent):

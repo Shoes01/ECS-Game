@@ -6,6 +6,7 @@ from components.game.event import EventComponent
 from components.game.map import MapComponent
 from components.game.mapgen import MapgenComponent
 from components.game.state import StateComponent
+from processors.initial import InitialProcessor
 
 class StateProcessor(esper.Processor):
     def __init__(self):
@@ -25,7 +26,16 @@ class StateProcessor(esper.Processor):
 
         if state_component.state == 'Game':
             if event_component.event == 'Exit':
-                self.world.component_for_entity(1, MapComponent).reset()                
+                self.world.clear_database()
+                self.world.add_processor(InitialProcessor())
+                state_component.state = 'MainMenu'
+            if event_component.event == 'PlayerKilled':
+                state_component.state = 'GameOver'
+        
+        if state_component.state == 'GameOver':
+            if event_component.event == 'Exit':
+                self.world.clear_database()
+                self.world.add_processor(InitialProcessor())
                 state_component.state = 'MainMenu'
 
         # Special debug event

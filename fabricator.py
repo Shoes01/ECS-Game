@@ -3,7 +3,7 @@ import tcod as libtcod
 from components.actor.actor import ActorComponent
 from components.actor.brain import BrainComponent
 from components.actor.has_turn import HasTurnComponent
-from components.actor.stats import StatsComponents
+from components.actor.stats import StatsComponent
 from components.game.console import ConsoleComponent
 from components.game.dijgen import DijgenComponent
 from components.game.event import EventComponent
@@ -37,7 +37,7 @@ def fabricate_entity(ent, world):
             PlayerComponent(),
             PositionComponent(),
             RenderComponent(char='@', color=libtcod.pink),
-            StatsComponents(hp=50, power=10)
+            StatsComponent(hp=50, power=10)
         )
     
     if ent == 'zombie':
@@ -46,5 +46,5 @@ def fabricate_entity(ent, world):
             BrainComponent(),
             PositionComponent(),
             RenderComponent(char='Z', color=libtcod.green),
-            StatsComponents(hp=11, power=1)
+            StatsComponent(hp=11, power=5)
         )

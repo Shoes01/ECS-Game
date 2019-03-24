@@ -6,9 +6,3 @@ class MapComponent():
         self.fov_map = None
         self.tiles = None
         self.width = width
-    
-    def reset(self):
-        self.dijkstra_map = None
-        self.directory = None
-        self.fov_map = None
-        self.tiles = None
