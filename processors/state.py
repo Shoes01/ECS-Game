@@ -14,7 +14,6 @@ class StateProcessor(esper.Processor):
     def process(self):        
         event_component = self.world.component_for_entity(1, EventComponent)
         state_component = self.world.component_for_entity(1, StateComponent)
-        # print('Event: {0}. State: {1}.'.format(event_component.event, state_component.state)) # Debug code
         
         if state_component.state == 'MainMenu':
             if event_component.event == 'Exit':

@@ -15,7 +15,7 @@ class MovementProcessor(esper.Processor):
             
             for ent_blocker, (actor, pos_blocker) in self.world.get_components(ActorComponent, PositionComponent):
                 if pos_blocker.x == pos.x + vel.dx and pos_blocker.y == pos.y + vel.dy:
-                    # Trigger a bump-attack here.
+                    # TODO: Trigger a bump-attack here.
                     vel.dx, vel.dy = 0, 0
             
             if self.world.has_component(ent, PlayerComponent):

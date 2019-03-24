@@ -20,6 +20,7 @@ class RenderProcessor(esper.Processor):
         console.clear(bg=libtcod.black, fg=libtcod.white)
 
         if self.world.has_component(1, DebugComponent):
+            # The DebugProcessor will print its own stuff.
             return 0
 
         game_state = self.world.component_for_entity(1, StateComponent).state
@@ -39,17 +40,13 @@ class RenderProcessor(esper.Processor):
                 if ren.visible:
                     console.print(pos.x, pos.y, ren.char, ren.color)
 
-            # Print the player.
+            # Print the player (again), on top of everything else.
             player_pos = self.world.component_for_entity(2, PositionComponent)
             player_ren = self.world.component_for_entity(2, RenderComponent)
             console.print(player_pos.x, player_pos.y, player_ren.char, player_ren.color)
             
-
         elif game_state == 'MainMenu':
-            console.print(3, 3, 'Welcome to the Main Menu.\nPress any key to begin.', libtcod.grey)
+            console.print(3, 3, 'Welcome to the Main Menu.\nPress any key to begin.\n', libtcod.grey)
         
-        # Blit console.
         console.blit(console)
-
-        # Flush console.
         libtcod.console_flush()

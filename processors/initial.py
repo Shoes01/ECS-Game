@@ -14,4 +14,4 @@ class InitialProcessor(esper.Processor):
         # Create the player entity. It is ID 2.
         fabricate_entity('player', self.world)
 
-        self.world.remove_processor(InitialProcessor) # Only needs to be done once per session.
+        self.world.remove_processor(InitialProcessor)

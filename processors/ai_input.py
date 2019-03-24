@@ -25,7 +25,7 @@ class AiInputProcessor(esper.Processor):
             self.world.add_component(2, HasTurnComponent())
     
     def take_turn_zombie(self, brain, pos):
-        if brain.awake is False and self.world.component_for_entity(1, MapComponent).fov_map.fov[pos.x, pos.y]: # There is no map the first time this is checked?
+        if brain.awake is False and self.world.component_for_entity(1, MapComponent).fov_map.fov[pos.x, pos.y]:
             brain.awake = True
         elif brain.awake:                    
             return self.hunt_player(pos)

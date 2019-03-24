@@ -13,7 +13,7 @@ class PrerenderProcessor(esper.Processor):
         game_map = self.world.component_for_entity(1, MapComponent)
 
         if game_map.fov_map:
-            pos_player = self.world.component_for_entity(2, PositionComponent) # 2 is player
+            pos_player = self.world.component_for_entity(2, PositionComponent)
             game_map.fov_map.compute_fov(x=pos_player.x, y=pos_player.y, radius=10, light_walls=True, algorithm=0)
 
             for ent, (pos, ren) in self.world.get_components(PositionComponent, RenderComponent):

@@ -14,7 +14,6 @@ class DijkstraProcessor(esper.Processor):
 
     def process(self):
         if self.world.has_component(1, DijgenComponent):
-            # Calculate dijkstra map.
             game_map = self.world.component_for_entity(1, MapComponent)
             player_pos = self.world.component_for_entity(2, PositionComponent)
 
