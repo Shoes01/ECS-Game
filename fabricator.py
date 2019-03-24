@@ -2,7 +2,7 @@ import tcod as libtcod
 
 from components.actor.actor import ActorComponent
 from components.actor.brain import BrainComponent
-from components.actor.has_turn import HasTurnComponent
+from components.actor.player_input import PlayerInputComponent
 from components.actor.stats import StatsComponent
 from components.game.console import ConsoleComponent
 from components.game.dijgen import DijgenComponent
@@ -32,7 +32,7 @@ def fabricate_entity(ent, world):
     if ent == 'player':
         return world.create_entity(
             ActorComponent(),
-            HasTurnComponent(),
+            PlayerInputComponent(),
             PersistComponent(),
             PlayerComponent(),
             PositionComponent(),

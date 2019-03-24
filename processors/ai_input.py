@@ -4,7 +4,7 @@ import random
 from components.action import ActionComponent
 from components.actor.actor import ActorComponent
 from components.actor.brain import BrainComponent
-from components.actor.has_turn import HasTurnComponent
+from components.actor.player_input import PlayerInputComponent
 from components.game.map import MapComponent
 from components.position import PositionComponent
 from components.player import PlayerComponent
@@ -14,15 +14,14 @@ class AiInputProcessor(esper.Processor):
         super().__init__()
     
     def process(self):
-        if not self.world.has_component(2, HasTurnComponent):
+        if not self.world.has_component(2, PlayerInputComponent):
             for ent, (actor, brain, pos) in self.world.get_components(ActorComponent, BrainComponent, PositionComponent):
                 if brain.brain == 'zombie':
                     action = self.take_turn_zombie(brain, pos)
                     if action:
-                        self.world.add_component(ent, HasTurnComponent())
                         self.world.add_component(ent, ActionComponent(action))
             
-            self.world.add_component(2, HasTurnComponent())
+            self.world.add_component(2, PlayerInputComponent())
     
     def take_turn_zombie(self, brain, pos):
         if brain.awake is False and self.world.component_for_entity(1, MapComponent).fov_map.fov[pos.x, pos.y]:

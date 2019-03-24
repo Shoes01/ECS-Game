@@ -1,7 +1,7 @@
 import esper
 import tcod as libtcod
 
-from components.actor.has_turn import HasTurnComponent
+from components.actor.player_input import PlayerInputComponent
 from components.action import ActionComponent
 from components.game.event import EventComponent
 from components.game.state import StateComponent
@@ -13,7 +13,7 @@ class InputProcessor(esper.Processor):
         self.key = key
     
     def process(self):
-        if self.world.has_component(2, HasTurnComponent):
+        if self.world.has_component(2, PlayerInputComponent):
             event_component = self.world.component_for_entity(1, EventComponent)
             game_state_component = self.world.component_for_entity(1, StateComponent)
 
@@ -55,5 +55,6 @@ class InputProcessor(esper.Processor):
             # Attach action component to player entity.
             if action:
                 self.world.add_component(2, ActionComponent(action=action)) # 2 is player entity
+                self.world.remove_component(2, PlayerInputComponent)
                 
             self.key = None
