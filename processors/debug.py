@@ -8,8 +8,9 @@ from components.game.map import MapComponent
 class DebugProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
-        self.mouse = None
         self.console = None
+        self.key = None
+        self.mouse = None
     
     def process(self):
         if self.world.has_component(1, DebugComponent):

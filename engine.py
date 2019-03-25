@@ -12,7 +12,7 @@ from world import build_world
 def main():
     # Prepare console.
     libtcod.console_set_custom_font('rexpaint_cp437_10x10.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_CP437)
-    console = libtcod.console_init_root(CONSOLE_WIDTH, CONSOLE_HEIGHT, title='v0.0.0', order='F')
+    console = libtcod.console_init_root(CONSOLE_WIDTH, CONSOLE_HEIGHT, title='ECS Game', order='F')
 
     # Prepare input related objects.
     key = libtcod.Key()
@@ -20,14 +20,18 @@ def main():
 
     # Prepare world. '1' is the game entity ID, '2' is the player ID.
     world = build_world()
+
+    # Insert input and display related objects into certain processors.
     world.get_processor(DebugProcessor).console = console
+    world.get_processor(DebugProcessor).key = key
+    world.get_processor(DebugProcessor).mouse = mouse
+    world.get_processor(InputProcessor).key = key
+    world.get_processor(InputProcessor).mouse = mouse
     world.get_processor(RenderProcessor).console = console
  
     while True:
         # Handle input.
         libtcod.sys_check_for_event(libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
-        world.get_processor(InputProcessor).key = key
-        world.get_processor(DebugProcessor).mouse = mouse
 
         # Do literally everything else.
         world.process()
