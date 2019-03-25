@@ -13,10 +13,10 @@ from components.render import RenderComponent
 class RenderProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
-        self.console = None
+        self._console = None
     
     def process(self):
-        console = self.console
+        console = self._console
         # Prepare the console.
         console.clear(bg=libtcod.black, fg=libtcod.white)
 

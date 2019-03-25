@@ -10,15 +10,15 @@ from components.player import PlayerComponent
 class InputProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
-        self.key = None
-        self.mouse = None
+        self._key = None
+        self._mouse = None
     
     def process(self):
         if self.world.has_component(2, PlayerInputComponent):
             event_component = self.world.component_for_entity(1, EventComponent)
             game_state_component = self.world.component_for_entity(1, StateComponent)
 
-            key = self.key
+            key = self._key
             key_char = chr(key.c)
             action = None
 

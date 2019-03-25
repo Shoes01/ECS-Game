@@ -8,14 +8,14 @@ from components.game.map import MapComponent
 class DebugProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
-        self.console = None
-        self.key = None
-        self.mouse = None
+        self._console = None
+        self._key = None
+        self._mouse = None
     
     def process(self):
         if self.world.has_component(1, DebugComponent):
             dijkstra_map = self.world.component_for_entity(1, MapComponent).dijkstra_map
-            console = self.console
+            console = self._console
             
             for (x, y), value in np.ndenumerate(dijkstra_map):
                 if value == 999:
@@ -23,15 +23,15 @@ class DebugProcessor(esper.Processor):
                 else:
                     console.print(x, y, baseN(value, 35), libtcod.pink)
 
-            if self.mouse:
-                _coordinate = (self.mouse.cx, self.mouse.cy)
-                _value = dijkstra_map[self.mouse.cx, self.mouse.cy]
+            if self._mouse:
+                _coordinate = (self._mouse.cx, self._mouse.cy)
+                _value = dijkstra_map[self._mouse.cx, self._mouse.cy]
                 console.print(0, 0, str(_coordinate), libtcod.white, bg_blend=libtcod.BKGND_NONE)
                 console.print(0, 1, str(_value), libtcod.white, bg_blend=libtcod.BKGND_NONE)
 
             last_key_char = None
-            if self.key and self.key.pressed:
-                last_key_char = self.key.text
+            if self._key and self._key.pressed:
+                last_key_char = self._key.text
             if last_key_char:
                 console.print(0, 2, last_key_char, libtcod.white, bg_blend=libtcod.BKGND_NONE)
 
