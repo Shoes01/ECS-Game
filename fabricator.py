@@ -1,10 +1,10 @@
 import tcod as libtcod
 
+from _data import CONSOLE_HEIGHT, CONSOLE_WIDTH
 from components.actor.actor import ActorComponent
 from components.actor.brain import BrainComponent
 from components.actor.player_input import PlayerInputComponent
 from components.actor.stats import StatsComponent
-from components.game.console import ConsoleComponent
 from components.game.dijgen import DijgenComponent
 from components.game.event import EventComponent
 from components.game.map import MapComponent
@@ -17,13 +17,9 @@ from components.render import RenderComponent
 from components.tile import TileComponent
 from components.velocity import VelocityComponent
 
-CONSOLE_HEIGHT = 60
-CONSOLE_WIDTH = 80
-
 def fabricate_entity(ent, world):
     if ent == 'game':
         return world.create_entity(
-            ConsoleComponent(console=libtcod.console_init_root(CONSOLE_WIDTH, CONSOLE_HEIGHT, title='v0.0.0', order='F')),
             EventComponent(),
             MapComponent(height=CONSOLE_HEIGHT, width=CONSOLE_WIDTH),
             PersistComponent(),

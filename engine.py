@@ -2,14 +2,17 @@ import cProfile
 import time
 import tcod as libtcod
 
+from _data import CONSOLE_HEIGHT, CONSOLE_WIDTH
 from components.game.state import StateComponent
 from processors.debug import DebugProcessor
 from processors.input import InputProcessor
+from processors.render import RenderProcessor
 from world import build_world
 
 def main():
     # Prepare console.
     libtcod.console_set_custom_font('rexpaint_cp437_10x10.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_CP437)
+    console = libtcod.console_init_root(CONSOLE_WIDTH, CONSOLE_HEIGHT, title='v0.0.0', order='F')
 
     # Prepare input related objects.
     key = libtcod.Key()
@@ -17,6 +20,8 @@ def main():
 
     # Prepare world. '1' is the game entity ID, '2' is the player ID.
     world = build_world()
+    world.get_processor(DebugProcessor).console = console
+    world.get_processor(RenderProcessor).console = console
  
     while True:
         # Handle input.

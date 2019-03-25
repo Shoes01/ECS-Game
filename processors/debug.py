@@ -2,7 +2,6 @@ import esper
 import numpy as np
 import tcod as libtcod
 
-from components.game.console import ConsoleComponent
 from components.game.debug import DebugComponent
 from components.game.map import MapComponent
 
@@ -10,11 +9,12 @@ class DebugProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
         self.mouse = None
+        self.console = None
     
     def process(self):
         if self.world.has_component(1, DebugComponent):
             dijkstra_map = self.world.component_for_entity(1, MapComponent).dijkstra_map
-            console = self.world.component_for_entity(1, ConsoleComponent).console
+            console = self.console
             
             for (x, y), value in np.ndenumerate(dijkstra_map):
                 if value == 999:
