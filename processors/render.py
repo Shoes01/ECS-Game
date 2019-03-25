@@ -26,7 +26,7 @@ class RenderProcessor(esper.Processor):
 
         game_state = self.world.component_for_entity(1, StateComponent).state
 
-        if game_state == 'Game':
+        if game_state == 'Game' or game_state == 'GameOver':
             # Print walls and stuff.
             for ent, (pos, ren, tile) in self.world.get_components(PositionComponent, RenderComponent, TileComponent):
                 
@@ -51,8 +51,11 @@ class RenderProcessor(esper.Processor):
             player_ren = self.world.component_for_entity(2, RenderComponent)
             console.print(player_pos.x, player_pos.y, player_ren.char, player_ren.color)
             
-        elif game_state == 'MainMenu':
+        if game_state == 'MainMenu':
             console.print(3, 3, 'Welcome to the Main Menu.\nPress any key to begin.\n', libtcod.grey)
+
+        if game_state == 'GameOver':
+            console.print(3, 3, 'You have died! Press ESC to return to the Main Menu.', libtcod.grey, bg_blend=libtcod.BKGND_NONE)
         
         console.blit(console)
         libtcod.console_flush()
