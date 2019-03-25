@@ -29,6 +29,12 @@ class DebugProcessor(esper.Processor):
                 console.print(0, 0, str(_coordinate), libtcod.white, bg_blend=libtcod.BKGND_NONE)
                 console.print(0, 1, str(_value), libtcod.white, bg_blend=libtcod.BKGND_NONE)
 
+            last_key_char = None
+            if self.key and self.key.pressed:
+                last_key_char = self.key.text
+            if last_key_char:
+                console.print(0, 2, last_key_char, libtcod.white, bg_blend=libtcod.BKGND_NONE)
+
             console.blit(console)
             libtcod.console_flush()
 

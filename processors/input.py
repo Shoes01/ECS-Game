@@ -22,6 +22,9 @@ class InputProcessor(esper.Processor):
             key_char = chr(key.c)
             action = None
 
+            if key.vk is libtcod.KEY_NONE:
+                return 0
+
             if key_char == 'd' and key.lctrl:
                 event_component.event = 'Toggle_debug_mode'
 
@@ -61,5 +64,3 @@ class InputProcessor(esper.Processor):
             if action:
                 self.world.add_component(2, ActionComponent(action=action)) # 2 is player entity
                 self.world.remove_component(2, PlayerInputComponent)
-                
-            self.key = None

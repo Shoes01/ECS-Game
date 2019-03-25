@@ -23,15 +23,15 @@ def main():
 
     # Insert input and display related objects into certain processors.
     world.get_processor(DebugProcessor).console = console
-    world.get_processor(DebugProcessor).key = key
-    world.get_processor(DebugProcessor).mouse = mouse
-    world.get_processor(InputProcessor).key = key
-    world.get_processor(InputProcessor).mouse = mouse
     world.get_processor(RenderProcessor).console = console
  
     while True:
         # Handle input.
         libtcod.sys_check_for_event(libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
+        world.get_processor(DebugProcessor).key = key
+        world.get_processor(DebugProcessor).mouse = mouse
+        world.get_processor(InputProcessor).key = key
+        world.get_processor(InputProcessor).mouse = mouse
 
         # Do literally everything else.
         world.process()
