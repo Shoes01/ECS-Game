@@ -10,7 +10,7 @@ from components.game.state import StateComponent
 from processors.initial import InitialProcessor
 from processors.final import FinalProcessor
 
-class StateProcessor(esper.Processor):
+class EventProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
     
