@@ -8,10 +8,9 @@ class InitialProcessor(esper.Processor):
         super().__init__()
 
     def process(self):
-        # Create game meta-entity. It is ID 1.
-        fabricate_entity('game', self.world)
+        if not self.world._entities:
+            # Create game meta-entity. It is ID 1.
+            fabricate_entity('game', self.world)
 
-        # Create the player entity. It is ID 2.
-        fabricate_entity('player', self.world)
-
-        self.world.remove_processor(InitialProcessor)
+            # Create the player entity. It is ID 2.
+            fabricate_entity('player', self.world)

@@ -52,6 +52,10 @@ class InputProcessor(esper.Processor):
                 elif key_char == '.' or key.vk == libtcod.KEY_KP5:
                     action = {'wait': True}
             
+            elif game_state_component.state == 'GameOver':
+                if key.vk == libtcod.KEY_ESCAPE:
+                    event_component.event = 'Exit'
+
             # Attach action component to player entity.
             if action:
                 self.world.add_component(2, ActionComponent(action=action)) # 2 is player entity

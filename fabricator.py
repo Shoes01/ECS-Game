@@ -8,6 +8,7 @@ from components.game.console import ConsoleComponent
 from components.game.dijgen import DijgenComponent
 from components.game.event import EventComponent
 from components.game.map import MapComponent
+from components.game.processor import ProcessorComponent
 from components.game.state import StateComponent
 from components.persist import PersistComponent
 from components.player import PlayerComponent
@@ -26,6 +27,7 @@ def fabricate_entity(ent, world):
             EventComponent(),
             MapComponent(height=CONSOLE_HEIGHT, width=CONSOLE_WIDTH),
             PersistComponent(),
+            ProcessorComponent(),
             StateComponent()
         )
 

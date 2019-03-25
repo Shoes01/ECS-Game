@@ -5,8 +5,10 @@ from components.game.dijgen import DijgenComponent
 from components.game.event import EventComponent
 from components.game.map import MapComponent
 from components.game.mapgen import MapgenComponent
+from components.game.processor import ProcessorComponent
 from components.game.state import StateComponent
 from processors.initial import InitialProcessor
+from processors.final import FinalProcessor
 
 class StateProcessor(esper.Processor):
     def __init__(self):
@@ -26,16 +28,14 @@ class StateProcessor(esper.Processor):
 
         if state_component.state == 'Game':
             if event_component.event == 'Exit':
-                self.world.clear_database()
-                self.world.add_processor(InitialProcessor())
+                self.world.component_for_entity(1, ProcessorComponent).final = True
                 state_component.state = 'MainMenu'
             if event_component.event == 'PlayerKilled':
                 state_component.state = 'GameOver'
         
         if state_component.state == 'GameOver':
             if event_component.event == 'Exit':
-                self.world.clear_database()
-                self.world.add_processor(InitialProcessor())
+                self.world.component_for_entity(1, ProcessorComponent).final = True
                 state_component.state = 'MainMenu'
 
         # Special debug event

@@ -7,6 +7,7 @@ from processors.combat import CombatProcessor
 from processors.debug import DebugProcessor
 from processors.death import DeathProcessor
 from processors.dijkstra import DijkstraProcessor
+from processors.final import FinalProcessor
 from processors.initial import InitialProcessor
 from processors.input import InputProcessor
 from processors.mapgen import MapgenProcessor
@@ -26,6 +27,7 @@ def build_world():
     debug_processor = DebugProcessor()
     death_processor = DeathProcessor()
     dijkstra_processor = DijkstraProcessor()
+    final_processor = FinalProcessor()
     initial_processor = InitialProcessor()
     input_processor = InputProcessor()
     mapgen_processor = MapgenProcessor()
@@ -35,7 +37,8 @@ def build_world():
     state_processor = StateProcessor()
     
     # Add them to the world.
-    world.add_processor(initial_processor, 999)
+    world.add_processor(final_processor, 999)
+    world.add_processor(initial_processor, 998)
     world.add_processor(state_processor, 70)
     world.add_processor(mapgen_processor, 60)
     world.add_processor(dijkstra_processor, 55)
