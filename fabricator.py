@@ -1,6 +1,5 @@
 import tcod as libtcod
 
-from _data import CONSOLE_HEIGHT, CONSOLE_WIDTH
 from components.actor.actor import ActorComponent
 from components.actor.brain import BrainComponent
 from components.actor.player_input import PlayerInputComponent
@@ -21,7 +20,7 @@ def fabricate_entity(ent, world):
     if ent == 'game':
         return world.create_entity(
             EventComponent(),
-            MapComponent(height=CONSOLE_HEIGHT, width=CONSOLE_WIDTH),
+            MapComponent(),
             PersistComponent(),
             ProcessorComponent(),
             StateComponent()

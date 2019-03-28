@@ -2,7 +2,7 @@ import cProfile
 import time
 import tcod as libtcod
 
-from _data import CONSOLE_HEIGHT, CONSOLE_WIDTH
+from _data import con
 from components.game.state import StateComponent
 from processors.debug import DebugProcessor
 from processors.input import InputProcessor
@@ -12,7 +12,7 @@ from world import build_world
 def main():
     # Prepare console.
     libtcod.console_set_custom_font('rexpaint_cp437_10x10.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_CP437)
-    console = libtcod.console_init_root(CONSOLE_WIDTH, CONSOLE_HEIGHT, title='ECS Game', order='F')
+    console = libtcod.console_init_root(con.w, con.h, title='ECS Game', order='F')
 
     # Prepare input related objects.
     key = libtcod.Key()

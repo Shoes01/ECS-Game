@@ -1,8 +1,10 @@
+from _data import map
+
 class MapComponent():
-    def __init__(self, height, width):
-        self.height = height
+    def __init__(self):
+        self.height = map.h
         self.dijkstra_map = None
         self.directory = None
         self.fov_map = None
         self.tiles = None
-        self.width = width
+        self.width = map.w
