@@ -26,6 +26,8 @@ class RenderProcessor(esper.Processor):
         log_obj[0].clear(bg=libtcod.black, fg=libtcod.white)
         map_obj[0].clear(bg=libtcod.black, fg=libtcod.white)
 
+        self.print_border()
+
         if self.world.has_component(1, DebugComponent):
             # The DebugProcessor will print its own stuff.
             return 0
@@ -67,3 +69,20 @@ class RenderProcessor(esper.Processor):
         log_obj[0].blit(dest=con_obj[0], dest_x=log_obj[1], dest_y=log_obj[2], width=log_obj[3], height=log_obj[4])
         map_obj[0].blit(dest=con_obj[0], dest_x=map_obj[1], dest_y=map_obj[2], width=map_obj[3], height=map_obj[4])
         libtcod.console_flush()
+    
+    def print_border(self):
+        con_obj = self._consoles['con'] # type: (console, x, y, w, h)
+        eqp_obj = self._consoles['eqp']
+        log_obj = self._consoles['log']
+        map_obj = self._consoles['map']
+        
+        for x in range(con_obj[1], con_obj[3]):
+            con_obj[0].print(x, con_obj[2], '#', libtcod.dark_grey)
+            con_obj[0].print(x, map_obj[2] + map_obj[4], '#', libtcod.dark_grey)
+            con_obj[0].print(x, con_obj[2] + con_obj[4] - 1, '#', libtcod.dark_grey)
+        
+        for y in range(con_obj[2], con_obj[4]):
+            con_obj[0].print(con_obj[1], y, '#', libtcod.dark_grey)
+            con_obj[0].print(con_obj[1] + con_obj[3] - 1, y, '#', libtcod.dark_grey)
+            if y >= eqp_obj[2]:
+                con_obj[0].print(eqp_obj[1] + eqp_obj[3], y, '#', libtcod.dark_grey)
