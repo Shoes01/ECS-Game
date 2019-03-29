@@ -1,3 +1,5 @@
+import tcod as libtcod
+
 from collections import namedtuple
 
 Rectangle = namedtuple('Rectangle', ['x', 'y', 'w', 'h'])
