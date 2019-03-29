@@ -64,7 +64,9 @@ class RenderProcessor(esper.Processor):
             map_obj[0].print(3, 3, 'Welcome to the Main Menu.\nPress any key to begin.\n', libtcod.grey)
 
         if game_state == 'GameOver':
-            map_obj[0].print(3, 3, 'You have died! Press ESC to return to the Main Menu.', libtcod.grey, bg_blend=libtcod.BKGND_NONE)
+            libtcod.console_set_color_control(libtcod.COLCTRL_1, libtcod.red, libtcod.light_red)
+
+            map_obj[0].print(3, 3, 'You have %cDIED%c! Press ESC to return to the Main Menu.' % (libtcod.COLCTRL_1, libtcod.COLCTRL_STOP), libtcod.grey, bg_blend=libtcod.BKGND_NONE)
         
         eqp_obj[0].blit(dest=con_obj[0], dest_x=eqp_obj[1], dest_y=eqp_obj[2], width=eqp_obj[3], height=eqp_obj[4])
         log_obj[0].blit(dest=con_obj[0], dest_x=log_obj[1], dest_y=log_obj[2], width=log_obj[3], height=log_obj[4])
