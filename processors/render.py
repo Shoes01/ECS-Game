@@ -20,6 +20,8 @@ class RenderProcessor(esper.Processor):
         eqp_obj = self._consoles['eqp']
         log_obj = self._consoles['log']
         map_obj = self._consoles['map']
+
+        game_state = self.world.component_for_entity(1, StateComponent).state
         
         # Prepare the console.
         eqp_obj[0].clear(bg=libtcod.black, fg=libtcod.white)
@@ -28,12 +30,11 @@ class RenderProcessor(esper.Processor):
 
         self.print_border()
 
+        # The DebugProcessor will print its own stuff.
         if self.world.has_component(1, DebugComponent):
-            # The DebugProcessor will print its own stuff.
             return 0
 
-        game_state = self.world.component_for_entity(1, StateComponent).state
-
+        # Print entities.
         if game_state == 'Game' or game_state == 'GameOver':
             # Print walls and stuff.
             for ent, (pos, ren, tile) in self.world.get_components(PositionComponent, RenderComponent, TileComponent):
