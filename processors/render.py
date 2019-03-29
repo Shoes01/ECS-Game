@@ -22,6 +22,8 @@ class RenderProcessor(esper.Processor):
         map_obj = self._consoles['map']
         
         # Prepare the console.
+        eqp_obj[0].clear(bg=libtcod.black, fg=libtcod.white)
+        log_obj[0].clear(bg=libtcod.black, fg=libtcod.white)
         map_obj[0].clear(bg=libtcod.black, fg=libtcod.white)
 
         if self.world.has_component(1, DebugComponent):
@@ -61,5 +63,7 @@ class RenderProcessor(esper.Processor):
         if game_state == 'GameOver':
             map_obj[0].print(3, 3, 'You have died! Press ESC to return to the Main Menu.', libtcod.grey, bg_blend=libtcod.BKGND_NONE)
         
+        eqp_obj[0].blit(dest=con_obj[0], dest_x=eqp_obj[1], dest_y=eqp_obj[2], width=eqp_obj[3], height=eqp_obj[4])
+        log_obj[0].blit(dest=con_obj[0], dest_x=log_obj[1], dest_y=log_obj[2], width=log_obj[3], height=log_obj[4])
         map_obj[0].blit(dest=con_obj[0], dest_x=map_obj[1], dest_y=map_obj[2], width=map_obj[3], height=map_obj[4])
         libtcod.console_flush()
