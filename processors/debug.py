@@ -50,6 +50,9 @@ class DebugProcessor(esper.Processor):
             if last_key_char:
                 map_obj[0].print(0, 2, last_key_char, libtcod.white, bg_blend=libtcod.BKGND_NONE)
 
+            # Test
+            eqp_obj[0].print(0, 0, '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', libtcod.white)
+
             # Send to console.
             eqp_obj[0].blit(dest=con_obj[0], dest_x=eqp_obj[1], dest_y=eqp_obj[2], width=eqp_obj[3], height=eqp_obj[4])
             log_obj[0].blit(dest=con_obj[0], dest_x=log_obj[1], dest_y=log_obj[2], width=log_obj[3], height=log_obj[4])

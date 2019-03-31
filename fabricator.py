@@ -7,6 +7,7 @@ from components.actor.stats import StatsComponent
 from components.game.dijgen import DijgenComponent
 from components.game.event import EventComponent
 from components.game.map import MapComponent
+from components.game.message_log import MessageLogComponent
 from components.game.processor import ProcessorComponent
 from components.game.state import StateComponent
 from components.persist import PersistComponent
@@ -21,6 +22,7 @@ def fabricate_entity(ent, world):
         return world.create_entity(
             EventComponent(),
             MapComponent(),
+            MessageLogComponent(),
             PersistComponent(),
             ProcessorComponent(),
             StateComponent()

@@ -1,6 +1,7 @@
 import esper
 import numpy as np
 import tcod as libtcod
+import textwrap #DEBUGGING
 
 from components.actor.actor import ActorComponent
 from components.corpse import CorpseComponent
@@ -65,11 +66,9 @@ class RenderProcessor(esper.Processor):
 
         if game_state == 'GameOver':
             libtcod.console_set_color_control(libtcod.COLCTRL_1, libtcod.red, libtcod.light_red)
-
-            map_obj[0].print(3, 3, 'You have %cDIED%c! Press ESC to return to the Main Menu.' % (libtcod.COLCTRL_1, libtcod.COLCTRL_STOP), libtcod.grey, bg_blend=libtcod.BKGND_NONE)
+            map_obj[0].print(3, 3, 'You have %cDIED%c! Press ESC to return to the Main Menu.' % (libtcod.COLCTRL_1, libtcod.COLCTRL_STOP), libtcod.grey, bg_blend=libtcod.BKGND_NONE)            
         
         eqp_obj[0].blit(dest=con_obj[0], dest_x=eqp_obj[1], dest_y=eqp_obj[2], width=eqp_obj[3], height=eqp_obj[4])
-        log_obj[0].blit(dest=con_obj[0], dest_x=log_obj[1], dest_y=log_obj[2], width=log_obj[3], height=log_obj[4])
         map_obj[0].blit(dest=con_obj[0], dest_x=map_obj[1], dest_y=map_obj[2], width=map_obj[3], height=map_obj[4])
         libtcod.console_flush()
     
