@@ -35,5 +35,7 @@ class MessageLogProcessor(esper.Processor):
                 console.print(0, 0 + dy, '(%s) The %c%s%c has died!' % (turn, libtcod.COLCTRL_1, char, libtcod.COLCTRL_STOP), LOG_COLORS['death'])
 
             dy -= 1
+            if dy < 0:
+                break
         
         console.blit(dest=self._consoles['con'][0], dest_x=x, dest_y=y, src_x=0, src_y=0, width=w, height=h)
