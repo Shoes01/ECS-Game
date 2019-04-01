@@ -25,17 +25,17 @@ class CombatProcessor(esper.Processor):
             attacker_stats = self.world.component_for_entity(attacker_ID, StatsComponent)
             defender_stats = self.world.component_for_entity(defender_ID, StatsComponent)
 
-            defender_stats.hp -= attacker_stats.power
+            damage = attacker_stats.power
+
+            defender_stats.hp -= damage
 
             att_ren = self.world.component_for_entity(attacker_ID, RenderComponent)
             def_ren = self.world.component_for_entity(defender_ID, RenderComponent)
 
-            message_log_component.messages.insert(0, {'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color)})
+            message_log_component.messages.insert(0, {'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, damage)})
 
-            if defender_stats.hp <= 0:
+            if defender_stats.hp <= 0 and not self.world.has_component(defender_ID, DeadComponent):
                 self.world.add_component(defender_ID, DeadComponent())
                 message_log_component.messages.insert(0, {'death': (def_ren.char, def_ren.color)})
-
-
 
             self.world.remove_component(ent, CombatComponent)
