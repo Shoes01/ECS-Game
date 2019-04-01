@@ -6,6 +6,7 @@ from components.actor.combat import CombatComponent
 from components.actor.dead import DeadComponent
 from components.actor.stats import StatsComponent
 from components.game.message_log import MessageLogComponent
+from components.render import RenderComponent
 
 class CombatProcessor(esper.Processor):
     def __init__(self):
@@ -29,7 +30,9 @@ class CombatProcessor(esper.Processor):
             if defender_stats.hp <= 0:
                 self.world.add_component(defender_ID, DeadComponent())
 
-            message_log_component.messages.append(
-                ('Entity #{0} hits Entity #{1} ({2}/{3} hp).'.format(attacker_ID, defender_ID, defender_stats.hp, defender_stats.hp_max), libtcod.yellow)
-            )
+            att_ren = self.world.component_for_entity(attacker_ID, RenderComponent)
+            def_ren = self.world.component_for_entity(defender_ID, RenderComponent)
+
+            message_log_component.messages.insert(0, {'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color)})
+
             self.world.remove_component(ent, CombatComponent)
