@@ -22,17 +22,17 @@ class MessageLogProcessor(esper.Processor):
             _death = message.get('death')
 
             if _combat:
-                att_char, att_color, def_char, def_color, damage = _combat
+                att_char, att_color, def_char, def_color, damage, turn = _combat
 
                 libtcod.console_set_color_control(libtcod.COLCTRL_1, att_color, libtcod.black)
                 libtcod.console_set_color_control(libtcod.COLCTRL_2, def_color, libtcod.black)
-                console.print(0, 0 + dy, ' %c%s%c hits %c%s%c for %s.' % (libtcod.COLCTRL_1, att_char, libtcod.COLCTRL_STOP, libtcod.COLCTRL_2, def_char, libtcod.COLCTRL_STOP, damage), LOG_COLORS['combat'])
+                console.print(0, 0 + dy, '(%s) %c%s%c hits %c%s%c for %s.' % (turn, libtcod.COLCTRL_1, att_char, libtcod.COLCTRL_STOP, libtcod.COLCTRL_2, def_char, libtcod.COLCTRL_STOP, damage), LOG_COLORS['combat'])
 
             if _death:
-                char, color = _death
+                char, color, turn = _death
 
                 libtcod.console_set_color_control(libtcod.COLCTRL_1, color, libtcod.black)
-                console.print(0, 0 + dy, ' The %c%s%c has died!' % (libtcod.COLCTRL_1, char, libtcod.COLCTRL_STOP), LOG_COLORS['death'])
+                console.print(0, 0 + dy, '(%s) The %c%s%c has died!' % (turn, libtcod.COLCTRL_1, char, libtcod.COLCTRL_STOP), LOG_COLORS['death'])
 
             dy -= 1
         

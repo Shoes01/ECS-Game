@@ -26,7 +26,6 @@ class RenderProcessor(esper.Processor):
         
         # Prepare the console.
         eqp_obj[0].clear(bg=libtcod.black, fg=libtcod.white)
-        log_obj[0].clear(bg=libtcod.black, fg=libtcod.white)
         map_obj[0].clear(bg=libtcod.black, fg=libtcod.white)
 
         self.print_border()

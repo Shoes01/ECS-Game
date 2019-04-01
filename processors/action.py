@@ -2,6 +2,7 @@ import esper
 
 from components.action import ActionComponent
 from components.game.dijgen import DijgenComponent
+from components.game.turn_count import TurnCountComponent
 from components.player import PlayerComponent
 from components.velocity import VelocityComponent
 
@@ -21,5 +22,8 @@ class ActionProcessor(esper.Processor):
             
             if _wait:
                 pass
+
+            if ent == 2:
+                self.world.component_for_entity(1, TurnCountComponent).turn_count += 1
 
             self.world.remove_component(ent, ActionComponent)

@@ -6,6 +6,7 @@ from components.actor.combat import CombatComponent
 from components.actor.dead import DeadComponent
 from components.actor.stats import StatsComponent
 from components.game.message_log import MessageLogComponent
+from components.game.turn_count import TurnCountComponent
 from components.render import RenderComponent
 
 class CombatProcessor(esper.Processor):
@@ -18,6 +19,7 @@ class CombatProcessor(esper.Processor):
             defender_ID = self.world.component_for_entity(attacker_ID, CombatComponent).defender_ID
 
             message_log_component = self.world.component_for_entity(1, MessageLogComponent)
+            turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
 
             if not self.world.has_component(defender_ID, ActorComponent):
                 return 0
@@ -32,10 +34,10 @@ class CombatProcessor(esper.Processor):
             att_ren = self.world.component_for_entity(attacker_ID, RenderComponent)
             def_ren = self.world.component_for_entity(defender_ID, RenderComponent)
 
-            message_log_component.messages.insert(0, {'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, damage)})
+            message_log_component.messages.insert(0, {'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, damage, turn)})
 
             if defender_stats.hp <= 0 and not self.world.has_component(defender_ID, DeadComponent):
                 self.world.add_component(defender_ID, DeadComponent())
-                message_log_component.messages.insert(0, {'death': (def_ren.char, def_ren.color)})
+                message_log_component.messages.insert(0, {'death': (def_ren.char, def_ren.color, turn)})
 
             self.world.remove_component(ent, CombatComponent)

@@ -10,6 +10,7 @@ from components.game.map import MapComponent
 from components.game.message_log import MessageLogComponent
 from components.game.processor import ProcessorComponent
 from components.game.state import StateComponent
+from components.game.turn_count import TurnCountComponent
 from components.persist import PersistComponent
 from components.player import PlayerComponent
 from components.position import PositionComponent
@@ -25,7 +26,8 @@ def fabricate_entity(ent, world):
             MessageLogComponent(),
             PersistComponent(),
             ProcessorComponent(),
-            StateComponent()
+            StateComponent(),
+            TurnCountComponent()
         )
 
     if ent == 'player':
