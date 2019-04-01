@@ -25,7 +25,6 @@ class RenderProcessor(esper.Processor):
         game_state = self.world.component_for_entity(1, StateComponent).state
         
         # Prepare the console.
-        eqp_obj[0].clear(bg=libtcod.black, fg=libtcod.white)
         map_obj[0].clear(bg=libtcod.black, fg=libtcod.white)
 
         self.print_border()

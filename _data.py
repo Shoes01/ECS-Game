@@ -10,8 +10,8 @@ border = 1
 
 CON_W = 80
 CON_H = 60
-EQP_W = 10
-EQP_H = 10
+EQP_W = 12
+EQP_H = 8
 
 """
 

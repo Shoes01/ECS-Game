@@ -8,6 +8,7 @@ from processors.debug import DebugProcessor
 from processors.input import InputProcessor
 from processors.message_log import MessageLogProcessor
 from processors.render import RenderProcessor
+from processors.stats import StatsProcessor
 from world import build_world
 
 def main():
@@ -30,6 +31,7 @@ def main():
     world.get_processor(DebugProcessor)._consoles = consoles
     world.get_processor(MessageLogProcessor)._consoles = consoles
     world.get_processor(RenderProcessor)._consoles = consoles
+    world.get_processor(StatsProcessor)._consoles = consoles
  
     while True:
         # Handle input.

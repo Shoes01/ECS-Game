@@ -16,6 +16,7 @@ from processors.message_log import MessageLogProcessor
 from processors.movement import MovementProcessor
 from processors.prerender import PrerenderProcessor
 from processors.render import RenderProcessor
+from processors.stats import StatsProcessor
 
 def build_world():
     # Create world.
@@ -37,6 +38,7 @@ def build_world():
     movement_processor = MovementProcessor()
     prerender_processor = PrerenderProcessor()
     render_processor = RenderProcessor()
+    stats_processor = StatsProcessor()
     
     # Add them to the world.
     world.add_processor(final_processor, 999)
@@ -45,7 +47,8 @@ def build_world():
     world.add_processor(mapgen_processor, 60)
     world.add_processor(dijkstra_processor, 55)
     world.add_processor(prerender_processor, 50)
-    world.add_processor(message_log, 41)
+    world.add_processor(message_log, 42)
+    world.add_processor(stats_processor, 41)
     world.add_processor(render_processor, 40)
     world.add_processor(debug_processor, 39)
     world.add_processor(ai_input_processor, 35)
