@@ -30,6 +30,5 @@ class DeathProcessor(esper.Processor):
             if self.world.has_component(ent, CombatComponent):
                 self.world.remove_component(ent, CombatComponent)
             self.world.remove_component(ent, DeadComponent)
-            self.world.remove_component(ent, StatsComponent)
             
             self.world.add_component(ent, CorpseComponent())
