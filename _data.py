@@ -2,6 +2,8 @@ import tcod as libtcod
 
 from collections import namedtuple
 
+### CONSOLE DIMENSION DATA
+
 Rectangle = namedtuple('Rectangle', ['x', 'y', 'w', 'h'])
 
 border = 1
@@ -50,3 +52,10 @@ log = Rectangle(
     w=CON_W - 3*border - EQP_W,
     h=EQP_H
 )
+
+### COLOR DATA
+
+LOG_COLORS = {
+    'combat': libtcod.yellow,
+    'death': libtcod.dark_red
+}

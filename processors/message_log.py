@@ -1,6 +1,7 @@
 import esper
 import tcod as libtcod
 
+from _data import LOG_COLORS
 from components.game.message_log import MessageLogComponent
 
 class MessageLogProcessor(esper.Processor):
@@ -16,14 +17,20 @@ class MessageLogProcessor(esper.Processor):
         for message in message_log:
             # Print combat messages
             _combat = message.get('combat')
+            _death = message.get('death')
+
             if _combat:
                 att_char, att_color, def_char, def_color = _combat
 
                 libtcod.console_set_color_control(libtcod.COLCTRL_1, att_color, libtcod.black)
                 libtcod.console_set_color_control(libtcod.COLCTRL_2, def_color, libtcod.black)
+                console.print(0, 0 + dy, 'The %c%s%c hits the %c%s%c.' % (libtcod.COLCTRL_1, att_char, libtcod.COLCTRL_STOP, libtcod.COLCTRL_2, def_char, libtcod.COLCTRL_STOP), LOG_COLORS['combat'])
 
+            if _death:
+                char, color = _death
 
-                console.print(0, 0 + dy, 'The %s hits the %s.' % (att_char, def_char), libtcod.yellow)
+                libtcod.console_set_color_control(libtcod.COLCTRL_1, color, libtcod.black)
+                console.print(0, 0 + dy, 'The %c%s%c has died!' % (libtcod.COLCTRL_1, char, libtcod.COLCTRL_STOP), LOG_COLORS['death'])
 
             dy -= 1
         
