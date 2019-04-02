@@ -55,6 +55,9 @@ class InputProcessor(esper.Processor):
                     action = {'move': (1, 1)}
                 elif key_char == '.' or key.vk == libtcod.KEY_KP5:
                     action = {'wait': True}
+                
+                if key_char = 'g':
+                    action = {'pick_up': True}
             
             elif game_state_component.state == 'GameOver':
                 if key.vk == libtcod.KEY_ESCAPE:

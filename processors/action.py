@@ -1,6 +1,7 @@
 import esper
 
 from components.action import ActionComponent
+from components.actor.equip import EquipComponent
 from components.game.dijgen import DijgenComponent
 from components.game.turn_count import TurnCountComponent
 from components.player import PlayerComponent
@@ -13,6 +14,7 @@ class ActionProcessor(esper.Processor):
     def process(self):
         for ent, (action) in self.world.get_component(ActionComponent):
             _move = action.action.get('move')
+            _pick_up = action.action.get('pick_up')
             _wait = action.action.get('wait')
 
             if _move:
@@ -20,6 +22,9 @@ class ActionProcessor(esper.Processor):
                 self.world.add_component(ent, VelocityComponent(dx=dx, dy=dy))
                 self.world.add_component(1, DijgenComponent())
             
+            if _pick_up:
+                self.world.add_component(ent, EquipComponent())
+
             if _wait:
                 pass
 
