@@ -1,6 +1,7 @@
 import esper
 import tcod as libtcod
 
+from _helper_functions import calculate_power
 from components.actor.stats import StatsComponent
 
 class StatsProcessor(esper.Processor):
@@ -19,7 +20,7 @@ class StatsProcessor(esper.Processor):
         player_stats_component = self.world.component_for_entity(2, StatsComponent)
 
         console.print(0, 0, 'HP: {0}/{1}'.format(player_stats_component.hp, player_stats_component.hp_max), color)
-        console.print(0, 1, 'PWR: {0}'.format(player_stats_component.power), color)
+        console.print(0, 1, 'PWR: {0}'.format(calculate_power(2, self.world)), color)
 
         # Draw the item boxes.
         

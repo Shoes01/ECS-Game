@@ -1,6 +1,7 @@
 import esper
 import tcod as libtcod
 
+from _helper_functions import calculate_power
 from components.actor.actor import ActorComponent
 from components.actor.combat import CombatComponent
 from components.actor.dead import DeadComponent
@@ -28,7 +29,7 @@ class CombatProcessor(esper.Processor):
             
             defender_stats = self.world.component_for_entity(defender_ID, StatsComponent)
 
-            damage = self.calculate_damage(attacker_ID)
+            damage = calculate_power(attacker_ID, self.world)
 
             defender_stats.hp -= damage
 
@@ -42,11 +43,3 @@ class CombatProcessor(esper.Processor):
                 message_log_component.messages.insert(0, {'death': (def_ren.char, def_ren.color, turn)})
 
             self.world.remove_component(ent, CombatComponent)
-    
-    def calculate_damage(self, ent):        
-        damage = self.world.component_for_entity(ent, StatsComponent).power
-
-        for item_id in self.world.component_for_entity(ent, EquipmentComponent).equipment:
-            damage += self.world.component_for_entity(item_id, ModifierComponent).power
-
-        return damage
