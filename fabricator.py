@@ -2,6 +2,7 @@ import tcod as libtcod
 
 from components.actor.actor import ActorComponent
 from components.actor.brain import BrainComponent
+from components.actor.equipment import EquipmentComponent
 from components.actor.player_input import PlayerInputComponent
 from components.actor.stats import StatsComponent
 from components.game.dijgen import DijgenComponent
@@ -33,9 +34,10 @@ def fabricate_entity(ent, world):
     if ent == 'player':
         return world.create_entity(
             ActorComponent(),
-            PlayerInputComponent(),
+            EquipmentComponent(),
             PersistComponent(),
             PlayerComponent(),
+            PlayerInputComponent(),
             PositionComponent(),
             RenderComponent(char='@', color=libtcod.pink),
             StatsComponent(hp=50, power=10)
@@ -45,6 +47,7 @@ def fabricate_entity(ent, world):
         return world.create_entity(
             ActorComponent(),
             BrainComponent(),
+            EquipmentComponent(),
             PositionComponent(),
             RenderComponent(char='Z', color=libtcod.green),
             StatsComponent(hp=11, power=5)
