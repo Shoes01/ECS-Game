@@ -12,6 +12,8 @@ from components.game.message_log import MessageLogComponent
 from components.game.processor import ProcessorComponent
 from components.game.state import StateComponent
 from components.game.turn_count import TurnCountComponent
+from components.item.item import ItemComponent
+from components.item.modifier import ModifierComponent
 from components.persist import PersistComponent
 from components.player import PlayerComponent
 from components.position import PositionComponent
@@ -43,6 +45,14 @@ def fabricate_entity(ent, world):
             StatsComponent(hp=50, power=10)
         )
     
+    if ent == 'sword':
+        return world.create_entity(
+            ItemComponent(),
+            ModifierComponent(power=5),
+            PositionComponent(),
+            RenderComponent(char=')', color=libtcod.blue)
+        )
+
     if ent == 'zombie':
         return world.create_entity(
             ActorComponent(),
