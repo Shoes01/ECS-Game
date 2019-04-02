@@ -7,6 +7,7 @@ from components.actor.actor import ActorComponent
 from components.corpse import CorpseComponent
 from components.game.debug import DebugComponent
 from components.game.state import StateComponent
+from components.item.equipped import EquippedComponent
 from components.item.item import ItemComponent
 from components.position import PositionComponent
 from components.tile import TileComponent
@@ -52,7 +53,7 @@ class RenderProcessor(esper.Processor):
 
             # Print items.
             for ent, (item, pos, ren) in self.world.get_components(ItemComponent, PositionComponent, RenderComponent):
-                if ren.visible:
+                if ren.visible and not self.world.has_component(ent, EquippedComponent):
                     map_obj[0].print(pos.x, pos.y, ren.char, ren.color)
 
             # Print entities to the console.

@@ -15,5 +15,5 @@ class EquipProcessor(esper.Processor):
 
             for item_ent, (item, item_pos) in self.world.get_components(ItemComponent, PositionComponent):
                 if pos.x == item_pos.x and pos.y == item_pos.y:
-                    equipment.append(item_ent)
+                    equipment.equipment.append(item_ent)
                     self.world.add_component(item_ent, EquippedComponent())
