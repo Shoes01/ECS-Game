@@ -59,6 +59,7 @@ class MapgenProcessor(esper.Processor):
         self.place_tiles(tiles)
         self.place_player()
         self.place_monsters(tiles)
+        self.place_loot(tiles)
 
         return tiles
 
@@ -151,6 +152,24 @@ class MapgenProcessor(esper.Processor):
                     new_ent_pos.y = y
                     
                 number_of_monsters -= 1
+
+    def place_loot(self, tiles):
+        for room in self._rooms:
+            size = room.h + room.w
+            number_of_items = size // 5 - 3
+
+            while number_of_items > 0:
+                x = random.randint(room.x, room.x + room.w - 1)
+                y = random.randint(room.y, room.y + room.h - 1)
+                
+                if not tiles[x, y] and not tile_occupied(self.world, x, y):
+                    new_ent = fabricate_entity('sword', self.world)
+                    new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
+                    new_ent_pos.x = x
+                    new_ent_pos.y = y
+                    
+                number_of_items -= 1
+
 
     def create_directory(self, h, tiles, w):
         directory = {}
