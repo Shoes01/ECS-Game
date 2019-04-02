@@ -4,9 +4,11 @@ import tcod as libtcod
 from components.actor.actor import ActorComponent
 from components.actor.combat import CombatComponent
 from components.actor.dead import DeadComponent
+from components.actor.equipment import EquipmentComponent
 from components.actor.stats import StatsComponent
 from components.game.message_log import MessageLogComponent
 from components.game.turn_count import TurnCountComponent
+from components.item.modifier import ModifierComponent
 from components.render import RenderComponent
 
 class CombatProcessor(esper.Processor):
@@ -23,11 +25,10 @@ class CombatProcessor(esper.Processor):
 
             if not self.world.has_component(defender_ID, ActorComponent):
                 return 0
-
-            attacker_stats = self.world.component_for_entity(attacker_ID, StatsComponent)
+            
             defender_stats = self.world.component_for_entity(defender_ID, StatsComponent)
 
-            damage = attacker_stats.power
+            damage = self.calculate_damage(attacker_ID)
 
             defender_stats.hp -= damage
 
@@ -41,3 +42,11 @@ class CombatProcessor(esper.Processor):
                 message_log_component.messages.insert(0, {'death': (def_ren.char, def_ren.color, turn)})
 
             self.world.remove_component(ent, CombatComponent)
+    
+    def calculate_damage(self, ent):        
+        damage = self.world.component_for_entity(ent, StatsComponent).power
+
+        for item_id in self.world.component_for_entity(ent, EquipmentComponent).equipment:
+            damage += self.world.component_for_entity(item_id, ModifierComponent).power
+
+        return damage
