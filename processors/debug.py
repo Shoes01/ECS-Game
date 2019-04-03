@@ -15,7 +15,7 @@ class DebugProcessor(esper.Processor):
     def process(self):
         if self.world.has_component(1, DebugComponent):
             con_obj = self._consoles['con'] # type: (console, x, y, w, h)
-            eqp_obj = self._consoles['eqp']
+            eqp_obj = self._consoles['stats']
             log_obj = self._consoles['log']
             map_obj = self._consoles['map']
 

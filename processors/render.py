@@ -14,6 +14,7 @@ from components.tile import TileComponent
 from components.render import RenderComponent
 from processors.sub.message_log import process_message_log
 from processors.sub.prerender import process_prerender
+from processors.sub.stats import process_stats
 
 class RenderProcessor(esper.Processor):
     def __init__(self):
@@ -32,11 +33,11 @@ class RenderProcessor(esper.Processor):
         """
         process_prerender(self.world)
         process_message_log(self._consoles['log'], self.world)
-        # process_stats()
+        process_stats(self._consoles['stats'], self.world)
         # process map
 
         con_obj = self._consoles['con'] # type: (console, x, y, w, h)
-        eqp_obj = self._consoles['eqp']
+        eqp_obj = self._consoles['stats']
         log_obj = self._consoles['log']
         map_obj = self._consoles['map']
 
@@ -96,7 +97,7 @@ class RenderProcessor(esper.Processor):
     
     def print_border(self):
         con_obj = self._consoles['con'] # type: (console, x, y, w, h)
-        eqp_obj = self._consoles['eqp']
+        eqp_obj = self._consoles['stats']
         log_obj = self._consoles['log']
         map_obj = self._consoles['map']
         

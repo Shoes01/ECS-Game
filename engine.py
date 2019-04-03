@@ -7,7 +7,6 @@ from components.game.state import StateComponent
 from processors.debug import DebugProcessor
 from processors.input import InputProcessor
 from processors.render import RenderProcessor
-from processors.stats import StatsProcessor
 from world import build_world
 
 def main():
@@ -15,7 +14,7 @@ def main():
     libtcod.console_set_custom_font('rexpaint_cp437_10x10.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_CP437)
     consoles = {}
     consoles['con'] = (libtcod.console_init_root(con.w, con.h, title='ECS Game', order='F'), con.x, con.y, con.w, con.h)
-    consoles['eqp'] = (libtcod.console.Console(eqp.w, eqp.h, order='F'), eqp.x, eqp.y, eqp.w, eqp.h)
+    consoles['stats'] = (libtcod.console.Console(eqp.w, eqp.h, order='F'), eqp.x, eqp.y, eqp.w, eqp.h)
     consoles['log'] = (libtcod.console.Console(log.w, log.h, order='F'), log.x, log.y, log.w, log.h)
     consoles['map'] = (libtcod.console.Console(map.w, map.h, order='F'), map.x, map.y, map.w, map.h)
 
@@ -29,7 +28,6 @@ def main():
     # Insert input and display related objects into certain processors.
     world.get_processor(DebugProcessor)._consoles = consoles
     world.get_processor(RenderProcessor)._consoles = consoles
-    world.get_processor(StatsProcessor)._consoles = consoles
  
     while True:
         # Handle input.

@@ -15,7 +15,6 @@ from processors.input import InputProcessor
 from processors.mapgen import MapgenProcessor
 from processors.movement import MovementProcessor
 from processors.render import RenderProcessor
-from processors.stats import StatsProcessor
 
 def build_world():
     # Create world.
@@ -36,7 +35,6 @@ def build_world():
     mapgen_processor = MapgenProcessor()
     movement_processor = MovementProcessor()
     render_processor = RenderProcessor()
-    stats_processor = StatsProcessor()
     
     # Add them to the world.
     world.add_processor(final_processor, 999)
@@ -44,7 +42,6 @@ def build_world():
     world.add_processor(event_processor, 70)
     world.add_processor(mapgen_processor, 60)
     world.add_processor(dijkstra_processor, 55)
-    world.add_processor(stats_processor, 41)
     world.add_processor(render_processor, 40)
     world.add_processor(debug_processor, 39)
     world.add_processor(ai_input_processor, 35)
