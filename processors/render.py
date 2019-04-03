@@ -12,13 +12,24 @@ from components.item.item import ItemComponent
 from components.position import PositionComponent
 from components.tile import TileComponent
 from components.render import RenderComponent
+from processors.sub.prerender import process_prerender
 
 class RenderProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
         self._consoles = {}
     
-    def process(self):        
+    def process(self):
+        """
+        TODO: Move all render-related processes into this one.
+        DebugProcessor
+        MessageLogProcessor
+        StatsProcessor
+        """
+        process_prerender(self.world)
+
+
+
         con_obj = self._consoles['con'] # type: (console, x, y, w, h)
         eqp_obj = self._consoles['eqp']
         log_obj = self._consoles['log']
