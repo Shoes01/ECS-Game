@@ -3,7 +3,7 @@ import tcod as libtcod
 from _helper_functions import calculate_power
 from components.actor.stats import StatsComponent
 
-def process_stats(console_bundle, world):
+def render_stats(console_bundle, world):
     console, x, y, w, h = console_bundle
         
     color = libtcod.white

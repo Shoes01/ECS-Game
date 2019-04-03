@@ -3,7 +3,7 @@ import tcod as libtcod
 from _data import LOG_COLORS
 from components.game.message_log import MessageLogComponent
 
-def process_message_log(console_bundle, world):
+def render_message_log(console_bundle, world):
     message_log = world.component_for_entity(1, MessageLogComponent).messages
     console, x, y, w, h = console_bundle
 

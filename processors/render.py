@@ -12,10 +12,9 @@ from components.item.item import ItemComponent
 from components.position import PositionComponent
 from components.tile import TileComponent
 from components.render import RenderComponent
-from processors.sub.entities import process_entities
-from processors.sub.message_log import process_message_log
-from processors.sub.prerender import process_prerender
-from processors.sub.stats import process_stats
+from processors.sub.entities import render_entities
+from processors.sub.message_log import render_message_log
+from processors.sub.stats import render_stats
 
 class RenderProcessor(esper.Processor):
     def __init__(self):
@@ -28,13 +27,11 @@ class RenderProcessor(esper.Processor):
         # Processing Game state
         if game_state == 'Game' or game_state == 'GameOver':
             self.print_border()
-            process_prerender(self.world)
-            process_message_log(self._consoles['log'], self.world)
-            process_stats(self._consoles['stats'], self.world)
-            process_entities(self._consoles['map'], self.world)
+            render_message_log(self._consoles['log'], self.world)
+            render_stats(self._consoles['stats'], self.world)
+            render_entities(self._consoles['map'], self.world)
         # process MainMenu state
         # process GameOver state
-        # process debug information
 
         con_obj = self._consoles['con'] # type: (console, x, y, w, h)
         eqp_obj = self._consoles['stats']
