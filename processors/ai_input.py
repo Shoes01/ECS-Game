@@ -1,13 +1,13 @@
 import esper
 import random
 
-from components.action import ActionComponent
+from components.actor.action import ActionComponent
 from components.actor.actor import ActorComponent
 from components.actor.brain import BrainComponent
+from components.actor.player import PlayerComponent
 from components.actor.player_input import PlayerInputComponent
 from components.game.map import MapComponent
 from components.position import PositionComponent
-from components.player import PlayerComponent
 
 class AiInputProcessor(esper.Processor):
     def __init__(self):

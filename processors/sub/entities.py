@@ -1,5 +1,5 @@
 from components.actor.actor import ActorComponent
-from components.corpse import CorpseComponent
+from components.actor.corpse import CorpseComponent
 from components.item.equipped import EquippedComponent
 from components.item.item import ItemComponent
 from components.game.map import MapComponent
@@ -9,7 +9,7 @@ from components.tile import TileComponent
 
 def render_entities(console_bundle, world):
     prerender_entities(world)
-    
+
     console, x, y, w, h = console_bundle
     for ent, (pos, ren, tile) in world.get_components(PositionComponent, RenderComponent, TileComponent):
         

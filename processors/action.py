@@ -1,11 +1,11 @@
 import esper
 
-from components.action import ActionComponent
+from components.actor.action import ActionComponent
 from components.actor.equip import EquipComponent
+from components.actor.player import PlayerComponent
+from components.actor.velocity import VelocityComponent
 from components.game.dijgen import DijgenComponent
 from components.game.turn_count import TurnCountComponent
-from components.player import PlayerComponent
-from components.velocity import VelocityComponent
 
 class ActionProcessor(esper.Processor):
     def __init__(self):

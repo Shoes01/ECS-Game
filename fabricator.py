@@ -3,8 +3,10 @@ import tcod as libtcod
 from components.actor.actor import ActorComponent
 from components.actor.brain import BrainComponent
 from components.actor.equipment import EquipmentComponent
+from components.actor.player import PlayerComponent
 from components.actor.player_input import PlayerInputComponent
 from components.actor.stats import StatsComponent
+from components.actor.velocity import VelocityComponent
 from components.game.dijgen import DijgenComponent
 from components.game.event import EventComponent
 from components.game.map import MapComponent
@@ -15,11 +17,9 @@ from components.game.turn_count import TurnCountComponent
 from components.item.item import ItemComponent
 from components.item.modifier import ModifierComponent
 from components.persist import PersistComponent
-from components.player import PlayerComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
 from components.tile import TileComponent
-from components.velocity import VelocityComponent
 
 def fabricate_entity(ent, world):
     if ent == 'game':

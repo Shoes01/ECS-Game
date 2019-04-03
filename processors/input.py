@@ -1,11 +1,11 @@
 import esper
 import tcod as libtcod
 
+from components.actor.action import ActionComponent
+from components.actor.player import PlayerComponent
 from components.actor.player_input import PlayerInputComponent
-from components.action import ActionComponent
 from components.game.event import EventComponent
 from components.game.state import StateComponent
-from components.player import PlayerComponent
 
 class InputProcessor(esper.Processor):
     def __init__(self):

@@ -3,10 +3,10 @@ import esper
 from _helper_functions import tile_occupied
 from components.actor.actor import ActorComponent
 from components.actor.combat import CombatComponent
-from components.player import PlayerComponent
+from components.actor.player import PlayerComponent
+from components.actor.velocity import VelocityComponent
 from components.position import PositionComponent
 from components.tile import TileComponent
-from components.velocity import VelocityComponent
 
 class MovementProcessor(esper.Processor):
     def __init__(self):
