@@ -7,8 +7,6 @@ def process_message_log(console_bundle, world):
     message_log = world.component_for_entity(1, MessageLogComponent).messages
     console, x, y, w, h = console_bundle
 
-    console.clear()
-
     dy = h - 1
     for message in message_log:
         # Print combat messages

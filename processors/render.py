@@ -12,6 +12,7 @@ from components.item.item import ItemComponent
 from components.position import PositionComponent
 from components.tile import TileComponent
 from components.render import RenderComponent
+from processors.sub.entities import process_entities
 from processors.sub.message_log import process_message_log
 from processors.sub.prerender import process_prerender
 from processors.sub.stats import process_stats
@@ -22,66 +23,27 @@ class RenderProcessor(esper.Processor):
         self._consoles = {}
     
     def process(self):
-        """
-        TODO: Move all render-related processes into this one.
-        
-        Stats processor
-        Normal render stuff
-        > Map
-        > Entities
-        Debug
-        """
-        process_prerender(self.world)
-        process_message_log(self._consoles['log'], self.world)
-        process_stats(self._consoles['stats'], self.world)
-        # process map
+        game_state = self.world.component_for_entity(1, StateComponent).state
+        ### TODO: Should all these "processes" be renamed to "render_x"? maybe :)
+        # Processing Game state
+        if game_state == 'Game' or game_state == 'GameOver':
+            self.print_border()
+            process_prerender(self.world)
+            process_message_log(self._consoles['log'], self.world)
+            process_stats(self._consoles['stats'], self.world)
+            process_entities(self._consoles['map'], self.world)
+        # process MainMenu state
+        # process GameOver state
+        # process debug information
 
         con_obj = self._consoles['con'] # type: (console, x, y, w, h)
         eqp_obj = self._consoles['stats']
         log_obj = self._consoles['log']
         map_obj = self._consoles['map']
 
-        game_state = self.world.component_for_entity(1, StateComponent).state
-        
-        # Prepare the console.
-        map_obj[0].clear(bg=libtcod.black, fg=libtcod.white)
-
-        self.print_border()
-
         # The DebugProcessor will print its own stuff.
         if self.world.has_component(1, DebugComponent):
             return 0
-
-        # Print entities.
-        if game_state == 'Game' or game_state == 'GameOver':
-            # Print walls and stuff.
-            for ent, (pos, ren, tile) in self.world.get_components(PositionComponent, RenderComponent, TileComponent):
-                
-                if ren.visible:
-                    map_obj[0].print(pos.x, pos.y, ren.char, ren.color)
-                
-                elif ren.explored:
-                    map_obj[0].print(pos.x, pos.y, ren.char, ren.explored_color)            
-
-            # Print corpses to the console.
-            for ent, (corpse, pos, ren) in self.world.get_components(CorpseComponent, PositionComponent, RenderComponent):
-                if ren.visible:
-                    map_obj[0].print(pos.x, pos.y, ren.char, ren.color)
-
-            # Print items.
-            for ent, (item, pos, ren) in self.world.get_components(ItemComponent, PositionComponent, RenderComponent):
-                if ren.visible and not self.world.has_component(ent, EquippedComponent):
-                    map_obj[0].print(pos.x, pos.y, ren.char, ren.color)
-
-            # Print entities to the console.
-            for ent, (actor, pos, ren) in self.world.get_components(ActorComponent, PositionComponent, RenderComponent):
-                if ren.visible:
-                    map_obj[0].print(pos.x, pos.y, ren.char, ren.color)
-
-            # Print the player (again), on top of everything else.
-            player_pos = self.world.component_for_entity(2, PositionComponent)
-            player_ren = self.world.component_for_entity(2, RenderComponent)
-            map_obj[0].print(player_pos.x, player_pos.y, player_ren.char, player_ren.color)
             
         if game_state == 'MainMenu':
             map_obj[0].print(3, 3, 'Welcome to the Main Menu.\nPress any key to begin.\n', libtcod.grey)
@@ -94,6 +56,11 @@ class RenderProcessor(esper.Processor):
         log_obj[0].blit(dest=con_obj[0], dest_x=log_obj[1], dest_y=log_obj[2], width=log_obj[3], height=log_obj[4])
         map_obj[0].blit(dest=con_obj[0], dest_x=map_obj[1], dest_y=map_obj[2], width=map_obj[3], height=map_obj[4])
         libtcod.console_flush()
+        
+        con_obj[0].clear()
+        eqp_obj[0].clear()
+        log_obj[0].clear()
+        map_obj[0].clear()        
     
     def print_border(self):
         con_obj = self._consoles['con'] # type: (console, x, y, w, h)
