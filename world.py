@@ -13,7 +13,6 @@ from processors.final import FinalProcessor
 from processors.initial import InitialProcessor
 from processors.input import InputProcessor
 from processors.mapgen import MapgenProcessor
-from processors.message_log import MessageLogProcessor
 from processors.movement import MovementProcessor
 from processors.render import RenderProcessor
 from processors.stats import StatsProcessor
@@ -35,7 +34,6 @@ def build_world():
     initial_processor = InitialProcessor()
     input_processor = InputProcessor()
     mapgen_processor = MapgenProcessor()
-    message_log = MessageLogProcessor()
     movement_processor = MovementProcessor()
     render_processor = RenderProcessor()
     stats_processor = StatsProcessor()
@@ -46,7 +44,6 @@ def build_world():
     world.add_processor(event_processor, 70)
     world.add_processor(mapgen_processor, 60)
     world.add_processor(dijkstra_processor, 55)
-    world.add_processor(message_log, 42)
     world.add_processor(stats_processor, 41)
     world.add_processor(render_processor, 40)
     world.add_processor(debug_processor, 39)

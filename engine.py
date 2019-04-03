@@ -6,7 +6,6 @@ from _data import con, eqp, log, map
 from components.game.state import StateComponent
 from processors.debug import DebugProcessor
 from processors.input import InputProcessor
-from processors.message_log import MessageLogProcessor
 from processors.render import RenderProcessor
 from processors.stats import StatsProcessor
 from world import build_world
@@ -29,7 +28,6 @@ def main():
 
     # Insert input and display related objects into certain processors.
     world.get_processor(DebugProcessor)._consoles = consoles
-    world.get_processor(MessageLogProcessor)._consoles = consoles
     world.get_processor(RenderProcessor)._consoles = consoles
     world.get_processor(StatsProcessor)._consoles = consoles
  

@@ -12,6 +12,7 @@ from components.item.item import ItemComponent
 from components.position import PositionComponent
 from components.tile import TileComponent
 from components.render import RenderComponent
+from processors.sub.message_log import process_message_log
 from processors.sub.prerender import process_prerender
 
 class RenderProcessor(esper.Processor):
@@ -22,13 +23,17 @@ class RenderProcessor(esper.Processor):
     def process(self):
         """
         TODO: Move all render-related processes into this one.
-        DebugProcessor
-        MessageLogProcessor
-        StatsProcessor
+        
+        Stats processor
+        Normal render stuff
+        > Map
+        > Entities
+        Debug
         """
         process_prerender(self.world)
-
-
+        process_message_log(self._consoles['log'], self.world)
+        # process_stats()
+        # process map
 
         con_obj = self._consoles['con'] # type: (console, x, y, w, h)
         eqp_obj = self._consoles['eqp']
@@ -85,6 +90,7 @@ class RenderProcessor(esper.Processor):
             map_obj[0].print(3, 3, 'You have %cDIED%c! Press ESC to return to the Main Menu.' % (libtcod.COLCTRL_1, libtcod.COLCTRL_STOP), libtcod.grey, bg_blend=libtcod.BKGND_NONE)            
         
         eqp_obj[0].blit(dest=con_obj[0], dest_x=eqp_obj[1], dest_y=eqp_obj[2], width=eqp_obj[3], height=eqp_obj[4])
+        log_obj[0].blit(dest=con_obj[0], dest_x=log_obj[1], dest_y=log_obj[2], width=log_obj[3], height=log_obj[4])
         map_obj[0].blit(dest=con_obj[0], dest_x=map_obj[1], dest_y=map_obj[2], width=map_obj[3], height=map_obj[4])
         libtcod.console_flush()
     
