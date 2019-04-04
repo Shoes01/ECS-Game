@@ -4,9 +4,9 @@ import tcod as libtcod
 from components.actor.actor import ActorComponent
 from components.actor.brain import BrainComponent
 from components.actor.combat import CombatComponent
+from components.actor.corpse import CorpseComponent
 from components.actor.dead import DeadComponent
 from components.actor.stats import StatsComponent
-from components.corpse import CorpseComponent
 from components.game.event import EventComponent
 from components.render import RenderComponent
 

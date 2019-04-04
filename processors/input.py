@@ -5,6 +5,7 @@ from components.actor.action import ActionComponent
 from components.actor.player import PlayerComponent
 from components.actor.player_input import PlayerInputComponent
 from components.game.event import EventComponent
+from components.game.popup import PopupComponent
 from components.game.state import StateComponent
 
 class InputProcessor(esper.Processor):
@@ -36,7 +37,23 @@ class InputProcessor(esper.Processor):
 
             elif game_state_component.state == 'Game':
                 if key.vk == libtcod.KEY_ESCAPE:
-                    event_component.event = 'Exit'
+                    popup_component = PopupComponent(
+                        title='Are you sure?',
+                        choices=[
+                            (
+                                'Yes',
+                                'y',
+                                {'event': 'Exit'}
+                            ),
+                            (
+                                'No',
+                                'n',
+                                {'event': 'Cancel'}
+                            )
+                        ]
+                    )
+                    self.world.add_component(1, popup_component)
+                    event_component.event = 'PopupMenu'
                 if key.vk == libtcod.KEY_UP or key_char == 'k' or key.vk == libtcod.KEY_KP8:
                     action = {'move': (0, -1)}
                 elif key.vk == libtcod.KEY_DOWN or key_char == 'j' or key.vk == libtcod.KEY_KP2:
@@ -62,6 +79,16 @@ class InputProcessor(esper.Processor):
             elif game_state_component.state == 'GameOver':
                 if key.vk == libtcod.KEY_ESCAPE:
                     event_component.event = 'Exit'
+
+            elif game_state_component.state == 'PopupMenu':
+                _popup_comp = self.world.component_for_entity(1, PopupComponent)
+                for choice in _popup_comp.choices:
+                    title, valid_key, result = choice
+                    if key_char == valid_key:
+                        if result.get('event'):
+                            event_component.event = result['event']
+                        if result.get('action'):
+                            action = result['action']
 
             # Attach action component to player entity.
             if action:

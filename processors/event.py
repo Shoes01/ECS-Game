@@ -5,6 +5,7 @@ from components.game.dijgen import DijgenComponent
 from components.game.event import EventComponent
 from components.game.map import MapComponent
 from components.game.mapgen import MapgenComponent
+from components.game.popup import PopupComponent
 from components.game.processor import ProcessorComponent
 from components.game.state import StateComponent
 from processors.initial import InitialProcessor
@@ -27,16 +28,24 @@ class EventProcessor(esper.Processor):
                 state_component.state = 'Game'
 
         if state_component.state == 'Game':
-            if event_component.event == 'Exit':
-                self.world.component_for_entity(1, ProcessorComponent).final = True
-                state_component.state = 'MainMenu'
             if event_component.event == 'PlayerKilled':
                 state_component.state = 'GameOver'
+            if event_component.event == 'PopupMenu':
+                state_component.state = 'PopupMenu'
         
         if state_component.state == 'GameOver':
             if event_component.event == 'Exit':
                 self.world.component_for_entity(1, ProcessorComponent).final = True
                 state_component.state = 'MainMenu'
+
+        if state_component.state == 'PopupMenu':
+            if event_component.event == 'Exit':
+                self.world.component_for_entity(1, ProcessorComponent).final = True
+                self.world.remove_component(1, PopupComponent)
+                state_component.state = 'MainMenu'
+            if event_component.event == 'Cancel':
+                state_component.state = 'Game'
+                self.world.remove_component(1, PopupComponent)
 
         # Special debug event
         if event_component.event == 'Toggle_debug_mode':

@@ -4,6 +4,7 @@ import tcod as libtcod
 from components.game.state import StateComponent
 from processors.sub.entities import render_entities
 from processors.sub.message_log import render_message_log
+from processors.sub.popup_menu import render_popup_menu
 from processors.sub.stats import render_stats
 
 class RenderProcessor(esper.Processor):
@@ -24,6 +25,9 @@ class RenderProcessor(esper.Processor):
             render_message_log(self._consoles['log'], self.world)
             render_stats(self._consoles['stats'], self.world)
             render_entities(self._consoles['map'], self.world)
+        
+        if game_state == 'PopupMenu':
+            render_popup_menu(self._consoles['map'], self.world)
         
         if game_state == 'MainMenu':
             map_obj[0].print(3, 3, 'Welcome to the Main Menu.\nPress any key to begin.\n', libtcod.grey)
