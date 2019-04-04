@@ -38,7 +38,7 @@ class InputProcessor(esper.Processor):
             elif game_state_component.state == 'Game':
                 if key.vk == libtcod.KEY_ESCAPE:
                     popup_component = PopupComponent(
-                        title='Are you sure?',
+                        title='Are you sure you want to quit?',
                         choices=[
                             (
                                 'Yes',

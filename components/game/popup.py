@@ -1,7 +1,7 @@
-from _data import con
+from _data import map
 
 class PopupComponent():
-    def __init__(self, title, choices, x=5, y=5, w=con.w-5, h=con.h-5):
+    def __init__(self, title, choices, x=10, y=5, w=map.w-20, h=map.h-10):
         self.title = title
         self.choices = choices
         self.x = x

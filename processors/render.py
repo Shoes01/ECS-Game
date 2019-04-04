@@ -20,13 +20,11 @@ class RenderProcessor(esper.Processor):
         log_obj = self._consoles['log']
         map_obj = self._consoles['map']
 
-        if game_state == 'Game' or game_state == 'GameOver':
+        if game_state == 'Game' or game_state == 'GameOver' or game_state == 'PopupMenu':
             self.render_border()
             render_message_log(self._consoles['log'], self.world)
             render_stats(self._consoles['stats'], self.world)
             render_entities(self._consoles['map'], self.world)
-        
-        if game_state == 'PopupMenu':
             render_popup_menu(self._consoles['map'], self.world)
         
         if game_state == 'MainMenu':
