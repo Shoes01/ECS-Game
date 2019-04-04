@@ -10,16 +10,7 @@ def render_popup_menu(console_bundle, world):
     popup_component = world.component_for_entity(1, PopupComponent)
     x, y, w, h = popup_component.x, popup_component.y, popup_component.w, popup_component.h
     
-    # Render the border
-    for xx in range(x, x + w):
-        console.print(xx, y, '+', libtcod.white)
-        console.print(xx, y + h - 1, '+', libtcod.white)
-    for yy in range(y, y + h):
-        console.print(x, yy, '+', libtcod.white)
-        console.print(x + w - 1, yy, '+', libtcod.white)
-    
-    # Render title
-    console.print(x + 1, y + 1, popup_component.title, libtcod.white)
+    console.draw_frame(x=x, y=y, width=w, height=h, title=popup_component.title, clear=True, fg=libtcod.white, bg=libtcod.black)
 
     # Render choices
     dy = 2
