@@ -31,7 +31,7 @@ class EquipProcessor(esper.Processor):
                 
                 elif len(matched_items) > 1:
                     title = 'Which item do you want to pick up?'
-                    choices = [('Nevermind', 'n', {'action': 'wait'})] # DEBUG
+                    choices = [('Nevermind', 'n', {'event': {'cancel': True}})] # DEBUG
                     popup_component = PopupComponent(title=title, choices=choices)
                     self.world.add_component(1, popup_component)
                     self.world.remove_component(ent, EquipComponent)

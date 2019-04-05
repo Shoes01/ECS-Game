@@ -37,8 +37,16 @@ class InputProcessor(esper.Processor):
                 if key_char == valid_key:
                     if result.get('event'):
                         event = result['event']
+                        self.world.remove_component(1, PopupComponent)
+                        break
                     if result.get('action'):
                         action = result['action']
+                        self.world.remove_component(1, PopupComponent)
+                        break
+                elif key.vk == libtcod.KEY_ESCAPE:
+                    event = {'cancel': True}
+                    self.world.remove_component(1, PopupComponent)
+                    break
     
         if game_state_component.state == 'MainMenu':
             if key.vk == libtcod.KEY_ESCAPE:
@@ -96,8 +104,16 @@ class InputProcessor(esper.Processor):
 
             # Attach action component to player entity. This ends their turn.
             if action:
+<<<<<<< HEAD
                 self.world.add_component(ent, ActionComponent(action=action))
         
         # Attach event component to world entity. It does not have to be the player's turn for this to happen.
         if event:
             self.world.add_component(1, EventComponent(event=event)) # 1 is world entity
+=======
+                self.world.add_component(2, ActionComponent(action=action)) # 2 is player entity
+            
+            # Attach event component to world entity.
+            if event:
+                self.world.add_component(1, EventComponent(event=event)) # 1 is world entity
+>>>>>>> Monsters drop their inventory on death

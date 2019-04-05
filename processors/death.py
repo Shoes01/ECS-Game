@@ -6,9 +6,12 @@ from components.actor.brain import BrainComponent
 from components.actor.combat import CombatComponent
 from components.actor.corpse import CorpseComponent
 from components.actor.dead import DeadComponent
+from components.actor.equipment import EquipmentComponent
 from components.actor.stats import StatsComponent
 from components.actor.velocity import VelocityComponent
 from components.game.event import EventComponent
+from components.item.equipped import EquippedComponent
+from components.position import PositionComponent
 from components.render import RenderComponent
 
 class DeathProcessor(esper.Processor):
@@ -21,6 +24,13 @@ class DeathProcessor(esper.Processor):
 
             render_component.char = '%'
             render_component.color = libtcod.red
+
+            equipment = self.world.component_for_entity(ent, EquipmentComponent).equipment
+            for item in equipment:
+                self.world.remove_component(item, EquippedComponent)
+                ent_pos = self.world.component_for_entity(ent, PositionComponent)
+                item_pos = self.world.component_for_entity(item, PositionComponent)
+                item_pos.x, item_pos.y = ent_pos.x, ent_pos.y
 
             if ent == 2:
                 self.world.add_component(1, EventComponent(event={'player_killed': True}))

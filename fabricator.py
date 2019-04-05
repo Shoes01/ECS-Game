@@ -13,6 +13,7 @@ from components.game.message_log import MessageLogComponent
 from components.game.end_game import EndGameComponent
 from components.game.state import StateComponent
 from components.game.turn_count import TurnCountComponent
+from components.item.equipped import EquippedComponent
 from components.item.item import ItemComponent
 from components.item.modifier import ModifierComponent
 from components.persist import PersistComponent
@@ -50,12 +51,21 @@ def fabricate_entity(ent, world):
             RenderComponent(char=')', color=libtcod.blue)
         )
 
+    if ent == 'sword_equipped':
+        return world.create_entity(
+            EquippedComponent(),
+            ItemComponent(),
+            ModifierComponent(power=2),
+            PositionComponent(),
+            RenderComponent(char=')', color=libtcod.green)
+        )
+
     if ent == 'zombie':
         return world.create_entity(
             ActorComponent(),
             BrainComponent(),
             EnergyComponent(),
-            EquipmentComponent(),
+            EquipmentComponent(equipment=[fabricate_entity('sword_equipped', world)]),
             PositionComponent(),
             RenderComponent(char='Z', color=libtcod.green),
             StatsComponent(hp=11, power=5)

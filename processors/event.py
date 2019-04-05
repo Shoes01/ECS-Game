@@ -1,6 +1,7 @@
 import esper
 
 from components.actor.player import PlayerComponent
+from components.actor.player_input import PlayerInputComponent
 from components.game.debug import DebugComponent
 from components.game.dijgen import DijgenComponent
 from components.game.event import EventComponent
@@ -38,8 +39,9 @@ class EventProcessor(esper.Processor):
                 else:
                     self.world.add_component(1, DebugComponent())
             
-            if _cancel and self.world.has_component(1, PopupComponent):
-                self.world.remove_component(1, PopupComponent)
+            if _cancel:
+                if not self.world.has_component(1, PlayerInputComponent):
+                    self.world.add_component(1, PlayerInputComponent()) # The player holds priority when canceling a popup menu.
 
             if state == 'MainMenu':                
                 if _exit:
