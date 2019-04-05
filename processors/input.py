@@ -16,24 +16,35 @@ class InputProcessor(esper.Processor):
     
     def process(self):
         if self.world.has_component(2, PlayerInputComponent):
-            event_component = self.world.component_for_entity(1, EventComponent)
             game_state_component = self.world.component_for_entity(1, StateComponent)
 
             key = self._key
             key_char = chr(key.c)
             action = None
+            event = None
 
             if key.vk is libtcod.KEY_NONE:
                 return 0
 
             if key_char == 'd' and key.lctrl:
-                event_component.event = 'Toggle_debug_mode'
+                event = {'toggle_debug': True}
 
-            if game_state_component.state == 'MainMenu':
+            # If there is a menu on screen, it has input priority regardless of state.
+            if self.world.has_component(1, PopupComponent):
+                _popup_comp = self.world.component_for_entity(1, PopupComponent)
+                for choice in _popup_comp.choices:
+                    _, valid_key, result = choice
+                    if key_char == valid_key:
+                        if result.get('event'):
+                            event = result['event']
+                        if result.get('action'):
+                            action = result['action']
+
+            elif game_state_component.state == 'MainMenu':
                 if key.vk == libtcod.KEY_ESCAPE:
-                    event_component.event = 'Exit'
-                elif key.pressed:
-                    event_component.event = 'New_map'
+                    event = {'exit': True}
+                elif key.vk == libtcod.KEY_ENTER or key.vk == libtcod.KEY_KPENTER:
+                    event = {'new_map': True}
 
             elif game_state_component.state == 'Game':
                 if key.vk == libtcod.KEY_ESCAPE:
@@ -43,17 +54,16 @@ class InputProcessor(esper.Processor):
                             (
                                 'Yes',
                                 'y',
-                                {'event': 'Exit'}
+                                {'event': {'exit': True}}
                             ),
                             (
                                 'No',
                                 'n',
-                                {'event': 'Cancel'}
+                                {'event': {'cancel': True}}
                             )
                         ]
                     )
-                    self.world.add_component(1, popup_component)
-                    event_component.event = 'PopupMenu'
+                    event = {'popup_menu': popup_component}
                 if key.vk == libtcod.KEY_UP or key_char == 'k' or key.vk == libtcod.KEY_KP8:
                     action = {'move': (0, -1)}
                 elif key.vk == libtcod.KEY_DOWN or key_char == 'j' or key.vk == libtcod.KEY_KP2:
@@ -78,19 +88,13 @@ class InputProcessor(esper.Processor):
             
             elif game_state_component.state == 'GameOver':
                 if key.vk == libtcod.KEY_ESCAPE:
-                    event_component.event = 'Exit'
+                    event = {'exit': True}
 
-            elif game_state_component.state == 'PopupMenu':
-                _popup_comp = self.world.component_for_entity(1, PopupComponent)
-                for choice in _popup_comp.choices:
-                    title, valid_key, result = choice
-                    if key_char == valid_key:
-                        if result.get('event'):
-                            event_component.event = result['event']
-                        if result.get('action'):
-                            action = result['action']
-
-            # Attach action component to player entity.
+            # Attach action component to player entity. This ends their turn.
             if action:
                 self.world.add_component(2, ActionComponent(action=action)) # 2 is player entity
                 self.world.remove_component(2, PlayerInputComponent)
+            
+            # Attach event component to world entity.
+            if event:
+                self.world.add_component(1, EventComponent(event=event)) # 1 is world entity

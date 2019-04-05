@@ -1,4 +1,3 @@
-' This component serves to tag an entity as player controlled. '
-
 class PlayerComponent():
-    pass
+    def __init__(self, killed=False):
+        self.killed = killed

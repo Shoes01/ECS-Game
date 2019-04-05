@@ -8,6 +8,9 @@ from components.game.dijgen import DijgenComponent
 from components.game.turn_count import TurnCountComponent
 
 class ActionProcessor(esper.Processor):
+    ' The ActionProcessor adds and removes Components based on the action. '
+    ' This, in turn, will cause various processors to change the update the game. '
+    ' It is like the EventProcessor, but for the character and not the user. '
     def __init__(self):
         super().__init__()
     

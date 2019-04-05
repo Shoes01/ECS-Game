@@ -41,8 +41,7 @@ def main():
         world.process()
 
         # Is there a way to exit the game from inside the processors?
-        game_state = world.component_for_entity(1, StateComponent).state
-        if game_state == 'Exit':
+        if world._entities and world.component_for_entity(1, StateComponent).state == 'Exit':
             return False
 
 if __name__ == '__main__':

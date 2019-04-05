@@ -28,7 +28,7 @@ class RenderProcessor(esper.Processor):
             render_popup_menu(self._consoles['map'], self.world)
         
         if game_state == 'MainMenu':
-            map_obj[0].print(3, 3, 'Welcome to the Main Menu.\nPress any key to begin.\n', libtcod.grey)
+            map_obj[0].print(3, 3, 'Welcome to the Main Menu.\nPress ENTER to begin.\n', libtcod.grey)
 
         if game_state == 'GameOver':
             libtcod.console_set_color_control(libtcod.COLCTRL_1, libtcod.red, libtcod.light_red)

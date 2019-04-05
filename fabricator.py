@@ -8,10 +8,9 @@ from components.actor.player_input import PlayerInputComponent
 from components.actor.stats import StatsComponent
 from components.actor.velocity import VelocityComponent
 from components.game.dijgen import DijgenComponent
-from components.game.event import EventComponent
 from components.game.map import MapComponent
 from components.game.message_log import MessageLogComponent
-from components.game.processor import ProcessorComponent
+from components.game.end_game import EndGameComponent
 from components.game.state import StateComponent
 from components.game.turn_count import TurnCountComponent
 from components.item.item import ItemComponent
@@ -24,11 +23,9 @@ from components.tile import TileComponent
 def fabricate_entity(ent, world):
     if ent == 'game':
         return world.create_entity(
-            EventComponent(),
             MapComponent(),
             MessageLogComponent(),
             PersistComponent(),
-            ProcessorComponent(),
             StateComponent(),
             TurnCountComponent()
         )

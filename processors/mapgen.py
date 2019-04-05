@@ -30,9 +30,6 @@ class MapgenProcessor(esper.Processor):
 
             # Create fov map.
             game_map.fov_map = self.create_fov_map(game_map.height, game_map.width)
-           
-            # Finished. Remove the component.
-            self.world.remove_component(1, MapgenComponent)
 
     def create_map(self, h, w):
         tiles = np.ones([w, h], dtype=int, order='F')

@@ -1,6 +1,6 @@
 import esper
 
-from components.game.processor import ProcessorComponent
+from components.game.end_game import EndGameComponent
 from processors.initial import InitialProcessor
 
 class FinalProcessor(esper.Processor):
@@ -8,5 +8,5 @@ class FinalProcessor(esper.Processor):
         super().__init__()
     
     def process(self):
-        if self.world._entities and self.world.component_for_entity(1, ProcessorComponent).final:
+        if self.world._entities and self.world.has_component(1, EndGameComponent):
             self.world.clear_database()
