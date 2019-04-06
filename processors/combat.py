@@ -17,7 +17,7 @@ class CombatProcessor(esper.Processor):
         super().__init__()
     
     def process(self):
-        for ent, (act, com) in self.world.get_components(ActorComponent, CombatComponent):
+        for ent, (act, com, att_ren) in self.world.get_components(ActorComponent, CombatComponent, RenderComponent):
             attacker_ID = ent
             defender_ID = self.world.component_for_entity(attacker_ID, CombatComponent).defender_ID
 
@@ -33,7 +33,6 @@ class CombatProcessor(esper.Processor):
 
             defender_stats.hp -= damage
 
-            att_ren = self.world.component_for_entity(attacker_ID, RenderComponent)
             def_ren = self.world.component_for_entity(defender_ID, RenderComponent)
 
             message_log_component.messages.insert(0, {'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, damage, turn)})
