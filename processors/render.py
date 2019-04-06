@@ -1,6 +1,7 @@
 import esper
 import tcod as libtcod
 
+from components.game.redraw import RedrawComponent
 from components.game.state import StateComponent
 from processors.sub.entities import render_entities
 from processors.sub.message_log import render_message_log
@@ -15,6 +16,11 @@ class RenderProcessor(esper.Processor):
     def process(self):
         game_state = self.world.component_for_entity(1, StateComponent).state
         
+        if game_state == 'Game' and self.world.component_for_entity(1, RedrawComponent).redraw is False:
+            return 0
+        else:
+            self.world.component_for_entity(1, RedrawComponent).redraw = False
+
         con_obj = self._consoles['con'] # type: (console, x, y, w, h)
         eqp_obj = self._consoles['stats']
         log_obj = self._consoles['log']

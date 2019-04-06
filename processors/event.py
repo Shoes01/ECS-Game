@@ -8,6 +8,7 @@ from components.game.events import EventsComponent
 from components.game.map import MapComponent
 from components.game.mapgen import MapgenComponent
 from components.game.popup import PopupComponent
+from components.game.redraw import RedrawComponent
 from components.game.state import StateComponent
 from processors.initial import InitialProcessor
 from processors.final import FinalProcessor
@@ -54,5 +55,7 @@ class EventProcessor(esper.Processor):
                         self.world.remove_component(1, DebugComponent)
                     else:
                         self.world.add_component(1, DebugComponent())
+                
+                self.world.component_for_entity(1, RedrawComponent).redraw = True
             
             self.world.remove_component(1, EventsComponent)
