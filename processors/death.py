@@ -11,6 +11,7 @@ from components.actor.stats import StatsComponent
 from components.actor.velocity import VelocityComponent
 from components.game.events import EventsComponent
 from components.item.equipped import EquippedComponent
+from components.name import NameComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
 
@@ -19,18 +20,16 @@ class DeathProcessor(esper.Processor):
         super().__init__()
     
     def process(self):
-        for ent, (dead) in self.world.get_component(DeadComponent):
-            render_component = self.world.component_for_entity(ent, RenderComponent)
+        for ent, (dead, eqp, name, pos, ren) in self.world.get_components(DeadComponent, EquipmentComponent, NameComponent, PositionComponent, RenderComponent):
+            equipment = eqp.equipment
+            name.name = 'corspe of ' + name.name
+            ren.char = '%'
+            ren.color = libtcod.red
 
-            render_component.char = '%'
-            render_component.color = libtcod.red
-
-            equipment = self.world.component_for_entity(ent, EquipmentComponent).equipment
             for item in equipment:
                 self.world.remove_component(item, EquippedComponent)
-                ent_pos = self.world.component_for_entity(ent, PositionComponent)
                 item_pos = self.world.component_for_entity(item, PositionComponent)
-                item_pos.x, item_pos.y = ent_pos.x, ent_pos.y
+                item_pos.x, item_pos.y = pos.x, pos.y
 
             if ent == 2:
                 self.world.add_component(1, EventsComponent(events=[{'player_killed': True}]))

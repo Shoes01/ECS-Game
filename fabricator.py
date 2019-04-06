@@ -16,6 +16,7 @@ from components.game.turn_count import TurnCountComponent
 from components.item.equipped import EquippedComponent
 from components.item.item import ItemComponent
 from components.item.modifier import ModifierComponent
+from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
@@ -39,6 +40,7 @@ def fabricate_entity(ent, world):
             PersistComponent(),
             PlayerComponent(),
             PositionComponent(),
+            NameComponent(name='Player'),
             RenderComponent(char='@', color=libtcod.pink),
             StatsComponent(hp=50, power=10)
         )
@@ -48,6 +50,7 @@ def fabricate_entity(ent, world):
             ItemComponent(),
             ModifierComponent(power=5),
             PositionComponent(),
+            NameComponent(name='Sword'),
             RenderComponent(char=')', color=libtcod.blue)
         )
 
@@ -57,6 +60,7 @@ def fabricate_entity(ent, world):
             ItemComponent(),
             ModifierComponent(power=2),
             PositionComponent(),
+            NameComponent(name='Zombie Sword'),
             RenderComponent(char=')', color=libtcod.green)
         )
 
@@ -67,6 +71,7 @@ def fabricate_entity(ent, world):
             EnergyComponent(),
             EquipmentComponent(equipment=[fabricate_entity('sword_equipped', world)]),
             PositionComponent(),
+            NameComponent(name='Zombie'),
             RenderComponent(char='Z', color=libtcod.green),
             StatsComponent(hp=11, power=5)
         )
