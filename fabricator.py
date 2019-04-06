@@ -37,10 +37,10 @@ def fabricate_entity(ent, world):
             ActorComponent(),
             EnergyComponent(energy=0),
             EquipmentComponent(),
+            NameComponent(name='Player'),
             PersistComponent(),
             PlayerComponent(),
             PositionComponent(),
-            NameComponent(name='Player'),
             RenderComponent(char='@', color=libtcod.pink),
             StatsComponent(hp=50, power=10)
         )
@@ -49,8 +49,8 @@ def fabricate_entity(ent, world):
         return world.create_entity(
             ItemComponent(),
             ModifierComponent(power=5),
-            PositionComponent(),
             NameComponent(name='Sword'),
+            PositionComponent(),
             RenderComponent(char=')', color=libtcod.blue)
         )
 
@@ -59,8 +59,8 @@ def fabricate_entity(ent, world):
             EquippedComponent(),
             ItemComponent(),
             ModifierComponent(power=2),
-            PositionComponent(),
             NameComponent(name='Zombie Sword'),
+            PositionComponent(),
             RenderComponent(char=')', color=libtcod.green)
         )
 
@@ -70,8 +70,8 @@ def fabricate_entity(ent, world):
             BrainComponent(),
             EnergyComponent(),
             EquipmentComponent(equipment=[fabricate_entity('sword_equipped', world)]),
-            PositionComponent(),
             NameComponent(name='Zombie'),
+            PositionComponent(),
             RenderComponent(char='Z', color=libtcod.green),
             StatsComponent(hp=11, power=5)
         )

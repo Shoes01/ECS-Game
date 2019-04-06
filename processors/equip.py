@@ -5,6 +5,7 @@ from components.actor.equipment import EquipmentComponent
 from components.game.popup import PopupComponent
 from components.item.equipped import EquippedComponent
 from components.item.item import ItemComponent
+from components.name import NameComponent
 from components.position import PositionComponent
 
 class EquipProcessor(esper.Processor):
@@ -31,7 +32,17 @@ class EquipProcessor(esper.Processor):
                 
                 elif len(matched_items) > 1:
                     title = 'Which item do you want to pick up?'
-                    choices = [('Nevermind', 'n', {'event': {'cancel': True}})] # DEBUG
+                    choices = []
+                    
+                    n = 97 # chr(97) is a
+                    for item in matched_items:
+                        name = self.world.component_for_entity(item, NameComponent).name
+                        char = chr(n)
+                        result = {'action': {'pick_up': item}}
+                        choices.append((name, char, result))
+                        n += 1
+
+                    choices.append(('Nevermind', 'ESC', {'event': {'cancel': True}}))
                     popup_component = PopupComponent(title=title, choices=choices)
                     self.world.add_component(1, popup_component)
                     self.world.remove_component(ent, EquipComponent)
