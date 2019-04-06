@@ -7,6 +7,7 @@ from processors.combat import CombatProcessor
 from processors.debug import DebugProcessor
 from processors.death import DeathProcessor
 from processors.dijkstra import DijkstraProcessor
+from processors.energy import EnergyProcessor
 from processors.equip import EquipProcessor
 from processors.event import EventProcessor
 from processors.final import FinalProcessor
@@ -28,6 +29,7 @@ def build_world():
     debug_processor = DebugProcessor()
     death_processor = DeathProcessor()
     dijkstra_processor = DijkstraProcessor()
+    energy_processor = EnergyProcessor()
     equip_processor = EquipProcessor()
     event_processor = EventProcessor()
     final_processor = FinalProcessor()
@@ -49,13 +51,14 @@ def build_world():
     world.add_processor(input_processor, 30)
     ## UPDATE
     world.add_processor(action_processor, 20)
-    world.add_processor(event_processor, 20)
+    world.add_processor(event_processor, 20)    
     world.add_processor(equip_processor, 10)
     world.add_processor(movement_processor, 10)
     world.add_processor(combat_processor, 5)
     world.add_processor(death_processor, 4)
     world.add_processor(mapgen_processor, 3)
     world.add_processor(dijkstra_processor, 2)
+    world.add_processor(energy_processor, 2) # TODO: Is this the right place?
     ## ENDSTEP
     world.add_processor(state_processor, 1)
     world.add_processor(final_processor, 0)

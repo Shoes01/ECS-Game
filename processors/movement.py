@@ -17,16 +17,15 @@ class MovementProcessor(esper.Processor):
             
             occupying_entity = tile_occupied(self.world, pos.x + vel.dx, pos.y + vel.dy)
             if occupying_entity:
+                self.world.remove_component(ent, VelocityComponent)
                 self.world.add_component(ent, CombatComponent(defender_ID=occupying_entity))
-                vel.dx, vel.dy = 0, 0
             
             if self.world.has_component(ent, PlayerComponent):
                 # Player may run into walls, whereas AI uses the dijkstra map to navigate.
                 for ent_tile, (pos_tile, tile) in self.world.get_components(PositionComponent, TileComponent):
                     if pos_tile.x == pos.x + vel.dx and pos_tile.y == pos.y + vel.dy and tile.blocks_path:
-                        vel.dx, vel.dy = 0, 0
+                        self.world.remove_component(ent, VelocityComponent)
 
-            pos.x += vel.dx
-            pos.y += vel.dy
-
-            self.world.remove_component(ent, VelocityComponent)
+            if self.world.has_component(ent, VelocityComponent):
+                pos.x += vel.dx
+                pos.y += vel.dy

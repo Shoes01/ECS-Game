@@ -41,5 +41,3 @@ class CombatProcessor(esper.Processor):
             if defender_stats.hp <= 0 and not self.world.has_component(defender_ID, DeadComponent):
                 self.world.add_component(defender_ID, DeadComponent())
                 message_log_component.messages.insert(0, {'death': (def_ren.char, def_ren.color, turn)})
-
-            self.world.remove_component(ent, CombatComponent)

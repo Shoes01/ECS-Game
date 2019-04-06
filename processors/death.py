@@ -7,6 +7,7 @@ from components.actor.combat import CombatComponent
 from components.actor.corpse import CorpseComponent
 from components.actor.dead import DeadComponent
 from components.actor.stats import StatsComponent
+from components.actor.velocity import VelocityComponent
 from components.game.event import EventComponent
 from components.render import RenderComponent
 
@@ -27,8 +28,8 @@ class DeathProcessor(esper.Processor):
                 self.world.remove_component(ent, BrainComponent)
             
             self.world.remove_component(ent, ActorComponent)
-            if self.world.has_component(ent, CombatComponent):
-                self.world.remove_component(ent, CombatComponent)
+            if self.world.has_component(ent, CombatComponent): self.world.remove_component(ent, CombatComponent)
             self.world.remove_component(ent, DeadComponent)
+            if self.world.has_component(ent, VelocityComponent): self.world.remove_component(ent, VelocityComponent)
             
             self.world.add_component(ent, CorpseComponent())

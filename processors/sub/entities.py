@@ -37,7 +37,8 @@ def render_entities(console_bundle, world):
     # Print the player (again), on top of everything else.
     player_pos = world.component_for_entity(2, PositionComponent)
     player_ren = world.component_for_entity(2, RenderComponent)
-    console.print(player_pos.x, player_pos.y, player_ren.char, player_ren.color)
+    if not world.has_component(2, CorpseComponent):
+        console.print(player_pos.x, player_pos.y, player_ren.char, player_ren.color)
 
 def prerender_entities(world):
     game_map = world.component_for_entity(1, MapComponent)

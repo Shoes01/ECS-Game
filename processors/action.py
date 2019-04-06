@@ -4,6 +4,7 @@ from components.actor.action import ActionComponent
 from components.actor.equip import EquipComponent
 from components.actor.player import PlayerComponent
 from components.actor.velocity import VelocityComponent
+from components.actor.wait import WaitComponent
 from components.game.dijgen import DijgenComponent
 from components.game.turn_count import TurnCountComponent
 
@@ -29,7 +30,7 @@ class ActionProcessor(esper.Processor):
                 self.world.add_component(ent, EquipComponent())
 
             if _wait:
-                pass
+                self.world.add_component(ent, WaitComponent())
 
             if ent == 2:
                 self.world.component_for_entity(1, TurnCountComponent).turn_count += 1

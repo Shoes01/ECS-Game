@@ -1,6 +1,7 @@
 import tcod as libtcod
 
 from _helper_functions import calculate_power
+from components.actor.energy import EnergyComponent
 from components.actor.stats import StatsComponent
 
 def render_stats(console_bundle, world):
@@ -10,9 +11,11 @@ def render_stats(console_bundle, world):
 
     # Draw the player stats.
     player_stats_component = world.component_for_entity(2, StatsComponent)
+    player_energy = world.component_for_entity(2, EnergyComponent).energy
 
     console.print(0, 0, 'HP: {0}/{1}'.format(player_stats_component.hp, player_stats_component.hp_max), color)
     console.print(0, 1, 'PWR: {0}'.format(calculate_power(2, world)), color)
+    console.print(0, 2, 'ENG: {0}'.format(player_energy))
 
     # Draw the item boxes.
     
