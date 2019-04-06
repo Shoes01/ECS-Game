@@ -4,7 +4,6 @@ from components.actor.player import PlayerComponent
 from components.game.state import StateComponent
 from components.game.dijgen import DijgenComponent
 from components.game.end_game import EndGameComponent
-from components.game.exit import ExitGameComponent
 from components.game.mapgen import MapgenComponent
 from components.game.popup import PopupComponent
 
@@ -29,19 +28,19 @@ class StateProcessor(esper.Processor):
             if self.world.has_component(1, PopupComponent):
                 state_component.state = 'PopupMenu'
         
-        if state_component.state == 'GameOver':
+        elif state_component.state == 'GameOver':
             if self.world.has_component(1, EndGameComponent):
                 # self.world.remove_component(1, EndGameComponent)
                 state_component.state = 'MainMenu'
 
-        if state_component.state == 'MainMenu':
+        elif state_component.state == 'MainMenu':
             if self.world.has_component(1, MapgenComponent):
                 self.world.remove_component(1, MapgenComponent)
                 state_component.state = 'Game'
-            if self.world.has_component(1, ExitGameComponent):
-                self.world.remove_component(1, ExitGameComponent)
+            if self.world.has_component(1, EndGameComponent):
+                self.world.remove_component(1, EndGameComponent)
                 state_component.state = 'Exit'
             
-        if state_component.state == 'PopupMenu':
+        elif state_component.state == 'PopupMenu':
             if not self.world.has_component(1, PopupComponent):
                 state_component.state = 'Game'

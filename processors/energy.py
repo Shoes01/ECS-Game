@@ -15,7 +15,6 @@ class EnergyProcessor(esper.Processor):
     def process(self):
         success = True
         for ent, (actor, eng) in self.world.get_components(ActorComponent, EnergyComponent):
-
             if self.world.has_component(ent, PlayerComponent) and eng.energy == 0:
                 success = False
 

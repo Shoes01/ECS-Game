@@ -9,7 +9,7 @@ from components.actor.dead import DeadComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.stats import StatsComponent
 from components.actor.velocity import VelocityComponent
-from components.game.event import EventComponent
+from components.game.events import EventsComponent
 from components.item.equipped import EquippedComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
@@ -33,7 +33,7 @@ class DeathProcessor(esper.Processor):
                 item_pos.x, item_pos.y = ent_pos.x, ent_pos.y
 
             if ent == 2:
-                self.world.add_component(1, EventComponent(event={'player_killed': True}))
+                self.world.add_component(1, EventsComponent(events=[{'player_killed': True}]))
             else:
                 self.world.remove_component(ent, BrainComponent)
             

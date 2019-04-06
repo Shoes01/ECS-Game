@@ -4,8 +4,7 @@ from components.actor.player import PlayerComponent
 from components.game.debug import DebugComponent
 from components.game.dijgen import DijgenComponent
 from components.game.end_game import EndGameComponent
-from components.game.event import EventComponent
-from components.game.exit import ExitGameComponent
+from components.game.events import EventsComponent
 from components.game.map import MapComponent
 from components.game.mapgen import MapgenComponent
 from components.game.popup import PopupComponent
@@ -21,45 +20,39 @@ class EventProcessor(esper.Processor):
         super().__init__()
     
     def process(self):
-        if self.world.has_component(1, EventComponent):
-            event = self.world.component_for_entity(1, EventComponent).event
+        if self.world.has_component(1, EventsComponent):
+            events = self.world.component_for_entity(1, EventsComponent).events
             state = self.world.component_for_entity(1, StateComponent).state
 
-            _close_popup_menu = event.get('close_popup_menu')
-            _exit = event.get('exit')
-            _new_map = event.get('new_map')
-            _player_killed = event.get('player_killed')
-            _popup_menu = event.get('popup_menu')
-            _toggle_debug = event.get('toggle_debug')
+            for event in events:
+                _close_popup_menu = event.get('close_popup_menu')
+                _exit = event.get('exit')
+                _new_map = event.get('new_map')
+                _player_killed = event.get('player_killed')
+                _popup_menu = event.get('popup_menu')
+                _toggle_debug = event.get('toggle_debug')
 
-            if _toggle_debug:
-                if self.world.has_component(1, DebugComponent):
-                    self.world.remove_component(1, DebugComponent)
-                else:
-                    self.world.add_component(1, DebugComponent())
-            
-            if state == 'Game':
-                if _exit:
-                    self.world.add_component(1, EndGameComponent())
-                if _player_killed:
-                    self.world.component_for_entity(2, PlayerComponent).killed = True
-                if _popup_menu:
-                    self.world.add_component(1, _popup_menu)
 
-            if state == 'GameOver':
+                if _close_popup_menu:
+                    self.world.remove_component(1, PopupComponent)
+
                 if _exit:
                     self.world.add_component(1, EndGameComponent())
 
-            if state == 'MainMenu':                
-                if _exit:
-                    self.world.add_component(1, ExitGameComponent())
                 if _new_map:
                     self.world.add_component(1, MapgenComponent())
                     self.world.add_component(1, DijgenComponent())
 
-            if state == 'PopupMenu':
-                if _close_popup_menu:
-                    self.world.remove_component(1, PopupComponent)
+                if _player_killed:
+                    self.world.component_for_entity(2, PlayerComponent).killed = True
 
+                if _popup_menu:
+                    self.world.add_component(1, _popup_menu)
+
+                if _toggle_debug:
+                    if self.world.has_component(1, DebugComponent):
+                        self.world.remove_component(1, DebugComponent)
+                    else:
+                        self.world.add_component(1, DebugComponent())
             
-            self.world.remove_component(1, EventComponent)
+            self.world.remove_component(1, EventsComponent)

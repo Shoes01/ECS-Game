@@ -5,7 +5,7 @@ from components.actor.action import ActionComponent
 from components.actor.actor import ActorComponent
 from components.actor.energy import EnergyComponent
 from components.actor.player import PlayerComponent
-from components.game.event import EventComponent
+from components.game.events import EventsComponent
 from components.game.popup import PopupComponent
 from components.game.state import StateComponent
 
@@ -17,7 +17,7 @@ class InputProcessor(esper.Processor):
     
     def process(self):
         action = None
-        event = None
+        events = []
         game_state_component = self.world.component_for_entity(1, StateComponent)
         key = self._key
         key_char = chr(key.c)
@@ -27,7 +27,7 @@ class InputProcessor(esper.Processor):
             return 0
 
         if key_char == 'd' and key.lctrl:
-            event = {'toggle_debug': True}
+            events.append({'toggle_debug': True})
 
         ### INPUTS THAT ARE READ REGARDLESS OF TURN
         if game_state_component.state == 'PopupMenu':
@@ -36,22 +36,22 @@ class InputProcessor(esper.Processor):
                 _, valid_key, result = choice
                 if key_char == valid_key:
                     if result.get('event'):
-                        event = result['event']
-                        event = {'close_popup_menu': True}
+                        events.append({'close_popup_menu': True})
+                        events.append(result['event'])
                         break
                     if result.get('action'):
                         action = result['action']
-                        event = {'close_popup_menu': True}
+                        events.append({'close_popup_menu': True})
                         break
                 elif key.vk == libtcod.KEY_ESCAPE:
-                    event = {'close_popup_menu': True}
+                    events.append({'close_popup_menu': True})
                     break
     
         if game_state_component.state == 'MainMenu':
             if key.vk == libtcod.KEY_ESCAPE:
-                event = {'exit': True}
+                events.append({'exit': True})
             elif key.vk == libtcod.KEY_ENTER or key.vk == libtcod.KEY_KPENTER:
-                event = {'new_map': True}
+                events.append({'new_map': True})
 
         elif game_state_component.state == 'Game':
             if key.vk == libtcod.KEY_ESCAPE:
@@ -66,19 +66,19 @@ class InputProcessor(esper.Processor):
                         (
                             'No',
                             'n',
-                            {'event': {'close_popup_menu': True}}
+                            {'event': {'uneeded': 'a successful key removed the menu anyway...'}}
                         )
                     ]
                 )
-                event = {'popup_menu': popup_component}
+                events.append({'popup_menu': popup_component})
 
         elif game_state_component.state == 'GameOver':
             if key.vk == libtcod.KEY_ESCAPE:
-                    event = {'exit': True}
+                    events.append({'exit': True})
 
         ### INPUTS THAT ARE READ ONLY ON THE PLAYERS TURN
         for ent, (actor, eng, player) in self.world.get_components(ActorComponent, EnergyComponent, PlayerComponent):
-            if game_state_component.state == 'Game':
+            if game_state_component.state == 'Game' and eng.energy == 0:
                 if key.vk == libtcod.KEY_UP or key_char == 'k' or key.vk == libtcod.KEY_KP8:
                     action = {'move': (0, -1)}
                 elif key.vk == libtcod.KEY_DOWN or key_char == 'j' or key.vk == libtcod.KEY_KP2:
@@ -106,5 +106,5 @@ class InputProcessor(esper.Processor):
                 self.world.add_component(ent, ActionComponent(action=action))
         
         # Attach event component to world entity. It does not have to be the player's turn for this to happen.
-        if event:
-            self.world.add_component(1, EventComponent(event=event)) # 1 is world entity
+        if events:
+            self.world.add_component(1, EventsComponent(events=events)) # 1 is world entity
