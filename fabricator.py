@@ -8,9 +8,9 @@ from components.actor.player import PlayerComponent
 from components.actor.stats import StatsComponent
 from components.actor.velocity import VelocityComponent
 from components.game.dijgen import DijgenComponent
+from components.game.end_game import EndGameComponent
 from components.game.map import MapComponent
 from components.game.message_log import MessageLogComponent
-from components.game.end_game import EndGameComponent
 from components.game.state import StateComponent
 from components.game.turn_count import TurnCountComponent
 from components.item.equipped import EquippedComponent

@@ -1,15 +1,14 @@
 import esper
 
 from components.actor.player import PlayerComponent
-from components.actor.player_input import PlayerInputComponent
 from components.game.debug import DebugComponent
 from components.game.dijgen import DijgenComponent
+from components.game.end_game import EndGameComponent
 from components.game.event import EventComponent
 from components.game.exit import ExitGameComponent
 from components.game.map import MapComponent
 from components.game.mapgen import MapgenComponent
 from components.game.popup import PopupComponent
-from components.game.end_game import EndGameComponent
 from components.game.state import StateComponent
 from processors.initial import InitialProcessor
 from processors.final import FinalProcessor
@@ -26,7 +25,7 @@ class EventProcessor(esper.Processor):
             event = self.world.component_for_entity(1, EventComponent).event
             state = self.world.component_for_entity(1, StateComponent).state
 
-            _cancel = event.get('cancel')
+            _close_popup_menu = event.get('close_popup_menu')
             _exit = event.get('exit')
             _new_map = event.get('new_map')
             _player_killed = event.get('player_killed')
@@ -39,17 +38,6 @@ class EventProcessor(esper.Processor):
                 else:
                     self.world.add_component(1, DebugComponent())
             
-            if _cancel:
-                if not self.world.has_component(1, PlayerInputComponent):
-                    self.world.add_component(1, PlayerInputComponent()) # The player holds priority when canceling a popup menu.
-
-            if state == 'MainMenu':                
-                if _exit:
-                    self.world.add_component(1, ExitGameComponent())
-                if _new_map:
-                    self.world.add_component(1, MapgenComponent())
-                    self.world.add_component(1, DijgenComponent())
-            
             if state == 'Game':
                 if _exit:
                     self.world.add_component(1, EndGameComponent())
@@ -61,5 +49,17 @@ class EventProcessor(esper.Processor):
             if state == 'GameOver':
                 if _exit:
                     self.world.add_component(1, EndGameComponent())
+
+            if state == 'MainMenu':                
+                if _exit:
+                    self.world.add_component(1, ExitGameComponent())
+                if _new_map:
+                    self.world.add_component(1, MapgenComponent())
+                    self.world.add_component(1, DijgenComponent())
+
+            if state == 'PopupMenu':
+                if _close_popup_menu:
+                    self.world.remove_component(1, PopupComponent)
+
             
             self.world.remove_component(1, EventComponent)

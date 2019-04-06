@@ -30,22 +30,21 @@ class InputProcessor(esper.Processor):
             event = {'toggle_debug': True}
 
         ### INPUTS THAT ARE READ REGARDLESS OF TURN
-        if self.world.has_component(1, PopupComponent):
+        if game_state_component.state == 'PopupMenu':
             _popup_comp = self.world.component_for_entity(1, PopupComponent)
             for choice in _popup_comp.choices:
                 _, valid_key, result = choice
                 if key_char == valid_key:
                     if result.get('event'):
                         event = result['event']
-                        self.world.remove_component(1, PopupComponent)
+                        event = {'close_popup_menu': True}
                         break
                     if result.get('action'):
                         action = result['action']
-                        self.world.remove_component(1, PopupComponent)
+                        event = {'close_popup_menu': True}
                         break
                 elif key.vk == libtcod.KEY_ESCAPE:
-                    event = {'cancel': True}
-                    self.world.remove_component(1, PopupComponent)
+                    event = {'close_popup_menu': True}
                     break
     
         if game_state_component.state == 'MainMenu':
@@ -67,7 +66,7 @@ class InputProcessor(esper.Processor):
                         (
                             'No',
                             'n',
-                            {'event': {'cancel': True}}
+                            {'event': {'close_popup_menu': True}}
                         )
                     ]
                 )
@@ -104,16 +103,8 @@ class InputProcessor(esper.Processor):
 
             # Attach action component to player entity. This ends their turn.
             if action:
-<<<<<<< HEAD
                 self.world.add_component(ent, ActionComponent(action=action))
         
         # Attach event component to world entity. It does not have to be the player's turn for this to happen.
         if event:
             self.world.add_component(1, EventComponent(event=event)) # 1 is world entity
-=======
-                self.world.add_component(2, ActionComponent(action=action)) # 2 is player entity
-            
-            # Attach event component to world entity.
-            if event:
-                self.world.add_component(1, EventComponent(event=event)) # 1 is world entity
->>>>>>> Monsters drop their inventory on death
