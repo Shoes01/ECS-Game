@@ -43,7 +43,7 @@ class EventProcessor(esper.Processor):
                     self.world.add_component(1, EndGameComponent())
 
                 if _load_game:
-                    self.world._next_entity_id, self.world._components, self.world._entities = load_game()
+                    load_game(self.world)
 
                 if _new_map:
                     self.world.add_component(1, MapgenComponent())
