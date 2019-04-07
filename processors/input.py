@@ -52,6 +52,8 @@ class InputProcessor(esper.Processor):
                 events.append({'exit': True})
             elif key.vk == libtcod.KEY_ENTER or key.vk == libtcod.KEY_KPENTER:
                 events.append({'new_map': True})
+            elif key_char == 'l':
+                events.append({'load_game': True})
 
         elif game_state_component.state == 'Game':
             if key.vk == libtcod.KEY_ESCAPE:
