@@ -1,6 +1,6 @@
 import esper
 
-from _helper_functions import save_game
+from _helper_functions import load_game, save_game
 from components.actor.player import PlayerComponent
 from components.game.debug import DebugComponent
 from components.game.dijgen import DijgenComponent
@@ -28,6 +28,7 @@ class EventProcessor(esper.Processor):
             for event in events:
                 _close_popup_menu = event.get('close_popup_menu')
                 _exit = event.get('exit')
+                _load_game = event.get('load_game')
                 _new_map = event.get('new_map')
                 _player_killed = event.get('player_killed')
                 _popup_menu = event.get('popup_menu')
@@ -40,6 +41,9 @@ class EventProcessor(esper.Processor):
 
                 if _exit:
                     self.world.add_component(1, EndGameComponent())
+
+                if _load_game:
+                    self.world._next_entity_id, self.world._components, self.world._entities = load_game()
 
                 if _new_map:
                     self.world.add_component(1, MapgenComponent())

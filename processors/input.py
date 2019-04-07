@@ -59,6 +59,11 @@ class InputProcessor(esper.Processor):
                     title='What would you like to do?',
                     choices=[
                         (
+                            'Load game',
+                            'l',
+                            {'event': {'load_game': True}}
+                        ),
+                        (
                             'Quit',
                             'q',
                             {'event': {'exit': True}}
