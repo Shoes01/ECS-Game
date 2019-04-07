@@ -1,3 +1,5 @@
+import shelve
+
 from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.stats import StatsComponent
@@ -18,3 +20,9 @@ def calculate_power(ent, world):
         power += world.component_for_entity(item_id, ModifierComponent).power
 
     return power
+
+def save_game(next_entity_id, components, entities):
+    with shelve.open('savegame', 'n') as data_file:
+        data_file['next_entity_id'] = next_entity_id
+        data_file['components'] = components
+        data_file['entities'] = entities

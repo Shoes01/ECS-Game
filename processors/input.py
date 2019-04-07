@@ -56,16 +56,21 @@ class InputProcessor(esper.Processor):
         elif game_state_component.state == 'Game':
             if key.vk == libtcod.KEY_ESCAPE:
                 popup_component = PopupComponent(
-                    title='Are you sure you want to quit?',
+                    title='What would you like to do?',
                     choices=[
                         (
-                            'Yes',
-                            'y',
+                            'Quit',
+                            'q',
                             {'event': {'exit': True}}
                         ),
                         (
-                            'No',
-                            'n',
+                            'Save game',
+                            's',
+                            {'event': {'save_game': True}}
+                        ),
+                        (
+                            'Nevermind',
+                            'ESC',
                             {'event': {'uneeded': 'a successful key removed the menu anyway...'}}
                         )
                     ]

@@ -1,5 +1,6 @@
 import esper
 
+from _helper_functions import save_game
 from components.actor.player import PlayerComponent
 from components.game.debug import DebugComponent
 from components.game.dijgen import DijgenComponent
@@ -30,6 +31,7 @@ class EventProcessor(esper.Processor):
                 _new_map = event.get('new_map')
                 _player_killed = event.get('player_killed')
                 _popup_menu = event.get('popup_menu')
+                _save_game = event.get('save_game')
                 _toggle_debug = event.get('toggle_debug')
 
 
@@ -48,6 +50,9 @@ class EventProcessor(esper.Processor):
 
                 if _popup_menu:
                     self.world.add_component(1, _popup_menu)
+                
+                if _save_game:
+                    save_game(self.world._next_entity_id, self.world._components, self.world._entities)
 
                 if _toggle_debug:
                     if self.world.has_component(1, DebugComponent):
