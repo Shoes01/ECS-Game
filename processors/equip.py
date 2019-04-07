@@ -13,7 +13,7 @@ class EquipProcessor(esper.Processor):
         super().__init__()
     
     def process(self):
-        for ent, (eqp, equipment, pos) in self.world.get_components(EquipComponent, EquipmentComponent, PositionComponent):
+        for ent, (eqp, eqpmnt, pos) in self.world.get_components(EquipComponent, EquipmentComponent, PositionComponent):
 
             if eqp.item_id is None:
                 matched_items = []
@@ -27,8 +27,10 @@ class EquipProcessor(esper.Processor):
 
                 elif len(matched_items) == 1:
                     item_id = matched_items.pop()
-                    equipment.equipment.append(item_id)
+                    eqpmnt.equipment.append(item_id)
                     self.world.add_component(item_id, EquippedComponent())
+                    item_pos = self.world.component_for_entity(item_id, PositionComponent)
+                    item_pos.x, item_pos.y = -1, -1
                 
                 elif len(matched_items) > 1:
                     title = 'Which item do you want to pick up?'
@@ -48,7 +50,9 @@ class EquipProcessor(esper.Processor):
                     self.world.remove_component(ent, EquipComponent)
 
             else:
-                equipment.equipment.append(eqp.item_id)
+                eqpmnt.equipment.append(eqp.item_id)
                 self.world.add_component(eqp.item_id, EquippedComponent())
+                item_pos = self.world.component_for_entity(eqp.item_id, PositionComponent)
+                item_pos.x, item_pos.y = -1, -1
 
             
