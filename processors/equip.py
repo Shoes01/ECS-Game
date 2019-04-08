@@ -1,7 +1,7 @@
 import esper
 
-from components.actor.equip import EquipComponent
 from components.actor.equipment import EquipmentComponent
+from components.actor.pickup import PickupComponent
 from components.game.popup import PopupComponent
 from components.item.equipped import EquippedComponent
 from components.item.item import ItemComponent
@@ -13,7 +13,7 @@ class EquipProcessor(esper.Processor):
         super().__init__()
     
     def process(self):
-        for ent, (eqp, eqpmnt, pos) in self.world.get_components(EquipComponent, EquipmentComponent, PositionComponent):
+        for ent, (eqpmnt, pick, pos) in self.world.get_components(EquipmentComponent, PickupComponent, PositionComponent):
 
             if eqp.item_id is None:
                 matched_items = []
@@ -23,7 +23,7 @@ class EquipProcessor(esper.Processor):
                         matched_items.append(item_ent)
                 
                 if len(matched_items) == 0:
-                    self.world.remove_component(ent, EquipComponent)
+                    self.world.remove_component(ent, PickupComponent)
 
                 elif len(matched_items) == 1:
                     item_id = matched_items.pop()
@@ -47,12 +47,12 @@ class EquipProcessor(esper.Processor):
                     choices.append(('Nevermind', 'ESC', {'event': {'cancel': True}}))
                     popup_component = PopupComponent(title=title, choices=choices)
                     self.world.add_component(1, popup_component)
-                    self.world.remove_component(ent, EquipComponent)
+                    self.world.remove_component(ent, PickupComponent)
 
             else:
-                eqpmnt.equipment.append(eqp.item_id)
-                self.world.add_component(eqp.item_id, EquippedComponent())
-                item_pos = self.world.component_for_entity(eqp.item_id, PositionComponent)
+                eqpmnt.equipment.append(pick.item_id)
+                self.world.add_component(pick.item_id, EquippedComponent())
+                item_pos = self.world.component_for_entity(pick.item_id, PositionComponent)
                 item_pos.x, item_pos.y = -1, -1
 
             

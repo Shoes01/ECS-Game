@@ -9,7 +9,7 @@ from components.game.state import StateComponent
 from components.item.modifier import ModifierComponent
 from components.position import PositionComponent
 
-def calculate_power(ent, world):        
+def calculate_power(ent, world):
     power = world.component_for_entity(ent, StatsComponent).power
 
     for item_id in world.component_for_entity(ent, EquipmentComponent).equipment:

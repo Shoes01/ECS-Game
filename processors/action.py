@@ -2,7 +2,7 @@ import esper
 
 from components.actor.action import ActionComponent
 from components.actor.consume import ConsumeComponent
-from components.actor.equip import EquipComponent
+from components.actor.pickup import PickupComponent
 from components.actor.player import PlayerComponent
 from components.actor.velocity import VelocityComponent
 from components.actor.wait import WaitComponent
@@ -36,9 +36,9 @@ class ActionProcessor(esper.Processor):
             
             if _pick_up:
                 if _pick_up is not True:
-                    self.world.add_component(ent, EquipComponent(item_id=_pick_up))
+                    self.world.add_component(ent, PickupComponent(item_id=_pick_up))
                 else:
-                    self.world.add_component(ent, EquipComponent(item_id=None))
+                    self.world.add_component(ent, PickupComponent(item_id=None))
 
             if _wait:
                 self.world.add_component(ent, WaitComponent())
