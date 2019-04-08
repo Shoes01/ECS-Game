@@ -46,6 +46,8 @@ class ConsumableProcessor(esper.Processor):
         stas_component = self.world.component_for_entity(ent, StatsComponent)
         turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
 
+        message_log_component.messages.insert(0, {'consume_generic': (self.world.component_for_entity(item, NameComponent).name, turn)})
+
         for key, value in con_component.effects.items():
             if key == 'heal':
                 stas_component.hp += value
