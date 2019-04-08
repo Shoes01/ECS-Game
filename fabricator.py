@@ -14,6 +14,7 @@ from components.game.message_log import MessageLogComponent
 from components.game.redraw import RedrawComponent
 from components.game.state import StateComponent
 from components.game.turn_count import TurnCountComponent
+from components.item.consumable import ConsumableComponent
 from components.item.equipped import EquippedComponent
 from components.item.item import ItemComponent
 from components.item.modifier import ModifierComponent
@@ -64,6 +65,16 @@ def fabricate_entity(ent, world):
             NameComponent(name='Zombie Sword'),
             PositionComponent(),
             RenderComponent(char=')', color=libtcod.green)
+        )
+    
+    if ent == 'titan_potion':
+        return world.create_entity(
+            ConsumableComponent(effects={'heal': 5, 'max_hp': 1}),
+            ItemComponent(),
+            ModifierComponent(power=0), # TODO: Give the plyaer an inventory to store tihs...
+            NameComponent(name='Titan Potion'),
+            PositionComponent(),
+            RenderComponent(char='!', color=libtcod.red)
         )
 
     if ent == 'zombie':

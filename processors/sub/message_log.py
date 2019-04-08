@@ -9,10 +9,11 @@ def render_message_log(console_bundle, world):
 
     dy = h - 1
     for message in message_log:
-        # Print combat messages
         _combat = message.get('combat')
         _death = message.get('death')
         _error = message.get('error')
+        _heal = message.get('heal')
+        _max_hp = message.get('max_hp')
 
         if _combat:
             att_char, att_color, def_char, def_color, damage, turn = _combat
@@ -31,6 +32,16 @@ def render_message_log(console_bundle, world):
             message= _error
 
             console.print(0, 0 + dy, message, LOG_COLORS['error'])
+        
+        if _heal:
+            value, turn = _heal
+
+            console.print(0, 0 + dy, '(Turn %s) You heal for %s point(s).' % (turn, value), LOG_COLORS['heal'])
+        
+        if _max_hp:
+            value, turn = _max_hp
+
+            console.print(0, 0 + dy, '(Turn %s) Your max hp increases by %s point(s).' % (turn, value), LOG_COLORS['max_hp'])
 
         dy -= 1
         if dy < 0:

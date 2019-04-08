@@ -4,6 +4,7 @@ import tcod as libtcod
 from processors.action import ActionProcessor
 from processors.ai_input import AiInputProcessor
 from processors.combat import CombatProcessor
+from processors.consumable import ConsumableProcessor
 from processors.debug import DebugProcessor
 from processors.death import DeathProcessor
 from processors.dijkstra import DijkstraProcessor
@@ -26,6 +27,7 @@ def build_world():
     action_processor = ActionProcessor()
     ai_input_processor = AiInputProcessor()
     combat_processor = CombatProcessor()
+    consumable_processor = ConsumableProcessor()
     debug_processor = DebugProcessor()
     death_processor = DeathProcessor()
     dijkstra_processor = DijkstraProcessor()
@@ -52,13 +54,14 @@ def build_world():
     ## UPDATE
     world.add_processor(action_processor, 20)
     world.add_processor(event_processor, 20)    
+    world.add_processor(consumable_processor, 10)
     world.add_processor(equip_processor, 10)
     world.add_processor(movement_processor, 10)
     world.add_processor(combat_processor, 5)
     world.add_processor(death_processor, 4)
     world.add_processor(mapgen_processor, 3)
     world.add_processor(dijkstra_processor, 2)
-    world.add_processor(energy_processor, 2) # TODO: Is this the right place?
+    world.add_processor(energy_processor, 2)
     ## ENDSTEP
     world.add_processor(state_processor, 1)
     world.add_processor(final_processor, 0)
