@@ -10,6 +10,7 @@ def render_message_log(console_bundle, world):
     dy = h - 1
     for message in message_log:
         _combat = message.get('combat')
+        _consume_fail = message.get('consume_fail')
         _consume_generic = message.get('consume_generic')
         _death = message.get('death')
         _error = message.get('error')
@@ -23,10 +24,15 @@ def render_message_log(console_bundle, world):
             libtcod.console_set_color_control(libtcod.COLCTRL_2, def_color, libtcod.black)
             console.print(0, 0 + dy, '(Turn %s) %c%s%c hits %c%s%c for %s.' % (turn, libtcod.COLCTRL_1, att_char, libtcod.COLCTRL_STOP, libtcod.COLCTRL_2, def_char, libtcod.COLCTRL_STOP, damage), LOG_COLORS['combat'])
 
+        if _consume_fail:
+            name, turn = _consume_fail
+
+            console.print(0, 0 + dy, '(Turn %s) You cannot consume your %s!' % (turn, name), LOG_COLORS['consume_generic'])
+
         if _consume_generic:
             name, turn = _consume_generic
 
-            console.print(0, 0 + dy, '(Turn %s) You consume your %s.' % (turn, name), LOG_COLORS['generic_consume'])
+            console.print(0, 0 + dy, '(Turn %s) You consume your %s.' % (turn, name), LOG_COLORS['consume_generic'])
 
         if _death:
             char, color, turn = _death

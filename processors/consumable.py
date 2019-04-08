@@ -1,7 +1,7 @@
 import esper
 
 from components.actor.consume import ConsumeComponent
-from components.actor.equipment import EquipmentComponent
+from components.actor.inventory import InventoryComponent
 from components.actor.stats import StatsComponent
 from components.game.popup import PopupComponent
 from components.game.message_log import MessageLogComponent
@@ -22,7 +22,7 @@ class ConsumableProcessor(esper.Processor):
                 choices = []
                 # Present the player with a list of items from their inventory that they may consume.
                 n = 97
-                for item in self.world.component_for_entity(ent, EquipmentComponent).equipment:
+                for item in self.world.component_for_entity(ent, InventoryComponent).inventory:
                     name = self.world.component_for_entity(item, NameComponent).name
                     char = chr(n)
                     result = {'action': {'consume': item}}
@@ -37,8 +37,12 @@ class ConsumableProcessor(esper.Processor):
             else:
                 ### Consume the item.
                 item = self.world.component_for_entity(ent, ConsumeComponent).item_id
-                self.consume_item(ent, item)
-                self.world.delete_entity(item)
+                if self.world.has_component(item, ConsumableComponent):
+                    self.consume_item(ent, item)
+                    self.world.delete_entity(item)
+                else:
+                    self.world.component_for_entity(1, MessageLogComponent).messages.insert(0, {'consume_fail': (self.world.component_for_entity(item, NameComponent).name, self.world.component_for_entity(1, TurnCountComponent).turn_count)})
+                    self.world.remove_component(ent, ConsumeComponent)
 
     def consume_item(self, ent, item):
         con_component = self.world.component_for_entity(item, ConsumableComponent)
@@ -58,4 +62,6 @@ class ConsumableProcessor(esper.Processor):
             elif key == 'max_hp':
                 stas_component.hp_max += value
                 message_log_component.messages.insert(0, {'max_hp': (value, turn)})
+        
+        self.world.remove_component(ent, ConsumeComponent)
                 

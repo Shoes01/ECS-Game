@@ -4,6 +4,7 @@ from components.actor.actor import ActorComponent
 from components.actor.brain import BrainComponent
 from components.actor.energy import EnergyComponent
 from components.actor.equipment import EquipmentComponent
+from components.actor.inventory import InventoryComponent
 from components.actor.player import PlayerComponent
 from components.actor.stats import StatsComponent
 from components.actor.velocity import VelocityComponent
@@ -15,9 +16,9 @@ from components.game.redraw import RedrawComponent
 from components.game.state import StateComponent
 from components.game.turn_count import TurnCountComponent
 from components.item.consumable import ConsumableComponent
-from components.item.equipped import EquippedComponent
 from components.item.item import ItemComponent
 from components.item.modifier import ModifierComponent
+from components.item.pickedup import PickedupComponent
 from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
@@ -40,6 +41,7 @@ def fabricate_entity(ent, world):
             ActorComponent(),
             EnergyComponent(energy=0),
             EquipmentComponent(),
+            InventoryComponent(),
             NameComponent(name='Player'),
             PersistComponent(),
             PlayerComponent(),
@@ -59,10 +61,10 @@ def fabricate_entity(ent, world):
 
     if ent == 'sword_equipped':
         return world.create_entity(
-            EquippedComponent(),
             ItemComponent(),
             ModifierComponent(power=2),
             NameComponent(name='Zombie Sword'),
+            PickedupComponent(),
             PositionComponent(),
             RenderComponent(char=')', color=libtcod.green)
         )
@@ -71,7 +73,6 @@ def fabricate_entity(ent, world):
         return world.create_entity(
             ConsumableComponent(effects={'heal': 5, 'max_hp': 1}),
             ItemComponent(),
-            ModifierComponent(power=0), # TODO: Give the plyaer an inventory to store tihs...
             NameComponent(name='Titan Potion'),
             PositionComponent(),
             RenderComponent(char='!', color=libtcod.red)
@@ -82,7 +83,8 @@ def fabricate_entity(ent, world):
             ActorComponent(),
             BrainComponent(),
             EnergyComponent(),
-            EquipmentComponent(equipment=[fabricate_entity('sword_equipped', world)]),
+            EquipmentComponent(),
+            InventoryComponent(inventory=[fabricate_entity('sword_equipped', world)]),
             NameComponent(name='Zombie'),
             PositionComponent(),
             RenderComponent(char='Z', color=libtcod.green),

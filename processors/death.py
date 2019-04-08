@@ -6,11 +6,11 @@ from components.actor.brain import BrainComponent
 from components.actor.combat import CombatComponent
 from components.actor.corpse import CorpseComponent
 from components.actor.dead import DeadComponent
-from components.actor.equipment import EquipmentComponent
+from components.actor.inventory import InventoryComponent
 from components.actor.stats import StatsComponent
 from components.actor.velocity import VelocityComponent
 from components.game.events import EventsComponent
-from components.item.equipped import EquippedComponent
+from components.item.pickedup import PickedupComponent
 from components.name import NameComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
@@ -20,14 +20,14 @@ class DeathProcessor(esper.Processor):
         super().__init__()
     
     def process(self):
-        for ent, (dead, eqp, name, pos, ren) in self.world.get_components(DeadComponent, EquipmentComponent, NameComponent, PositionComponent, RenderComponent):
-            equipment = eqp.equipment
+        for ent, (dead, inv, name, pos, ren) in self.world.get_components(DeadComponent, InventoryComponent, NameComponent, PositionComponent, RenderComponent):
+            inventory = inv.inventory
             name.name = 'corspe of ' + name.name
             ren.char = '%'
             ren.color = libtcod.red
 
-            for item in equipment:
-                self.world.remove_component(item, EquippedComponent)
+            for item in inventory:
+                self.world.remove_component(item, PickedupComponent)
                 item_pos = self.world.component_for_entity(item, PositionComponent)
                 item_pos.x, item_pos.y = pos.x, pos.y
 
