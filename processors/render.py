@@ -18,6 +18,7 @@ class RenderProcessor(esper.Processor):
         game_state = self.world.component_for_entity(1, StateComponent).state
         
         if game_state == 'Game' and (self.world.component_for_entity(1, RedrawComponent).redraw is False or self.world.has_component(1, DebugComponent)):
+            self.render_border()
             return 0
         else:
             self.world.component_for_entity(1, RedrawComponent).redraw = False
@@ -26,6 +27,8 @@ class RenderProcessor(esper.Processor):
         eqp_obj = self._consoles['stats']
         log_obj = self._consoles['log']
         map_obj = self._consoles['map']
+
+
 
         if game_state == 'Game' or game_state == 'GameOver' or game_state == 'PopupMenu':
             self.render_border()

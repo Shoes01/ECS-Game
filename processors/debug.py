@@ -3,59 +3,67 @@ import numpy as np
 import tcod as libtcod
 
 from components.game.debug import DebugComponent
+from components.game.state import StateComponent
 from components.game.map import MapComponent
+from components.game.redraw import RedrawComponent
 
 class DebugProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
         self._consoles = {}
-        self._key = None
-        self._mouse = None
+        self._input = (None, None)
     
     def process(self):
-        if self.world.has_component(1, DebugComponent):
-            con_obj = self._consoles['con'] # type: (console, x, y, w, h)
-            eqp_obj = self._consoles['stats']
-            log_obj = self._consoles['log']
-            map_obj = self._consoles['map']
-
-            eqp_obj[0].clear(bg=libtcod.pink, fg=libtcod.white)
-            log_obj[0].clear(bg=libtcod.red, fg=libtcod.white)
-            map_obj[0].clear(bg=libtcod.green, fg=libtcod.white)
-
+        if self.world.has_component(1, DebugComponent) and self.world.component_for_entity(1, StateComponent).state == 'Game':
             dijkstra_map = self.world.component_for_entity(1, MapComponent).dijkstra_map
-            
-            # Show dijkstra map.
-            for (x, y), value in np.ndenumerate(dijkstra_map):
-                if value == 999:
-                    map_obj[0].print(x, y, '#', libtcod.pink)
-                else:
-                    map_obj[0].print(x, y, baseN(value, 35), libtcod.pink)
+            key, mouse = self._input
+            key_char = None
+            con_obj = self._consoles['con'] # type: (console, x, y, w, h)
+            map_obj = self._consoles['map']
+            log_obj = self._consoles['log']
 
+            # Prepare input.
+            try:
+                key_char = chr(key.sym)
+            except:
+                key_char = None
+
+            # Show dijkstra map, but only when the map needs to be redraw.
+            if self.world.component_for_entity(1, RedrawComponent).redraw is True:
+                self.world.component_for_entity(1, RedrawComponent).redraw = False
+                for (x, y), value in np.ndenumerate(dijkstra_map):
+                    if value == 999:
+                        map_obj[0].print(x, y, '#', libtcod.pink)
+                    else:
+                        map_obj[0].print(x, y, baseN(value, 35), libtcod.pink)
+                
             # Display mouse information.
-            if self._mouse:
-                c, x, y, w, h = map_obj
+            if mouse:
+                m_x, m_y = mouse.tile
+                _string = 'Console coordinate: {:>8}'.format(str((m_x, m_y)))
+                con_obj[0].print(log_obj[1], log_obj[2], _string, libtcod.white, bg_blend=libtcod.BKGND_NONE)
                 
-                _coordinate = (self._mouse.cx, self._mouse.cy)
-                map_obj[0].print(0, 0, str(_coordinate), libtcod.white, bg_blend=libtcod.BKGND_NONE)
-                
-                if x <= self._mouse.cx <= w - 1 and y <= self._mouse.cy <= h - 1:
-                    _value = dijkstra_map[self._mouse.cx, self._mouse.cy]
-                    map_obj[0].print(0, 1, str(_value), libtcod.white, bg_blend=libtcod.BKGND_NONE)
+                if map_obj[1] <= m_x <= map_obj[3] - 1 and map_obj[2] <= m_y <= map_obj[4] - 1:
+                    _string = 'Map coordinate: {:>8}'.format(str((m_x - 1, m_y - 1)))
+                    con_obj[0].print(log_obj[1], log_obj[2] + 1, _string, libtcod.white, bg_blend=libtcod.BKGND_NONE)
+                    _value = dijkstra_map[m_x, m_y]
+                    _string = 'Dijkstra value: {:3d}'.format(_value)
+                    con_obj[0].print(log_obj[1], log_obj[2] + 2, _string, libtcod.white, bg_blend=libtcod.BKGND_NONE)
+                else:
+                    _string = '{:>25}'.format(' ')
+                    con_obj[0].print(log_obj[1], log_obj[2] + 1, _string, libtcod.white, bg_blend=libtcod.BKGND_NONE)
+                    con_obj[0].print(log_obj[1], log_obj[2] + 2, _string, libtcod.white, bg_blend=libtcod.BKGND_NONE)
 
-            # Display last key pressed TODO: Fix this.
-            last_key_char = None
-            if self._key and self._key.pressed:
-                last_key_char = self._key.text
-            if last_key_char:
-                map_obj[0].print(0, 2, last_key_char, libtcod.white, bg_blend=libtcod.BKGND_NONE)
-
-            # Test
-            eqp_obj[0].print(0, 0, '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', libtcod.white)
+            # Display last key pressed. TODO: This fails to work, because the InputProcessor pops the event before the debugger gets to read it.
+            if key:
+                _string = 'Last key pressed: {:>4}'.format(key.scancode)
+                if key_char:
+                    _string += ' (' + key_char + ')'
+                else:
+                    _string += ' ( )'
+                con_obj[0].print(log_obj[1], log_obj[2] + 3, _string, libtcod.white, bg_blend=libtcod.BKGND_NONE)
 
             # Send to console.
-            eqp_obj[0].blit(dest=con_obj[0], dest_x=eqp_obj[1], dest_y=eqp_obj[2], width=eqp_obj[3], height=eqp_obj[4])
-            log_obj[0].blit(dest=con_obj[0], dest_x=log_obj[1], dest_y=log_obj[2], width=log_obj[3], height=log_obj[4])
             map_obj[0].blit(dest=con_obj[0], dest_x=map_obj[1], dest_y=map_obj[2], width=map_obj[3], height=map_obj[4])
             libtcod.console_flush()
 

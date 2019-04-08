@@ -9,6 +9,7 @@ from components.actor.player import PlayerComponent
 from components.game.events import EventsComponent
 from components.game.popup import PopupComponent
 from components.game.state import StateComponent
+from processors.debug import DebugProcessor
 
 class InputProcessor(esper.Processor):
     def __init__(self):
@@ -20,10 +21,15 @@ class InputProcessor(esper.Processor):
         game_state_component = self.world.component_for_entity(1, StateComponent)
         key = None
         key_char = None
+        mouse = None
 
         for event in libtcod.event.get():
             if event.type == 'KEYDOWN':
                 key = event
+            elif event.type == 'MOUSEMOTION':
+                mouse = event
+
+        self.world.get_processor(DebugProcessor)._input = (key, mouse)
 
         if key is None:
             return 0
