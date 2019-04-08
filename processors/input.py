@@ -1,5 +1,6 @@
 import esper
 import tcod as libtcod
+import tcod.event
 
 from components.actor.action import ActionComponent
 from components.actor.actor import ActorComponent
@@ -12,24 +13,30 @@ from components.game.state import StateComponent
 class InputProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
-        self._key = None
-        self._mouse = None
     
     def process(self):
         action = None
         events = []
         game_state_component = self.world.component_for_entity(1, StateComponent)
-        key = self._key
-        key_char = chr(key.c)
-        mouse = self._mouse
+        key = None
+        key_char = None
 
-        if key.vk is libtcod.KEY_NONE:
+        for event in libtcod.event.get():
+            if event.type == 'KEYDOWN':
+                key = event
+
+        if key is None:
             return 0
 
-        if key_char == 'd' and key.lctrl:
-            events.append({'toggle_debug': True})
+        try:
+            key_char = chr(key.sym)
+        except:
+            key_char = None
 
         ### INPUTS THAT ARE READ REGARDLESS OF TURN
+        if key_char == 'd' and key.mod & libtcod.event.KMOD_CTRL:
+            events.append({'toggle_debug': True})
+
         if game_state_component.state == 'PopupMenu':
             _popup_comp = self.world.component_for_entity(1, PopupComponent)
             for choice in _popup_comp.choices:
@@ -43,20 +50,20 @@ class InputProcessor(esper.Processor):
                         action = result['action']
                         events.append({'close_popup_menu': True})
                         break
-                elif key.vk == libtcod.KEY_ESCAPE:
+                elif key.scancode == libtcod.event.SCANCODE_ESCAPE:
                     events.append({'close_popup_menu': True})
                     break
     
-        if game_state_component.state == 'MainMenu':
-            if key.vk == libtcod.KEY_ESCAPE:
+        elif game_state_component.state == 'MainMenu':
+            if key.scancode == libtcod.event.SCANCODE_ESCAPE:
                 events.append({'exit': True})
-            elif key.vk == libtcod.KEY_ENTER or key.vk == libtcod.KEY_KPENTER:
+            elif key.scancode == libtcod.event.SCANCODE_KP_ENTER or key.scancode == libtcod.event.SCANCODE_RETURN:
                 events.append({'new_map': True})
             elif key_char == 'l':
                 events.append({'load_game': True})
 
         elif game_state_component.state == 'Game':
-            if key.vk == libtcod.KEY_ESCAPE:
+            if key.scancode == libtcod.event.SCANCODE_ESCAPE:
                 popup_component = PopupComponent(
                     title='What would you like to do?',
                     choices=[
@@ -78,36 +85,36 @@ class InputProcessor(esper.Processor):
                         (
                             'Nevermind',
                             'ESC',
-                            {'event': {'uneeded': 'a successful key removed the menu anyway...'}}
+                            {'event': {'uneeded': True}} # Choosing an option from a popup menu closes it, so I don't need to close it again...
                         )
                     ]
                 )
                 events.append({'popup_menu': popup_component})
 
         elif game_state_component.state == 'GameOver':
-            if key.vk == libtcod.KEY_ESCAPE:
+            if key.scancode == libtcod.event.SCANCODE_ESCAPE:
                     events.append({'exit': True})
 
         ### INPUTS THAT ARE READ ONLY ON THE PLAYERS TURN
         for ent, (actor, eng, player) in self.world.get_components(ActorComponent, EnergyComponent, PlayerComponent):
             if game_state_component.state == 'Game' and eng.energy == 0:
-                if key.vk == libtcod.KEY_UP or key_char == 'k' or key.vk == libtcod.KEY_KP8:
+                if key.scancode == libtcod.event.SCANCODE_UP or key_char == 'k' or key.scancode == libtcod.event.SCANCODE_KP_8:
                     action = {'move': (0, -1)}
-                elif key.vk == libtcod.KEY_DOWN or key_char == 'j' or key.vk == libtcod.KEY_KP2:
+                elif key.scancode == libtcod.event.SCANCODE_DOWN or key_char == 'j' or key.scancode == libtcod.event.SCANCODE_KP_2:
                     action = {'move': (0, 1)}
-                elif key.vk == libtcod.KEY_LEFT or key_char == 'h' or key.vk == libtcod.KEY_KP4:
+                elif key.scancode == libtcod.event.SCANCODE_LEFT or key_char == 'h' or key.scancode == libtcod.event.SCANCODE_KP_4:
                     action = {'move': (-1, 0)}
-                elif key.vk == libtcod.KEY_RIGHT or key_char == 'l' or key.vk == libtcod.KEY_KP6:
+                elif key.scancode == libtcod.event.SCANCODE_RIGHT or key_char == 'l' or key.scancode == libtcod.event.SCANCODE_KP_6:
                     action = {'move': (1, 0)}
-                elif key_char == 'y' or key.vk == libtcod.KEY_KP7:
+                elif key_char == 'y' or key.scancode == libtcod.event.SCANCODE_KP_7:
                     action = {'move': (-1, -1)}
-                elif key_char == 'u' or key.vk == libtcod.KEY_KP9:
+                elif key_char == 'u' or key.scancode == libtcod.event.SCANCODE_KP_9:
                     action = {'move': (1, -1)}
-                elif key_char == 'b' or key.vk == libtcod.KEY_KP1:
+                elif key_char == 'b' or key.scancode == libtcod.event.SCANCODE_KP_1:
                     action = {'move': (-1, 1)}
-                elif key_char == 'n' or key.vk == libtcod.KEY_KP3:
+                elif key_char == 'n' or key.scancode == libtcod.event.SCANCODE_KP_3:
                     action = {'move': (1, 1)}
-                elif key_char == '.' or key.vk == libtcod.KEY_KP5:
+                elif key_char == '.' or key.scancode == libtcod.event.SCANCODE_KP_5:
                     action = {'wait': True}
                 
                 if key_char == 'g':
