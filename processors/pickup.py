@@ -8,14 +8,14 @@ from components.item.item import ItemComponent
 from components.name import NameComponent
 from components.position import PositionComponent
 
-class EquipProcessor(esper.Processor):
+class PickupProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
     
     def process(self):
         for ent, (eqpmnt, pick, pos) in self.world.get_components(EquipmentComponent, PickupComponent, PositionComponent):
 
-            if eqp.item_id is None:
+            if pick.item_id is None:
                 matched_items = []
 
                 for item_ent, (item, item_pos) in self.world.get_components(ItemComponent, PositionComponent):
