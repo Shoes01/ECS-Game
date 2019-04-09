@@ -20,10 +20,32 @@ class InventoryProcessor(esper.Processor):
             for item in inv.inventory:
                 name = self.world.component_for_entity(item, NameComponent).name
                 char = chr(n)
-                result = {'event': {'DEBUG': True}} # The result should be another popup menu with the title=name, and choices=drop/wear/consume.
+                result = self.generate_results(item, name)
                 choices.append((name, char, result))
                 n += 1
             
             choices.append(('Nevermind', 'ESC', {'event': {'cancel': True}}))
             self.world.component_for_entity(1, PopupComponent).menus.append( (title, choices) )
             self.world.remove_component(ent, OpenInventoryComponent)
+    
+    def generate_results(self, item, name):
+        title = name
+        choices = [
+            (
+                'Consume',
+                'c',
+                {'action': {'consume': item}}
+            ),
+            (
+                'Wear',
+                'w',
+                {'action': {'wear': item}}
+            ),
+            (
+                'Nevermind',
+                'ESC',
+                {'event': {'cancel': True}}
+            )
+        ]
+
+        return {'event': {'popup': (title, choices)}}
