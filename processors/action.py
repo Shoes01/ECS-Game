@@ -43,7 +43,4 @@ class ActionProcessor(esper.Processor):
             if _wait:
                 self.world.add_component(ent, WaitComponent())
 
-            if ent == 2:
-                self.world.component_for_entity(1, TurnCountComponent).turn_count += 1
-
             self.world.remove_component(ent, ActionComponent)

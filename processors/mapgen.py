@@ -161,7 +161,7 @@ class MapgenProcessor(esper.Processor):
                 
                 if not tiles[x, y] and not tile_occupied(self.world, x, y):
                     chance = random.randint(0, 100)
-                    if chance > 50:
+                    if chance > 80:
                         new_ent = fabricate_entity('sword', self.world)
                     else:
                         new_ent = fabricate_entity('titan_potion', self.world)

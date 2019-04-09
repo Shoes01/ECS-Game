@@ -2,6 +2,7 @@ import tcod as libtcod
 
 from _helper_functions import calculate_power
 from components.actor.stats import StatsComponent
+from components.game.turn_count import TurnCountComponent
 
 def render_stats(console_bundle, world):
     console, x, y, w, h = console_bundle
@@ -13,6 +14,7 @@ def render_stats(console_bundle, world):
 
     console.print(0, 0, 'HP: {0}/{1}'.format(player_stats_component.hp, player_stats_component.hp_max), color)
     console.print(0, 1, 'PWR: {0}'.format(calculate_power(2, world)), color)
+    console.print(0, 2, 'TURN: {0}'.format(world.component_for_entity(1, TurnCountComponent).turn_count), color)
 
     # Draw the item boxes.
     

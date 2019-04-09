@@ -28,6 +28,7 @@ from components.tile import TileComponent
 def fabricate_entity(ent, world):
     if ent == 'game':
         return world.create_entity(
+            EnergyComponent(),
             MapComponent(),
             MessageLogComponent(),
             PersistComponent(),

@@ -35,10 +35,11 @@ class ConsumableProcessor(esper.Processor):
                 self.world.remove_component(ent, ConsumeComponent)
 
             else:
-                ### Consume the item.
+                # Consume the item.
                 item = self.world.component_for_entity(ent, ConsumeComponent).item_id
                 if self.world.has_component(item, ConsumableComponent):
                     self.consume_item(ent, item)
+                    self.world.component_for_entity(ent, InventoryComponent).inventory.remove(item)
                     self.world.delete_entity(item)
                 else:
                     self.world.component_for_entity(1, MessageLogComponent).messages.insert(0, {'consume_fail': (self.world.component_for_entity(item, NameComponent).name, self.world.component_for_entity(1, TurnCountComponent).turn_count)})
@@ -62,6 +63,3 @@ class ConsumableProcessor(esper.Processor):
             elif key == 'max_hp':
                 stas_component.hp_max += value
                 message_log_component.messages.insert(0, {'max_hp': (value, turn)})
-        
-        self.world.remove_component(ent, ConsumeComponent)
-                
