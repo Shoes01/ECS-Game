@@ -11,6 +11,7 @@ from components.actor.stats import StatsComponent
 from components.actor.velocity import VelocityComponent
 from components.game.events import EventsComponent
 from components.game.message_log import MessageLogComponent
+from components.game.turn_count import TurnCountComponent
 from components.item.pickedup import PickedupComponent
 from components.name import NameComponent
 from components.position import PositionComponent
@@ -22,6 +23,8 @@ class DeathProcessor(esper.Processor):
     
     def process(self):
         for ent, (dead, inv, name, pos, ren) in self.world.get_components(DeadComponent, InventoryComponent, NameComponent, PositionComponent, RenderComponent):
+            self.world.component_for_entity(1, MessageLogComponent).messages.append({'death': (ren.char, ren.color, self.world.component_for_entity(1, TurnCountComponent).turn_count)})
+            
             inventory = inv.inventory
             name.name = 'corspe of ' + name.name
             ren.char = '%'
@@ -43,5 +46,3 @@ class DeathProcessor(esper.Processor):
             if self.world.has_component(ent, VelocityComponent): self.world.remove_component(ent, VelocityComponent)
             
             self.world.add_component(ent, CorpseComponent())
-
-            self.world.component_for_entity(1, MessageLogComponent).messages.append({'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, damage, turn)})

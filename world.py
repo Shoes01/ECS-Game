@@ -18,6 +18,7 @@ from processors.movement import MovementProcessor
 from processors.pickup import PickupProcessor
 from processors.render import RenderProcessor
 from processors.state import StateProcessor
+from processors.wearable import WearableProcessor
 
 def build_world():
     # Create world.
@@ -41,6 +42,7 @@ def build_world():
     pickup_processor = PickupProcessor()
     render_processor = RenderProcessor()
     state_processor = StateProcessor()
+    wearable_processor = WearableProcessor()
     
     # Add them to the world.
     ## UPKEEP
@@ -57,6 +59,7 @@ def build_world():
     world.add_processor(consumable_processor, 10)
     world.add_processor(pickup_processor, 10)
     world.add_processor(movement_processor, 10)
+    world.add_processor(wearable_processor, 10)
     world.add_processor(combat_processor, 5)
     world.add_processor(death_processor, 4)
     world.add_processor(mapgen_processor, 3)

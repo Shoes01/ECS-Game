@@ -1,4 +1,3 @@
-' Tags an entity as being dead. '
-
 class DeadComponent():
-    pass
+    def __init__(self, murderer):
+        self.murderer = murderer

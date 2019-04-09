@@ -1,7 +1,7 @@
 from components.actor.actor import ActorComponent
 from components.actor.corpse import CorpseComponent
-from components.item.equipped import EquippedComponent
 from components.item.item import ItemComponent
+from components.item.wearable import WearableComponent
 from components.game.map import MapComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
@@ -26,7 +26,7 @@ def render_entities(console_bundle, world):
 
     # Print items.
     for ent, (item, pos, ren) in world.get_components(ItemComponent, PositionComponent, RenderComponent):
-        if ren.visible and not world.has_component(ent, EquippedComponent):
+        if ren.visible and not world.has_component(ent, WearableComponent): # TODO: Is this still good?
             console.print(pos.x, pos.y, ren.char, ren.color)
 
     # Print entities to the console.

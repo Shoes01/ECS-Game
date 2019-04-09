@@ -62,5 +62,8 @@ LOG_COLORS = {
     'death': libtcod.dark_red,
     'error': libtcod.red,
     'heal': libtcod.light_blue,
-    'max_hp': libtcod.light_blue
+    'max_hp': libtcod.light_blue,
+    'wear': libtcod.light_blue,
+    'wear_already': libtcod.dark_red,
+    'wear_fail': libtcod.dark_red
 }

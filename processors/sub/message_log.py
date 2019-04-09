@@ -16,6 +16,9 @@ def render_message_log(console_bundle, world):
         _error = message.get('error')
         _heal = message.get('heal')
         _max_hp = message.get('max_hp')
+        _wear = message.get('wear')
+        _wear_already = message.get('wear_already')
+        _wear_fail = message.get('wear_fail')
 
         if _combat:
             att_char, att_color, def_char, def_color, damage, turn = _combat
@@ -54,6 +57,21 @@ def render_message_log(console_bundle, world):
             value, turn = _max_hp
 
             console.print(0, 0 + dy, '(Turn %s) Your max hp increases by %s point(s).' % (turn, value), LOG_COLORS['max_hp'])
+
+        if _wear:
+            name, turn = _wear
+
+            console.print(0, 0 + dy, '(Turn %s) Your equip your %s.' % (turn, name), LOG_COLORS['wear'])
+
+        if _wear_already:
+            name, turn = _wear_already
+
+            console.print(0, 0 + dy, '(Turn %s) You have already equipped your %s!' % (turn, name), LOG_COLORS['wear_already'])
+
+        if _wear_fail:
+            name, turn = _wear_fail
+
+            console.print(0, 0 + dy, '(Turn %s) You cannot equip a %s!' % (turn, name), LOG_COLORS['wear_fail'])
 
         dy -= 1
         if dy < 0:

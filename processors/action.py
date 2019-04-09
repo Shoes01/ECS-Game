@@ -6,6 +6,7 @@ from components.actor.pickup import PickupComponent
 from components.actor.player import PlayerComponent
 from components.actor.velocity import VelocityComponent
 from components.actor.wait import WaitComponent
+from components.actor.wear import WearComponent
 from components.game.dijgen import DijgenComponent
 from components.game.turn_count import TurnCountComponent
 
@@ -22,6 +23,7 @@ class ActionProcessor(esper.Processor):
             _move = action.action.get('move')
             _pick_up = action.action.get('pick_up')
             _wait = action.action.get('wait')
+            _wear = action.action.get('wear')
 
             if _consume:
                 if _consume is not True:
@@ -42,5 +44,11 @@ class ActionProcessor(esper.Processor):
 
             if _wait:
                 self.world.add_component(ent, WaitComponent())
+
+            if _wear:
+                if _wear is not True:
+                    self.world.add_component(ent, WearComponent(item_id=_wear))
+                else:
+                    self.world.add_component(ent, WearComponent(item_id=None))
 
             self.world.remove_component(ent, ActionComponent)

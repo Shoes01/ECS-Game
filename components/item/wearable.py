@@ -1,4 +1,4 @@
 ' Tags an item as equipped. '
 
-class EquippedComponent():
+class WearableComponent():
     pass

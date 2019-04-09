@@ -19,6 +19,7 @@ from components.item.consumable import ConsumableComponent
 from components.item.item import ItemComponent
 from components.item.modifier import ModifierComponent
 from components.item.pickedup import PickedupComponent
+from components.item.wearable import WearableComponent
 from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
@@ -57,7 +58,8 @@ def fabricate_entity(ent, world):
             ModifierComponent(power=5),
             NameComponent(name='Sword'),
             PositionComponent(),
-            RenderComponent(char=')', color=libtcod.blue)
+            RenderComponent(char=')', color=libtcod.blue),
+            WearableComponent()
         )
 
     if ent == 'sword_equipped':
@@ -67,7 +69,8 @@ def fabricate_entity(ent, world):
             NameComponent(name='Zombie Sword'),
             PickedupComponent(),
             PositionComponent(),
-            RenderComponent(char=')', color=libtcod.green)
+            RenderComponent(char=')', color=libtcod.green),
+            WearableComponent()
         )
     
     if ent == 'titan_potion':

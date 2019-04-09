@@ -7,6 +7,7 @@ from components.actor.pickup import PickupComponent
 from components.actor.player import PlayerComponent
 from components.actor.velocity import VelocityComponent
 from components.actor.wait import WaitComponent
+from components.actor.wear import WearComponent
 from components.game.redraw import RedrawComponent
 from components.game.turn_count import TurnCountComponent
 
@@ -36,6 +37,10 @@ class EnergyProcessor(esper.Processor):
                 eng.energy += 10
                 self.world.remove_component(ent, WaitComponent)
             
+            elif self.world.has_component(ent, WearComponent):
+                eng.energy += 10
+                self.world.remove_component(ent, WearComponent)
+
             elif ent == 1 and eng.energy == 0:
                 # This tracks the turn number.
                 eng.energy += 10
