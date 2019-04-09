@@ -13,6 +13,7 @@ from processors.event import EventProcessor
 from processors.final import FinalProcessor
 from processors.initial import InitialProcessor
 from processors.input import InputProcessor
+from processors.inventory import InventoryProcessor
 from processors.mapgen import MapgenProcessor
 from processors.movement import MovementProcessor
 from processors.pickup import PickupProcessor
@@ -37,6 +38,7 @@ def build_world():
     final_processor = FinalProcessor()
     initial_processor = InitialProcessor()
     input_processor = InputProcessor()
+    inventory_processor = InventoryProcessor()
     mapgen_processor = MapgenProcessor()
     movement_processor = MovementProcessor()
     pickup_processor = PickupProcessor()
@@ -57,6 +59,7 @@ def build_world():
     world.add_processor(action_processor, 20)
     world.add_processor(event_processor, 20)    
     world.add_processor(consumable_processor, 10)
+    world.add_processor(inventory_processor, 10)
     world.add_processor(pickup_processor, 10)
     world.add_processor(movement_processor, 10)
     world.add_processor(wearable_processor, 10)

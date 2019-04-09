@@ -127,6 +127,8 @@ class InputProcessor(esper.Processor):
                     action = {'consume': True}
                 if key_char == 'g':
                     action = {'pick_up': True}
+                if key_char == 'i':
+                    action = {'open_inventory': True}
                 if key_char == 'w':
                     action = {'wear': True}
 
