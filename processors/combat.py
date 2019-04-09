@@ -21,7 +21,6 @@ class CombatProcessor(esper.Processor):
             attacker_ID = ent
             defender_ID = self.world.component_for_entity(attacker_ID, CombatComponent).defender_ID
 
-            message_log_component = self.world.component_for_entity(1, MessageLogComponent)
             turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
 
             if not self.world.has_component(defender_ID, ActorComponent):
@@ -35,8 +34,7 @@ class CombatProcessor(esper.Processor):
 
             def_ren = self.world.component_for_entity(defender_ID, RenderComponent)
 
-            message_log_component.messages.append({'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, damage, turn)})
+            self.world.component_for_entity(1, MessageLogComponent).messages.append({'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, damage, turn)})
 
             if defender_stats.hp <= 0 and not self.world.has_component(defender_ID, DeadComponent):
                 self.world.add_component(defender_ID, DeadComponent())
-                message_log_component.messages.append({'death': (def_ren.char, def_ren.color, turn)})

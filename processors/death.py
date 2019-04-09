@@ -10,6 +10,7 @@ from components.actor.inventory import InventoryComponent
 from components.actor.stats import StatsComponent
 from components.actor.velocity import VelocityComponent
 from components.game.events import EventsComponent
+from components.game.message_log import MessageLogComponent
 from components.item.pickedup import PickedupComponent
 from components.name import NameComponent
 from components.position import PositionComponent
@@ -42,3 +43,5 @@ class DeathProcessor(esper.Processor):
             if self.world.has_component(ent, VelocityComponent): self.world.remove_component(ent, VelocityComponent)
             
             self.world.add_component(ent, CorpseComponent())
+
+            self.world.component_for_entity(1, MessageLogComponent).messages.append({'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, damage, turn)})
