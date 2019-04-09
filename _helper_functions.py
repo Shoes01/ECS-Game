@@ -24,7 +24,7 @@ def load_game(world):
 
         if state is not 'MainMenu':
             message = 'There is no save file to load.'
-            message_log_component.messages.insert(0, {'error': message})
+            message_log_component.messages.append({'error': message})
         return 0
 
     with shelve.open('savegame', 'r') as data_file:

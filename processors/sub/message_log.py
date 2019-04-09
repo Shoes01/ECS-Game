@@ -8,7 +8,7 @@ def render_message_log(console_bundle, world):
     console, x, y, w, h = console_bundle
 
     dy = h - 1
-    for message in message_log:
+    for message in reversed(message_log):
         _combat = message.get('combat')
         _consume_fail = message.get('consume_fail')
         _consume_generic = message.get('consume_generic')

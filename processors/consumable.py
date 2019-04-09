@@ -42,7 +42,7 @@ class ConsumableProcessor(esper.Processor):
                     self.world.component_for_entity(ent, InventoryComponent).inventory.remove(item)
                     self.world.delete_entity(item)
                 else:
-                    self.world.component_for_entity(1, MessageLogComponent).messages.insert(0, {'consume_fail': (self.world.component_for_entity(item, NameComponent).name, self.world.component_for_entity(1, TurnCountComponent).turn_count)})
+                    self.world.component_for_entity(1, MessageLogComponent).messages.append({'consume_fail': (self.world.component_for_entity(item, NameComponent).name, self.world.component_for_entity(1, TurnCountComponent).turn_count)})
                     self.world.remove_component(ent, ConsumeComponent)
 
     def consume_item(self, ent, item):
@@ -51,15 +51,15 @@ class ConsumableProcessor(esper.Processor):
         stas_component = self.world.component_for_entity(ent, StatsComponent)
         turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
 
-        message_log_component.messages.insert(0, {'consume_generic': (self.world.component_for_entity(item, NameComponent).name, turn)})
+        message_log_component.messages.append({'consume_generic': (self.world.component_for_entity(item, NameComponent).name, turn)})
 
         for key, value in con_component.effects.items():
             if key == 'heal':
                 stas_component.hp += value
                 if stas_component.hp > stas_component.hp_max:
                     stas_component.hp = stas_component.hp_max
-                message_log_component.messages.insert(0, {'heal': (value, turn)})
+                message_log_component.messages.append({'heal': (value, turn)})
             
             elif key == 'max_hp':
                 stas_component.hp_max += value
-                message_log_component.messages.insert(0, {'max_hp': (value, turn)})
+                message_log_component.messages.append({'max_hp': (value, turn)})
