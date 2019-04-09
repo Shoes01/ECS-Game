@@ -25,7 +25,7 @@ class StateProcessor(esper.Processor):
             if self.world.component_for_entity(2, PlayerComponent).killed:
                 self.world.remove_component(2, PlayerComponent)
                 state_component.state = 'GameOver'
-            if self.world.has_component(1, PopupComponent):
+            if self.world.component_for_entity(1, PopupComponent).menus:
                 state_component.state = 'PopupMenu'
         
         elif state_component.state == 'GameOver':
@@ -42,5 +42,5 @@ class StateProcessor(esper.Processor):
                 state_component.state = 'Exit'
             
         elif state_component.state == 'PopupMenu':
-            if not self.world.has_component(1, PopupComponent):
+            if not self.world.component_for_entity(1, PopupComponent).menus:
                 state_component.state = 'Game'

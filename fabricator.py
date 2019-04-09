@@ -12,6 +12,7 @@ from components.game.dijgen import DijgenComponent
 from components.game.end_game import EndGameComponent
 from components.game.map import MapComponent
 from components.game.message_log import MessageLogComponent
+from components.game.popup import PopupComponent
 from components.game.redraw import RedrawComponent
 from components.game.state import StateComponent
 from components.game.turn_count import TurnCountComponent
@@ -33,6 +34,7 @@ def fabricate_entity(ent, world):
             MapComponent(),
             MessageLogComponent(),
             PersistComponent(),
+            PopupComponent(),
             RedrawComponent(),
             StateComponent(),
             TurnCountComponent()

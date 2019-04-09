@@ -30,7 +30,7 @@ class ConsumableProcessor(esper.Processor):
                     n += 1
                 
                 choices.append(('Nevermind', 'ESC', {'event': {'cancel': True}}))
-                popup_component = PopupComponent(title=title, choices=choices)
+                popup_component = self.world.component_for_entity(1, PopupComponent).menus.append( (title, choices) )
                 self.world.add_component(1, popup_component)
                 self.world.remove_component(ent, ConsumeComponent)
 

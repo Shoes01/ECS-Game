@@ -45,7 +45,7 @@ class InputProcessor(esper.Processor):
 
         if game_state_component.state == 'PopupMenu':
             _popup_comp = self.world.component_for_entity(1, PopupComponent)
-            for choice in _popup_comp.choices:
+            for choice in _popup_comp.menus[-1][1]:
                 _, valid_key, result = choice
                 if key_char == valid_key:
                     if result.get('event'):
@@ -69,33 +69,31 @@ class InputProcessor(esper.Processor):
                 events.append({'load_game': True})
 
         elif game_state_component.state == 'Game':
-            if key.scancode == libtcod.event.SCANCODE_ESCAPE:
-                popup_component = PopupComponent(
-                    title='What would you like to do?',
-                    choices=[
-                        (
-                            'Load game',
-                            'l',
-                            {'event': {'load_game': True}}
-                        ),
-                        (
-                            'Quit',
-                            'q',
-                            {'event': {'exit': True}}
-                        ),
-                        (
-                            'Save game',
-                            's',
-                            {'event': {'save_game': True}}
-                        ),
-                        (
-                            'Nevermind',
-                            'ESC',
-                            {'event': {'uneeded': True}} # Choosing an option from a popup menu closes it, so I don't need to close it again...
-                        )
-                    ]
-                )
-                events.append({'popup_menu': popup_component})
+            if key.scancode == libtcod.event.SCANCODE_ESCAPE:                
+                title='What would you like to do?'
+                choices=[
+                    (
+                        'Load game',
+                        'l',
+                        {'event': {'load_game': True}}
+                    ),
+                    (
+                        'Quit',
+                        'q',
+                        {'event': {'exit': True}}
+                    ),
+                    (
+                        'Save game',
+                        's',
+                        {'event': {'save_game': True}}
+                    ),
+                    (
+                        'Nevermind',
+                        'ESC',
+                        {'event': {'uneeded': True}} # Choosing an option from a popup menu closes it, so I don't need to close it again...
+                    )
+                ]
+                self.world.component_for_entity(1, PopupComponent).menus.append( (title, choices) )
 
         elif game_state_component.state == 'GameOver':
             if key.scancode == libtcod.event.SCANCODE_ESCAPE:
