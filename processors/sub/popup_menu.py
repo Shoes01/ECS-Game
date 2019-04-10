@@ -22,7 +22,16 @@ def render_popup_menu(console_bundle, world):
     # Render choices
     dy = 2
     for choice in menu[1]:
-        name, key, _ = choice
+        eligibility = True
+        if len(choice) == 3:
+            name, key, _ = choice
+        else:
+            name, key, _, eligibility = choice
+        
+        color = libtcod.white
+        if not eligibility:
+            color = libtcod.grey
+
         string = '(' + key + ') ' + name
-        console.print(x + 2, y + dy, string, libtcod.white)
+        console.print(x + 2, y + dy, string, color)
         dy += 1

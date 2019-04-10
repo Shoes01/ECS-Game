@@ -4,6 +4,8 @@ from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
 from components.actor.open_inv import OpenInventoryComponent
 from components.game.popup import PopupComponent
+from components.item.consumable import ConsumableComponent
+from components.item.wearable import WearableComponent
 from components.name import NameComponent
 
 class InventoryProcessor(esper.Processor):
@@ -33,29 +35,23 @@ class InventoryProcessor(esper.Processor):
             self.world.component_for_entity(1, PopupComponent).menus.append( (title, choices) )
             self.world.remove_component(ent, OpenInventoryComponent)
     
-    def generate_results(self, item, name, drop_or_wear):
+    def generate_results(self, item, name, drop_or_wear):        
         title = name
-        choices = [
-            (
-                'Consume',
-                'c',
-                {'action': {'consume': item}}
-            ),
-            (
-                'Drop',
-                'd',
-                {'action': {drop_or_wear: item}}
-            ),
-            (
-                'Wear',
-                'w',
-                {'action': {'wear': item}}
-            ),
-            (
-                'Nevermind',
-                'ESC',
-                {'event': {'cancel': True}}
-            )
-        ]
+        eligibility = True
+
+        if not self.world.has_component(item, ConsumableComponent):
+            eligibility = False
+        action_choice = ('Consume', 'c', {'action': {'consume': item}}, eligibility)
+
+        action_drop = ('Drop', 'd', {'action': {drop_or_wear: item}})
+
+        eligibility = True
+        if not self.world.has_component(item, WearableComponent):
+            eligibility = False
+        action_wear = ('Wear', 'w', {'action': {'wear': item}}, eligibility)
+
+        action_nevermind = ('Nevermind', 'ESC', {'event': {'cancel': True}})
+
+        choices = [action_choice, action_drop, action_wear, action_nevermind]
 
         return {'event': {'popup': (title, choices)}}

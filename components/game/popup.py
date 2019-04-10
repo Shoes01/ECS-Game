@@ -4,7 +4,7 @@ class PopupComponent():
     def __init__(self):
         self.menus = [] # type: a list containing (title, choices)
         # title: string
-        # choices: name, key, result
+        # choices: name, key, result, ineligibility
 
         """
         Example of how a 'choice' should look:
@@ -12,6 +12,7 @@ class PopupComponent():
             (
                 'Yes',
                 'y',
-                {'event': 'Exit'}
+                {'event': 'Exit'},
+                True
             )]
         """

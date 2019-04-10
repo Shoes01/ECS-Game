@@ -46,7 +46,10 @@ class InputProcessor(esper.Processor):
         if game_state_component.state == 'PopupMenu':
             _popup_comp = self.world.component_for_entity(1, PopupComponent)
             for choice in _popup_comp.menus[-1][1]:
-                _, valid_key, result = choice
+                if len(choice) == 3:
+                    _, valid_key, result = choice
+                else:
+                    _, valid_key, result, _ = choice
                 if key_char == valid_key:
                     if result.get('event'):
                         events.append({'close_popup_menu': True})
