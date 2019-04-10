@@ -30,7 +30,7 @@ def render_message_log(console_bundle, world):
         if _consume_fail:
             name, turn = _consume_fail
 
-            console.print(0, 0 + dy, '(Turn %s) You cannot consume your %s!' % (turn, name), LOG_COLORS['consume_generic'])
+            console.print(0, 0 + dy, '(Turn %s) You cannot consume your %s!' % (turn, name), LOG_COLORS['consume_fail'])
 
         if _consume_generic:
             name, turn = _consume_generic

@@ -121,6 +121,8 @@ class InputProcessor(esper.Processor):
                 elif key_char == '.' or key.scancode == libtcod.event.SCANCODE_KP_5:
                     action = {'wait': True}
                 
+                if key_char == 'd':
+                    action = {'drop': True}
                 if key_char == 'e':
                     action = {'consume': True}
                 if key_char == 'g':

@@ -57,7 +57,7 @@ log = Rectangle(
 
 LOG_COLORS = {
     'combat': libtcod.yellow,
-    'consume_fail': libtcod.red,
+    'consume_fail': libtcod.dark_red,
     'consume_generic': libtcod.light_blue,
     'death': libtcod.dark_red,
     'error': libtcod.red,

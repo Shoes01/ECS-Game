@@ -36,8 +36,11 @@ class ActionProcessor(esper.Processor):
                     self.world.add_component(ent, ConsumeComponent(item_id=None))
 
             if _drop:
-                self.world.add_component(ent, DropComponent(item_id=_drop))
-
+                if _drop is not True:
+                    self.world.add_component(ent, DropComponent(item_id=_drop))    
+                else:
+                    self.world.add_component(ent, DropComponent(item_id=None))
+                
             if _open_inventory:
                 self.world.add_component(ent, OpenInventoryComponent())
 
