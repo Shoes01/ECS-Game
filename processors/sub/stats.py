@@ -29,11 +29,11 @@ def render_stats(console_bundle, world):
 
 def draw_letter_box(x, y, w, h, char, console, color):
     # Draw the little box, and put the letter in it.
-    box = SingleLineBox
+    box = SingleLineBox()
     
     for xx in range(x, x + w):
-        console.print(xx, y, box.horiztonal, color)
-        console.print(xx, y + h - 1, box.horiztonal, color)
+        console.print(xx, y, box.horizontal, color)
+        console.print(xx, y + h - 1, box.horizontal, color)
     
     for yy in range(y, y + h):
         console.print(x, yy, box.vertical, color)

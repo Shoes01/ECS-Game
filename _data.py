@@ -88,13 +88,13 @@ class DoubleLineBox():
     right_bookend = u'\u255e' # ╞
 
 class SingleLineBox():
-    vertical = u'\007C' # |
-    horiztonal = u'\2500' # ─
-    top_left = u'\250C' # ┌
-    top_right = u'\2510' # ┐
-    bottom_left = u'\2514' # └
-    bottom_right = u'\2518' # ┘
-    not_left = u'\251C' # ├
-    not_up = u'\252C' # ┬
-    not_down = u'\2534' # ┴
-    intersection = u'\253C' # ┼
+    vertical = u'\u2502' # │
+    horizontal = u'\u2500' # ─
+    top_left = u'\u250c' # ┌
+    top_right = u'\u2510' # ┐
+    bottom_left = u'\u2514' # └
+    bottom_right = u'\u2518' # ┘
+    not_left = u'\u251c' # ├
+    not_up = u'\u252c' # ┬
+    not_down = u'\u2534' # ┴
+    intersection = u'\u253c' # ┼
