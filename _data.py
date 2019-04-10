@@ -86,3 +86,15 @@ class DoubleLineBox():
     nws_special = u'\u2567' # ╧
     left_bookend = u'\u2561' # ╡
     right_bookend = u'\u255e' # ╞
+
+class SingleLineBox():
+    vertical = u'\007C' # |
+    horiztonal = u'\2500' # ─
+    top_left = u'\250C' # ┌
+    top_right = u'\2510' # ┐
+    bottom_left = u'\2514' # └
+    bottom_right = u'\2518' # ┘
+    not_left = u'\251C' # ├
+    not_up = u'\252C' # ┬
+    not_down = u'\2534' # ┴
+    intersection = u'\253C' # ┼

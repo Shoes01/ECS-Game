@@ -1,5 +1,6 @@
 import tcod as libtcod
 
+from _data import SingleLineBox
 from _helper_functions import calculate_power
 from components.actor.stats import StatsComponent
 from components.game.turn_count import TurnCountComponent
@@ -28,17 +29,19 @@ def render_stats(console_bundle, world):
 
 def draw_letter_box(x, y, w, h, char, console, color):
     # Draw the little box, and put the letter in it.
+    box = SingleLineBox
+    
     for xx in range(x, x + w):
-        console.print(xx, y, '-', color)
-        console.print(xx, y + h - 1, '-', color)
+        console.print(xx, y, box.horiztonal, color)
+        console.print(xx, y + h - 1, box.horiztonal, color)
     
     for yy in range(y, y + h):
-        console.print(x, yy, '|', color)
-        console.print(x + w - 1, yy, '|', color)
+        console.print(x, yy, box.vertical, color)
+        console.print(x + w - 1, yy, box.vertical, color)
     
-    console.print(x, y, '+', color)
-    console.print(x + w - 1, y, '+', color)
-    console.print(x, y + h -1, '+', color)
-    console.print(x + w - 1, y + h -1, '+', color)
+    console.print(x, y, box.top_left, color)
+    console.print(x + w - 1, y, box.top_right, color)
+    console.print(x, y + h -1, box.bottom_left, color)
+    console.print(x + w - 1, y + h -1, box.bottom_right, color)
 
     console.print(x + 1, y + 1, char, color)
