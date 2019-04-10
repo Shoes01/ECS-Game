@@ -67,3 +67,22 @@ LOG_COLORS = {
     'wear_already': libtcod.light_blue,
     'wear_fail': libtcod.dark_red
 }
+
+### BORDER DATA
+
+class DoubleLineBox():
+    horizontal = u'\u2550' # ═
+    vertical = u'\u2551' # ║
+    top_left = u'\u2554' # ╔
+    top_right = u'\u2557' # ╗
+    bottom_left = u'\u255a' # ╚
+    bottom_right = u'\u255d' # ╝
+    not_left = u'\u2560' # ╠
+    not_right = u'\u2563' # ╣
+    not_up = u'\u2566' # ╦
+    not_down = u'\u2569' # ╩
+    intersection = u'\u256c' # ╬
+    wse_special = u'\u2564' # ╤
+    nws_special = u'\u2567' # ╧
+    left_bookend = u'\u2561' # ╡
+    right_bookend = u'\u255e' # ╞

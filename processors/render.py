@@ -1,6 +1,7 @@
 import esper
 import tcod as libtcod
 
+from _data import DoubleLineBox
 from components.game.debug import DebugComponent
 from components.game.redraw import RedrawComponent
 from components.game.state import StateComponent
@@ -60,14 +61,26 @@ class RenderProcessor(esper.Processor):
         con_obj = self._consoles['con'] # type: (console, x, y, w, h)
         eqp_obj = self._consoles['stats']
         map_obj = self._consoles['map']
+
+        box = DoubleLineBox()
         
         for x in range(con_obj[1], con_obj[3]):
-            con_obj[0].print(x, con_obj[2], '#', libtcod.dark_grey)
-            con_obj[0].print(x, map_obj[2] + map_obj[4], '#', libtcod.dark_grey)
-            con_obj[0].print(x, con_obj[2] + con_obj[4] - 1, '#', libtcod.dark_grey)
+            con_obj[0].print(x, con_obj[2], box.horizontal, libtcod.dark_grey)
+            con_obj[0].print(x, map_obj[2] + map_obj[4], box.horizontal, libtcod.dark_grey)
+            con_obj[0].print(x, con_obj[2] + con_obj[4] - 1, box.horizontal, libtcod.dark_grey)
         
         for y in range(con_obj[2], con_obj[4]):
-            con_obj[0].print(con_obj[1], y, '#', libtcod.dark_grey)
-            con_obj[0].print(con_obj[1] + con_obj[3] - 1, y, '#', libtcod.dark_grey)
+            con_obj[0].print(con_obj[1], y, box.vertical, libtcod.dark_grey)
+            con_obj[0].print(con_obj[1] + con_obj[3] - 1, y, box.vertical, libtcod.dark_grey)
             if y >= eqp_obj[2]:
-                con_obj[0].print(eqp_obj[1] + eqp_obj[3], y, '#', libtcod.dark_grey)
+                con_obj[0].print(eqp_obj[1] + eqp_obj[3], y, box.vertical, libtcod.dark_grey)
+        
+        con_obj[0].print(con_obj[1], con_obj[2], box.top_left, libtcod.dark_grey)
+        con_obj[0].print(con_obj[1] + con_obj[3] - 1, con_obj[2], box.top_right, libtcod.dark_grey)
+        con_obj[0].print(con_obj[1] + con_obj[3] - 1, con_obj[2] + con_obj[4] - 1, box.bottom_right, libtcod.dark_grey)
+        con_obj[0].print(con_obj[1], con_obj[2] + con_obj[4] - 1, box.bottom_left, libtcod.dark_grey)
+
+        con_obj[0].print(eqp_obj[1] - 1, eqp_obj[2] - 1, box.not_left, libtcod.dark_grey)
+        con_obj[0].print(eqp_obj[1] + eqp_obj[3], eqp_obj[2] - 1, box.not_up, libtcod.dark_grey)
+        con_obj[0].print(eqp_obj[1] + eqp_obj[3], eqp_obj[2] + eqp_obj[4], box.not_down, libtcod.dark_grey)
+        con_obj[0].print(map_obj[1] + map_obj[3], map_obj[2] + map_obj[4], box.not_right, libtcod.dark_grey)
