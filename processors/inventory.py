@@ -37,6 +37,11 @@ class InventoryProcessor(esper.Processor):
                 {'action': {'consume': item}}
             ),
             (
+                'Drop',
+                'd',
+                {'action': {'drop': item}}
+            ),
+            (
                 'Wear',
                 'w',
                 {'action': {'wear': item}}

@@ -2,6 +2,7 @@ import esper
 
 from components.actor.action import ActionComponent
 from components.actor.consume import ConsumeComponent
+from components.actor.drop import DropComponent
 from components.actor.open_inv import OpenInventoryComponent
 from components.actor.pickup import PickupComponent
 from components.actor.player import PlayerComponent
@@ -21,6 +22,7 @@ class ActionProcessor(esper.Processor):
     def process(self):
         for ent, (action) in self.world.get_component(ActionComponent):
             _consume = action.action.get('consume')
+            _drop = action.action.get('drop')
             _open_inventory = action.action.get('open_inventory')
             _move = action.action.get('move')
             _pick_up = action.action.get('pick_up')
@@ -32,6 +34,9 @@ class ActionProcessor(esper.Processor):
                     self.world.add_component(ent, ConsumeComponent(item_id=_consume))
                 else:
                     self.world.add_component(ent, ConsumeComponent(item_id=None))
+
+            if _drop:
+                self.world.add_component(ent, DropComponent(item_id=_drop))
 
             if _open_inventory:
                 self.world.add_component(ent, OpenInventoryComponent())

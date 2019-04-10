@@ -8,6 +8,7 @@ from processors.consumable import ConsumableProcessor
 from processors.debug import DebugProcessor
 from processors.death import DeathProcessor
 from processors.dijkstra import DijkstraProcessor
+from processors.drop import DropProcessor
 from processors.energy import EnergyProcessor
 from processors.event import EventProcessor
 from processors.final import FinalProcessor
@@ -33,6 +34,7 @@ def build_world():
     debug_processor = DebugProcessor()
     death_processor = DeathProcessor()
     dijkstra_processor = DijkstraProcessor()
+    drop_processor = DropProcessor()
     energy_processor = EnergyProcessor()
     event_processor = EventProcessor()
     final_processor = FinalProcessor()
@@ -58,11 +60,12 @@ def build_world():
     ## UPDATE
     world.add_processor(action_processor, 20)
     world.add_processor(event_processor, 20)    
+    world.add_processor(inventory_processor, 15)
     world.add_processor(consumable_processor, 10)
-    world.add_processor(inventory_processor, 10)
     world.add_processor(pickup_processor, 10)
     world.add_processor(movement_processor, 10)
     world.add_processor(wearable_processor, 10)
+    world.add_processor(drop_processor, 10)
     world.add_processor(combat_processor, 5)
     world.add_processor(death_processor, 4)
     world.add_processor(mapgen_processor, 3)

@@ -2,6 +2,7 @@ import esper
 
 from components.actor.combat import CombatComponent
 from components.actor.consume import ConsumeComponent
+from components.actor.drop import DropComponent
 from components.actor.energy import EnergyComponent
 from components.actor.pickup import PickupComponent
 from components.actor.player import PlayerComponent
@@ -24,6 +25,10 @@ class EnergyProcessor(esper.Processor):
             elif self.world.has_component(ent, ConsumeComponent):
                 eng.energy += 10
                 self.world.remove_component(ent, ConsumeComponent)
+
+            elif self.world.has_component(ent, DropComponent):
+                eng.energy += 10
+                self.world.remove_component(ent, DropComponent)
 
             elif self.world.has_component(ent, PickupComponent):
                 eng.energy += 10
