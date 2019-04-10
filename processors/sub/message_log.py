@@ -61,12 +61,12 @@ def render_message_log(console_bundle, world):
         if _wear:
             name, turn = _wear
 
-            console.print(0, 0 + dy, '(Turn %s) Your equip your %s.' % (turn, name), LOG_COLORS['wear'])
+            console.print(0, 0 + dy, '(Turn %s) You equip your %s.' % (turn, name), LOG_COLORS['wear'])
 
         if _wear_already:
             name, turn = _wear_already
 
-            console.print(0, 0 + dy, '(Turn %s) You have already equipped your %s!' % (turn, name), LOG_COLORS['wear_already'])
+            console.print(0, 0 + dy, '(Turn %s) You unequip your %s.' % (turn, name), LOG_COLORS['wear_already'])
 
         if _wear_fail:
             name, turn = _wear_fail
