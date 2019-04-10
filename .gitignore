@@ -1,8 +1,10 @@
 # Custome git ignore files
-*.md
+TODO.md
 *.dat
 *.bak
 *.dir
+*.stackdump
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
