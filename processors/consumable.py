@@ -23,6 +23,8 @@ class ConsumableProcessor(esper.Processor):
                 # Present the player with a list of items from their inventory that they may consume.
                 n = 97
                 for item in self.world.component_for_entity(ent, InventoryComponent).inventory:
+                    if not self.world.has_component(item, ConsumableComponent):
+                        continue
                     name = self.world.component_for_entity(item, NameComponent).name
                     char = chr(n)
                     result = {'action': {'consume': item}}

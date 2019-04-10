@@ -18,11 +18,13 @@ class WearableProcessor(esper.Processor):
 
             if wear.item_id is None:
                 # Create popup menu for player to choose from.
-                title = 'Which item would you like to wear?'
+                title = 'Which item would you like to wear or remove?'
                 choices = []
                 # Present the player with a list of items from their inventory that they may consume.
                 n = 97
                 for item in self.world.component_for_entity(ent, InventoryComponent).inventory:
+                    if not self.world.has_component(item, WearableComponent):
+                        continue
                     choices.append(self.generate_choice(chr(n), eqp, item))
                     n += 1
                 
