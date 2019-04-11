@@ -27,7 +27,7 @@ class InventoryProcessor(esper.Processor):
                     name += ' (worn)'
                     drop_or_wear = 'wear'
                 char = chr(n)
-                result = self.generate_results(item, name, drop_or_wear)
+                result = self.generate_results(ent, item, name, drop_or_wear)
                 choices.append((name, char, result))
                 n += 1
             
@@ -35,10 +35,10 @@ class InventoryProcessor(esper.Processor):
             self.world.component_for_entity(1, PopupComponent).menus.append( (title, choices) )
             self.world.remove_component(ent, OpenInventoryComponent)
     
-    def generate_results(self, item, name, drop_or_wear):        
+    def generate_results(self, ent, item, name, drop_or_wear):        
         title = name
+        
         eligibility = True
-
         if not self.world.has_component(item, ConsumableComponent):
             eligibility = False
         action_choice = ('Consume', 'c', {'action': {'consume': item}}, eligibility)
@@ -46,12 +46,17 @@ class InventoryProcessor(esper.Processor):
         action_drop = ('Drop', 'd', {'action': {drop_or_wear: item}})
 
         eligibility = True
-        if not self.world.has_component(item, WearableComponent):
+        if not item in self.world.component_for_entity(ent, EquipmentComponent).equipment:
+            eligibility = False
+        action_remove = ('Remove', 'r', {'action': {'wear': item}}, eligibility)
+
+        eligibility = True
+        if not self.world.has_component(item, WearableComponent) or item in self.world.component_for_entity(ent, EquipmentComponent).equipment:
             eligibility = False
         action_wear = ('Wear', 'w', {'action': {'wear': item}}, eligibility)
 
         action_nevermind = ('Back', 'ESC', {'event': {'pop_popup_menu': True}})
 
-        choices = [action_choice, action_drop, action_wear, action_nevermind]
+        choices = [action_choice, action_drop, action_remove, action_wear, action_nevermind]
 
         return {'event': {'popup': (title, choices)}}

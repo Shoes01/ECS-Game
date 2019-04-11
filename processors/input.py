@@ -134,7 +134,7 @@ class InputProcessor(esper.Processor):
                     action = {'pick_up': True}
                 if key_char == 'i':
                     action = {'open_inventory': True}
-                if key_char == 'w':
+                if key_char == 'w' or key_char == 'r':
                     action = {'wear': True}
 
             # Attach action component to player entity. This ends their turn.
