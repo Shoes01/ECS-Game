@@ -50,18 +50,18 @@ class InputProcessor(esper.Processor):
                     _, valid_key, result = choice
                 else:
                     _, valid_key, result, _ = choice
-                if key_char == valid_key:
+                if key_char == valid_key or (valid_key == 'ESC' and key.scancode == libtcod.event.SCANCODE_ESCAPE):
                     if result.get('event'):
-                        events.append({'close_popup_menu': True})
+                        if not result.get('event').get('popup'):
+                            events.append({'close_popup_menu': True})
                         events.append(result['event'])
-                        break
-                    if result.get('action'):
+                    elif result.get('action'):
                         action = result['action']
                         events.append({'close_popup_menu': True})
-                        break
-                elif key.scancode == libtcod.event.SCANCODE_ESCAPE:
-                    events.append({'close_popup_menu': True})
                     break
+            else:
+                if key.scancode == libtcod.event.SCANCODE_ESCAPE:
+                    events.append({'close_popup_menu': True})
     
         elif game_state_component.state == 'MainMenu':
             if key.scancode == libtcod.event.SCANCODE_ESCAPE:
