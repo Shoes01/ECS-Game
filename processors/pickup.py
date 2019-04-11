@@ -2,7 +2,7 @@ import esper
 
 from components.actor.inventory import InventoryComponent
 from components.actor.pickup import PickupComponent
-from components.game.popup import PopupComponent
+from components.game.popup import PopupComponent, PopupMenu, PopupChoice
 from components.item.item import ItemComponent
 from components.item.pickedup import PickedupComponent
 from components.name import NameComponent
@@ -33,19 +33,18 @@ class PickupProcessor(esper.Processor):
                     item_pos.x, item_pos.y = -1, -1
                 
                 elif len(matched_items) > 1:
-                    title = 'Which item do you want to pick up?'
-                    choices = []
+                    # Create popup menu for player to choose from.
+                    menu = PopupMenu(title='Which item do you want to pick up?')
                     
-                    n = 97 # chr(97) is a
+                    n = 97
                     for item in matched_items:
-                        name = self.world.component_for_entity(item, NameComponent).name
-                        char = chr(n)
-                        result = {'action': {'pick_up': item}}
-                        choices.append((name, char, result))
+                        _name = self.world.component_for_entity(item, NameComponent).name
+                        _keu = chr(n)
+                        _result = {'pick_up': item}
+                        menu.contents.append(PopupChoice(name=_name, key=_key, result=_result)
                         n += 1
 
-                    choices.append(('Close menu', 'ESC', {'event': {'pop_popup_menu': True}}))
-                    self.world.component_for_entity(1, PopupComponent).menus.append( (title, choices) )
+                    self.world.component_for_entity(1, PopupComponent).menus.append(menu)
                     self.world.remove_component(ent, PickupComponent)
 
             else:

@@ -5,7 +5,7 @@ from components.actor.inventory import InventoryComponent
 from components.actor.wear import WearComponent
 from components.item.wearable import WearableComponent
 from components.game.message_log import MessageLogComponent
-from components.game.popup import PopupComponent
+from components.game.popup import PopupComponent, PopupMenu, PopupChoice
 from components.game.turn_count import TurnCountComponent
 from components.name import NameComponent
 
@@ -18,18 +18,21 @@ class WearableProcessor(esper.Processor):
 
             if wear.item_id is None:
                 # Create popup menu for player to choose from.
-                title = 'Which item would you like to wear or remove?'
-                choices = []
-                # Present the player with a list of items from their inventory that they may consume.
+                menu = PopupMenu(title='Which item would you like to wear or remove?')
+                
                 n = 97
                 for item in self.world.component_for_entity(ent, InventoryComponent).inventory:
                     if not self.world.has_component(item, WearableComponent):
                         continue
-                    choices.append(self.generate_choice(chr(n), eqp, item))
+                    _name = self.world.component_for_entity(item, NameComponent).name
+                    if item in eqp.equipment:
+                        _name += ' (worn)'
+                    _key = chr(n)
+                    _result = {'wear': item}
+                    menu.contents.append(PopupChoice(name=_name, key=_key, result=_result))
                     n += 1
                 
-                choices.append(('Close menu', 'ESC', {'event': {'pop_popup_menu': True}}))
-                self.world.component_for_entity(1, PopupComponent).menus.append( (title, choices) )
+                self.world.component_for_entity(1, PopupComponent).menus.append(menu)
                 self.world.remove_component(ent, WearComponent)
 
             else:
@@ -44,10 +47,3 @@ class WearableProcessor(esper.Processor):
                 else:
                     self.world.component_for_entity(1, MessageLogComponent).messages.append({'wear_fail': (self.world.component_for_entity(item, NameComponent).name, self.world.component_for_entity(1, TurnCountComponent).turn_count)})
                     self.world.remove_component(ent, WearComponent)
-    
-    def generate_choice(self, char, eqp, item):
-        name = self.world.component_for_entity(item, NameComponent).name
-        if item in eqp.equipment:
-            name += ' (worn)'
-        result = {'action': {'wear': item}}
-        return (name, char, result)

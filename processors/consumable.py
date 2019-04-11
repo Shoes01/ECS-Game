@@ -3,7 +3,7 @@ import esper
 from components.actor.consume import ConsumeComponent
 from components.actor.inventory import InventoryComponent
 from components.actor.stats import StatsComponent
-from components.game.popup import PopupComponent
+from components.game.popup import PopupComponent, PopupMenu, PopupChoice
 from components.game.message_log import MessageLogComponent
 from components.game.turn_count import TurnCountComponent
 from components.item.consumable import ConsumableComponent
@@ -18,22 +18,19 @@ class ConsumableProcessor(esper.Processor):
             
             if con.item_id is None:
                 # Create popup menu for player to choose from.
-                title = 'Which item would you like to consume?'
-                choices = []
-                # Present the player with a list of items from their inventory that they may consume.
+                menu = PopupMenu(title='Which item would you like to consume?')
+
                 n = 97
-                for item in self.world.component_for_entity(ent, InventoryComponent).inventory:
+                for item in self.world.component_for_entity(ent, InventoryComponent).inventory: 
                     if not self.world.has_component(item, ConsumableComponent):
                         continue
-                    name = self.world.component_for_entity(item, NameComponent).name
-                    char = chr(n)
-                    result = {'action': {'consume': item}}
-                    choices.append((name, char, result))
+                    _name = self.world.component_for_entity(item, NameComponent).name
+                    _key = chr(n)
+                    _result = {'consume': item}
+                    menu.contents.append(PopupChoice(name=_name, key=_key, result=_result))
                     n += 1
                 
-                choices.append(('Close menu', 'ESC', {'event': {'pop_popup_menu': True}}))
-                popup_component = self.world.component_for_entity(1, PopupComponent).menus.append( (title, choices) )
-                self.world.add_component(1, popup_component)
+                self.world.component_for_entity(1, PopupComponent).menus.append(menu)
                 self.world.remove_component(ent, ConsumeComponent)
 
             else:
