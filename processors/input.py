@@ -52,16 +52,18 @@ class InputProcessor(esper.Processor):
                     _, valid_key, result, _ = choice
                 if key_char == valid_key or (valid_key == 'ESC' and key.scancode == libtcod.event.SCANCODE_ESCAPE):
                     if result.get('event'):
-                        if not result.get('event').get('popup'):
+                        if result.get('event').get('pop_popup_menu') or result.get('event').get('popup'):
+                            events.append(result['event'])
+                        else:
                             events.append({'close_popup_menu': True})
-                        events.append(result['event'])
+                            events.append(result['event'])
                     elif result.get('action'):
-                        action = result['action']
                         events.append({'close_popup_menu': True})
+                        action = result['action']
                     break
             else:
-                if key.scancode == libtcod.event.SCANCODE_ESCAPE:
-                    events.append({'close_popup_menu': True})
+                if key.scancode == libtcod.event.SCANCODE_ESCAPE: # This key works for all menus, all the time.
+                    events.append({'pop_popup_menu': True})
     
         elif game_state_component.state == 'MainMenu':
             if key.scancode == libtcod.event.SCANCODE_ESCAPE:
@@ -91,7 +93,7 @@ class InputProcessor(esper.Processor):
                         {'event': {'save_game': True}}
                     ),
                     (
-                        'Nevermind',
+                        'Close menu',
                         'ESC',
                         {'event': {'uneeded': True}} # Choosing an option from a popup menu closes it, so I don't need to close it again...
                     )

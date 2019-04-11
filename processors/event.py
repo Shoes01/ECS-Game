@@ -31,13 +31,16 @@ class EventProcessor(esper.Processor):
                 _load_game = event.get('load_game')
                 _new_map = event.get('new_map')
                 _player_killed = event.get('player_killed')
+                _pop_popup_menu = event.get('pop_popup_menu')
                 _popup = event.get('popup')
                 _save_game = event.get('save_game')
                 _toggle_debug = event.get('toggle_debug')
 
 
                 if _close_popup_menu:
-                    self.world.component_for_entity(1, PopupComponent).menus.pop()
+                    menus = self.world.component_for_entity(1, PopupComponent).menus
+                    while len(menus):
+                        menus.pop()
 
                 if _exit:
                     self.world.add_component(1, EndGameComponent())
@@ -51,6 +54,9 @@ class EventProcessor(esper.Processor):
 
                 if _player_killed:
                     self.world.component_for_entity(2, PlayerComponent).killed = True
+
+                if _pop_popup_menu:
+                    self.world.component_for_entity(1, PopupComponent).menus.pop()
 
                 if _popup:
                     self.world.component_for_entity(1, PopupComponent).menus.append(_popup)

@@ -28,7 +28,7 @@ class WearableProcessor(esper.Processor):
                     choices.append(self.generate_choice(chr(n), eqp, item))
                     n += 1
                 
-                choices.append(('Nevermind', 'ESC', {'event': {'cancel': True}}))
+                choices.append(('Close menu', 'ESC', {'event': {'pop_popup_menu': True}}))
                 self.world.component_for_entity(1, PopupComponent).menus.append( (title, choices) )
                 self.world.remove_component(ent, WearComponent)
 

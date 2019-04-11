@@ -31,7 +31,7 @@ class InventoryProcessor(esper.Processor):
                 choices.append((name, char, result))
                 n += 1
             
-            choices.append(('Nevermind', 'ESC', {'event': {'cancel': True}}))
+            choices.append(('Close menu', 'ESC', {'event': {'pop_popup_menu': True}}))
             self.world.component_for_entity(1, PopupComponent).menus.append( (title, choices) )
             self.world.remove_component(ent, OpenInventoryComponent)
     
@@ -50,7 +50,7 @@ class InventoryProcessor(esper.Processor):
             eligibility = False
         action_wear = ('Wear', 'w', {'action': {'wear': item}}, eligibility)
 
-        action_nevermind = ('Nevermind', 'ESC', {'event': {'cancel': True}})
+        action_nevermind = ('Back', 'ESC', {'event': {'pop_popup_menu': True}})
 
         choices = [action_choice, action_drop, action_wear, action_nevermind]
 
