@@ -8,30 +8,24 @@ def render_popup_menu(console_bundle, world):
         return
 
     console = console_bundle[0]
-    menus = world.component_for_entity(1, PopupComponent).menus 
+    menus = world.component_for_entity(1, PopupComponent).menus
     if not menus:
         return 0
+
     menu = menus[-1]
-    x = 10
-    y = 5
-    w = map.w - 20
-    h = map.h - 10
     
-    console.draw_frame(x=x, y=y, width=w, height=h, title=menu[0], clear=True, fg=libtcod.white, bg=libtcod.black)
+    console.draw_frame(x=menu.x, y=menu.y, width=menu.w, height=menu.h, title=menu.title, clear=True, fg=libtcod.white, bg=libtcod.black)
 
     # Render choices
     dy = 2
-    for choice in menu[1]:
-        eligibility = True
-        if len(choice) == 3:
-            name, key, _ = choice
-        else:
-            name, key, _, eligibility = choice
-        
+    for choice in menu.contents:        
         color = libtcod.white
-        if not eligibility:
+        if not choice.valid:
             color = libtcod.grey
 
-        string = '(' + key + ') ' + name
-        console.print(x + 2, y + dy, string, color)
+        string = '(' + choice.key + ') ' + choice.name
+        console.print(menu.x + 2, menu.y + dy, string, color)
         dy += 1
+    
+    if menu.include_esc:
+        console.print(menu.x + 2, menu.y + menu.h - 2, '(ESC) Close menu', libtcod.white)

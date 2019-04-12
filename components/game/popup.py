@@ -19,15 +19,16 @@ class PopupChoice():
         
 class PopupMenu():
     ' This contains the input and render information for a popup menu. '
-    def __init__(self, title, contents=[], include_esc=True, x=10, y=5, w=map.w-20, h=map.h-10):
+    def __init__(self, title, contents=None, include_esc=True, x=10, y=5, w=map.w-20, h=map.h-10, auto_close=True):
         self.title = title
-        self.contents = contents # type: list of PopupChoices
+        self.contents = [] # type: list of PopupChoices
         
         self.x = x
         self.y = y
         self.w = w
         self.h = h
         
+        self.auto_close = auto_close # If True, all menus will be closed upon selecting a choice.
         self.include_esc = include_esc # If True, a choice to close the menu will be printed at the bottom of the menu.
 
         ### Additional information that could be added later:

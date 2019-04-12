@@ -7,7 +7,7 @@ from components.actor.actor import ActorComponent
 from components.actor.energy import EnergyComponent
 from components.actor.player import PlayerComponent
 from components.game.events import EventsComponent
-from components.game.popup import PopupComponent
+from components.game.popup import PopupComponent, PopupMenu, PopupChoice
 from components.game.state import StateComponent
 from processors.debug import DebugProcessor
 
@@ -44,26 +44,21 @@ class InputProcessor(esper.Processor):
             events.append({'toggle_debug': True})
 
         if game_state_component.state == 'PopupMenu':
-            _popup_comp = self.world.component_for_entity(1, PopupComponent)
-            for choice in _popup_comp.menus[-1][1]:
-                if len(choice) == 3:
-                    _, valid_key, result = choice
-                else:
-                    _, valid_key, result, _ = choice
-                if key_char == valid_key or (valid_key == 'ESC' and key.scancode == libtcod.event.SCANCODE_ESCAPE):
-                    if result.get('event'):
-                        if result.get('event').get('pop_popup_menu') or result.get('event').get('popup'):
-                            events.append(result['event'])
-                        else:
-                            events.append({'close_popup_menu': True})
-                            events.append(result['event'])
-                    elif result.get('action'):
+            menu = self.world.component_for_entity(1, PopupComponent).menus[-1]
+            
+            for choice in menu.contents:
+                if key_char == choice.key:
+                    if choice.action:
+                        action = choice.result
+                    else:
+                        events.append(choice.result)
+                    
+                    if menu.auto_close:
                         events.append({'close_popup_menu': True})
-                        action = result['action']
-                    break
-            else:
-                if key.scancode == libtcod.event.SCANCODE_ESCAPE: # This key works for all menus, all the time.
+
+                elif menu.include_esc and key.scancode == libtcod.event.SCANCODE_ESCAPE:
                     events.append({'pop_popup_menu': True})
+                    break
     
         elif game_state_component.state == 'MainMenu':
             if key.scancode == libtcod.event.SCANCODE_ESCAPE:
@@ -74,31 +69,12 @@ class InputProcessor(esper.Processor):
                 events.append({'load_game': True})
 
         elif game_state_component.state == 'Game':
-            if key.scancode == libtcod.event.SCANCODE_ESCAPE:                
-                title='What would you like to do?'
-                choices=[
-                    (
-                        'Load game',
-                        'l',
-                        {'event': {'load_game': True}}
-                    ),
-                    (
-                        'Quit',
-                        'q',
-                        {'event': {'exit': True}}
-                    ),
-                    (
-                        'Save game',
-                        's',
-                        {'event': {'save_game': True}}
-                    ),
-                    (
-                        'Close menu',
-                        'ESC',
-                        {'event': {'uneeded': True}} # Choosing an option from a popup menu closes it, so I don't need to close it again...
-                    )
-                ]
-                events.append({'popup': (title, choices)})
+            if key.scancode == libtcod.event.SCANCODE_ESCAPE:
+                menu = PopupMenu(title='What would you like to do?')
+                menu.contents.append(PopupChoice(name='Load game', key='l', result={'load_game': True}, action=False))
+                menu.contents.append(PopupChoice(name='Quit', key='q', result={'exit': True}, action=False))
+                menu.contents.append(PopupChoice(name='Save game', key='s', result={'save_game': True}, action=False))
+                events.append({'popup': menu})
 
         elif game_state_component.state == 'GameOver':
             if key.scancode == libtcod.event.SCANCODE_ESCAPE:

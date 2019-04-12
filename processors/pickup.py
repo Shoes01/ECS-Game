@@ -39,9 +39,9 @@ class PickupProcessor(esper.Processor):
                     n = 97
                     for item in matched_items:
                         _name = self.world.component_for_entity(item, NameComponent).name
-                        _keu = chr(n)
+                        _key = chr(n)
                         _result = {'pick_up': item}
-                        menu.contents.append(PopupChoice(name=_name, key=_key, result=_result)
+                        menu.contents.append(PopupChoice(name=_name, key=_key, result=_result))
                         n += 1
 
                     self.world.component_for_entity(1, PopupComponent).menus.append(menu)
@@ -52,5 +52,3 @@ class PickupProcessor(esper.Processor):
                 self.world.add_component(pick.item_id, PickedupComponent())
                 item_pos = self.world.component_for_entity(pick.item_id, PositionComponent)
                 item_pos.x, item_pos.y = -1, -1
-
-            

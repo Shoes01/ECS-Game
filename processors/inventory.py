@@ -16,7 +16,7 @@ class InventoryProcessor(esper.Processor):
         for ent, (eqp, inv, op_inv) in self.world.get_components(EquipmentComponent, InventoryComponent, OpenInventoryComponent):
             # Generate a list of items that the player may select.
             # Selecting an item opens a submenu with possible actions.
-            menu = PopupMenu(title='Inventory')
+            menu = PopupMenu(title='Inventory', auto_close=False)
             
             n = 97
             for item in inv.inventory:
@@ -33,7 +33,7 @@ class InventoryProcessor(esper.Processor):
                 _validity = False
                 if self.world.has_component(item, ConsumableComponent):
                     _validity = True
-                submenu.contents.append(PopupChoice(name=_name, key=_key, result=_result, valid=_validity))
+                submenu.contents.append(PopupChoice(name='Consume', key='c', result=_result, valid=_validity))
 
                 # Drop
                 _result = {'drop': item}
@@ -41,21 +41,21 @@ class InventoryProcessor(esper.Processor):
                 if item in eqp.equipment:
                     _result = {'wear': item} # If the player tries to drop the item, they will unequip it instead.
                     _validity = False
-                submenu.contents.append(PopupChoice(name=_name, key=_key, result=_result, valid=_validity))
+                submenu.contents.append(PopupChoice(name='Drop', key='d', result=_result, valid=_validity))
 
                 # Remove
                 _result = {'wear': item}
                 _validity = False
                 if item in eqp.equipment:
                     _validity = True
-                submenu.contents.append(PopupChoice(name=_name, key=_key, result=_result, valid=_validity))
+                submenu.contents.append(PopupChoice(name='Remove', key='r', result=_result, valid=_validity))
 
                 # Wear
                 _result = {'wear': item}
                 _validity = False
-                if self.world.has_component(item, WearableComponent):
+                if self.world.has_component(item, WearableComponent) and item not in eqp.equipment:
                     _validity = True
-                submenu.contents.append(PopupChoice(name=_name, key=_key, result=_result, valid=_validity))
+                submenu.contents.append(PopupChoice(name='Wear', key='w', result=_result, valid=_validity))
                 
                 _menu_result = {'popup': submenu}
                 menu.contents.append(PopupChoice(name=_name, key=_key, result=_menu_result, action=False))
