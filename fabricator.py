@@ -1,5 +1,4 @@
-import tcod as libtcod
-
+from _data import ENTITY_COLORS
 from components.actor.actor import ActorComponent
 from components.actor.brain import BrainComponent
 from components.actor.energy import EnergyComponent
@@ -50,7 +49,7 @@ def fabricate_entity(ent, world):
             PersistComponent(),
             PlayerComponent(),
             PositionComponent(),
-            RenderComponent(char='@', color=libtcod.pink),
+            RenderComponent(char='@', color=ENTITY_COLORS['player']),
             StatsComponent(hp=50, power=10)
         )
     
@@ -60,7 +59,7 @@ def fabricate_entity(ent, world):
             ModifierComponent(power=5),
             NameComponent(name='Sword'),
             PositionComponent(),
-            RenderComponent(char=')', color=libtcod.blue),
+            RenderComponent(char=')', color=ENTITY_COLORS['weapon']),
             WearableComponent()
         )
 
@@ -71,7 +70,7 @@ def fabricate_entity(ent, world):
             NameComponent(name='Zombie Sword'),
             PickedupComponent(),
             PositionComponent(),
-            RenderComponent(char=')', color=libtcod.green),
+            RenderComponent(char=')', color=ENTITY_COLORS['weapon']),
             WearableComponent()
         )
     
@@ -81,7 +80,7 @@ def fabricate_entity(ent, world):
             ItemComponent(),
             NameComponent(name='Titan Potion'),
             PositionComponent(),
-            RenderComponent(char='!', color=libtcod.red)
+            RenderComponent(char='!', color=ENTITY_COLORS['potion_heal'])
         )
 
     if ent == 'zombie':
@@ -93,6 +92,6 @@ def fabricate_entity(ent, world):
             InventoryComponent(inventory=[fabricate_entity('sword_equipped', world)]),
             NameComponent(name='Zombie'),
             PositionComponent(),
-            RenderComponent(char='Z', color=libtcod.green),
+            RenderComponent(char='Z', color=ENTITY_COLORS['zombie']),
             StatsComponent(hp=11, power=5)
         )

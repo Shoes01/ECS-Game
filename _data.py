@@ -65,6 +65,13 @@ LOG_COLORS = {
     'warning': libtcod.yellow
 }
 
+ENTITY_COLORS = {
+    'player': libtcod.pink,
+    'potion_heal': libtcod.red,
+    'weapon': libtcod.blue,
+    'zombie': libtcod.green
+}
+
 ### BORDER DATA
 
 class DoubleLineBox():
