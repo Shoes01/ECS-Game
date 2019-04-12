@@ -60,7 +60,8 @@ LOG_COLORS = {
     'death': libtcod.dark_red,
     'error': libtcod.red,
     'failure': libtcod.dark_red,
-    'success': libtcod.light_blue
+    'success': libtcod.light_blue,
+    'warning': libtcod.yellow
 }
 
 ### BORDER DATA

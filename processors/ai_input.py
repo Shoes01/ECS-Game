@@ -7,23 +7,30 @@ from components.actor.brain import BrainComponent
 from components.actor.energy import EnergyComponent
 from components.actor.player import PlayerComponent
 from components.game.map import MapComponent
+from components.game.message_log import MessageLogComponent
+from components.game.turn_count import TurnCountComponent
 from components.position import PositionComponent
+from components.render import RenderComponent
 
 class AiInputProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
     
     def process(self):
-        for ent, (actor, brain, eng, pos) in self.world.get_components(ActorComponent, BrainComponent, EnergyComponent, PositionComponent):
+        for ent, (actor, brain, eng, pos, ren) in self.world.get_components(ActorComponent, BrainComponent, EnergyComponent, PositionComponent, RenderComponent):
             if eng.energy == 0:
                 if brain.brain == 'zombie':
-                    action = self.take_turn_zombie(brain, pos)
+                    action = self.take_turn_zombie(brain, pos, ren)
                     if action:
                         self.world.add_component(ent, ActionComponent(action))
     
-    def take_turn_zombie(self, brain, pos):
+    def take_turn_zombie(self, brain, pos, ren):
         if brain.awake is False and self.world.component_for_entity(1, MapComponent).fov_map.fov[pos.x, pos.y]:
             brain.awake = True
+            turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
+            message = {'ai_awake': (ren.char, ren.color, turn)}
+            self.world.component_for_entity(1, MessageLogComponent).messages.append(message)
+
             return {'wait': True}
         elif brain.awake:                    
             return self.hunt_player(pos)
