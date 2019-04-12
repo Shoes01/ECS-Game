@@ -27,6 +27,13 @@ from components.render import RenderComponent
 from components.tile import TileComponent
 
 def fabricate_entity(ent, world):
+    if ent == 'floor':
+        return world.create_entity(
+            PositionComponent(),
+            RenderComponent(char='.', color=ENTITY_COLORS['floor'], explored_color=ENTITY_COLORS['floor_explored']),
+            TileComponent(blocks_path=False, blocks_sight=False)
+        )
+    
     if ent == 'game':
         return world.create_entity(
             EnergyComponent(),
@@ -73,7 +80,7 @@ def fabricate_entity(ent, world):
             RenderComponent(char=')', color=ENTITY_COLORS['weapon']),
             WearableComponent()
         )
-    
+
     if ent == 'titan_potion':
         return world.create_entity(
             ConsumableComponent(effects={'heal': 5, 'max_hp': 1}),
@@ -81,6 +88,13 @@ def fabricate_entity(ent, world):
             NameComponent(name='Titan Potion'),
             PositionComponent(),
             RenderComponent(char='!', color=ENTITY_COLORS['potion_heal'])
+        )
+
+    if ent == 'wall':
+        return world.create_entity(
+            PositionComponent(),
+            RenderComponent(char='#', color=ENTITY_COLORS['wall'], explored_color=ENTITY_COLORS['wall_explored']),
+            TileComponent(blocks_path=True, blocks_sight=True)
         )
 
     if ent == 'zombie':

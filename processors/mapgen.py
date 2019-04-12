@@ -121,17 +121,15 @@ class MapgenProcessor(esper.Processor):
     def place_tiles(self, tiles):
         for (x, y), value in np.ndenumerate(tiles):
             if value == 0:
-                self.world.create_entity(
-                    PositionComponent(x=x, y=y),
-                    RenderComponent(char='.', color=libtcod.white, explored_color=libtcod.darkest_grey),
-                    TileComponent(blocks_path=False, blocks_sight=False)
-                )
+                new_ent = fabricate_entity('floor', self.world)
+                new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
+                new_ent_pos.x = x
+                new_ent_pos.y = y
             if value == 1:
-                self.world.create_entity(
-                    PositionComponent(x=x, y=y),
-                    RenderComponent(char='#', color=libtcod.white, explored_color=libtcod.darkest_grey),
-                    TileComponent(blocks_path=True, blocks_sight=True)
-                )
+                new_ent = fabricate_entity('wall', self.world)
+                new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
+                new_ent_pos.x = x
+                new_ent_pos.y = y
 
     def place_monsters(self, tiles):
         for room in self._rooms:

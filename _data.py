@@ -67,8 +67,12 @@ LOG_COLORS = {
 
 ENTITY_COLORS = {
     'corpse': libtcod.red,
+    'floor': libtcod.white,
+    'floor_explored': libtcod.darkest_grey,
     'player': libtcod.pink,
     'potion_heal': libtcod.red,
+    'wall': libtcod.white
+    'wall_explored': libtcod.darkest_grey,
     'weapon': libtcod.blue,
     'zombie': libtcod.green
 }
