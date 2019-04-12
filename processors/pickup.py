@@ -16,6 +16,7 @@ class PickupProcessor(esper.Processor):
     
     def process(self):
         for ent, (inv, pick, pos) in self.world.get_components(InventoryComponent, PickupComponent, PositionComponent):
+            turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
 
             if pick.item_id is None:
                 matched_items = []
@@ -25,15 +26,16 @@ class PickupProcessor(esper.Processor):
                         matched_items.append(item_ent)
                 
                 if len(matched_items) == 0:
-                    self.world.component_for_entity(1, MessageLogComponent).messages.append({'pickup': (None, False, self.world.component_for_entity(item, TurnCountComponent).turn_count)})
+                    self.world.component_for_entity(1, MessageLogComponent).messages.append({'pickup': (None, False, turn)})
                     self.world.remove_component(ent, PickupComponent)
 
                 elif len(matched_items) == 1:
-                    item_id = matched_items.pop()
-                    inv.inventory.append(item_id)
-                    self.world.add_component(item_id, PickedupComponent())
-                    item_pos = self.world.component_for_entity(item_id, PositionComponent)
+                    item = matched_items.pop()
+                    inv.inventory.append(item)
+                    self.world.add_component(item, PickedupComponent())
+                    item_pos = self.world.component_for_entity(item, PositionComponent)
                     item_pos.x, item_pos.y = -1, -1
+                    self.world.component_for_entity(1, MessageLogComponent).messages.append({'pickup': (self.world.component_for_entity(item, NameComponent).name, True, turn)})
                 
                 elif len(matched_items) > 1:
                     # Create popup menu for player to choose from.
@@ -51,8 +53,9 @@ class PickupProcessor(esper.Processor):
                     self.world.remove_component(ent, PickupComponent)
 
             else:
-                inv.inventory.append(pick.item_id)
-                self.world.add_component(pick.item_id, PickedupComponent())
-                item_pos = self.world.component_for_entity(pick.item_id, PositionComponent)
+                item = pick.item_id
+                inv.inventory.append(item)
+                self.world.add_component(item, PickedupComponent())
+                item_pos = self.world.component_for_entity(item, PositionComponent)
                 item_pos.x, item_pos.y = -1, -1
-                self.world.component_for_entity(1, MessageLogComponent).messages.append({'pickup': (self.world.component_for_entity(item, NameComponent).name, True, self.world.component_for_entity(item, TurnCountComponent).turn_count)})
+                self.world.component_for_entity(1, MessageLogComponent).messages.append({'pickup': (self.world.component_for_entity(item, NameComponent).name, True, turn)})

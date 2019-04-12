@@ -17,10 +17,7 @@ def render_message_log(console_bundle, world):
         _max_hp = message.get('max_hp')
         _pickup = message.get('pickup')
         _remove = message.get('remove')
-        _remove_fail = message.get('remove_fail')
         _wear = message.get('wear')
-        _wear_already = message.get('wear_already')
-        _wear_fail = message.get('wear_fail')
 
         if _combat:
             att_char, att_color, def_char, def_color, damage, turn = _combat
@@ -64,7 +61,7 @@ def render_message_log(console_bundle, world):
             if success:
                 console.print(0, 0 + dy, '(Turn %s) You pickup a %s.' % (turn, name), LOG_COLORS['success'])
             else:
-                console.print(0, 0 + dy, '(Turn %s) There is nothing here to pick up.' % (turn), LOG_COLORS['fail'])
+                console.print(0, 0 + dy, '(Turn %s) There is nothing here to pick up.' % (turn), LOG_COLORS['failure'])
 
         if _remove:
             name, success, turn = _remove
