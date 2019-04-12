@@ -36,21 +36,25 @@ class ConsumableProcessor(esper.Processor):
             else:
                 # Consume the item.
                 item = self.world.component_for_entity(ent, ConsumeComponent).item_id
+                message_log_component = self.world.component_for_entity(1, MessageLogComponent)
+                name = self.world.component_for_entity(item, NameComponent).name
+                success = True
+                turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
                 if self.world.has_component(item, ConsumableComponent):
-                    self.consume_item(ent, item)
+                    message_log_component.messages.append({'consume': (name, success, turn)})
+                    self.consume_item(ent, item, message_log_component, turn)
                     self.world.component_for_entity(ent, InventoryComponent).inventory.remove(item)
                     self.world.delete_entity(item)
                 else:
-                    self.world.component_for_entity(1, MessageLogComponent).messages.append({'consume_fail': (self.world.component_for_entity(item, NameComponent).name, self.world.component_for_entity(1, TurnCountComponent).turn_count)})
+                    success = False
+                    message_log_component.messages.append({'consume': (name, success, turn)})
                     self.world.remove_component(ent, ConsumeComponent)
 
-    def consume_item(self, ent, item):
+    def consume_item(self, ent, item, message_log_component, turn):
         con_component = self.world.component_for_entity(item, ConsumableComponent)
-        message_log_component = self.world.component_for_entity(1, MessageLogComponent)
+        
         stas_component = self.world.component_for_entity(ent, StatsComponent)
-        turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
-
-        message_log_component.messages.append({'consume_generic': (self.world.component_for_entity(item, NameComponent).name, turn)})
+        
 
         for key, value in con_component.effects.items():
             if key == 'heal':

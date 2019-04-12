@@ -57,14 +57,14 @@ log = Rectangle(
 
 LOG_COLORS = {
     'combat': libtcod.yellow,
-    'consume_fail': libtcod.dark_red,
-    'consume_generic': libtcod.light_blue,
     'death': libtcod.dark_red,
     'error': libtcod.red,
+    'failure': libtcod.dark_red
     'heal': libtcod.light_blue,
     'max_hp': libtcod.light_blue,
     'remove': libtcod.light_blue,
     'remove_fail': libtcod.dark_red,
+    'success': libtcod.light_blue,
     'wear': libtcod.light_blue,
     'wear_already': libtcod.light_blue,
     'wear_fail': libtcod.dark_red
