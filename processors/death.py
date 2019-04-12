@@ -1,6 +1,6 @@
 import esper
-import tcod as libtcod
 
+from _data import ENTITY_COLORS
 from components.actor.actor import ActorComponent
 from components.actor.brain import BrainComponent
 from components.actor.combat import CombatComponent
@@ -28,7 +28,7 @@ class DeathProcessor(esper.Processor):
             inventory = inv.inventory
             name.name = 'corspe of ' + name.name
             ren.char = '%'
-            ren.color = libtcod.red
+            ren.color = ENTITY_COLORS['corpse']
 
             for item in inventory:
                 self.world.remove_component(item, PickedupComponent)
