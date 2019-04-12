@@ -15,6 +15,7 @@ def render_message_log(console_bundle, world):
         _error = message.get('error')
         _heal = message.get('heal')
         _max_hp = message.get('max_hp')
+        _pickup = message.get('pickup')
         _remove = message.get('remove')
         _remove_fail = message.get('remove_fail')
         _wear = message.get('wear')
@@ -56,6 +57,14 @@ def render_message_log(console_bundle, world):
             value, turn = _max_hp
 
             console.print(0, 0 + dy, '(Turn %s) Your max hp increases by %s point(s).' % (turn, value), LOG_COLORS['success'])
+        
+        if _pickup:
+            name, success, turn = _pickup
+
+            if success:
+                console.print(0, 0 + dy, '(Turn %s) You pickup a %s.' % (turn, name), LOG_COLORS['success'])
+            else:
+                console.print(0, 0 + dy, '(Turn %s) There is nothing here to pick up.' % (turn), LOG_COLORS['fail'])
 
         if _remove:
             name, success, turn = _remove
