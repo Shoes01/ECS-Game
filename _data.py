@@ -59,9 +59,7 @@ LOG_COLORS = {
     'combat': libtcod.yellow,
     'death': libtcod.dark_red,
     'error': libtcod.red,
-    'failure': libtcod.dark_red
-    'heal': libtcod.light_blue,
-    'max_hp': libtcod.light_blue,
+    'failure': libtcod.dark_red,
     'success': libtcod.light_blue
 }
 

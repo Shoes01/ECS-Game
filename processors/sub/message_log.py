@@ -50,12 +50,12 @@ def render_message_log(console_bundle, world):
         if _heal:
             value, turn = _heal
 
-            console.print(0, 0 + dy, '(Turn %s) You heal for %s point(s).' % (turn, value), LOG_COLORS['heal'])
+            console.print(0, 0 + dy, '(Turn %s) You heal for %s point(s).' % (turn, value), LOG_COLORS['success'])
         
         if _max_hp:
             value, turn = _max_hp
 
-            console.print(0, 0 + dy, '(Turn %s) Your max hp increases by %s point(s).' % (turn, value), LOG_COLORS['max_hp'])
+            console.print(0, 0 + dy, '(Turn %s) Your max hp increases by %s point(s).' % (turn, value), LOG_COLORS['success'])
 
         if _remove:
             name, success, turn = _remove

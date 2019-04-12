@@ -56,9 +56,9 @@ class InputProcessor(esper.Processor):
                     if menu.auto_close:
                         events.append({'close_popup_menu': True})
 
-                elif menu.include_esc and key.scancode == libtcod.event.SCANCODE_ESCAPE:
+            else:
+                if menu.include_esc and key.scancode == libtcod.event.SCANCODE_ESCAPE:
                     events.append({'pop_popup_menu': True})
-                    break
     
         elif game_state_component.state == 'MainMenu':
             if key.scancode == libtcod.event.SCANCODE_ESCAPE:
