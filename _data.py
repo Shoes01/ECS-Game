@@ -60,6 +60,7 @@ LOG_COLORS = {
     'death': libtcod.dark_red,
     'error': libtcod.red,
     'failure': libtcod.dark_red,
+    'system_message': libtcod.dark_green,
     'success': libtcod.light_blue,
     'warning': libtcod.yellow
 }

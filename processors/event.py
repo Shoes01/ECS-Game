@@ -8,6 +8,7 @@ from components.game.end_game import EndGameComponent
 from components.game.events import EventsComponent
 from components.game.map import MapComponent
 from components.game.mapgen import MapgenComponent
+from components.game.message_log import MessageLogComponent
 from components.game.popup import PopupComponent
 from components.game.state import StateComponent
 from processors.initial import InitialProcessor
@@ -47,6 +48,7 @@ class EventProcessor(esper.Processor):
 
                 if _load_game:
                     load_game(self.world)
+                    self.world.component_for_entity(1, MessageLogComponent).messages.append({'game_loaded': True})
 
                 if _new_map:
                     self.world.add_component(1, MapgenComponent())
@@ -62,6 +64,7 @@ class EventProcessor(esper.Processor):
                     self.world.component_for_entity(1, PopupComponent).menus.append(_popup)
                 
                 if _save_game:
+                    self.world.component_for_entity(1, MessageLogComponent).messages.append({'game_saved': True})
                     save_game(self.world._next_entity_id, self.world._components, self.world._entities)
 
                 if _toggle_debug:

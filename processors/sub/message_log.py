@@ -14,6 +14,8 @@ def render_message_log(console_bundle, world):
         _consume = message.get('consume')
         _death = message.get('death')
         _error = message.get('error')
+        _game_loaded = message.get('game_loaded')
+        _game_saved = message.get('game_saved')
         _heal = message.get('heal')
         _max_hp = message.get('max_hp')
         _pickup = message.get('pickup')
@@ -52,6 +54,12 @@ def render_message_log(console_bundle, world):
 
             console.print(0, 0 + dy, message, LOG_COLORS['error'])
         
+        if _game_loaded:
+            console.print(0, 0 + dy, 'Game loaded.', LOG_COLORS['system_message'])
+            
+        if _game_saved:
+            console.print(0, 0 + dy, 'Game saved.', LOG_COLORS['system_message'])
+
         if _heal:
             value, turn = _heal
 
