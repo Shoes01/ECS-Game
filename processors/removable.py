@@ -14,12 +14,15 @@ class RemovableProcessor(esper.Processor):
     def process(self):
         for ent, (eqp, rem) in self.world.get_components(EquipmentComponent, RemoveComponent):
             item = rem.item_id
+            name_component = self.world.component_for_entity(item, NameComponent)            
+            turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
 
             if item in eqp.equipment:
-                eqp.equipment.remove(item)
-                name_component = self.world.component_for_entity(item, NameComponent)
+                success = True
+                eqp.equipment.remove(item)                
                 name_component.name = name_component._name
-                self.world.component_for_entity(1, MessageLogComponent).messages.append({'remove': (name_component.name, self.world.component_for_entity(1, TurnCountComponent).turn_count)})
+                self.world.component_for_entity(1, MessageLogComponent).messages.append({'remove': (name_component.name, success, turn)})
             else:
+                success = False
                 self.world.remove_component(ent, RemoveComponent)
-                self.world.component_for_entity(1, MessageLogComponent).messages.append({'remove_fail': (self.world.component_for_entity(item, NameComponent).name, self.world.component_for_entity(1, TurnCountComponent).turn_count)})
+                self.world.component_for_entity(1, MessageLogComponent).messages.append({'remove': (name_component.name, success, turn)})

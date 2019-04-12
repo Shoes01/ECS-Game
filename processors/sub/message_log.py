@@ -58,29 +58,20 @@ def render_message_log(console_bundle, world):
             console.print(0, 0 + dy, '(Turn %s) Your max hp increases by %s point(s).' % (turn, value), LOG_COLORS['max_hp'])
 
         if _remove:
-            name, turn = _remove
+            name, success, turn = _remove
 
-            console.print(0, 0 + dy, '(Turn %s) You unequip your %s.' % (turn, name), LOG_COLORS['remove'])
-
-        if _remove_fail:
-            name, turn = _remove_fail
-
-            console.print(0, 0 + dy, '(Turn %s) You are not wearing your %s!' % (turn, name), LOG_COLORS['remove_fail'])
+            if success:
+                console.print(0, 0 + dy, '(Turn %s) You unequip your %s.' % (turn, name), LOG_COLORS['success'])
+            else:
+                console.print(0, 0 + dy, '(Turn %s) You are not wearing your %s!' % (turn, name), LOG_COLORS['failure'])
 
         if _wear:
-            name, turn = _wear
+            name, success, turn = _wear
 
-            console.print(0, 0 + dy, '(Turn %s) You equip your %s.' % (turn, name), LOG_COLORS['wear'])
-
-        if _wear_already:
-            name, turn = _wear_already
-
-            console.print(0, 0 + dy, '(Turn %s) You unequip your %s.' % (turn, name), LOG_COLORS['wear_already'])
-
-        if _wear_fail:
-            name, turn = _wear_fail
-
-            console.print(0, 0 + dy, '(Turn %s) You cannot equip a %s!' % (turn, name), LOG_COLORS['wear_fail'])
+            if success:
+                console.print(0, 0 + dy, '(Turn %s) You equip your %s.' % (turn, name), LOG_COLORS['success'])
+            else:
+                console.print(0, 0 + dy, '(Turn %s) You cannot equip a %s!' % (turn, name), LOG_COLORS['failure'])
 
         dy -= 1
         if dy < 0:

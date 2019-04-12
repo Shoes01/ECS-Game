@@ -38,9 +38,10 @@ class ConsumableProcessor(esper.Processor):
                 item = self.world.component_for_entity(ent, ConsumeComponent).item_id
                 message_log_component = self.world.component_for_entity(1, MessageLogComponent)
                 name = self.world.component_for_entity(item, NameComponent).name
-                success = True
                 turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
+
                 if self.world.has_component(item, ConsumableComponent):
+                    success = True
                     message_log_component.messages.append({'consume': (name, success, turn)})
                     self.consume_item(ent, item, message_log_component, turn)
                     self.world.component_for_entity(ent, InventoryComponent).inventory.remove(item)
@@ -52,10 +53,8 @@ class ConsumableProcessor(esper.Processor):
 
     def consume_item(self, ent, item, message_log_component, turn):
         con_component = self.world.component_for_entity(item, ConsumableComponent)
-        
         stas_component = self.world.component_for_entity(ent, StatsComponent)
         
-
         for key, value in con_component.effects.items():
             if key == 'heal':
                 stas_component.hp += value

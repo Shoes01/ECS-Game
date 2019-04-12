@@ -37,16 +37,21 @@ class WearableProcessor(esper.Processor):
             else:
                 # Wear the item.
                 item = self.world.component_for_entity(ent, WearComponent).item_id
+                name_component = self.world.component_for_entity(item, NameComponent)
+                turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
+
                 if item in eqp.equipment:
                     # Already worn, so remove it.
                     self.world.remove_component(ent, WearComponent)
                     self.world.add_component(ent, RemoveComponent(item_id=item))                    
                     
                 elif self.world.has_component(item, WearableComponent):
-                    self.world.component_for_entity(1, MessageLogComponent).messages.append({'wear': (self.world.component_for_entity(item, NameComponent).name, self.world.component_for_entity(1, TurnCountComponent).turn_count)})
+                    success = True
+                    self.world.component_for_entity(1, MessageLogComponent).messages.append({'wear': (name_component.name, success, turn)})
                     eqp.equipment.append(item)
-                    self.world.component_for_entity(item, NameComponent).name += ' (worn)'
+                    name_component.name += ' (worn)'
                 
                 else:
-                    self.world.component_for_entity(1, MessageLogComponent).messages.append({'wear_fail': (self.world.component_for_entity(item, NameComponent).name, self.world.component_for_entity(1, TurnCountComponent).turn_count)})
+                    success = False
+                    self.world.component_for_entity(1, MessageLogComponent).messages.append({'wear': (name_component.name, success, turn)})
                     self.world.remove_component(ent, WearComponent)
