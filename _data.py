@@ -55,6 +55,18 @@ log = Rectangle(
 
 ### COLOR DATA
 
+ENTITY_COLORS = {
+    'corpse': libtcod.red,
+    'floor': libtcod.white,
+    'floor_explored': libtcod.darkest_grey,
+    'player': libtcod.pink,
+    'potion_heal': libtcod.red,
+    'wall': libtcod.white,
+    'wall_explored': libtcod.darkest_grey,
+    'weapon': libtcod.blue,
+    'zombie': libtcod.green
+}
+
 LOG_COLORS = {
     'combat': libtcod.yellow,
     'death': libtcod.dark_red,
@@ -65,16 +77,14 @@ LOG_COLORS = {
     'warning': libtcod.yellow
 }
 
-ENTITY_COLORS = {
-    'corpse': libtcod.red,
-    'floor': libtcod.white,
-    'floor_explored': libtcod.darkest_grey,
-    'player': libtcod.pink,
-    'potion_heal': libtcod.red,
-    'wall': libtcod.white
-    'wall_explored': libtcod.darkest_grey,
-    'weapon': libtcod.blue,
-    'zombie': libtcod.green
+UI_COLORS = {
+    'border_main': libtcod.dark_grey,
+    'border_secondary': libtcod.white,
+    'bg': libtcod.black,
+    'fg': libtcod.white,
+    'text': libtcod.white,
+    'text_invalid': libtcod.grey,
+    'text_mainmenu': libtcod.grey
 }
 
 ### BORDER DATA

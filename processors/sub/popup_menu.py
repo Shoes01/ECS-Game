@@ -1,6 +1,4 @@
-import tcod as libtcod
-
-from _data import map
+from _data import map, UI_COLORS
 from components.game.popup import PopupComponent
 
 def render_popup_menu(console_bundle, world):
@@ -14,18 +12,18 @@ def render_popup_menu(console_bundle, world):
 
     menu = menus[-1]
     
-    console.draw_frame(x=menu.x, y=menu.y, width=menu.w, height=menu.h, title=menu.title, clear=True, fg=libtcod.white, bg=libtcod.black)
+    console.draw_frame(x=menu.x, y=menu.y, width=menu.w, height=menu.h, title=menu.title, clear=True, fg=UI_COLORS['fg'], bg=UI_COLORS['bg'])
 
     # Render choices
     dy = 2
     for choice in menu.contents:        
-        color = libtcod.white
+        color = UI_COLORS['text']
         if not choice.valid:
-            color = libtcod.grey
+            color = UI_COLORS['text_invalid']
 
         string = '(' + choice.key + ') ' + choice.name
         console.print(menu.x + 2, menu.y + dy, string, color)
         dy += 1
     
     if menu.include_esc:
-        console.print(menu.x + 2, menu.y + menu.h - 2, '(ESC) Close menu', libtcod.white)
+        console.print(menu.x + 2, menu.y + menu.h - 2, '(ESC) Close menu', UI_COLORS['text'])

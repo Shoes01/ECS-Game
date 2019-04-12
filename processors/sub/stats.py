@@ -1,6 +1,4 @@
-import tcod as libtcod
-
-from _data import SingleLineBox
+from _data import SingleLineBox, UI_COLORS
 from _helper_functions import calculate_power
 from components.actor.stats import StatsComponent
 from components.game.turn_count import TurnCountComponent
@@ -8,7 +6,7 @@ from components.game.turn_count import TurnCountComponent
 def render_stats(console_bundle, world):
     console, x, y, w, h = console_bundle
         
-    color = libtcod.white
+    color = UI_COLORS['text']
 
     # Draw the player stats.
     player_stats_component = world.component_for_entity(2, StatsComponent)

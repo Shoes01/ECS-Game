@@ -1,7 +1,7 @@
 import esper
 import tcod as libtcod
 
-from _data import DoubleLineBox
+from _data import DoubleLineBox, UI_COLORS
 from components.game.debug import DebugComponent
 from components.game.redraw import RedrawComponent
 from components.game.state import StateComponent
@@ -40,11 +40,11 @@ class RenderProcessor(esper.Processor):
         
         if game_state == 'MainMenu':
             _string = 'Welcome to the Main Menu.\n\nPress ENTER to begin.\nPress L to load the last save.\n\nPress ESC to quit.'
-            map_obj[0].print(3, 3, _string, libtcod.grey)
+            map_obj[0].print(3, 3, _string, UI_COLORS['text_mainmenu'])
 
         if game_state == 'GameOver':
             libtcod.console_set_color_control(libtcod.COLCTRL_1, libtcod.red, libtcod.light_red)
-            map_obj[0].print(3, 3, 'You have %cDIED%c! Press ESC to return to the Main Menu.' % (libtcod.COLCTRL_1, libtcod.COLCTRL_STOP), libtcod.grey, bg_blend=libtcod.BKGND_NONE)  
+            map_obj[0].print(3, 3, 'You have %cDIED%c! Press ESC to return to the Main Menu.' % (libtcod.COLCTRL_1, libtcod.COLCTRL_STOP), UI_COLORS['text_mainmenu'], bg_blend=libtcod.BKGND_NONE)  
 
         eqp_obj[0].blit(dest=con_obj[0], dest_x=eqp_obj[1], dest_y=eqp_obj[2], width=eqp_obj[3], height=eqp_obj[4])
         log_obj[0].blit(dest=con_obj[0], dest_x=log_obj[1], dest_y=log_obj[2], width=log_obj[3], height=log_obj[4])
@@ -65,22 +65,22 @@ class RenderProcessor(esper.Processor):
         box = DoubleLineBox()
         
         for x in range(con_obj[1], con_obj[3]):
-            con_obj[0].print(x, con_obj[2], box.horizontal, libtcod.dark_grey)
-            con_obj[0].print(x, map_obj[2] + map_obj[4], box.horizontal, libtcod.dark_grey)
-            con_obj[0].print(x, con_obj[2] + con_obj[4] - 1, box.horizontal, libtcod.dark_grey)
+            con_obj[0].print(x, con_obj[2], box.horizontal, UI_COLORS['border_main'])
+            con_obj[0].print(x, map_obj[2] + map_obj[4], box.horizontal, UI_COLORS['border_main'])
+            con_obj[0].print(x, con_obj[2] + con_obj[4] - 1, box.horizontal, UI_COLORS['border_main'])
         
         for y in range(con_obj[2], con_obj[4]):
-            con_obj[0].print(con_obj[1], y, box.vertical, libtcod.dark_grey)
-            con_obj[0].print(con_obj[1] + con_obj[3] - 1, y, box.vertical, libtcod.dark_grey)
+            con_obj[0].print(con_obj[1], y, box.vertical, UI_COLORS['border_main'])
+            con_obj[0].print(con_obj[1] + con_obj[3] - 1, y, box.vertical, UI_COLORS['border_main'])
             if y >= eqp_obj[2]:
-                con_obj[0].print(eqp_obj[1] + eqp_obj[3], y, box.vertical, libtcod.dark_grey)
+                con_obj[0].print(eqp_obj[1] + eqp_obj[3], y, box.vertical, UI_COLORS['border_main'])
         
-        con_obj[0].print(con_obj[1], con_obj[2], box.top_left, libtcod.dark_grey)
-        con_obj[0].print(con_obj[1] + con_obj[3] - 1, con_obj[2], box.top_right, libtcod.dark_grey)
-        con_obj[0].print(con_obj[1] + con_obj[3] - 1, con_obj[2] + con_obj[4] - 1, box.bottom_right, libtcod.dark_grey)
-        con_obj[0].print(con_obj[1], con_obj[2] + con_obj[4] - 1, box.bottom_left, libtcod.dark_grey)
+        con_obj[0].print(con_obj[1], con_obj[2], box.top_left, UI_COLORS['border_main'])
+        con_obj[0].print(con_obj[1] + con_obj[3] - 1, con_obj[2], box.top_right, UI_COLORS['border_main'])
+        con_obj[0].print(con_obj[1] + con_obj[3] - 1, con_obj[2] + con_obj[4] - 1, box.bottom_right, UI_COLORS['border_main'])
+        con_obj[0].print(con_obj[1], con_obj[2] + con_obj[4] - 1, box.bottom_left, UI_COLORS['border_main'])
 
-        con_obj[0].print(eqp_obj[1] - 1, eqp_obj[2] - 1, box.not_left, libtcod.dark_grey)
-        con_obj[0].print(eqp_obj[1] + eqp_obj[3], eqp_obj[2] - 1, box.not_up, libtcod.dark_grey)
-        con_obj[0].print(eqp_obj[1] + eqp_obj[3], eqp_obj[2] + eqp_obj[4], box.not_down, libtcod.dark_grey)
-        con_obj[0].print(map_obj[1] + map_obj[3], map_obj[2] + map_obj[4], box.not_right, libtcod.dark_grey)
+        con_obj[0].print(eqp_obj[1] - 1, eqp_obj[2] - 1, box.not_left, UI_COLORS['border_main'])
+        con_obj[0].print(eqp_obj[1] + eqp_obj[3], eqp_obj[2] - 1, box.not_up, UI_COLORS['border_main'])
+        con_obj[0].print(eqp_obj[1] + eqp_obj[3], eqp_obj[2] + eqp_obj[4], box.not_down, UI_COLORS['border_main'])
+        con_obj[0].print(map_obj[1] + map_obj[3], map_obj[2] + map_obj[4], box.not_right, UI_COLORS['border_main'])
