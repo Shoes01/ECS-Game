@@ -16,6 +16,8 @@ def render_message_log(console_bundle, world):
         _error = message.get('error')
         _heal = message.get('heal')
         _max_hp = message.get('max_hp')
+        _remove = message.get('remove')
+        _remove_fail = message.get('remove_fail')
         _wear = message.get('wear')
         _wear_already = message.get('wear_already')
         _wear_fail = message.get('wear_fail')
@@ -57,6 +59,16 @@ def render_message_log(console_bundle, world):
             value, turn = _max_hp
 
             console.print(0, 0 + dy, '(Turn %s) Your max hp increases by %s point(s).' % (turn, value), LOG_COLORS['max_hp'])
+
+        if _remove:
+            name, turn = _remove
+
+            console.print(0, 0 + dy, '(Turn %s) You unequip your %s.' % (turn, name), LOG_COLORS['remove'])
+
+        if _remove_fail:
+            name, turn = _remove_fail
+
+            console.print(0, 0 + dy, '(Turn %s) You are not wearing your %s!' % (turn, name), LOG_COLORS['remove_fail'])
 
         if _wear:
             name, turn = _wear

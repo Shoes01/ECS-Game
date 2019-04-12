@@ -6,6 +6,7 @@ from components.actor.drop import DropComponent
 from components.actor.open_inv import OpenInventoryComponent
 from components.actor.pickup import PickupComponent
 from components.actor.player import PlayerComponent
+from components.actor.remove import RemoveComponent
 from components.actor.velocity import VelocityComponent
 from components.actor.wait import WaitComponent
 from components.actor.wear import WearComponent
@@ -26,6 +27,7 @@ class ActionProcessor(esper.Processor):
             _open_inventory = action.action.get('open_inventory')
             _move = action.action.get('move')
             _pick_up = action.action.get('pick_up')
+            _remove = action.action.get('remove')
             _wait = action.action.get('wait')
             _wear = action.action.get('wear')
 
@@ -54,6 +56,9 @@ class ActionProcessor(esper.Processor):
                     self.world.add_component(ent, PickupComponent(item_id=_pick_up))
                 else:
                     self.world.add_component(ent, PickupComponent(item_id=None))
+
+            if _remove:
+                self.world.add_component(ent, RemoveComponent(item_id=_remove))
 
             if _wait:
                 self.world.add_component(ent, WaitComponent())

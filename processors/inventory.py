@@ -37,12 +37,12 @@ class InventoryProcessor(esper.Processor):
                 _result = {'drop': item}
                 _validity = True
                 if item in eqp.equipment:
-                    _result = {'wear': item} # If the player tries to drop the item, they will unequip it instead.
+                    _result = {'remove': item} # If the player tries to drop the item, they will unequip it instead.
                     _validity = False
                 submenu.contents.append(PopupChoice(name='Drop', key='d', result=_result, valid=_validity))
 
                 # Remove
-                _result = {'wear': item}
+                _result = {'remove': item}
                 _validity = False
                 if item in eqp.equipment:
                     _validity = True

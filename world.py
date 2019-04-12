@@ -18,6 +18,7 @@ from processors.inventory import InventoryProcessor
 from processors.mapgen import MapgenProcessor
 from processors.movement import MovementProcessor
 from processors.pickup import PickupProcessor
+from processors.removable import RemovableProcessor
 from processors.render import RenderProcessor
 from processors.state import StateProcessor
 from processors.wearable import WearableProcessor
@@ -44,6 +45,7 @@ def build_world():
     mapgen_processor = MapgenProcessor()
     movement_processor = MovementProcessor()
     pickup_processor = PickupProcessor()
+    removable_processor = RemovableProcessor()
     render_processor = RenderProcessor()
     state_processor = StateProcessor()
     wearable_processor = WearableProcessor()
@@ -67,6 +69,7 @@ def build_world():
     world.add_processor(wearable_processor, 10)
     world.add_processor(drop_processor, 10)
     world.add_processor(combat_processor, 5)
+    world.add_processor(removable_processor, 5)
     world.add_processor(death_processor, 4)
     world.add_processor(mapgen_processor, 3)
     world.add_processor(dijkstra_processor, 2)

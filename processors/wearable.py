@@ -2,6 +2,7 @@ import esper
 
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
+from components.actor.remove import RemoveComponent
 from components.actor.wear import WearComponent
 from components.item.wearable import WearableComponent
 from components.game.message_log import MessageLogComponent
@@ -37,14 +38,15 @@ class WearableProcessor(esper.Processor):
                 # Wear the item.
                 item = self.world.component_for_entity(ent, WearComponent).item_id
                 if item in eqp.equipment:
-                    self.world.component_for_entity(item, NameComponent).name = self.world.component_for_entity(item, NameComponent)._name
-                    self.world.component_for_entity(1, MessageLogComponent).messages.append({'wear_already': (self.world.component_for_entity(item, NameComponent).name, self.world.component_for_entity(1, TurnCountComponent).turn_count)})
-                    eqp.equipment.remove(item)
+                    # Already worn, so remove it.
+                    self.world.remove_component(ent, WearComponent)
+                    self.world.add_component(ent, RemoveComponent(item_id=item))                    
                     
                 elif self.world.has_component(item, WearableComponent):
                     self.world.component_for_entity(1, MessageLogComponent).messages.append({'wear': (self.world.component_for_entity(item, NameComponent).name, self.world.component_for_entity(1, TurnCountComponent).turn_count)})
                     eqp.equipment.append(item)
                     self.world.component_for_entity(item, NameComponent).name += ' (worn)'
+                
                 else:
                     self.world.component_for_entity(1, MessageLogComponent).messages.append({'wear_fail': (self.world.component_for_entity(item, NameComponent).name, self.world.component_for_entity(1, TurnCountComponent).turn_count)})
                     self.world.remove_component(ent, WearComponent)

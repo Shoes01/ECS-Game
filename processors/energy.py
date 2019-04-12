@@ -6,6 +6,7 @@ from components.actor.drop import DropComponent
 from components.actor.energy import EnergyComponent
 from components.actor.pickup import PickupComponent
 from components.actor.player import PlayerComponent
+from components.actor.remove import RemoveComponent
 from components.actor.velocity import VelocityComponent
 from components.actor.wait import WaitComponent
 from components.actor.wear import WearComponent
@@ -33,6 +34,10 @@ class EnergyProcessor(esper.Processor):
             elif self.world.has_component(ent, PickupComponent):
                 eng.energy += 10
                 self.world.remove_component(ent, PickupComponent)
+            
+            elif self.world.has_component(ent, RemoveComponent):
+                eng.energy += 10
+                self.world.remove_component(ent, RemoveComponent)
 
             elif self.world.has_component(ent, VelocityComponent):
                 eng.energy += 10
