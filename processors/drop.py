@@ -25,7 +25,6 @@ class DropProcessor(esper.Processor):
                     _key = chr(n)
                     _result = None
                     if item in eqp.equipment:
-                        _name += ' (worn)'
                         _result = {'action': {'wear': item}}
                     else:
                         _result = {'action': {'drop': item}}

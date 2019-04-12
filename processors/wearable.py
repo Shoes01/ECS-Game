@@ -25,8 +25,6 @@ class WearableProcessor(esper.Processor):
                     if not self.world.has_component(item, WearableComponent):
                         continue
                     _name = self.world.component_for_entity(item, NameComponent).name
-                    if item in eqp.equipment:
-                        _name += ' (worn)'
                     _key = chr(n)
                     _result = {'wear': item}
                     menu.contents.append(PopupChoice(name=_name, key=_key, result=_result))
@@ -39,11 +37,14 @@ class WearableProcessor(esper.Processor):
                 # Wear the item.
                 item = self.world.component_for_entity(ent, WearComponent).item_id
                 if item in eqp.equipment:
+                    self.world.component_for_entity(item, NameComponent).name = self.world.component_for_entity(item, NameComponent)._name
                     self.world.component_for_entity(1, MessageLogComponent).messages.append({'wear_already': (self.world.component_for_entity(item, NameComponent).name, self.world.component_for_entity(1, TurnCountComponent).turn_count)})
                     eqp.equipment.remove(item)
+                    
                 elif self.world.has_component(item, WearableComponent):
                     self.world.component_for_entity(1, MessageLogComponent).messages.append({'wear': (self.world.component_for_entity(item, NameComponent).name, self.world.component_for_entity(1, TurnCountComponent).turn_count)})
                     eqp.equipment.append(item)
+                    self.world.component_for_entity(item, NameComponent).name += ' (worn)'
                 else:
                     self.world.component_for_entity(1, MessageLogComponent).messages.append({'wear_fail': (self.world.component_for_entity(item, NameComponent).name, self.world.component_for_entity(1, TurnCountComponent).turn_count)})
                     self.world.remove_component(ent, WearComponent)

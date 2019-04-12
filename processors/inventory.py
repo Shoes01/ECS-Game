@@ -21,8 +21,6 @@ class InventoryProcessor(esper.Processor):
             n = 97
             for item in inv.inventory:
                 _name = self.world.component_for_entity(item, NameComponent).name
-                if item in eqp.equipment:
-                    _name += ' (worn)'
                 _key = chr(n)
                 
                 # Prepare the result of the menu: the submenu!
