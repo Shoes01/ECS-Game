@@ -22,6 +22,7 @@ class MapgenProcessor(esper.Processor):
     def process(self):
         if self.world.has_component(1, MapgenComponent):
             game_map = self.world.component_for_entity(1, MapComponent)
+            game_map.depth += 1
 
             # Create new map.
             game_map.tiles = self.create_map(game_map.height, game_map.width)

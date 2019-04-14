@@ -1,6 +1,7 @@
 from _data import SingleLineBox, UI_COLORS
 from _helper_functions import calculate_power
 from components.actor.stats import StatsComponent
+from components.game.map import MapComponent
 from components.game.turn_count import TurnCountComponent
 
 def render_stats(console_bundle, world):
@@ -14,10 +15,12 @@ def render_stats(console_bundle, world):
     console.print(0, 0, 'HP: {0}/{1}'.format(player_stats_component.hp, player_stats_component.hp_max), color)
     console.print(0, 1, 'PWR: {0}'.format(calculate_power(2, world)), color)
     console.print(0, 2, 'TURN: {0}'.format(world.component_for_entity(1, TurnCountComponent).turn_count), color)
+    console.print(0, 3, 'DPTH: {0}'.format(world.component_for_entity(1, MapComponent).depth), color)
+
 
     # Draw the item boxes.
     
-    y_offset = 3
+    y_offset = 4
     draw_letter_box(0, 0 + y_offset, 4, 4, 'Q', console, color)
     draw_letter_box(4, 0 + y_offset, 4, 4, 'W', console, color)
     draw_letter_box(8, 0 + y_offset, 4, 4, 'E', console, color)
