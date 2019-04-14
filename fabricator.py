@@ -24,6 +24,7 @@ from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
+from components.stairs import StairsComponent
 from components.tile import TileComponent
 
 def fabricate_entity(ent, world):
@@ -60,6 +61,13 @@ def fabricate_entity(ent, world):
             StatsComponent(hp=50, power=10)
         )
     
+    if ent == 'stairs':
+        return world.create_entity(
+            PositionComponent(),
+            RenderComponent(char='>', color=ENTITY_COLORS['stairs']),
+            StairsComponent()
+        )
+
     if ent == 'sword':
         return world.create_entity(
             ItemComponent(),

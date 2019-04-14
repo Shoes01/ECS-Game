@@ -103,6 +103,7 @@ ENTITY_COLORS = {
     'floor_explored': COLOR_THEME['BrightBlack'],
     'player': COLOR_THEME['BrightMagenta'],
     'potion_heal': COLOR_THEME['Red'],
+    'stairs': COLOR_THEME['White'],
     'wall': COLOR_THEME['White'],
     'wall_explored': COLOR_THEME['BrightBlack'],
     'weapon': COLOR_THEME['Blue'],
