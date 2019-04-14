@@ -9,6 +9,7 @@ from components.game.mapgen import MapgenComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
+from components.stairs import StairsComponent
 from components.tile import TileComponent
 from fabricator import fabricate_entity
 
@@ -55,6 +56,7 @@ class MapgenProcessor(esper.Processor):
         self.clear_entities()
         self.place_tiles(tiles)
         self.place_player()
+        self.place_stairs()
         self.place_monsters(tiles)
         self.place_loot(tiles)
 
@@ -112,8 +114,15 @@ class MapgenProcessor(esper.Processor):
         player_pos.x = random.randint(room.x + 1, room.x + room.w - 2)
         player_pos.y = random.randint(room.y + 1, room.y + room.h - 2)
 
+    def place_stairs(self):
+        for stairs, (pos, _) in self.world.get_component(PositionComponent, StairsComponent):            
+            room = self._leaf_rooms.pop(random.randint(0, len(self._leaf_rooms) - 1))
+
+            pos.x = random.randint(room.x + 1, room.x + room.w - 2)
+            pos.y = random.randint(room.y + 1, room.y + room.h - 2)
+
     def clear_entities(self):
-        # Clear literally all entities, except game and player.
+        # Clear literally all entities, except game, player, and things picked up by the player.
         for ent in self.world._entities.keys():
             if not self.world.has_component(ent, PersistComponent):
                 self.world.delete_entity(ent)
