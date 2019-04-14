@@ -13,6 +13,7 @@ def render_message_log(console_bundle, world):
         _combat = message.get('combat')
         _consume = message.get('consume')
         _death = message.get('death')
+        _drop = message.get('drop')
         _error = message.get('error')
         _game_loaded = message.get('game_loaded')
         _game_saved = message.get('game_saved')
@@ -49,6 +50,11 @@ def render_message_log(console_bundle, world):
             libtcod.console_set_color_control(libtcod.COLCTRL_1, color, libtcod.black)
             console.print(0, 0 + dy, '(Turn %s) The %c%s%c has died!' % (turn, libtcod.COLCTRL_1, char, libtcod.COLCTRL_STOP), LOG_COLORS['death'])
         
+        if _drop:
+            name, turn = _drop
+
+            console.print(0, 0 + dy, '(Turn %s) You drop your %s.' % (turn, name), LOG_COLORS['success'])
+
         if _error:
             message= _error
 

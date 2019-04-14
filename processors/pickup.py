@@ -8,6 +8,7 @@ from components.game.turn_count import TurnCountComponent
 from components.item.item import ItemComponent
 from components.item.pickedup import PickedupComponent
 from components.name import NameComponent
+from components.persist import PersistComponent
 from components.position import PositionComponent
 
 class PickupProcessor(esper.Processor):
@@ -54,8 +55,14 @@ class PickupProcessor(esper.Processor):
 
             else:
                 item = pick.item_id
+                
+                # Attach item to player.
                 inv.inventory.append(item)
+                self.world.add_component(item, PersistComponent())
+
+                # Remove the item from the map.
                 self.world.add_component(item, PickedupComponent())
                 item_pos = self.world.component_for_entity(item, PositionComponent)
                 item_pos.x, item_pos.y = -1, -1
+
                 self.world.component_for_entity(1, MessageLogComponent).messages.append({'pickup': (self.world.component_for_entity(item, NameComponent).name, True, turn)})

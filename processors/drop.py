@@ -4,8 +4,11 @@ from components.actor.drop import DropComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
 from components.item.pickedup import PickedupComponent
+from components.game.message_log import MessageLogComponent
 from components.game.popup import PopupComponent, PopupMenu, PopupChoice
+from components.game.turn_count import TurnCountComponent
 from components.name import NameComponent
+from components.persist import PersistComponent
 from components.position import PositionComponent
 
 class DropProcessor(esper.Processor):
@@ -39,8 +42,11 @@ class DropProcessor(esper.Processor):
 
                 # Remove the item from the player.
                 self.world.component_for_entity(ent, InventoryComponent).inventory.remove(item)
+                self.world.remove_component(item, PersistComponent)
                 
-                # Remove the player from the item.
+                # Return the item to the map.
                 self.world.remove_component(item, PickedupComponent)
                 item_pos = self.world.component_for_entity(item, PositionComponent)
                 item_pos.x, item_pos.y = pos.x, pos.y
+
+                self.world.component_for_entity(1, MessageLogComponent).messages.append({'drop': (self.world.component_for_entity(item, NameComponent).name, self.world.component_for_entity(1, TurnCountComponent).turn_count)})
