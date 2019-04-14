@@ -2,6 +2,7 @@ import esper
 
 from components.actor.action import ActionComponent
 from components.actor.consume import ConsumeComponent
+from components.actor.descend import DescendComponent
 from components.actor.drop import DropComponent
 from components.actor.open_inv import OpenInventoryComponent
 from components.actor.pickup import PickupComponent
@@ -10,7 +11,7 @@ from components.actor.remove import RemoveComponent
 from components.actor.velocity import VelocityComponent
 from components.actor.wait import WaitComponent
 from components.actor.wear import WearComponent
-from components.game.descend import DescendComponent
+from components.game.events import EventsComponent
 from components.game.dijgen import DijgenComponent
 from components.game.turn_count import TurnCountComponent
 
@@ -40,7 +41,7 @@ class ActionProcessor(esper.Processor):
                     self.world.add_component(ent, ConsumeComponent(item_id=None))
 
             if _descend:
-                self.world.add_component(1, DescendComponent())
+                self.world.add_component(ent, DescendComponent())
 
             if _drop:
                 if _drop is not True:

@@ -2,7 +2,6 @@ import esper
 
 from components.actor.player import PlayerComponent
 from components.game.state import StateComponent
-from components.game.descend import DescendComponent
 from components.game.dijgen import DijgenComponent
 from components.game.end_game import EndGameComponent
 from components.game.mapgen import MapgenComponent
@@ -29,7 +28,6 @@ class StateProcessor(esper.Processor):
             if self.world.component_for_entity(1, PopupComponent).menus:
                 state_component.state = 'PopupMenu'
             if self.world.has_component(1, MapgenComponent):
-                self.world.remove_component(1, DescendComponent)
                 self.world.remove_component(1, MapgenComponent)
         
         elif state_component.state == 'GameOver':
