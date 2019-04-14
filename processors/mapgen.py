@@ -114,6 +114,15 @@ class MapgenProcessor(esper.Processor):
         player_pos.x = random.randint(room.x + 1, room.x + room.w - 2)
         player_pos.y = random.randint(room.y + 1, room.y + room.h - 2)
 
+        ### DEBUG 
+        """
+        new_ent = fabricate_entity('stairs', self.world)
+        
+        new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
+        new_ent_pos.x = player_pos.x
+        new_ent_pos.y = player_pos.y
+        """
+
     def place_stairs(self):
         new_ent = fabricate_entity('stairs', self.world)
         

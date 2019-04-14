@@ -31,12 +31,7 @@ class PickupProcessor(esper.Processor):
                     self.world.remove_component(ent, PickupComponent)
 
                 elif len(matched_items) == 1:
-                    item = matched_items.pop()
-                    inv.inventory.append(item)
-                    self.world.add_component(item, PickedupComponent())
-                    item_pos = self.world.component_for_entity(item, PositionComponent)
-                    item_pos.x, item_pos.y = -1, -1
-                    self.world.component_for_entity(1, MessageLogComponent).messages.append({'pickup': (self.world.component_for_entity(item, NameComponent).name, True, turn)})
+                    self.pick_up(matched_items.pop(), inv, turn)
                 
                 elif len(matched_items) > 1:
                     # Create popup menu for player to choose from.
@@ -54,15 +49,16 @@ class PickupProcessor(esper.Processor):
                     self.world.remove_component(ent, PickupComponent)
 
             else:
-                item = pick.item_id
-                
-                # Attach item to player.
-                inv.inventory.append(item)
-                self.world.add_component(item, PersistComponent())
+                self.pick_up(pick.item_id, inv, turn)
+    
+    def pick_up(self, item, inv_component, turn):
+        # Attach item to player.
+        inv_component.inventory.append(item)
+        self.world.add_component(item, PersistComponent())
 
-                # Remove the item from the map.
-                self.world.add_component(item, PickedupComponent())
-                item_pos = self.world.component_for_entity(item, PositionComponent)
-                item_pos.x, item_pos.y = -1, -1
+        # Remove the item from the map.
+        self.world.add_component(item, PickedupComponent())
+        item_pos = self.world.component_for_entity(item, PositionComponent)
+        item_pos.x, item_pos.y = -1, -1
 
-                self.world.component_for_entity(1, MessageLogComponent).messages.append({'pickup': (self.world.component_for_entity(item, NameComponent).name, True, turn)})
+        self.world.component_for_entity(1, MessageLogComponent).messages.append({'pickup': (self.world.component_for_entity(item, NameComponent).name, True, turn)})
