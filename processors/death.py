@@ -14,6 +14,7 @@ from components.game.message_log import MessageLogComponent
 from components.game.turn_count import TurnCountComponent
 from components.item.pickedup import PickedupComponent
 from components.name import NameComponent
+from components.persist import PersistComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
 
@@ -34,6 +35,8 @@ class DeathProcessor(esper.Processor):
                 self.world.remove_component(item, PickedupComponent)
                 item_pos = self.world.component_for_entity(item, PositionComponent)
                 item_pos.x, item_pos.y = pos.x, pos.y
+                if self.world.has_component(item, PersistComponent):
+                    self.world.remove_component(item, PersistComponent)
 
             if ent == 2:
                 self.world.add_component(1, EventsComponent(events=[{'player_killed': True}]))

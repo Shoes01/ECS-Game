@@ -115,11 +115,12 @@ class MapgenProcessor(esper.Processor):
         player_pos.y = random.randint(room.y + 1, room.y + room.h - 2)
 
     def place_stairs(self):
-        for stairs, (pos, _) in self.world.get_component(PositionComponent, StairsComponent):            
-            room = self._leaf_rooms.pop(random.randint(0, len(self._leaf_rooms) - 1))
-
-            pos.x = random.randint(room.x + 1, room.x + room.w - 2)
-            pos.y = random.randint(room.y + 1, room.y + room.h - 2)
+        new_ent = fabricate_entity('stairs', self.world)
+        
+        new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
+        room = self._leaf_rooms.pop(random.randint(0, len(self._leaf_rooms) - 1))
+        new_ent_pos.x = random.randint(room.x + 1, room.x + room.w - 2)
+        new_ent_pos.y = random.randint(room.y + 1, room.y + room.h - 2)
 
     def clear_entities(self):
         # Clear literally all entities, except game, player, and things picked up by the player.

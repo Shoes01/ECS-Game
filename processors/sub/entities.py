@@ -5,6 +5,7 @@ from components.item.pickedup import PickedupComponent
 from components.game.map import MapComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
+from components.stairs import StairsComponent
 from components.tile import TileComponent
 
 def render_entities(console_bundle, world):
@@ -31,6 +32,11 @@ def render_entities(console_bundle, world):
 
     # Print entities to the console.
     for ent, (actor, pos, ren) in world.get_components(ActorComponent, PositionComponent, RenderComponent):
+        if ren.visible:
+            console.print(pos.x, pos.y, ren.char, ren.color)
+
+    # Print stairs.
+    for ent, (stairs, pos, ren) in world.get_components(StairsComponent, PositionComponent, RenderComponent):
         if ren.visible:
             console.print(pos.x, pos.y, ren.char, ren.color)
 

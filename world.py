@@ -7,6 +7,7 @@ from processors.combat import CombatProcessor
 from processors.consumable import ConsumableProcessor
 from processors.debug import DebugProcessor
 from processors.death import DeathProcessor
+from processors.descend import DescendProcessor
 from processors.dijkstra import DijkstraProcessor
 from processors.drop import DropProcessor
 from processors.energy import EnergyProcessor
@@ -34,6 +35,7 @@ def build_world():
     consumable_processor = ConsumableProcessor()
     debug_processor = DebugProcessor()
     death_processor = DeathProcessor()
+    descend_processor = DescendProcessor()
     dijkstra_processor = DijkstraProcessor()
     drop_processor = DropProcessor()
     energy_processor = EnergyProcessor()
@@ -64,6 +66,7 @@ def build_world():
     world.add_processor(event_processor, 20)    
     world.add_processor(inventory_processor, 15)
     world.add_processor(consumable_processor, 10)
+    world.add_processor(descend_processor, 10)
     world.add_processor(pickup_processor, 10)
     world.add_processor(movement_processor, 10)
     world.add_processor(wearable_processor, 10)

@@ -58,14 +58,15 @@ def fabricate_entity(ent, world):
             PlayerComponent(),
             PositionComponent(),
             RenderComponent(char='@', color=ENTITY_COLORS['player']),
-            StatsComponent(hp=50, power=10)
+            StatsComponent(hp=500, power=10)
         )
     
     if ent == 'stairs':
         return world.create_entity(
             PositionComponent(),
-            RenderComponent(char='>', color=ENTITY_COLORS['stairs']),
-            StairsComponent()
+            RenderComponent(char='>', color=ENTITY_COLORS['stairs'], explored_color=ENTITY_COLORS['stairs_explored']),
+            StairsComponent(),
+            TileComponent(blocks_path=False, blocks_sight=False)
         )
 
     if ent == 'sword':
