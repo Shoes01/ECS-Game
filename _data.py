@@ -54,37 +54,79 @@ log = Rectangle(
 )
 
 ### COLOR DATA
+"""
+# FrontEndDelight Theme
+COLOR_THEME = {
+    "Black": (36,36,38),
+    "Blue": (44,112,183),
+    "BrightBlack": (94,172,108),
+    "BrightBlue": (51,147,201),
+    "BrightCyan": (78,188,229),
+    "BrightGreen": (116,235,76),
+    "BrightMagenta": (231,94,78),
+    "BrightRed": (246,67,25),
+    "BrightWhite": (139,115,90),
+    "BrightYellow": (252,194,36),
+    "Cyan": (59,160,165),
+    "Green": (86,87,70),
+    "Magenta": (240,45,78),
+    "Red": (248,80,26),
+    "White": (172,172,172),
+    "Yellow": (249,118,29),
+    "Background": (27,27,29)
+}
+"""
+# ENCOM Color Theme
+COLOR_THEME = {
+    "Black": (36,36,38),
+    "Blue": (0,129,255),
+    "BrightBlack": (84,84,84),
+    "BrightBlue": (0,0,255),
+    "BrightCyan": (0,205,205),
+    "BrightGreen": (0,238,0),
+    "BrightMagenta": (255,0,255),
+    "BrightRed": (255,0,0),
+    "BrightWhite": (255, 255, 255),
+    "BrightYellow": (255, 255, 0),
+    "Cyan": (0,139,139),
+    "Green": (0,139,0),
+    "Magenta": (188,0,202),
+    "Red": (159,0,0),
+    "White": (187,187,187),
+    "Yellow": (255,207,0),
+    "Background": (0, 0, 0)
+}
 
 ENTITY_COLORS = {
-    'corpse': libtcod.red,
-    'floor': libtcod.white,
-    'floor_explored': libtcod.darkest_grey,
-    'player': libtcod.pink,
-    'potion_heal': libtcod.red,
-    'wall': libtcod.white,
-    'wall_explored': libtcod.darkest_grey,
-    'weapon': libtcod.blue,
-    'zombie': libtcod.green
+    'corpse': COLOR_THEME['BrightRed'],
+    'floor': COLOR_THEME['White'],
+    'floor_explored': COLOR_THEME['BrightBlack'],
+    'player': COLOR_THEME['BrightMagenta'],
+    'potion_heal': COLOR_THEME['Red'],
+    'wall': COLOR_THEME['White'],
+    'wall_explored': COLOR_THEME['BrightBlack'],
+    'weapon': COLOR_THEME['Blue'],
+    'zombie': COLOR_THEME['Green']
 }
 
 LOG_COLORS = {
-    'combat': libtcod.yellow,
-    'death': libtcod.dark_red,
-    'error': libtcod.red,
-    'failure': libtcod.dark_red,
-    'system_message': libtcod.dark_green,
-    'success': libtcod.light_blue,
-    'warning': libtcod.yellow
+    'combat': COLOR_THEME['Yellow'],
+    'death': COLOR_THEME['Red'],
+    'error': COLOR_THEME['BrightRed'],
+    'failure': COLOR_THEME['Red'],
+    'system_message': COLOR_THEME['Green'],
+    'success': COLOR_THEME['Blue'],
+    'warning': COLOR_THEME['BrightYellow']
 }
 
 UI_COLORS = {
-    'border_main': libtcod.dark_grey,
-    'border_secondary': libtcod.white,
-    'bg': libtcod.black,
-    'fg': libtcod.white,
-    'text': libtcod.white,
-    'text_invalid': libtcod.grey,
-    'text_mainmenu': libtcod.grey
+    'border_main': COLOR_THEME['BrightWhite'],
+    'border_secondary': COLOR_THEME['White'],
+    'bg': COLOR_THEME['Black'],
+    'fg': COLOR_THEME['BrightWhite'],
+    'text': COLOR_THEME['BrightWhite'],
+    'text_invalid': COLOR_THEME['White'],
+    'text_mainmenu': COLOR_THEME['White']
 }
 
 ### BORDER DATA
