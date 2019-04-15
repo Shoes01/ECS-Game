@@ -12,6 +12,7 @@ from components.game.message_log import MessageLogComponent
 from components.game.popup import PopupComponent
 from components.game.state import StateComponent
 from components.game.victory import VictoryComponent
+from components.game.view_log import ViewLogComponent
 from processors.initial import InitialProcessor
 from processors.final import FinalProcessor
 
@@ -38,6 +39,7 @@ class EventProcessor(esper.Processor):
                 _popup = event.get('popup')
                 _save_game = event.get('save_game')
                 _toggle_debug = event.get('toggle_debug')
+                _view_log = event.get('view_log')
 
                 if _boss_killed:
                     self.world.add_component(1, VictoryComponent())
@@ -76,5 +78,8 @@ class EventProcessor(esper.Processor):
                         self.world.remove_component(1, DebugComponent)
                     else:
                         self.world.add_component(1, DebugComponent())
+                
+                if _view_log:
+                    self.world.add_component(1, ViewLogComponent())
             
             self.world.remove_component(1, EventsComponent)

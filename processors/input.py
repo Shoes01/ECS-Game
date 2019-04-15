@@ -75,15 +75,13 @@ class InputProcessor(esper.Processor):
                 menu.contents.append(PopupChoice(name='Quit', key='q', result={'exit': True}, action=False))
                 menu.contents.append(PopupChoice(name='Save game', key='s', result={'save_game': True}, action=False))
                 events.append({'popup': menu})
+            if key_char == 'm':
+                events.append({'view_log': True})
 
-        elif game_state_component.state == 'GameOver':
+        elif game_state_component.state == 'GameOver' or game_state_component.state == 'VictoryScreen' or game_state_component.state == 'ViewLog':
             if key.scancode == libtcod.event.SCANCODE_ESCAPE:
                     events.append({'exit': True})
         
-        elif game_state_component.state == 'VictoryScreen':
-            if key.scancode == libtcod.event.SCANCODE_ESCAPE:
-                    events.append({'exit': True})
-
         ### INPUTS THAT ARE READ ONLY ON THE PLAYERS TURN
         for ent, (actor, eng, player) in self.world.get_components(ActorComponent, EnergyComponent, PlayerComponent):
             if game_state_component.state == 'Game' and eng.energy == 0:

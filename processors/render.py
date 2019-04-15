@@ -29,14 +29,16 @@ class RenderProcessor(esper.Processor):
         log_obj = self._consoles['log']
         map_obj = self._consoles['map']
 
-
-
-        if game_state == 'Game' or game_state == 'GameOver' or game_state == 'PopupMenu':
+        if game_state == 'Game' or game_state == 'GameOver' or game_state == 'PopupMenu' or game_state == 'ViewLog':
             self.render_border()
-            render_message_log(self._consoles['log'], self.world)
             render_stats(self._consoles['stats'], self.world)
             render_entities(self._consoles['map'], self.world)
             render_popup_menu(self._consoles['map'], self.world)
+            if game_state == 'ViewLog':
+                map_obj[0].clear()
+                render_message_log(self._consoles['map'], self.world)
+            else:
+                render_message_log(self._consoles['log'], self.world)
         
         if game_state == 'MainMenu':
             _string = 'Welcome to the Main Menu.\n\nPress ENTER to begin.\nPress L to load the last save.\n\nPress ESC to quit.'
@@ -50,7 +52,6 @@ class RenderProcessor(esper.Processor):
             _string = 'You have won! Press ESC to return to the Main Menu.'
             map_obj[0].print(3, 3, _string, UI_COLORS['text_mainmenu'])
 
-
         eqp_obj[0].blit(dest=con_obj[0], dest_x=eqp_obj[1], dest_y=eqp_obj[2], width=eqp_obj[3], height=eqp_obj[4])
         log_obj[0].blit(dest=con_obj[0], dest_x=log_obj[1], dest_y=log_obj[2], width=log_obj[3], height=log_obj[4])
         map_obj[0].blit(dest=con_obj[0], dest_x=map_obj[1], dest_y=map_obj[2], width=map_obj[3], height=map_obj[4])
@@ -60,7 +61,7 @@ class RenderProcessor(esper.Processor):
         con_obj[0].clear()
         eqp_obj[0].clear()
         log_obj[0].clear()
-        map_obj[0].clear()        
+        map_obj[0].clear()
     
     def render_border(self):
         con_obj = self._consoles['con'] # type: (console, x, y, w, h)
