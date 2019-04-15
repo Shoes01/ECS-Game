@@ -167,8 +167,14 @@ class MapgenProcessor(esper.Processor):
                 new_ent = fabricate_entity('demon', self.world)
                 new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                 new_ent_pos.x = x
-                new_ent_pos.y = y            
+                new_ent_pos.y = y
 
+                # DEBUG
+                """
+                player_pos = self.world.component_for_entity(2, PositionComponent)
+                new_ent_pos.x = player_pos.x + 1
+                new_ent_pos.y = player_pos.y + 1
+                """
 
         for room in self._rooms:
             size = room.h + room.w
