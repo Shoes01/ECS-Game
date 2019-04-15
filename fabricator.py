@@ -1,5 +1,6 @@
 from _data import ENTITY_COLORS
 from components.actor.actor import ActorComponent
+from components.actor.boss import BossComponent
 from components.actor.brain import BrainComponent
 from components.actor.energy import EnergyComponent
 from components.actor.equipment import EquipmentComponent
@@ -28,6 +29,20 @@ from components.stairs import StairsComponent
 from components.tile import TileComponent
 
 def fabricate_entity(ent, world):
+    if ent == 'demon':
+        return world.create_entity(
+            ActorComponent(),
+            BossComponent(),
+            BrainComponent(),
+            EnergyComponent(),
+            EquipmentComponent(),
+            InventoryComponent(inventory=[fabricate_entity('sword_equipped', world), fabricate_entity('sword_equipped', world)]),
+            NameComponent(name='Demon'),
+            PositionComponent(),
+            RenderComponent(char='&', color=ENTITY_COLORS['demon']),
+            StatsComponent(hp=20, power=8)
+        )
+
     if ent == 'floor':
         return world.create_entity(
             PositionComponent(),

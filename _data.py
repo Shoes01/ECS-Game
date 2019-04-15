@@ -2,6 +2,10 @@ import tcod as libtcod
 
 from collections import namedtuple
 
+### GAME MAP DATA
+
+FINAL_FLOOR = 2
+
 ### CONSOLE DIMENSION DATA
 
 Rectangle = namedtuple('Rectangle', ['x', 'y', 'w', 'h'])
@@ -99,6 +103,7 @@ COLOR_THEME = {
 
 ENTITY_COLORS = {
     'corpse': COLOR_THEME['BrightRed'],
+    'demon': COLOR_THEME['Red'],
     'floor': COLOR_THEME['White'],
     'floor_explored': COLOR_THEME['BrightBlack'],
     'player': COLOR_THEME['BrightMagenta'],

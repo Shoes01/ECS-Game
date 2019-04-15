@@ -79,6 +79,10 @@ class InputProcessor(esper.Processor):
         elif game_state_component.state == 'GameOver':
             if key.scancode == libtcod.event.SCANCODE_ESCAPE:
                     events.append({'exit': True})
+        
+        elif game_state_component.state == 'VictoryScreen':
+            if key.scancode == libtcod.event.SCANCODE_ESCAPE:
+                    events.append({'exit': True})
 
         ### INPUTS THAT ARE READ ONLY ON THE PLAYERS TURN
         for ent, (actor, eng, player) in self.world.get_components(ActorComponent, EnergyComponent, PlayerComponent):

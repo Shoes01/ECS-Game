@@ -11,6 +11,7 @@ from components.game.mapgen import MapgenComponent
 from components.game.message_log import MessageLogComponent
 from components.game.popup import PopupComponent
 from components.game.state import StateComponent
+from components.game.victory import VictoryComponent
 from processors.initial import InitialProcessor
 from processors.final import FinalProcessor
 
@@ -27,6 +28,7 @@ class EventProcessor(esper.Processor):
             state = self.world.component_for_entity(1, StateComponent).state
 
             for event in events:
+                _boss_killed = event.get('boss_killed')
                 _close_popup_menu = event.get('close_popup_menu')
                 _exit = event.get('exit')
                 _load_game = event.get('load_game')
@@ -37,6 +39,8 @@ class EventProcessor(esper.Processor):
                 _save_game = event.get('save_game')
                 _toggle_debug = event.get('toggle_debug')
 
+                if _boss_killed:
+                    self.world.add_component(1, VictoryComponent())
 
                 if _close_popup_menu:
                     menus = self.world.component_for_entity(1, PopupComponent).menus

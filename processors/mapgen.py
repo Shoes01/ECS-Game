@@ -3,6 +3,7 @@ import numpy as np
 import random
 import tcod as libtcod
 
+from _data import FINAL_FLOOR
 from _helper_functions import tile_occupied
 from components.game.map import MapComponent
 from components.game.mapgen import MapgenComponent
@@ -25,7 +26,7 @@ class MapgenProcessor(esper.Processor):
             game_map.depth += 1
 
             # Create new map.
-            game_map.tiles = self.create_map(game_map.height, game_map.width)
+            game_map.tiles = self.create_map(game_map.depth, game_map.height, game_map.width)
             
             # Create directory of map.
             game_map.directory = self.create_directory(game_map.height, game_map.tiles, game_map.width)
@@ -33,7 +34,7 @@ class MapgenProcessor(esper.Processor):
             # Create fov map.
             game_map.fov_map = self.create_fov_map(game_map.height, game_map.width)
 
-    def create_map(self, h, w):
+    def create_map(self, depth, h, w):
         tiles = np.ones([w, h], dtype=int, order='F')
         self._rooms = []
         self._leaf_rooms = []
@@ -57,8 +58,8 @@ class MapgenProcessor(esper.Processor):
         self.clear_entities()
         self.place_tiles(tiles)
         self.place_player()
-        self.place_stairs()
-        self.place_monsters(tiles)
+        self.place_stairs(depth)
+        self.place_monsters(depth, tiles)
         self.place_loot(tiles)
 
         return tiles
@@ -124,7 +125,10 @@ class MapgenProcessor(esper.Processor):
         new_ent_pos.y = player_pos.y
         """
 
-    def place_stairs(self):
+    def place_stairs(self, depth):
+        if depth == FINAL_FLOOR:
+            return 0
+
         new_ent = fabricate_entity('stairs', self.world)
         
         new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
@@ -151,7 +155,21 @@ class MapgenProcessor(esper.Processor):
                 new_ent_pos.x = x
                 new_ent_pos.y = y
 
-    def place_monsters(self, tiles):
+    def place_monsters(self, depth, tiles):
+        if depth == FINAL_FLOOR:
+            boss_room = self._leaf_rooms.pop(random.randint(0, len(self._leaf_rooms) - 1))
+            self._rooms.remove(boss_room)
+
+            x = random.randint(boss_room.x, boss_room.x + boss_room.w - 1)
+            y = random.randint(boss_room.y, boss_room.y + boss_room.h - 1)
+
+            if not tiles[x, y] and not tile_occupied(self.world, x, y):
+                new_ent = fabricate_entity('demon', self.world)
+                new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
+                new_ent_pos.x = x
+                new_ent_pos.y = y            
+
+
         for room in self._rooms:
             size = room.h + room.w
             number_of_monsters = size // 5  # This controls monster density

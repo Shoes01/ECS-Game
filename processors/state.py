@@ -6,6 +6,7 @@ from components.game.dijgen import DijgenComponent
 from components.game.end_game import EndGameComponent
 from components.game.mapgen import MapgenComponent
 from components.game.popup import PopupComponent
+from components.game.victory import VictoryComponent
 
 class StateProcessor(esper.Processor):
     def __init__(self):
@@ -20,7 +21,7 @@ class StateProcessor(esper.Processor):
 
         if state_component.state == 'Game':
             if self.world.has_component(1, EndGameComponent):
-                # self.world.remove_component(1, EndGameComponent)
+                # self.world.remove_component(1, EndGameComponent) # The EndgameProcessor will remove this
                 state_component.state = 'MainMenu'
             if self.world.component_for_entity(2, PlayerComponent).killed:
                 self.world.remove_component(2, PlayerComponent)
@@ -29,10 +30,13 @@ class StateProcessor(esper.Processor):
                 state_component.state = 'PopupMenu'
             if self.world.has_component(1, MapgenComponent):
                 self.world.remove_component(1, MapgenComponent)
+            if self.world.has_component(1, VictoryComponent):
+                self.world.remove_component(1, VictoryComponent)
+                state_component.state = 'VictoryScreen'
         
         elif state_component.state == 'GameOver':
             if self.world.has_component(1, EndGameComponent):
-                # self.world.remove_component(1, EndGameComponent)
+                # self.world.remove_component(1, EndGameComponent) # The EndgameProcessor will remove this
                 state_component.state = 'MainMenu'
 
         elif state_component.state == 'MainMenu':
@@ -46,3 +50,8 @@ class StateProcessor(esper.Processor):
         elif state_component.state == 'PopupMenu':
             if not self.world.component_for_entity(1, PopupComponent).menus:
                 state_component.state = 'Game'
+        
+        elif state_component.state == 'VictoryScreen':
+            if self.world.has_component(1, EndGameComponent):
+                # self.world.remove_component(1, EndGameComponent) # The EndgameProcessor will remove this
+                state_component.state = 'MainMenu'
