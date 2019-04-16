@@ -78,9 +78,17 @@ class InputProcessor(esper.Processor):
             if key_char == 'm':
                 events.append({'view_log': True})
 
-        elif game_state_component.state == 'GameOver' or game_state_component.state == 'VictoryScreen' or game_state_component.state == 'ViewLog':
+        elif game_state_component.state == 'ViewLog':
+            if key.scancode == libtcod.event.SCANCODE_UP or key_char == 'k' or key.scancode == libtcod.event.SCANCODE_KP_8:
+                events.append({'scroll': +1})
+            elif key.scancode == libtcod.event.SCANCODE_DOWN or key_char == 'j' or key.scancode == libtcod.event.SCANCODE_KP_2:
+                events.append({'scroll': -1})
+            elif key.scancode == libtcod.event.SCANCODE_ESCAPE:
+                events.append({'exit': True})
+
+        elif game_state_component.state == 'GameOver' or game_state_component.state == 'VictoryScreen':
             if key.scancode == libtcod.event.SCANCODE_ESCAPE:
-                    events.append({'exit': True})
+                events.append({'exit': True})
         
         ### INPUTS THAT ARE READ ONLY ON THE PLAYERS TURN
         for ent, (actor, eng, player) in self.world.get_components(ActorComponent, EnergyComponent, PlayerComponent):

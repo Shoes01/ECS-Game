@@ -4,11 +4,27 @@ from _data import LOG_COLORS
 from components.game.message_log import MessageLogComponent
 
 def render_message_log(console_bundle, world):
-    message_log = world.component_for_entity(1, MessageLogComponent).messages
+    message_log_component = world.component_for_entity(1, MessageLogComponent)
     console, x, y, w, h = console_bundle
+    
+    offset = None
+    messages = message_log_component.messages
+    
+    max_offset = len(messages) - h
 
+    if message_log_component.offset >= max_offset:
+        message_log_component.offset = max_offset
+        offset = -max_offset
+    elif message_log_component.offset <= 0:
+        message_log_component.offset = 0
+        offset = None
+    else:
+        offset = -message_log_component.offset
+    
+    
     dy = h - 1
-    for message in reversed(message_log):
+    offset_messages = messages[:offset]
+    for message in reversed(offset_messages):
         _ai_awake = message.get('ai_awake')
         _combat = message.get('combat')
         _consume = message.get('consume')

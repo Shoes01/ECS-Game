@@ -38,6 +38,7 @@ class EventProcessor(esper.Processor):
                 _pop_popup_menu = event.get('pop_popup_menu')
                 _popup = event.get('popup')
                 _save_game = event.get('save_game')
+                _scroll = event.get('scroll')
                 _toggle_debug = event.get('toggle_debug')
                 _view_log = event.get('view_log')
 
@@ -72,6 +73,9 @@ class EventProcessor(esper.Processor):
                 if _save_game:
                     self.world.component_for_entity(1, MessageLogComponent).messages.append({'game_saved': True})
                     save_game(self.world._next_entity_id, self.world._components, self.world._entities)
+
+                if _scroll:
+                    self.world.component_for_entity(1, MessageLogComponent).offset += _scroll
 
                 if _toggle_debug:
                     if self.world.has_component(1, DebugComponent):
