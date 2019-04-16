@@ -55,6 +55,7 @@ class EventProcessor(esper.Processor):
 
                 if _load_game:
                     load_game(self.world)
+                    events.append({'close_popup_menu': True})
                     self.world.component_for_entity(1, MessageLogComponent).messages.append({'game_loaded': True})
 
                 if _new_map:
