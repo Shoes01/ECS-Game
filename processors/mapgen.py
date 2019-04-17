@@ -5,8 +5,12 @@ import tcod as libtcod
 
 from _data import FINAL_FLOOR
 from _helper_functions import tile_occupied
+from components.actor.actor import ActorComponent
+from components.actor.equipment import EquipmentComponent
+from components.actor.inventory import InventoryComponent
 from components.game.map import MapComponent
 from components.game.mapgen import MapgenComponent
+from components.item.pickedup import PickedupComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
@@ -215,7 +219,11 @@ class MapgenProcessor(esper.Processor):
                 number_of_items -= 1
 
     def equip_monsters(self):
-        pass
+        for ent, (actor, eqp, inv) in self.world.get_components(ActorComponent, EquipmentComponent, InventoryComponent):
+            ### For each monster, give them an item. Equip it too.
+            # The item need to be given a PickedupComponent
+            # The entity needs to have the item added to their inventory, and to their equipment.
+            continue
 
     def create_directory(self, h, tiles, w):
         directory = {}
