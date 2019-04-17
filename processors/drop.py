@@ -28,9 +28,9 @@ class DropProcessor(esper.Processor):
                     _key = chr(n)
                     _result = None
                     if item in eqp.equipment:
-                        _result = {'action': {'wear': item}}
+                        _result = {'wear': item}
                     else:
-                        _result = {'action': {'drop': item}}
+                        _result = {'drop': item}
                     menu.contents.append(PopupChoice(name=_name, key=_key, result=_result))
                     n += 1
                 
