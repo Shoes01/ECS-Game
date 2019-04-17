@@ -61,6 +61,7 @@ class MapgenProcessor(esper.Processor):
         self.place_stairs(depth)
         self.place_monsters(depth, tiles)
         self.place_loot(tiles)
+        self.equip_monsters()
 
         return tiles
 
@@ -108,6 +109,25 @@ class MapgenProcessor(esper.Processor):
         
         return tiles
 
+    def clear_entities(self):
+        # Clear literally all entities, except game, player, and things picked up by the player.
+        for ent in self.world._entities.keys():
+            if not self.world.has_component(ent, PersistComponent):
+                self.world.delete_entity(ent)
+
+    def place_tiles(self, tiles):
+        for (x, y), value in np.ndenumerate(tiles):
+            if value == 0:
+                new_ent = fabricate_entity('floor', self.world)
+                new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
+                new_ent_pos.x = x
+                new_ent_pos.y = y
+            if value == 1:
+                new_ent = fabricate_entity('wall', self.world)
+                new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
+                new_ent_pos.x = x
+                new_ent_pos.y = y
+
     def place_player(self):
         player_pos = self.world.component_for_entity(2, PositionComponent)
         room = self._leaf_rooms.pop(random.randint(0, len(self._leaf_rooms) - 1))
@@ -135,25 +155,6 @@ class MapgenProcessor(esper.Processor):
         room = self._leaf_rooms.pop(random.randint(0, len(self._leaf_rooms) - 1))
         new_ent_pos.x = random.randint(room.x + 1, room.x + room.w - 2)
         new_ent_pos.y = random.randint(room.y + 1, room.y + room.h - 2)
-
-    def clear_entities(self):
-        # Clear literally all entities, except game, player, and things picked up by the player.
-        for ent in self.world._entities.keys():
-            if not self.world.has_component(ent, PersistComponent):
-                self.world.delete_entity(ent)
-
-    def place_tiles(self, tiles):
-        for (x, y), value in np.ndenumerate(tiles):
-            if value == 0:
-                new_ent = fabricate_entity('floor', self.world)
-                new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
-                new_ent_pos.x = x
-                new_ent_pos.y = y
-            if value == 1:
-                new_ent = fabricate_entity('wall', self.world)
-                new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
-                new_ent_pos.x = x
-                new_ent_pos.y = y
 
     def place_monsters(self, depth, tiles):
         if depth == FINAL_FLOOR:
@@ -213,6 +214,8 @@ class MapgenProcessor(esper.Processor):
                     
                 number_of_items -= 1
 
+    def equip_monsters(self):
+        pass
 
     def create_directory(self, h, tiles, w):
         directory = {}
