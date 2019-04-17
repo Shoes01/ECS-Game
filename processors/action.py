@@ -35,20 +35,20 @@ class ActionProcessor(esper.Processor):
             _wear = action.action.get('wear')
 
             if _consume:
-                if _consume is not True:
-                    self.world.add_component(ent, ConsumeComponent(item_id=_consume))
-                else:
+                if _consume is True:
                     self.world.add_component(ent, ConsumeComponent(item_id=None))
-
+                elif _consume:
+                    self.world.add_component(ent, ConsumeComponent(item_id=_consume))
+                    
             if _descend:
                 self.world.add_component(ent, DescendComponent())
 
             if _drop:
-                if _drop is not True:
-                    self.world.add_component(ent, DropComponent(item_id=_drop))    
-                else:
+                if _drop is True:
                     self.world.add_component(ent, DropComponent(item_id=None))
-                
+                elif _drop:
+                    self.world.add_component(ent, DropComponent(item_id=_drop))    
+
             if _open_inventory:
                 self.world.add_component(ent, OpenInventoryComponent())
 
@@ -58,11 +58,11 @@ class ActionProcessor(esper.Processor):
                 self.world.add_component(1, DijgenComponent())
             
             if _pick_up:
-                if _pick_up is not True:
-                    self.world.add_component(ent, PickupComponent(item_id=_pick_up))
-                else:
+                if _pick_up is True:
                     self.world.add_component(ent, PickupComponent(item_id=None))
-
+                elif _pick_up:
+                    self.world.add_component(ent, PickupComponent(item_id=_pick_up))
+                    
             if _remove:
                 self.world.add_component(ent, RemoveComponent(item_id=_remove))
 
@@ -70,9 +70,9 @@ class ActionProcessor(esper.Processor):
                 self.world.add_component(ent, WaitComponent())
 
             if _wear:
-                if _wear is not True:
-                    self.world.add_component(ent, WearComponent(item_id=_wear))
-                else:
+                if _wear is True:
                     self.world.add_component(ent, WearComponent(item_id=None))
-
+                elif _wear:
+                    self.world.add_component(ent, WearComponent(item_id=_wear))
+                    
             self.world.remove_component(ent, ActionComponent)

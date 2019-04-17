@@ -23,7 +23,7 @@ class DropProcessor(esper.Processor):
                 menu = PopupMenu(title='Which item would you like to drop?')
                 
                 n = 97
-                for item in self.world.component_for_entity(ent, InventoryComponent).inventory:
+                for item in inv.inventory:
                     _name = self.world.component_for_entity(item, NameComponent).name
                     _key = chr(n)
                     _result = None
@@ -41,7 +41,7 @@ class DropProcessor(esper.Processor):
                 item = drop.item_id
 
                 # Remove the item from the player.
-                self.world.component_for_entity(ent, InventoryComponent).inventory.remove(item)
+                inv.inventory.remove(item)
                 self.world.remove_component(item, PersistComponent)
                 
                 # Return the item to the map.
