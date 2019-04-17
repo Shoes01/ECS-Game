@@ -61,10 +61,13 @@ def render_message_log(console_bundle, world):
                 console.print(0, 0 + dy, '(Turn %s) You cannot consume your %s!' % (turn, name), LOG_COLORS['failure'])
 
         if _death:
-            char, color, turn = _death
+            char, color, turn, is_furniture = _death
 
             libtcod.console_set_color_control(libtcod.COLCTRL_1, color, libtcod.black)
-            console.print(0, 0 + dy, '(Turn %s) The %c%s%c has died!' % (turn, libtcod.COLCTRL_1, char, libtcod.COLCTRL_STOP), LOG_COLORS['death'])
+            if is_furniture:
+                console.print(0, 0 + dy, '(Turn %s) The %c%s%c is destroyed!' % (turn, libtcod.COLCTRL_1, char, libtcod.COLCTRL_STOP), LOG_COLORS['success'])
+            else:
+                console.print(0, 0 + dy, '(Turn %s) The %c%s%c has died!' % (turn, libtcod.COLCTRL_1, char, libtcod.COLCTRL_STOP), LOG_COLORS['death'])
         
         if _drop:
             name, turn = _drop

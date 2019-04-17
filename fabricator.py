@@ -22,6 +22,7 @@ from components.item.modifier import ModifierComponent
 from components.item.pickedup import PickedupComponent
 from components.item.slot import SlotComponent
 from components.item.wearable import WearableComponent
+from components.furniture import FurnitureComponent
 from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
@@ -30,6 +31,16 @@ from components.stairs import StairsComponent
 from components.tile import TileComponent
 
 def fabricate_entity(ent, world):
+    if ent == 'chest':
+        return world.create_entity(
+            ActorComponent(),
+            FurnitureComponent(),
+            InventoryComponent(inventory=[fabricate_entity('sword_equipped', world)]),
+            NameComponent(name='Chest'),
+            PositionComponent(),
+            RenderComponent(char='(', color=ENTITY_COLORS['chest']),
+            StatsComponent(hp=10, power=0)
+        )
     if ent == 'demon':
         return world.create_entity(
             ActorComponent(),

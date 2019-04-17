@@ -14,6 +14,7 @@ from components.game.events import EventsComponent
 from components.game.message_log import MessageLogComponent
 from components.game.turn_count import TurnCountComponent
 from components.item.pickedup import PickedupComponent
+from components.furniture import FurnitureComponent
 from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
@@ -25,7 +26,9 @@ class DeathProcessor(esper.Processor):
     
     def process(self):
         for ent, (dead, inv, name, pos, ren) in self.world.get_components(DeadComponent, InventoryComponent, NameComponent, PositionComponent, RenderComponent):
-            self.world.component_for_entity(1, MessageLogComponent).messages.append({'death': (ren.char, ren.color, self.world.component_for_entity(1, TurnCountComponent).turn_count)})
+            turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
+            is_furniture = self.world.has_component(ent, FurnitureComponent)
+            self.world.component_for_entity(1, MessageLogComponent).messages.append({'death': (ren.char, ren.color, turn, is_furniture)})
             
             inventory = inv.inventory
             name.name = 'corspe of ' + name.name
@@ -39,7 +42,10 @@ class DeathProcessor(esper.Processor):
                 if self.world.has_component(item, PersistComponent):
                     self.world.remove_component(item, PersistComponent)
 
-            if ent == 2:
+            if is_furniture:
+                self.world.delete_entity(ent)
+                return 0
+            elif ent == 2:
                 self.world.add_component(1, EventsComponent(events=[{'player_killed': True}]))
             else:
                 self.world.remove_component(ent, BrainComponent)
