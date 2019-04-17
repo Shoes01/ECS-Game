@@ -12,7 +12,7 @@ def render_message_log(console_bundle, world):
     
     max_offset = len(messages) - h
 
-    if message_log_component.offset >= max_offset:
+    if message_log_component.offset >= max_offset > 0:
         message_log_component.offset = max_offset
         offset = -max_offset
     elif message_log_component.offset <= 0:
