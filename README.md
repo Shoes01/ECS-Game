@@ -15,4 +15,5 @@ The numpad controls movement.
 'e': eat items
 'w': wear items
 'i': view your inventory
+'m': view message log
 'ESC': quit
