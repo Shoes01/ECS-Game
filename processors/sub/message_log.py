@@ -109,10 +109,12 @@ def render_message_log(console_bundle, world):
                 console.print(0, 0 + dy, '(Turn %s) You are not wearing your %s!' % (turn, name), LOG_COLORS['failure'])
 
         if _wear:
-            name, success, turn = _wear
+            name, slot, success, turn = _wear
 
-            if success:
-                console.print(0, 0 + dy, '(Turn %s) You equip your %s.' % (turn, name), LOG_COLORS['success'])
+            if success is True:
+                console.print(0, 0 + dy, '(Turn %s) You equip your %s to your %s.' % (turn, name, slot), LOG_COLORS['success'])
+            elif success == 'slot_filled':
+                console.print(0, 0 + dy, '(Turn %s) You replace your %s item with your %s.' % (turn, slot, name), LOG_COLORS['success'])
             else:
                 console.print(0, 0 + dy, '(Turn %s) You cannot equip a %s!' % (turn, name), LOG_COLORS['failure'])
 

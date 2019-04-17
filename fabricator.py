@@ -20,6 +20,7 @@ from components.item.consumable import ConsumableComponent
 from components.item.item import ItemComponent
 from components.item.modifier import ModifierComponent
 from components.item.pickedup import PickedupComponent
+from components.item.slot import SlotComponent
 from components.item.wearable import WearableComponent
 from components.name import NameComponent
 from components.persist import PersistComponent
@@ -91,6 +92,7 @@ def fabricate_entity(ent, world):
             NameComponent(name='Sword'),
             PositionComponent(),
             RenderComponent(char=')', color=ENTITY_COLORS['weapon']),
+            SlotComponent(slot='mainhand'),
             WearableComponent()
         )
 
@@ -102,6 +104,7 @@ def fabricate_entity(ent, world):
             PickedupComponent(),
             PositionComponent(),
             RenderComponent(char=')', color=ENTITY_COLORS['weapon']),
+            SlotComponent(slot='mainhand'),
             WearableComponent()
         )
 
