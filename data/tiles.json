@@ -1,0 +1,21 @@
+{
+    "floor":
+    {
+        "position": true,
+        "render": {"char": ".", "color": "floor", "explored_color": "floor_explored"},
+        "tile": {"blocks_path": false, "blocks_sight": false}
+    },
+    "wall":
+    {
+        "position": true,
+        "render": {"char": "#", "color": "wall", "explored_color": "wall_explored"},
+        "tile": {"blocks_path": true, "blocks_sight": true}
+    },
+    "stairs":
+    {
+        "position": true,
+        "render": {"char": ">", "color": "stairs", "explored_color": "stairs_explored"},
+        "stairs": true,
+        "tile": {"blocks_path": false, "blocks_sight": false}
+    }
+}

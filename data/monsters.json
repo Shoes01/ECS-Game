@@ -1,0 +1,27 @@
+{
+    "demon":
+    {
+        "actor": true,
+        "boss": true,
+        "brain": true,
+        "energy": true,
+        "equipment": true,
+        "inventory": true,
+        "name": {"name": "Demon"},
+        "position": true,
+        "render": {"char": "&", "color": "demon"},
+        "stats": {"hp": 20, "power": 8}
+    },
+    "zombie":
+    {
+        "actor": true,
+        "brain": true,
+        "energy": true,
+        "equipment": true,
+        "inventory": true,
+        "name": {"name": "Zombie"},
+        "position": true,
+        "render": {"char": "Z", "color": "zombie"},
+        "stats": {"hp": 11, "power": 5}
+    }
+}

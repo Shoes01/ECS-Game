@@ -16,7 +16,6 @@ from components.position import PositionComponent
 from components.render import RenderComponent
 from components.stairs import StairsComponent
 from components.tile import TileComponent
-from fabricator import fabricate_entity
 
 class MapgenProcessor(esper.Processor):
     def __init__(self):
@@ -122,12 +121,12 @@ class MapgenProcessor(esper.Processor):
     def place_tiles(self, tiles):
         for (x, y), value in np.ndenumerate(tiles):
             if value == 0:
-                new_ent = fabricate_entity('floor', self.world)
+                new_ent = self.world.create_entity('floor')
                 new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                 new_ent_pos.x = x
                 new_ent_pos.y = y
             if value == 1:
-                new_ent = fabricate_entity('wall', self.world)
+                new_ent = self.world.create_entity('wall')
                 new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                 new_ent_pos.x = x
                 new_ent_pos.y = y
@@ -142,7 +141,7 @@ class MapgenProcessor(esper.Processor):
 
         ### DEBUG 
         """
-        new_ent = fabricate_entity('stairs', self.world)
+        new_ent = self.world.create_entity('stairs')
         
         new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
         new_ent_pos.x = player_pos.x
@@ -153,7 +152,7 @@ class MapgenProcessor(esper.Processor):
         if depth == FINAL_FLOOR:
             return 0
 
-        new_ent = fabricate_entity('stairs', self.world)
+        new_ent = self.world.create_entity('stairs')
         
         new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
         room = self._leaf_rooms.pop(random.randint(0, len(self._leaf_rooms) - 1))
@@ -169,7 +168,7 @@ class MapgenProcessor(esper.Processor):
             y = random.randint(boss_room.y, boss_room.y + boss_room.h - 1)
 
             if not tiles[x, y] and not tile_occupied(self.world, x, y):
-                new_ent = fabricate_entity('demon', self.world)
+                new_ent = self.world.create_entity('demon')
                 new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                 new_ent_pos.x = x
                 new_ent_pos.y = y
@@ -190,7 +189,7 @@ class MapgenProcessor(esper.Processor):
                 y = random.randint(room.y, room.y + room.h - 1)
                 
                 if not tiles[x, y] and not tile_occupied(self.world, x, y):
-                    new_ent = fabricate_entity('zombie', self.world)
+                    new_ent = self.world.create_entity('zombie')
                     new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                     new_ent_pos.x = x
                     new_ent_pos.y = y
@@ -209,9 +208,9 @@ class MapgenProcessor(esper.Processor):
                 if not tiles[x, y] and not tile_occupied(self.world, x, y):
                     chance = random.randint(0, 100)
                     if chance > 50:
-                        new_ent = self.world.entity_directory.create_entity('hammer', self.world)
+                        new_ent = self.world.create_entity('hammer')
                     else:
-                        new_ent = self.world.entity_directory.create_entity('hammer', self.world)
+                        new_ent = self.world.create_entity('hammer')
                     new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                     new_ent_pos.x = x
                     new_ent_pos.y = y

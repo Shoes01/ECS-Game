@@ -1,6 +1,38 @@
 import esper
+import json
 import tcod as libtcod
 
+from _data import ENTITY_COLORS
+from components.actor.actor import ActorComponent
+from components.actor.boss import BossComponent
+from components.actor.brain import BrainComponent
+from components.actor.energy import EnergyComponent
+from components.actor.equipment import EquipmentComponent
+from components.actor.inventory import InventoryComponent
+from components.actor.player import PlayerComponent
+from components.actor.stats import StatsComponent
+from components.actor.velocity import VelocityComponent
+from components.game.dijgen import DijgenComponent
+from components.game.end_game import EndGameComponent
+from components.game.map import MapComponent
+from components.game.message_log import MessageLogComponent
+from components.game.popup import PopupComponent
+from components.game.redraw import RedrawComponent
+from components.game.state import StateComponent
+from components.game.turn_count import TurnCountComponent
+from components.item.consumable import ConsumableComponent
+from components.item.item import ItemComponent
+from components.item.modifier import ModifierComponent
+from components.item.pickedup import PickedupComponent
+from components.item.slot import SlotComponent
+from components.item.wearable import WearableComponent
+from components.furniture import FurnitureComponent
+from components.name import NameComponent
+from components.persist import PersistComponent
+from components.position import PositionComponent
+from components.render import RenderComponent
+from components.stairs import StairsComponent
+from components.tile import TileComponent
 from processors.action import ActionProcessor
 from processors.ai_input import AiInputProcessor
 from processors.combat import CombatProcessor
@@ -24,9 +56,116 @@ from processors.render import RenderProcessor
 from processors.state import StateProcessor
 from processors.wearable import WearableProcessor
 
+class CustomWorld(esper.World):
+    def __init__(self):
+        super().__init__()
+        self._json_data = self.load_data()
+    
+    def load_data(self):
+        data = None
+
+        with open("data/items.json", "r") as read_file:
+            data = json.load(read_file)
+        with open("data/monsters.json", "r") as read_file:
+            data.update(json.load(read_file))
+        with open("data/tiles.json", "r") as read_file:
+            data.update(json.load(read_file))
+        
+        return data
+    
+    def create_entity(self, entity):
+        # TODO: Fix this somehow? Move the game entity to JSON as well?
+        if entity == 'game':
+            return super().create_entity(
+                EnergyComponent(),
+                MapComponent(),
+                MessageLogComponent(),
+                PersistComponent(),
+                PopupComponent(),
+                RedrawComponent(),
+                StateComponent(),
+                TurnCountComponent()
+            )
+        elif entity == 'player':
+            return super().create_entity(
+                ActorComponent(),
+                EnergyComponent(energy=0),
+                EquipmentComponent(),
+                InventoryComponent(),
+                NameComponent(name='Player'),
+                PersistComponent(),
+                PlayerComponent(),
+                PositionComponent(),
+                RenderComponent(char='@', color=ENTITY_COLORS['player']),
+                StatsComponent(hp=500, power=10)
+            )
+        
+        ent = super().create_entity()
+
+        for key, value in self._json_data[entity].items():
+            if key =='actor':
+                super().add_component(ent, ActorComponent())
+            
+            elif key == 'boss':
+                super().add_component(ent, BossComponent())
+            
+            elif key == 'brain':
+                super().add_component(ent, BrainComponent())
+            
+            elif key == 'energy':
+                super().add_component(ent, EnergyComponent())
+            
+            elif key == 'equipment':
+                super().add_component(ent, EquipmentComponent())
+            
+            elif key == 'item':
+                super().add_component(ent, ItemComponent())
+            
+            elif key == 'inventory':
+                super().add_component(ent, InventoryComponent())
+            
+            elif key == 'modifier':
+                power = value.get('power')
+                super().add_component(ent, ModifierComponent(power=power))
+            
+            elif key == 'name':
+                name = value.get('name')
+                super().add_component(ent, NameComponent(name=name))
+            
+            elif key == 'position':
+                super().add_component(ent, PositionComponent())
+            
+            elif key == 'render':
+                char = value.get('char')
+                color = value.get('color')
+                explored_color = value.get('explored_color')
+                super().add_component(ent, RenderComponent(char=char, color=ENTITY_COLORS[color], explored_color=ENTITY_COLORS.get('explored_color')))
+            
+            elif key == 'slot':
+                slot = value.get('slot')
+                super().add_component(ent, SlotComponent(slot=slot))
+            
+            elif key == 'stairs':
+                super().add_component(ent, StairsComponent())
+            
+            elif key == 'stats':
+                hp = value.get('hp')
+                power = value.get('power')
+                super().add_component(ent, StatsComponent(hp=hp, power=power))
+
+            elif key == 'tile':
+                blocks_path = value.get('blocks_path')
+                blocks_sight = value.get('blocks_sight')
+                super().add_component(ent, TileComponent(blocks_path=blocks_path, blocks_sight=blocks_sight))
+            
+            elif key == 'wearable':
+                super().add_component(ent, WearableComponent())
+        
+        return ent
+
 def build_world():
     # Create world.
-    world = esper.World()
+    world = CustomWorld()
 
     # Instantiate Processors.
     action_processor = ActionProcessor()
