@@ -103,7 +103,20 @@ class CustomWorld(esper.World):
         ent = super().create_entity()
 
         for key, value in self._json_data[entity].items():
-            if key =='actor':
+            # Check for archtypes. This makes JSONing the data easier.
+            if key == 'archtype':
+                if value == 'monster':
+                    super().add_component(ent, ActorComponent())
+                    super().add_component(ent, EnergyComponent())
+                    super().add_component(ent, EquipmentComponent())
+                    super().add_component(ent, InventoryComponent())
+                    super().add_component(ent, PositionComponent())
+                elif value == 'item':
+                    super().add_component(ent, ItemComponent())
+                    super().add_component(ent, PositionComponent())
+            
+            # Now just look for each and every component possible...
+            elif key == 'actor':
                 super().add_component(ent, ActorComponent())
             
             elif key == 'boss':
