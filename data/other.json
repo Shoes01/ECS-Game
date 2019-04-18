@@ -1,0 +1,12 @@
+{
+    "chest":
+    {
+        "actor": true,
+        "furniture": true,
+        "inventory": true,
+        "name": {"name": "Chest"},
+        "position": true,
+        "render": {"char": "(", "color": "chest"},
+        "stats": {"hp": 10, "power": 0}
+    }
+}

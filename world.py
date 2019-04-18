@@ -68,6 +68,8 @@ class CustomWorld(esper.World):
             data = json.load(read_file)
         with open("data/monsters.json", "r") as read_file:
             data.update(json.load(read_file))
+        with open("data/other.json", "r") as read_file:
+            data.update(json.load(read_file))
         with open("data/tiles.json", "r") as read_file:
             data.update(json.load(read_file))
         
@@ -130,6 +132,9 @@ class CustomWorld(esper.World):
             
             elif key == 'equipment':
                 super().add_component(ent, EquipmentComponent())
+            
+            elif key == 'furniture':
+                super().add_component(ent, FurnitureComponent())
             
             elif key == 'item':
                 super().add_component(ent, ItemComponent())
