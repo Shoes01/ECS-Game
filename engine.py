@@ -4,7 +4,7 @@ import tcod as libtcod
 
 from _data import con, eqp, log, map
 from components.game.state import StateComponent
-from fabricator import ItemDirectory
+from fabricator import EntityDirectory
 from processors.debug import DebugProcessor
 from processors.input import InputProcessor
 from processors.render import RenderProcessor
@@ -23,7 +23,7 @@ def main():
     world = build_world()
 
     # Assign the item directory to world.
-    world.item_directory = ItemDirectory(world)
+    world.entity_directory = EntityDirectory(world)
 
     # Insert input and display related objects into certain processors.
     world.get_processor(DebugProcessor)._consoles = consoles

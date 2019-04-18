@@ -32,14 +32,14 @@ from components.render import RenderComponent
 from components.stairs import StairsComponent
 from components.tile import TileComponent
 
-class ItemDirectory():
+class EntityDirectory():
     def __init__(self, world):
-        self.item_data = self.load_item_data()
+        self._entity_data = self.load_data()
     
-    def create_item(self, item, world):
+    def create_entity(self, entity, world):
         ent = world.create_entity()
 
-        for key, value in self.item_data[item].items():
+        for key, value in self._entity_data[entity].items():
             if key == 'item':
                 world.add_component(ent, ItemComponent())
             
@@ -68,11 +68,13 @@ class ItemDirectory():
         
         return ent
 
-    def load_item_data(self):
+    def load_data(self):
         data = None
 
         with open("data/items.json", "r") as read_file:
             data = json.load(read_file)
+        
+        # When more entities get moved to .json, then I will add more lines here, adding more to data.
         
         return data
                 

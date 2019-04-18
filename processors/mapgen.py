@@ -209,9 +209,9 @@ class MapgenProcessor(esper.Processor):
                 if not tiles[x, y] and not tile_occupied(self.world, x, y):
                     chance = random.randint(0, 100)
                     if chance > 50:
-                        new_ent = self.world.item_directory.create_item('hammer', self.world)
+                        new_ent = self.world.entity_directory.create_entity('hammer', self.world)
                     else:
-                        new_ent = self.world.item_directory.create_item('hammer', self.world)
+                        new_ent = self.world.entity_directory.create_entity('hammer', self.world)
                     new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                     new_ent_pos.x = x
                     new_ent_pos.y = y
