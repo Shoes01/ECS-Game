@@ -1,3 +1,5 @@
+import json
+
 from _data import ENTITY_COLORS
 from components.actor.actor import ActorComponent
 from components.actor.boss import BossComponent
@@ -30,6 +32,50 @@ from components.render import RenderComponent
 from components.stairs import StairsComponent
 from components.tile import TileComponent
 
+class ItemDirectory():
+    def __init__(self, world):
+        self.item_data = self.load_item_data()
+    
+    def create_item(self, item, world):
+        ent = world.create_entity()
+
+        for key, value in self.item_data[item].items():
+            if key == 'item':
+                world.add_component(ent, ItemComponent())
+            
+            elif key == 'modifier':
+                power = value.get('power')
+                world.add_component(ent, ModifierComponent(power=power))
+            
+            elif key == 'name':
+                name = value.get('name')
+                world.add_component(ent, NameComponent(name=name))
+            
+            elif key == 'position':
+                world.add_component(ent, PositionComponent())
+            
+            elif key == 'render':
+                char = value.get('char')
+                color = value.get('color')
+                world.add_component(ent, RenderComponent(char=char, color=ENTITY_COLORS[color]))
+            
+            elif key == 'slot':
+                slot = value.get('slot')
+                world.add_component(ent, SlotComponent(slot=slot))
+            
+            elif key == 'wearable':
+                world.add_component(ent, WearableComponent())
+        
+        return ent
+
+    def load_item_data(self):
+        data = None
+
+        with open("data/items.json", "r") as read_file:
+            data = json.load(read_file)
+        
+        return data
+                
 def fabricate_entity(ent, world):
     if ent == 'chest':
         return world.create_entity(

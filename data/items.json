@@ -1,0 +1,22 @@
+{
+    "sword":
+    {
+        "item": true,
+        "modifier": {"power": 5},
+        "name": {"name": "Sword"},
+        "position": true,
+        "render": {"char": ")", "color": "weapon"},
+        "slot": {"slot": "mainhand"},
+        "wearable": true
+    },
+    "hammer":
+    {
+        "item": true,
+        "modifier": {"power": 7},
+        "name": {"name": "Hammer"},
+        "position": true,
+        "render": {"char": ")", "color": "weapon"},
+        "slot": {"slot": "mainhand"},
+        "wearable": true
+    }
+}

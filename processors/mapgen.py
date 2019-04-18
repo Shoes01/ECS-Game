@@ -200,7 +200,7 @@ class MapgenProcessor(esper.Processor):
     def place_loot(self, tiles):
         for room in self._rooms:
             size = room.h + room.w
-            number_of_items = size // 5 - 3
+            number_of_items = size #// 5 - 3
 
             while number_of_items > 0:
                 x = random.randint(room.x, room.x + room.w - 1)
@@ -208,10 +208,10 @@ class MapgenProcessor(esper.Processor):
                 
                 if not tiles[x, y] and not tile_occupied(self.world, x, y):
                     chance = random.randint(0, 100)
-                    if chance > 80:
-                        new_ent = fabricate_entity('chest', self.world)
+                    if chance > 50:
+                        new_ent = self.world.item_directory.create_item('hammer', self.world)
                     else:
-                        new_ent = fabricate_entity('titan_potion', self.world)
+                        new_ent = self.world.item_directory.create_item('hammer', self.world)
                     new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                     new_ent_pos.x = x
                     new_ent_pos.y = y
