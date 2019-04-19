@@ -5,6 +5,7 @@ from components.actor.stats import StatsComponent
 from components.game.map import MapComponent
 from components.game.turn_count import TurnCountComponent
 from components.item.slot import SlotComponent
+from components.render import RenderComponent
 
 def render_stats(console_bundle, world):
     console, x, y, w, h = console_bundle
@@ -23,30 +24,37 @@ def render_stats(console_bundle, world):
 
     # Draw the item boxes.
     Q_color, W_color, E_color, A_color, S_color, D_color = color_invalid, color_invalid, color_invalid, color_invalid, color_invalid, color_invalid
+    Q_item, W_item, E_item, A_item, S_item, D_item = None, None, None, None, None, None
     for item in world.component_for_entity(2, EquipmentComponent).equipment:
         slot = world.component_for_entity(item, SlotComponent).slot
         if slot == 'mainhand':
             Q_color = color
+            Q_item = world.component_for_entity(item, RenderComponent)
         elif slot == 'head':
             W_color = color
+            W_item = world.component_for_entity(item, RenderComponent)
         elif slot == 'accessory':
             E_color = color
+            E_item = world.component_for_entity(item, RenderComponent)
         elif slot == 'offhand':
             A_color = color
+            A_item = world.component_for_entity(item, RenderComponent)
         elif slot == 'torso':
             S_color = color
+            S_item = world.component_for_entity(item, RenderComponent)
         elif slot == 'boots':
             D_color = color
-    
-    y_offset = 4
-    draw_letter_box(0, 0 + y_offset, 4, 4, 'Q', console, Q_color) # Slot: mainhand
-    draw_letter_box(4, 0 + y_offset, 4, 4, 'W', console, W_color) # Slot: head
-    draw_letter_box(8, 0 + y_offset, 4, 4, 'E', console, E_color) # Slot: Accessory
-    draw_letter_box(0, 4 + y_offset, 4, 4, 'A', console, A_color) # Slot: offhand
-    draw_letter_box(4, 4 + y_offset, 4, 4, 'S', console, S_color) # Slot: torso
-    draw_letter_box(8, 4 + y_offset, 4, 4, 'D', console, D_color) # Slot: boots
+            D_item = world.component_for_entity(item, RenderComponent)
 
-def draw_letter_box(x, y, w, h, char, console, color):
+    y_offset = 4
+    draw_letter_box(0, 0 + y_offset, 4, 4, 'Q', console, Q_color, Q_item) # Slot: mainhand
+    draw_letter_box(4, 0 + y_offset, 4, 4, 'W', console, W_color, W_item) # Slot: head
+    draw_letter_box(8, 0 + y_offset, 4, 4, 'E', console, E_color, E_item) # Slot: accessory
+    draw_letter_box(0, 4 + y_offset, 4, 4, 'A', console, A_color, A_item) # Slot: offhand
+    draw_letter_box(4, 4 + y_offset, 4, 4, 'S', console, S_color, S_item) # Slot: torso
+    draw_letter_box(8, 4 + y_offset, 4, 4, 'D', console, D_color, D_item) # Slot: boots
+
+def draw_letter_box(x, y, w, h, char, console, color, item):
     # Draw the little box, and put the letter in it.
     box = SingleLineBox()
     
@@ -64,3 +72,5 @@ def draw_letter_box(x, y, w, h, char, console, color):
     console.print(x + w - 1, y + h -1, box.bottom_right, color)
 
     console.print(x + 1, y + 1, char, color)
+    if item:
+        console.print(x + 2, y + 1, item.char, item.color)
