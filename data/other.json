@@ -6,7 +6,8 @@
         "inventory": true,
         "name": {"name": "Chest"},
         "position": true,
+        "rarity": 3,
         "render": {"char": "(", "color": "chest"},
-        "stats": {"hp": 10, "power": 0}
+        "stats": {"hp": 10}
     }
 }

@@ -64,7 +64,7 @@ class MapgenProcessor(esper.Processor):
         self.place_stairs(depth)
         self.place_monsters(depth, tiles)
         self.place_loot(tiles)
-        self.equip_monsters()
+        self.distribute_items()
 
         return tiles
 
@@ -208,17 +208,15 @@ class MapgenProcessor(esper.Processor):
                 if not tiles[x, y] and not tile_occupied(self.world, x, y):
                     chance = random.randint(0, 100)
                     if chance > 50:
-                        new_ent = self.world.create_entity('hammer')
-                    else:
-                        new_ent = self.world.create_entity('hammer')
-                    new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
-                    new_ent_pos.x = x
-                    new_ent_pos.y = y
+                        new_ent = self.world.create_entity('chest')
+                        new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
+                        new_ent_pos.x = x
+                        new_ent_pos.y = y
                     
                 number_of_items -= 1
 
-    def equip_monsters(self):
-        for ent, (actor, eqp, inv) in self.world.get_components(ActorComponent, EquipmentComponent, InventoryComponent):
+    def distribute_items(self):
+        for ent, (actor, inv) in self.world.get_components(ActorComponent, InventoryComponent):
             ### For each monster, give them an item. Equip it too.
             # The item need to be given a PickedupComponent
             # The entity needs to have the item added to their inventory, and to their equipment.

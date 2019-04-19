@@ -8,6 +8,7 @@
         "boss": true,
         "brain": true,
         "name": {"name": "Demon"},
+        "rarity": 7,
         "render": {"char": "&", "color": "demon"},
         "stats": {"hp": 20, "power": 8}
     },
@@ -17,6 +18,7 @@
 
         "brain": true,
         "name": {"name": "Zombie"},
+        "rarity": 0,
         "render": {"char": "Z", "color": "zombie"},
         "stats": {"hp": 11, "power": 5}
     }

@@ -30,9 +30,11 @@ from components.furniture import FurnitureComponent
 from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
+from components.rarity import RarityComponent
 from components.render import RenderComponent
 from components.stairs import StairsComponent
 from components.tile import TileComponent
+
 from processors.action import ActionProcessor
 from processors.ai_input import AiInputProcessor
 from processors.combat import CombatProcessor
@@ -60,6 +62,7 @@ class CustomWorld(esper.World):
     def __init__(self):
         super().__init__()
         self._json_data = self.load_data()
+        self.item_table, self.monster_table = self.load_tables()
     
     def load_data(self):
         data = None
@@ -74,6 +77,22 @@ class CustomWorld(esper.World):
             data.update(json.load(read_file))
         
         return data
+    
+    def load_tables(self):
+        item_table = {0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: []}
+        monster_table = {0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: []}
+        
+        for ent, components in self._json_data.items():
+            if ent == 'comment': continue
+            rarity = components.get('rarity')
+            archtype = components.get('archtype')
+            if rarity is not None:
+                if archtype == 'monster':
+                    monster_table[rarity].append(ent)
+                elif archtype == 'item':
+                    item_table[rarity].append(ent)
+        
+        return item_table, monster_table
     
     def create_entity(self, entity):
         # TODO: Fix this somehow? Move the game entity to JSON as well?
@@ -108,76 +127,80 @@ class CustomWorld(esper.World):
             # Check for archtypes. This makes JSONing the data easier.
             if key == 'archtype':
                 if value == 'monster':
-                    super().add_component(ent, ActorComponent())
-                    super().add_component(ent, EnergyComponent())
-                    super().add_component(ent, EquipmentComponent())
-                    super().add_component(ent, InventoryComponent())
-                    super().add_component(ent, PositionComponent())
+                    self.add_component(ent, ActorComponent())
+                    self.add_component(ent, EnergyComponent())
+                    self.add_component(ent, EquipmentComponent())
+                    self.add_component(ent, InventoryComponent())
+                    self.add_component(ent, PositionComponent())
                 elif value == 'item':
-                    super().add_component(ent, ItemComponent())
-                    super().add_component(ent, PositionComponent())
+                    self.add_component(ent, ItemComponent())
+                    self.add_component(ent, PositionComponent())
             
             # Now just look for each and every component possible...
             elif key == 'actor':
-                super().add_component(ent, ActorComponent())
+                self.add_component(ent, ActorComponent())
             
             elif key == 'boss':
-                super().add_component(ent, BossComponent())
+                self.add_component(ent, BossComponent())
             
             elif key == 'brain':
-                super().add_component(ent, BrainComponent())
+                self.add_component(ent, BrainComponent())
             
             elif key == 'energy':
-                super().add_component(ent, EnergyComponent())
+                self.add_component(ent, EnergyComponent())
             
             elif key == 'equipment':
-                super().add_component(ent, EquipmentComponent())
+                self.add_component(ent, EquipmentComponent())
             
             elif key == 'furniture':
-                super().add_component(ent, FurnitureComponent())
+                self.add_component(ent, FurnitureComponent())
             
             elif key == 'item':
-                super().add_component(ent, ItemComponent())
+                self.add_component(ent, ItemComponent())
             
             elif key == 'inventory':
-                super().add_component(ent, InventoryComponent())
+                self.add_component(ent, InventoryComponent())
             
             elif key == 'modifier':
                 power = value.get('power')
-                super().add_component(ent, ModifierComponent(power=power))
+                self.add_component(ent, ModifierComponent(power=power))
             
             elif key == 'name':
                 name = value.get('name')
-                super().add_component(ent, NameComponent(name=name))
+                self.add_component(ent, NameComponent(name=name))
             
             elif key == 'position':
-                super().add_component(ent, PositionComponent())
+                self.add_component(ent, PositionComponent())
             
+            elif key == 'rarity':
+                rarity = value
+                self.add_component(ent, RarityComponent(rarity=rarity))
+
             elif key == 'render':
                 char = value.get('char')
                 color = value.get('color')
                 explored_color = value.get('explored_color')
-                super().add_component(ent, RenderComponent(char=char, color=ENTITY_COLORS[color], explored_color=ENTITY_COLORS.get('explored_color')))
+                self.add_component(ent, RenderComponent(char=char, color=ENTITY_COLORS[color], explored_color=ENTITY_COLORS.get(explored_color)))
             
             elif key == 'slot':
                 slot = value.get('slot')
-                super().add_component(ent, SlotComponent(slot=slot))
+                self.add_component(ent, SlotComponent(slot=slot))
             
             elif key == 'stairs':
-                super().add_component(ent, StairsComponent())
+                self.add_component(ent, StairsComponent())
             
             elif key == 'stats':
                 hp = value.get('hp')
                 power = value.get('power')
-                super().add_component(ent, StatsComponent(hp=hp, power=power))
+                self.add_component(ent, StatsComponent(hp=hp, power=power))
 
             elif key == 'tile':
                 blocks_path = value.get('blocks_path')
                 blocks_sight = value.get('blocks_sight')
-                super().add_component(ent, TileComponent(blocks_path=blocks_path, blocks_sight=blocks_sight))
+                self.add_component(ent, TileComponent(blocks_path=blocks_path, blocks_sight=blocks_sight))
             
             elif key == 'wearable':
-                super().add_component(ent, WearableComponent())
+                self.add_component(ent, WearableComponent())
         
         return ent
 
