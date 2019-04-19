@@ -1,5 +1,5 @@
 # Custome git ignore files
-TODO.md
+*.md
 *.dat
 *.bak
 *.dir
