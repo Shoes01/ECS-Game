@@ -31,6 +31,9 @@ class InputProcessor(esper.Processor):
 
         self.world.get_processor(DebugProcessor)._input = (key, mouse)
 
+        if mouse:
+            self.world.component_for_entity(1, EventsComponent).events.append({'mouse_pos': (mouse.tile.x, mouse.tile.y)})
+
         if key is None:
             return 0
 
