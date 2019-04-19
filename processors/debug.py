@@ -3,6 +3,7 @@ import numpy as np
 import tcod as libtcod
 
 from components.game.debug import DebugComponent
+from components.game.input import InputComponent
 from components.game.state import StateComponent
 from components.game.map import MapComponent
 from components.game.redraw import RedrawComponent
@@ -11,12 +12,12 @@ class DebugProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
         self._consoles = {}
-        self._input = (None, None)
     
     def process(self):
         if self.world.has_component(1, DebugComponent) and self.world.component_for_entity(1, StateComponent).state == 'Game':
             dijkstra_map = self.world.component_for_entity(1, MapComponent).dijkstra_map
-            key, mouse = self._input
+            input_component = self.world.component_for_entity(1, InputComponent)
+            key, mouse_pos = input_component.key, input_component.mouse_pos
             key_char = None
             con_obj = self._consoles['con'] # type: (console, x, y, w, h)
             map_obj = self._consoles['map']
@@ -38,8 +39,8 @@ class DebugProcessor(esper.Processor):
                         map_obj[0].print(x, y, baseN(value, 35), libtcod.pink)
                 
             # Display mouse information.
-            if mouse:
-                m_x, m_y = mouse.tile
+            if mouse_pos:
+                m_x, m_y = mouse_pos
                 _string = 'Console coordinate: {:>8}'.format(str((m_x, m_y)))
                 con_obj[0].print(log_obj[1], log_obj[2], _string, libtcod.white, bg_blend=libtcod.BKGND_NONE)
                 

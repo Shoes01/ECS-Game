@@ -9,7 +9,6 @@ from components.actor.player import PlayerComponent
 from components.game.events import EventsComponent
 from components.game.popup import PopupComponent, PopupMenu, PopupChoice
 from components.game.state import StateComponent
-from processors.debug import DebugProcessor
 
 class InputProcessor(esper.Processor):
     def __init__(self):
@@ -28,8 +27,6 @@ class InputProcessor(esper.Processor):
                 key = event
             elif event.type == 'MOUSEMOTION':
                 mouse = event
-
-        self.world.get_processor(DebugProcessor)._input = (key, mouse)
 
         if mouse:
             self.world.component_for_entity(1, EventsComponent).events.append({'mouse_pos': (mouse.tile.x, mouse.tile.y)})
