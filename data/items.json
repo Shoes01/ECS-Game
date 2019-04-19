@@ -1,6 +1,8 @@
 {
     "comment": "The 'item' archtype bestows a lot of blank components: Item, Position.",
 
+    "comment": "########################## RARITY ZERO ITEMS ##########################",
+
     "sword":
     {
         "archtype": "item",
@@ -12,6 +14,9 @@
         "slot": {"slot": "mainhand"},
         "wearable": true
     },
+
+    "comment": "########################## RARITY ONE ITEMS ##########################",
+
     "hammer":
     {
         "archtype": "item",
@@ -21,6 +26,62 @@
         "rarity": 1,
         "render": {"char": ")", "color": "weapon"},
         "slot": {"slot": "mainhand"},
+        "wearable": true
+    },
+
+    "comment": "########################## RARITY TWO ITEMS ##########################",
+
+    "long_sword":
+    {
+        "archtype": "item",
+
+        "modifier": {"power": 10},
+        "name": {"name": "Long Sword"},
+        "rarity": 2,
+        "render": {"char": ")", "color": "weapon"},
+        "slot": {"slot": "mainhand"},
+        "wearable": true
+    },
+
+    "comment": "########################## RARITY THREE ITEMS ##########################",
+
+    "great_sword":
+    {
+        "archtype": "item",
+
+        "modifier": {"power": 15},
+        "name": {"name": "Great Sword"},
+        "rarity": 3,
+        "render": {"char": ")", "color": "weapon"},
+        "slot": {"slot": "mainhand"},
+        "wearable": true
+    },
+
+    "comment": "########################## RARITY FOUR ITEMS ##########################",
+
+    "war_hammer":
+    {
+        "archtype": "item",
+
+        "modifier": {"power": 22},
+        "name": {"name": "War Hammer"},
+        "rarity": 4,
+        "render": {"char": ")", "color": "weapon"},
+        "slot": {"slot": "mainhand"},
+        "wearable": true
+    },
+
+    "comment": "########################## RARITY FIVE ITEMS ##########################",
+
+    "dagger":
+    {
+        "archtype": "item",
+
+        "modifier": {"power": 15},
+        "name": {"name": "Dagger"},
+        "rarity": 5,
+        "render": {"char": ")", "color": "weapon"},
+        "slot": {"slot": "offhand"},
         "wearable": true
     }
 }

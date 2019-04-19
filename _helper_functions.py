@@ -32,6 +32,12 @@ def load_game(world):
         world._components = data_file['components']
         world._entities = data_file['entities']
 
+def loot_algorithm(chance, monster, item, floor):
+    net_rarity = (1 + (monster)*5 - (item - 3)*5 + (floor)*5)
+    if chance > (100 - net_rarity):
+        return True
+    return False
+
 def save_game(next_entity_id, components, entities):
     with shelve.open('savegame', 'n') as data_file:
         data_file['next_entity_id'] = next_entity_id

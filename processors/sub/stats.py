@@ -18,7 +18,7 @@ def render_stats(console_bundle, world):
     console.print(0, 0, 'HP: {0}/{1}'.format(player_stats_component.hp, player_stats_component.hp_max), color)
     console.print(0, 1, 'PWR: {0}'.format(calculate_power(2, world)), color)
     console.print(0, 2, 'TURN: {0}'.format(world.component_for_entity(1, TurnCountComponent).turn_count), color)
-    console.print(0, 3, 'DPTH: {0}'.format(world.component_for_entity(1, MapComponent).depth), color)
+    console.print(0, 3, 'FLOOR: {0}'.format(world.component_for_entity(1, MapComponent).floor), color)
 
 
     # Draw the item boxes.

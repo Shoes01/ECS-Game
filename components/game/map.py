@@ -8,4 +8,4 @@ class MapComponent():
         self.fov_map = None
         self.tiles = None
         self.width = map.w
-        self.depth = 0
+        self.floor = 0

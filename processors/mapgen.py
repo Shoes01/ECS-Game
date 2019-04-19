@@ -4,15 +4,18 @@ import random
 import tcod as libtcod
 
 from _data import FINAL_FLOOR
-from _helper_functions import tile_occupied
+from _helper_functions import loot_algorithm, tile_occupied
 from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
 from components.game.map import MapComponent
 from components.game.mapgen import MapgenComponent
 from components.item.pickedup import PickedupComponent
+from components.item.wearable import WearableComponent
+from components.furniture import FurnitureComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
+from components.rarity import RarityComponent
 from components.render import RenderComponent
 from components.stairs import StairsComponent
 from components.tile import TileComponent
@@ -26,10 +29,10 @@ class MapgenProcessor(esper.Processor):
     def process(self):
         if self.world.has_component(1, MapgenComponent):
             game_map = self.world.component_for_entity(1, MapComponent)
-            game_map.depth += 1
+            game_map.floor += 1
 
             # Create new map.
-            game_map.tiles = self.create_map(game_map.depth, game_map.height, game_map.width)
+            game_map.tiles = self.create_map(game_map.floor, game_map.height, game_map.width)
             
             # Create directory of map.
             game_map.directory = self.create_directory(game_map.height, game_map.tiles, game_map.width)
@@ -37,7 +40,7 @@ class MapgenProcessor(esper.Processor):
             # Create fov map.
             game_map.fov_map = self.create_fov_map(game_map.height, game_map.width)
 
-    def create_map(self, depth, h, w):
+    def create_map(self, floor, h, w):
         tiles = np.ones([w, h], dtype=int, order='F')
         self._rooms = []
         self._leaf_rooms = []
@@ -61,10 +64,10 @@ class MapgenProcessor(esper.Processor):
         self.clear_entities()
         self.place_tiles(tiles)
         self.place_player()
-        self.place_stairs(depth)
-        self.place_monsters(depth, tiles)
+        self.place_stairs(floor)
+        self.place_monsters(floor, tiles)
         self.place_loot(tiles)
-        self.distribute_items()
+        self.distribute_items(floor)
 
         return tiles
 
@@ -148,8 +151,8 @@ class MapgenProcessor(esper.Processor):
         new_ent_pos.y = player_pos.y
         """
 
-    def place_stairs(self, depth):
-        if depth == FINAL_FLOOR:
+    def place_stairs(self, floor):
+        if floor == FINAL_FLOOR:
             return 0
 
         new_ent = self.world.create_entity('stairs')
@@ -159,8 +162,8 @@ class MapgenProcessor(esper.Processor):
         new_ent_pos.x = random.randint(room.x + 1, room.x + room.w - 2)
         new_ent_pos.y = random.randint(room.y + 1, room.y + room.h - 2)
 
-    def place_monsters(self, depth, tiles):
-        if depth == FINAL_FLOOR:
+    def place_monsters(self, floor, tiles):
+        if floor == FINAL_FLOOR:
             boss_room = self._leaf_rooms.pop(random.randint(0, len(self._leaf_rooms) - 1))
             self._rooms.remove(boss_room)
 
@@ -199,7 +202,7 @@ class MapgenProcessor(esper.Processor):
     def place_loot(self, tiles):
         for room in self._rooms:
             size = room.h + room.w
-            number_of_items = size #// 5 - 3
+            number_of_items = size // 5 - 3
 
             while number_of_items > 0:
                 x = random.randint(room.x, room.x + room.w - 1)
@@ -215,12 +218,22 @@ class MapgenProcessor(esper.Processor):
                     
                 number_of_items -= 1
 
-    def distribute_items(self):
-        for ent, (actor, inv) in self.world.get_components(ActorComponent, InventoryComponent):
-            ### For each monster, give them an item. Equip it too.
-            # The item need to be given a PickedupComponent
-            # The entity needs to have the item added to their inventory, and to their equipment.
-            continue
+    def distribute_items(self, floor):
+        for ent, (actor, inv, rar) in self.world.get_components(ActorComponent, InventoryComponent, RarityComponent):
+            loot = self.generate_loot(floor, rar.rarity)
+            if loot:
+                new_ent = self.world.create_entity(loot)
+                inv.inventory.append(new_ent)
+                if self.world.has_component(ent, EquipmentComponent) and self.world.has_component(new_ent, WearableComponent):
+                    self.world.component_for_entity(ent, EquipmentComponent).equipment.append(new_ent)
+                self.world.add_component(new_ent, PickedupComponent())
+    
+    def generate_loot(self, floor, ent_rarity):
+        item_table = self.world.item_table
+        for x in reversed(range(0, len(item_table))):
+            chance = random.randint(0, 100)
+            if item_table[x] and loot_algorithm(chance=chance, monster=ent_rarity, item=x, floor=floor):
+                return random.choice(item_table[x])
 
     def create_directory(self, h, tiles, w):
         directory = {}
