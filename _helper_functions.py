@@ -6,6 +6,7 @@ from components.actor.equipment import EquipmentComponent
 from components.actor.stats import StatsComponent
 from components.game.message_log import MessageLogComponent
 from components.game.state import StateComponent
+from components.item.item import ItemComponent
 from components.item.modifier import ModifierComponent
 from components.position import PositionComponent
 
@@ -43,6 +44,13 @@ def save_game(next_entity_id, components, entities):
         data_file['next_entity_id'] = next_entity_id
         data_file['components'] = components
         data_file['entities'] = entities
+
+def tile_has_items(world, x, y):
+    items = []
+    for ent, (item, pos) in world.get_components(ItemComponent, PositionComponent):
+        if pos.x == x and pos.y == y:
+            items.append(ent)
+    return items
 
 def tile_occupied(world, x, y):
     for ent, (actor, pos) in world.get_components(ActorComponent, PositionComponent):

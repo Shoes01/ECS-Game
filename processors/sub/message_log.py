@@ -35,6 +35,7 @@ def render_message_log(console_bundle, world):
         _game_saved = message.get('game_saved')
         _heal = message.get('heal')
         _max_hp = message.get('max_hp')
+        _move_items = message.get('move_items')
         _pickup = message.get('pickup')
         _remove = message.get('remove')
         _wear = message.get('wear')
@@ -95,6 +96,16 @@ def render_message_log(console_bundle, world):
 
             console.print(0, 0 + dy, '(Turn %s) Your max hp increases by %s point(s).' % (turn, value), LOG_COLORS['success'])
         
+        if _move_items:
+            turn, name, number = _move_items
+
+            if name:
+                console.print(0, 0 + dy, '(Turn %s) There is a %s here.' % (turn, name), LOG_COLORS['warning'])
+            else:
+                console.print(0, 0 + dy, '(Turn %s) There are %s items here.' % (turn, str(number)), LOG_COLORS['warning'])
+                
+                
+
         if _pickup:
             name, success, turn = _pickup
 
