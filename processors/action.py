@@ -11,7 +11,6 @@ from components.actor.remove import RemoveComponent
 from components.actor.velocity import VelocityComponent
 from components.actor.wait import WaitComponent
 from components.actor.wear import WearComponent
-from components.game.events import EventsComponent
 from components.game.dijgen import DijgenComponent
 from components.game.turn_count import TurnCountComponent
 

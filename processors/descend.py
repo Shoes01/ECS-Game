@@ -14,7 +14,7 @@ class DescendProcessor(esper.Processor):
             # Look to see if we are standing on stairs.
             for stairs, (s_pos, _) in self.world.get_components(PositionComponent, StairsComponent):
                 if pos.x == s_pos.x and pos.y == s_pos.y:
-                    self.world.add_component(1, EventsComponent(events=[{'new_map': True}]))
+                    self.world.component_for_entity(1, EventsComponent).events.append({'new_map': True})
                     break
             else:
                 self.world.remove_component(ent, DescendComponent)

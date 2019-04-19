@@ -131,4 +131,4 @@ class InputProcessor(esper.Processor):
         
         # Attach event component to world entity. It does not have to be the player's turn for this to happen.
         if events:
-            self.world.add_component(1, EventsComponent(events=events)) # 1 is world entity
+            self.world.component_for_entity(1, EventsComponent).events.extend(events)

@@ -46,12 +46,12 @@ class DeathProcessor(esper.Processor):
                 self.world.delete_entity(ent)
                 return 0
             elif ent == 2:
-                self.world.add_component(1, EventsComponent(events=[{'player_killed': True}]))
+                self.world.component_for_entity(1, EventsComponent).events.append({'player_killed': True})
             else:
                 self.world.remove_component(ent, BrainComponent)
             
             if self.world.has_component(ent, BossComponent):
-                self.world.add_component(1, EventsComponent(events=[{'boss_killed': True}]))
+                self.world.component_for_entity(1, EventsComponent).events.append({'boss_killed': True})
 
             self.world.remove_component(ent, ActorComponent)
             if self.world.has_component(ent, CombatComponent): self.world.remove_component(ent, CombatComponent)

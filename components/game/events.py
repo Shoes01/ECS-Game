@@ -1,3 +1,3 @@
 class EventsComponent():
-    def __init__(self, events):
-        self.events = events
+    def __init__(self, events=None):
+        self.events = []
