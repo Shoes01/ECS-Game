@@ -6,6 +6,7 @@ from components.game.debug import DebugComponent
 from components.game.dijgen import DijgenComponent
 from components.game.end_game import EndGameComponent
 from components.game.events import EventsComponent
+from components.game.input import InputComponent
 from components.game.map import MapComponent
 from components.game.mapgen import MapgenComponent
 from components.game.message_log import MessageLogComponent
@@ -32,7 +33,9 @@ class EventProcessor(esper.Processor):
                 _boss_killed = event.get('boss_killed')
                 _close_popup_menu = event.get('close_popup_menu')
                 _exit = event.get('exit')
+                _key_stroke = event.get('key_stroke')
                 _load_game = event.get('load_game')
+                _mouse_pos = event.get('mouse_pos')
                 _new_map = event.get('new_map')
                 _player_killed = event.get('player_killed')
                 _pop_popup_menu = event.get('pop_popup_menu')
@@ -53,10 +56,19 @@ class EventProcessor(esper.Processor):
                 if _exit:
                     self.world.add_component(1, EndGameComponent())
 
+                if _key_stroke:
+                    key = _key_stroke
+                    self.world.component_for_entity(1, InputComponent).key = key
+                    self.world.component_for_entity(1, InputComponent).mouse_pos = None
+
                 if _load_game:
                     load_game(self.world)
                     events.append({'close_popup_menu': True})
                     self.world.component_for_entity(1, MessageLogComponent).messages.append({'game_loaded': True})
+
+                if _mouse_pos:
+                    x, y = _mouse_pos
+                    self.world.component_for_entity(1, InputComponent).mouse_pos = (x, y)
 
                 if _new_map:
                     self.world.add_component(1, MapgenComponent())
