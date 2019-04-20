@@ -9,7 +9,6 @@ from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
 from components.game.map import MapComponent
-from components.game.mapgen import MapgenComponent
 from components.item.pickedup import PickedupComponent
 from components.item.wearable import WearableComponent
 from components.furniture import FurnitureComponent
@@ -27,7 +26,7 @@ class MapgenProcessor(esper.Processor):
         self._leaf_rooms = []
 
     def process(self):
-        if self.world.has_component(1, MapgenComponent):
+        if self.world.generate_map:
             game_map = self.world.component_for_entity(1, MapComponent)
             game_map.floor += 1
 

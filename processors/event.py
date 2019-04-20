@@ -7,7 +7,6 @@ from components.game.end_game import EndGameComponent
 from components.game.events import EventsComponent
 from components.game.input import InputComponent
 from components.game.map import MapComponent
-from components.game.mapgen import MapgenComponent
 from components.game.message_log import MessageLogComponent
 from components.game.popup import PopupComponent
 from components.game.state import StateComponent
@@ -82,7 +81,7 @@ class EventProcessor(esper.Processor):
                 cursor_component.y += dy
 
             if _new_map:
-                self.world.add_component(1, MapgenComponent())
+                self.world.generate_map = True
                 self.world.create_dijkstra_map = True
 
             if _player_killed:

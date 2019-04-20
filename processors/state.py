@@ -3,7 +3,6 @@ import esper
 from components.actor.player import PlayerComponent
 from components.game.cursor import CursorComponent
 from components.game.end_game import EndGameComponent
-from components.game.mapgen import MapgenComponent
 from components.game.popup import PopupComponent
 from components.game.state import StateComponent
 from components.game.victory import VictoryComponent
@@ -29,8 +28,8 @@ class StateProcessor(esper.Processor):
                 state_component.state = 'GameOver'
             if self.world.component_for_entity(1, PopupComponent).menus:
                 state_component.state = 'PopupMenu'
-            if self.world.has_component(1, MapgenComponent):
-                self.world.remove_component(1, MapgenComponent)
+            if self.world.generate_map:
+                self.world.generate_map = False
             if self.world.has_component(1, VictoryComponent):
                 self.world.remove_component(1, VictoryComponent)
                 state_component.state = 'VictoryScreen'
@@ -52,8 +51,8 @@ class StateProcessor(esper.Processor):
                 state_component.state = 'Game'
 
         elif state_component.state == 'MainMenu':
-            if self.world.has_component(1, MapgenComponent):
-                self.world.remove_component(1, MapgenComponent)
+            if self.world.generate_map:
+                self.world.generate_map = False
                 state_component.state = 'Game'
             if self.world.has_component(1, EndGameComponent):
                 self.world.remove_component(1, EndGameComponent)

@@ -11,7 +11,7 @@ class DijkstraProcessor(esper.Processor):
         super().__init__()
 
     def process(self):
-        if self.world.create_dijkstra_map == True:
+        if self.world.create_dijkstra_map:
             game_map = self.world.component_for_entity(1, MapComponent)
             player_pos = self.world.component_for_entity(2, PositionComponent)
 
