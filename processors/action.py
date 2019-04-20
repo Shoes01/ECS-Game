@@ -12,7 +12,6 @@ from components.actor.remove import RemoveComponent
 from components.actor.velocity import VelocityComponent
 from components.actor.wait import WaitComponent
 from components.actor.wear import WearComponent
-from components.game.dijgen import DijgenComponent
 from components.game.turn_count import TurnCountComponent
 from components.position import PositionComponent
 
@@ -64,13 +63,13 @@ class ActionProcessor(esper.Processor):
                 r = math.sqrt( dx**2 + dy**2)
 
                 self.world.add_component(ent, VelocityComponent(dx=round(dx/r), dy=round(dy/r)))
-                self.world.add_component(1, DijgenComponent())
+                self.world.create_dijkstra_map = True
 
 
             if _move:
                 dx, dy = _move
                 self.world.add_component(ent, VelocityComponent(dx=dx, dy=dy))
-                self.world.add_component(1, DijgenComponent())
+                self.world.create_dijkstra_map = True
             
             if _pick_up:
                 if _pick_up is True:

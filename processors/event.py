@@ -3,7 +3,6 @@ import esper
 from _helper_functions import load_game, save_game
 from components.actor.player import PlayerComponent
 from components.game.cursor import CursorComponent
-from components.game.dijgen import DijgenComponent
 from components.game.end_game import EndGameComponent
 from components.game.events import EventsComponent
 from components.game.input import InputComponent
@@ -84,7 +83,7 @@ class EventProcessor(esper.Processor):
 
             if _new_map:
                 self.world.add_component(1, MapgenComponent())
-                self.world.add_component(1, DijgenComponent())
+                self.world.create_dijkstra_map = True
 
             if _player_killed:
                 self.world.component_for_entity(2, PlayerComponent).killed = True

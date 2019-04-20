@@ -13,7 +13,6 @@ from components.actor.inventory import InventoryComponent
 from components.actor.player import PlayerComponent
 from components.actor.stats import StatsComponent
 from components.actor.velocity import VelocityComponent
-from components.game.dijgen import DijgenComponent
 from components.game.end_game import EndGameComponent
 from components.game.events import EventsComponent
 from components.game.input import InputComponent

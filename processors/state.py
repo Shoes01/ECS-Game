@@ -2,7 +2,6 @@ import esper
 
 from components.actor.player import PlayerComponent
 from components.game.cursor import CursorComponent
-from components.game.dijgen import DijgenComponent
 from components.game.end_game import EndGameComponent
 from components.game.mapgen import MapgenComponent
 from components.game.popup import PopupComponent

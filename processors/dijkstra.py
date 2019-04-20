@@ -3,7 +3,6 @@ import numpy as np
 
 from collections import deque
 from components.actor.actor import ActorComponent
-from components.game.dijgen import DijgenComponent
 from components.game.map import MapComponent
 from components.position import PositionComponent
 
@@ -12,7 +11,7 @@ class DijkstraProcessor(esper.Processor):
         super().__init__()
 
     def process(self):
-        if self.world.has_component(1, DijgenComponent):
+        if self.world.create_dijkstra_map == True:
             game_map = self.world.component_for_entity(1, MapComponent)
             player_pos = self.world.component_for_entity(2, PositionComponent)
 
@@ -48,4 +47,4 @@ class DijkstraProcessor(esper.Processor):
             game_map.dijkstra_map = dijkstra_map
             game_map.directory = directory
 
-            self.world.remove_component(1, DijgenComponent)
+            self.world.create_dijkstra_map = False
