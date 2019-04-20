@@ -10,6 +10,7 @@ class GameWorld(world.CustomWorld):
         self.generate_map = False
         self.view_log = False
         self.popup_menus = []
+        self.victory = False
 
 class PopupChoice():
     ' This is a single entry into the popup menu. '

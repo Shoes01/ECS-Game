@@ -9,7 +9,6 @@ from components.game.input import InputComponent
 from components.game.map import MapComponent
 from components.game.message_log import MessageLogComponent
 from components.game.state import StateComponent
-from components.game.victory import VictoryComponent
 from processors.initial import InitialProcessor
 from processors.final import FinalProcessor
 
@@ -44,7 +43,7 @@ class EventProcessor(esper.Processor):
             _view_log = event.get('view_log')
 
             if _boss_killed:
-                self.world.add_component(1, VictoryComponent())
+                self.world.victory = True
 
             if _close_popup_menu:
                 menus = self.world.popup_menus
