@@ -7,9 +7,9 @@ from components.actor.wear import WearComponent
 from components.item.slot import SlotComponent
 from components.item.wearable import WearableComponent
 from components.game.message_log import MessageLogComponent
-from components.game.popup import PopupComponent, PopupMenu, PopupChoice
 from components.game.turn_count import TurnCountComponent
 from components.name import NameComponent
+from game import PopupMenu, PopupChoice
 
 class WearableProcessor(esper.Processor):
     def __init__(self):
@@ -32,7 +32,7 @@ class WearableProcessor(esper.Processor):
                     menu.contents.append(PopupChoice(name=_name, key=_key, result=_result))
                     n += 1
                 
-                self.world.component_for_entity(1, PopupComponent).menus.append(menu)
+                self.world.popup_menus.append(menu)
                 self.world.remove_component(ent, WearComponent)
 
             else:

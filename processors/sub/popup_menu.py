@@ -1,12 +1,11 @@
 from _data import map, UI_COLORS
-from components.game.popup import PopupComponent
 
 def render_popup_menu(console_bundle, world):
-    if not world.has_component(1, PopupComponent):
+    if not world.popup_menus:
         return
 
     console = console_bundle[0]
-    menus = world.component_for_entity(1, PopupComponent).menus
+    menus = world.popup_menus
     if not menus:
         return 0
 

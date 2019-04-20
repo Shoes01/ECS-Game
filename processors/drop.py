@@ -5,11 +5,11 @@ from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
 from components.item.pickedup import PickedupComponent
 from components.game.message_log import MessageLogComponent
-from components.game.popup import PopupComponent, PopupMenu, PopupChoice
 from components.game.turn_count import TurnCountComponent
 from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
+from game import PopupMenu, PopupChoice
 
 class DropProcessor(esper.Processor):
     def __init__(self):
@@ -34,7 +34,7 @@ class DropProcessor(esper.Processor):
                     menu.contents.append(PopupChoice(name=_name, key=_key, result=_result))
                     n += 1
                 
-                self.world.component_for_entity(1, PopupComponent).menus.append(menu)
+                self.world.popup_menus.append(menu)
                 self.world.remove_component(ent, DropComponent)
             
             else:

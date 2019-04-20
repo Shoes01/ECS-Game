@@ -7,9 +7,9 @@ from components.actor.actor import ActorComponent
 from components.actor.energy import EnergyComponent
 from components.actor.player import PlayerComponent
 from components.game.events import EventsComponent
-from components.game.popup import PopupComponent, PopupMenu, PopupChoice
 from components.game.state import StateComponent
 from components.position import PositionComponent
+from game import PopupMenu, PopupChoice
 
 class InputProcessor(esper.Processor):
     def __init__(self):
@@ -49,7 +49,7 @@ class InputProcessor(esper.Processor):
             events.append({'toggle_debug': True})
 
         if game_state_component.state == 'PopupMenu':
-            menu = self.world.component_for_entity(1, PopupComponent).menus[-1]
+            menu = self.world.popup_menus[-1]
             
             for choice in menu.contents:
                 if key_char == choice.key:

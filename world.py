@@ -18,7 +18,6 @@ from components.game.events import EventsComponent
 from components.game.input import InputComponent
 from components.game.map import MapComponent
 from components.game.message_log import MessageLogComponent
-from components.game.popup import PopupComponent
 from components.game.redraw import RedrawComponent
 from components.game.state import StateComponent
 from components.game.turn_count import TurnCountComponent
@@ -95,7 +94,6 @@ class CustomWorld(esper.World):
                 MapComponent(),
                 MessageLogComponent(),
                 PersistComponent(),
-                PopupComponent(),
                 RedrawComponent(),
                 StateComponent(),
                 TurnCountComponent()

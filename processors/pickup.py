@@ -3,13 +3,13 @@ import esper
 from components.actor.inventory import InventoryComponent
 from components.actor.pickup import PickupComponent
 from components.game.message_log import MessageLogComponent
-from components.game.popup import PopupComponent, PopupMenu, PopupChoice
 from components.game.turn_count import TurnCountComponent
 from components.item.item import ItemComponent
 from components.item.pickedup import PickedupComponent
 from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
+from game import PopupMenu, PopupChoice
 
 class PickupProcessor(esper.Processor):
     def __init__(self):
@@ -45,7 +45,7 @@ class PickupProcessor(esper.Processor):
                         menu.contents.append(PopupChoice(name=_name, key=_key, result=_result))
                         n += 1
 
-                    self.world.component_for_entity(1, PopupComponent).menus.append(menu)
+                    self.world.popup_menus.append(menu)
                     self.world.remove_component(ent, PickupComponent)
 
             else:

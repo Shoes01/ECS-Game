@@ -3,10 +3,10 @@ import esper
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
 from components.actor.open_inv import OpenInventoryComponent
-from components.game.popup import PopupComponent, PopupMenu, PopupChoice
 from components.item.consumable import ConsumableComponent
 from components.item.wearable import WearableComponent
 from components.name import NameComponent
+from game import PopupMenu, PopupChoice
 
 class InventoryProcessor(esper.Processor):
     def __init__(self):
@@ -59,5 +59,5 @@ class InventoryProcessor(esper.Processor):
                 menu.contents.append(PopupChoice(name=_name, key=_key, result=_menu_result, action=False))
                 n += 1
             
-            self.world.component_for_entity(1, PopupComponent).menus.append(menu)
+            self.world.popup_menus.append(menu)
             self.world.remove_component(ent, OpenInventoryComponent)

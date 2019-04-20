@@ -3,11 +3,11 @@ import esper
 from components.actor.consume import ConsumeComponent
 from components.actor.inventory import InventoryComponent
 from components.actor.stats import StatsComponent
-from components.game.popup import PopupComponent, PopupMenu, PopupChoice
 from components.game.message_log import MessageLogComponent
 from components.game.turn_count import TurnCountComponent
 from components.item.consumable import ConsumableComponent
 from components.name import NameComponent
+from game import PopupMenu, PopupChoice
 
 class ConsumableProcessor(esper.Processor):
     def __init__(self):
@@ -30,7 +30,7 @@ class ConsumableProcessor(esper.Processor):
                     menu.contents.append(PopupChoice(name=_name, key=_key, result=_result))
                     n += 1
                 
-                self.world.component_for_entity(1, PopupComponent).menus.append(menu)
+                self.world.popup_menus.append(menu)
                 self.world.remove_component(ent, ConsumeComponent)
 
             else:

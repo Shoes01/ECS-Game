@@ -8,7 +8,6 @@ from components.game.events import EventsComponent
 from components.game.input import InputComponent
 from components.game.map import MapComponent
 from components.game.message_log import MessageLogComponent
-from components.game.popup import PopupComponent
 from components.game.state import StateComponent
 from components.game.victory import VictoryComponent
 from processors.initial import InitialProcessor
@@ -48,7 +47,7 @@ class EventProcessor(esper.Processor):
                 self.world.add_component(1, VictoryComponent())
 
             if _close_popup_menu:
-                menus = self.world.component_for_entity(1, PopupComponent).menus
+                menus = self.world.popup_menus
                 while len(menus):
                     menus.pop()
 
@@ -87,10 +86,10 @@ class EventProcessor(esper.Processor):
                 self.world.component_for_entity(2, PlayerComponent).killed = True
 
             if _pop_popup_menu:
-                self.world.component_for_entity(1, PopupComponent).menus.pop()
+                self.world.popup_menus.pop()
 
             if _popup:
-                self.world.component_for_entity(1, PopupComponent).menus.append(_popup)
+                self.world.popup_menus.append(_popup)
             
             if _save_game:
                 self.world.component_for_entity(1, MessageLogComponent).messages.append({'game_saved': True})
