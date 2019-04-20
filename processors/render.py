@@ -10,6 +10,7 @@ from processors.sub.entities import render_entities
 from processors.sub.message_log import render_message_log
 from processors.sub.popup_menu import render_popup_menu
 from processors.sub.stats import render_stats
+from processors.sub.tooltips import render_tooltips
 
 class RenderProcessor(esper.Processor):
     def __init__(self):
@@ -19,6 +20,7 @@ class RenderProcessor(esper.Processor):
     def process(self):
         game_state = self.world.component_for_entity(1, StateComponent).state
         
+        # Draw the border while Debug mode is active.
         if game_state == 'Game' and (self.world.component_for_entity(1, RedrawComponent).redraw is False or self.world.has_component(1, DebugComponent)):
             self.render_border()
             return 0
@@ -30,28 +32,35 @@ class RenderProcessor(esper.Processor):
         log_obj = self._consoles['log']
         map_obj = self._consoles['map']
 
+        # Draw the main menu.
+        if game_state == 'MainMenu':
+            _string = 'Welcome to the Main Menu.\n\nPress ENTER to begin.\nPress L to load the last save.\n\nPress ESC to quit.'
+            map_obj[0].print(3, 3, _string, UI_COLORS['text_mainmenu'])
+
+        # Draw the victory screen
+        if game_state == 'VictoryScreen':
+            _string = 'You have won! Press ESC to return to the Main Menu.'
+            map_obj[0].print(3, 3, _string, UI_COLORS['text_mainmenu'])
+
+        # Draw the game.
         if game_state == 'Game' or game_state == 'GameOver' or game_state == 'PopupMenu' or game_state == 'ViewLog':
             self.render_border()
             render_stats(self._consoles['stats'], self.world)
             render_entities(self._consoles['map'], self.world)
             render_popup_menu(self._consoles['map'], self.world)
-            if game_state == 'ViewLog':
-                map_obj[0].clear()
-                render_message_log(self._consoles['map'], self.world)
-            else:
-                render_message_log(self._consoles['log'], self.world)
-        
-        if game_state == 'MainMenu':
-            _string = 'Welcome to the Main Menu.\n\nPress ENTER to begin.\nPress L to load the last save.\n\nPress ESC to quit.'
-            map_obj[0].print(3, 3, _string, UI_COLORS['text_mainmenu'])
+            render_message_log(self._consoles['log'], self.world)
+            render_tooltips(self._consoles['map'], self.world)
 
+        # Draw the gameover overlay.
         if game_state == 'GameOver':
             libtcod.console_set_color_control(libtcod.COLCTRL_1, COLOR_THEME['BrightRed'], COLOR_THEME['Red'])
             map_obj[0].print(3, 3, 'You have %cDIED%c! Press ESC to return to the Main Menu.' % (libtcod.COLCTRL_1, libtcod.COLCTRL_STOP), UI_COLORS['text_mainmenu'], bg_blend=libtcod.BKGND_NONE)
         
-        if game_state == 'VictoryScreen':
-            _string = 'You have won! Press ESC to return to the Main Menu.'
-            map_obj[0].print(3, 3, _string, UI_COLORS['text_mainmenu'])
+        # Draw the message log overlay.
+        if game_state == 'ViewLog':
+            map_obj[0].clear()
+            log_obj[0].clear()
+            render_message_log(self._consoles['map'], self.world)
 
         eqp_obj[0].blit(dest=con_obj[0], dest_x=eqp_obj[1], dest_y=eqp_obj[2], width=eqp_obj[3], height=eqp_obj[4])
         log_obj[0].blit(dest=con_obj[0], dest_x=log_obj[1], dest_y=log_obj[2], width=log_obj[3], height=log_obj[4])
