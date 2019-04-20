@@ -11,7 +11,6 @@ from components.game.message_log import MessageLogComponent
 from components.game.popup import PopupComponent
 from components.game.state import StateComponent
 from components.game.victory import VictoryComponent
-from components.game.view_log import ViewLogComponent
 from processors.initial import InitialProcessor
 from processors.final import FinalProcessor
 
@@ -107,4 +106,4 @@ class EventProcessor(esper.Processor):
                     self.world.debug_mode = True
             
             if _view_log:
-                self.world.add_component(1, ViewLogComponent())
+                self.world.view_log = True

@@ -4,7 +4,6 @@ import tcod as libtcod
 from _data import DoubleLineBox, UI_COLORS, COLOR_THEME
 from components.game.redraw import RedrawComponent
 from components.game.state import StateComponent
-from components.game.view_log import ViewLogComponent
 from processors.sub.entities import render_entities
 from processors.sub.message_log import render_message_log
 from processors.sub.popup_menu import render_popup_menu

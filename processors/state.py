@@ -6,7 +6,6 @@ from components.game.end_game import EndGameComponent
 from components.game.popup import PopupComponent
 from components.game.state import StateComponent
 from components.game.victory import VictoryComponent
-from components.game.view_log import ViewLogComponent
 
 class StateProcessor(esper.Processor):
     def __init__(self):
@@ -33,8 +32,8 @@ class StateProcessor(esper.Processor):
             if self.world.has_component(1, VictoryComponent):
                 self.world.remove_component(1, VictoryComponent)
                 state_component.state = 'VictoryScreen'
-            if self.world.has_component(1, ViewLogComponent):
-                self.world.remove_component(1, ViewLogComponent)
+            if self.world.view_log:
+                self.world.view_log = False
                 state_component.state = 'ViewLog'
             if self.world.has_component(1, CursorComponent):
                 state_component.state = 'Look'
