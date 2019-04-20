@@ -7,7 +7,7 @@ from components.game.state import StateComponent
 from processors.debug import DebugProcessor
 from processors.input import InputProcessor
 from processors.render import RenderProcessor
-from world import build_world
+from new_world import build_world
 
 def main():
     # Prepare console.
