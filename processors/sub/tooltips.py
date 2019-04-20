@@ -1,5 +1,4 @@
 from _data import UI_COLORS
-from _helper_functions import tile_has_items
 from components.actor.actor import ActorComponent
 from components.game.cursor import CursorComponent
 from components.game.input import InputComponent

@@ -1,12 +1,12 @@
 import esper
 
-from _helper_functions import tile_has_items
 from components.actor.actor import ActorComponent
 from components.actor.combat import CombatComponent
 from components.actor.player import PlayerComponent
 from components.actor.velocity import VelocityComponent
 from components.game.message_log import MessageLogComponent
 from components.game.turn_count import TurnCountComponent
+from components.item.item import ItemComponent
 from components.name import NameComponent
 from components.position import PositionComponent
 from components.tile import TileComponent
@@ -29,7 +29,7 @@ class MovementProcessor(esper.Processor):
                     if pos_tile.x == pos.x + vel.dx and pos_tile.y == pos.y + vel.dy and tile.blocks_path:
                         self.world.remove_component(ent, VelocityComponent)
                 # Custom messages for the player too.
-                items = tile_has_items(self.world, pos.x + vel.dx, pos.y + vel.dy)
+                items = self.world.get_entities_at(pos.x + vel.dx, pos.y + vel.dy, ItemComponent)
                 if items:
                     turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
                     name = None
