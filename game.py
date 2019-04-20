@@ -3,7 +3,7 @@ import world
 from _data import map
 
 class GameWorld(world.CustomWorld):
-    def __init__(self, popup_menus=None):
+    def __init__(self):
         super().__init__()
         self.debug_mode = False
         self.create_dijkstra_map = False
@@ -11,6 +11,12 @@ class GameWorld(world.CustomWorld):
         self.view_log = False
         self.popup_menus = []
         self.victory = False
+        self.pop_state = False
+        self.state_stack = ['Exit', 'MainMenu']
+
+        @property
+        def state(self):
+            return self.state_stack[-1]
 
 class PopupChoice():
     ' This is a single entry into the popup menu. '

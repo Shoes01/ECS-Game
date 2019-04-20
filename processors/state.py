@@ -2,69 +2,70 @@ import esper
 
 from components.actor.player import PlayerComponent
 from components.game.cursor import CursorComponent
-from components.game.end_game import EndGameComponent
-from components.game.state import StateComponent
 
 class StateProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
     
     def process(self):
-        state_component = self.world.component_for_entity(1, StateComponent)
-        
-        if state_component.state == 'Exit':
+        if self.world.state == 'Exit':
             # This state signals the engine to turn off. There is no coming back.
             pass
 
-        if state_component.state == 'Game':
-            if self.world.has_component(1, EndGameComponent):
-                # self.world.remove_component(1, EndGameComponent) # The EndgameProcessor will remove this
-                state_component.state = 'MainMenu'
+        if self.world.state == 'Game':
+            if self.world.pop_state:
+                self.world.state_stack.pop()
+                self.world.pop_state = False
+                self.world.state_stack.clear_database = True
             if self.world.component_for_entity(2, PlayerComponent).killed:
                 self.world.remove_component(2, PlayerComponent)
-                state_component.state = 'GameOver'
+                self.world.state_stack.append('GameOver')
             if self.world.popup_menus:
-                state_component.state = 'PopupMenu'
+                self.world.state_stack.append('PopupMenu')
             if self.world.generate_map:
                 self.world.generate_map = False
             if self.world.victory:
                 self.world.victory = False
-                state_component.state = 'VictoryScreen'
+                self.world.state_stack.append('VictoryScreen')
             if self.world.view_log:
                 self.world.view_log = False
-                state_component.state = 'ViewLog'
+                self.world.state_stack.append('ViewLog')
             if self.world.has_component(1, CursorComponent):
-                state_component.state = 'Look'
+                self.world.state_stack.append('Look')
         
-        elif state_component.state == 'GameOver':
-            if self.world.has_component(1, EndGameComponent):
-                # self.world.remove_component(1, EndGameComponent) # The EndgameProcessor will remove this
-                state_component.state = 'MainMenu'
-
-        elif state_component.state == 'Look':
-            if self.world.has_component(1, EndGameComponent):
-                self.world.remove_component(1, EndGameComponent)
+        elif self.world.state == 'GameOver':
+            if self.world.pop_state:
+                self.world.state_stack.pop() # Pop to Game
+                self.world.state_stack.pop() # Pop to MainMenu
+                self.world.pop_state = False
+                self.world.state_stack.clear_database = True
+                
+        elif self.world.state == 'Look':
+            if self.world.pop_state:
+                self.world.state_stack.pop()
+                self.world.pop_state = False
                 self.world.remove_component(1, CursorComponent)
-                state_component.state = 'Game'
-
-        elif state_component.state == 'MainMenu':
+                
+        elif self.world.state == 'MainMenu':
             if self.world.generate_map:
                 self.world.generate_map = False
-                state_component.state = 'Game'
-            if self.world.has_component(1, EndGameComponent):
-                self.world.remove_component(1, EndGameComponent)
-                state_component.state = 'Exit'
-            
-        elif state_component.state == 'PopupMenu':
+                 self.world.state_stack.append('Game')
+            if self.world.pop_state:
+                self.world.state_stack.pop()
+                self.world.pop_state = False
+                
+        elif self.world.state == 'PopupMenu':
             if not self.world.popup_menus:
-                state_component.state = 'Game'
+                self.world.state_stack.pop()
         
-        elif state_component.state == 'VictoryScreen':
-            if self.world.has_component(1, EndGameComponent):
-                # self.world.remove_component(1, EndGameComponent) # The EndgameProcessor will remove this
-                state_component.state = 'MainMenu'
-        
-        elif state_component.state == 'ViewLog':
-            if self.world.has_component(1, EndGameComponent):
-                self.world.remove_component(1, EndGameComponent)
-                state_component.state = 'Game'
+        elif self.world.state == 'VictoryScreen':
+            if self.world.pop_state:
+                self.world.state_stack.pop() # Pop to Game
+                self.world.state_stack.pop() # Pop to MainMenu
+                self.world.pop_state = False
+                self.world.state_stack.clear_database = True
+                
+        elif self.world.state == 'ViewLog':
+            if self.world.pop_state:
+                self.world.state_stack.pop()
+                self.world.pop_state = False                
