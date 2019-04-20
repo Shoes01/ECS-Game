@@ -1,4 +1,5 @@
 import esper
+import math
 
 from components.actor.action import ActionComponent
 from components.actor.consume import ConsumeComponent
@@ -13,6 +14,7 @@ from components.actor.wait import WaitComponent
 from components.actor.wear import WearComponent
 from components.game.dijgen import DijgenComponent
 from components.game.turn_count import TurnCountComponent
+from components.position import PositionComponent
 
 class ActionProcessor(esper.Processor):
     ' The ActionProcessor adds and removes Components based on the action. '
@@ -27,6 +29,7 @@ class ActionProcessor(esper.Processor):
             _descend = action.action.get('descend')
             _drop = action.action.get('drop')
             _open_inventory = action.action.get('open_inventory')
+            _mouse_move = action.action.get('mouse_move')
             _move = action.action.get('move')
             _pick_up = action.action.get('pick_up')
             _remove = action.action.get('remove')
@@ -50,6 +53,19 @@ class ActionProcessor(esper.Processor):
 
             if _open_inventory:
                 self.world.add_component(ent, OpenInventoryComponent())
+
+            if _mouse_move:
+                mx, my = _mouse_move.tile.x, _mouse_move.tile.y
+                pos = self.world.component_for_entity(ent, PositionComponent)
+
+                dx = mx - pos.x
+                dy = my - pos.y
+
+                r = math.sqrt( dx**2 + dy**2)
+
+                self.world.add_component(ent, VelocityComponent(dx=round(dx/r), dy=round(dy/r)))
+                self.world.add_component(1, DijgenComponent())
+
 
             if _move:
                 dx, dy = _move
