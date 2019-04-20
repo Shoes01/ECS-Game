@@ -2,7 +2,6 @@ import esper
 import tcod as libtcod
 
 from _data import DoubleLineBox, UI_COLORS, COLOR_THEME
-from components.game.debug import DebugComponent
 from components.game.redraw import RedrawComponent
 from components.game.state import StateComponent
 from components.game.view_log import ViewLogComponent
@@ -21,7 +20,7 @@ class RenderProcessor(esper.Processor):
         game_state = self.world.component_for_entity(1, StateComponent).state
         
         # Draw the border while Debug mode is active.
-        if game_state == 'Game' and (self.world.component_for_entity(1, RedrawComponent).redraw is False or self.world.has_component(1, DebugComponent)):
+        if game_state == 'Game' and (self.world.component_for_entity(1, RedrawComponent).redraw is False or self.world.debug_mode):
             self.render_border()
             return 0
         else:

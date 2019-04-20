@@ -3,7 +3,6 @@ import esper
 from _helper_functions import load_game, save_game
 from components.actor.player import PlayerComponent
 from components.game.cursor import CursorComponent
-from components.game.debug import DebugComponent
 from components.game.dijgen import DijgenComponent
 from components.game.end_game import EndGameComponent
 from components.game.events import EventsComponent
@@ -104,10 +103,10 @@ class EventProcessor(esper.Processor):
                 self.world.component_for_entity(1, MessageLogComponent).offset += _scroll
 
             if _toggle_debug:
-                if self.world.has_component(1, DebugComponent):
-                    self.world.remove_component(1, DebugComponent)
+                if self.world.debug_mode:
+                    self.world.debug_mode = False
                 else:
-                    self.world.add_component(1, DebugComponent())
+                    self.world.debug_mode = True
             
             if _view_log:
                 self.world.add_component(1, ViewLogComponent())

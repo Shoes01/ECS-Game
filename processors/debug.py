@@ -2,7 +2,6 @@ import esper
 import numpy as np
 import tcod as libtcod
 
-from components.game.debug import DebugComponent
 from components.game.input import InputComponent
 from components.game.state import StateComponent
 from components.game.map import MapComponent
@@ -14,7 +13,7 @@ class DebugProcessor(esper.Processor):
         self._consoles = {}
     
     def process(self):
-        if self.world.has_component(1, DebugComponent) and self.world.component_for_entity(1, StateComponent).state == 'Game':
+        if self.world.debug_mode and self.world.component_for_entity(1, StateComponent).state == 'Game':
             dijkstra_map = self.world.component_for_entity(1, MapComponent).dijkstra_map
             input_component = self.world.component_for_entity(1, InputComponent)
             key, mouse_pos = input_component.key, input_component.mouse_pos
