@@ -1,11 +1,12 @@
 import esper
 
 from components.actor.player import PlayerComponent
-from components.game.state import StateComponent
+from components.game.cursor import CursorComponent
 from components.game.dijgen import DijgenComponent
 from components.game.end_game import EndGameComponent
 from components.game.mapgen import MapgenComponent
 from components.game.popup import PopupComponent
+from components.game.state import StateComponent
 from components.game.victory import VictoryComponent
 from components.game.view_log import ViewLogComponent
 
@@ -37,11 +38,19 @@ class StateProcessor(esper.Processor):
             if self.world.has_component(1, ViewLogComponent):
                 self.world.remove_component(1, ViewLogComponent)
                 state_component.state = 'ViewLog'
+            if self.world.has_component(1, CursorComponent):
+                state_component.state = 'Look'
         
         elif state_component.state == 'GameOver':
             if self.world.has_component(1, EndGameComponent):
                 # self.world.remove_component(1, EndGameComponent) # The EndgameProcessor will remove this
                 state_component.state = 'MainMenu'
+
+        elif state_component.state == 'Look':
+            if self.world.has_component(1, EndGameComponent):
+                self.world.remove_component(1, EndGameComponent)
+                self.world.remove_component(1, CursorComponent)
+                state_component.state = 'Game'
 
         elif state_component.state == 'MainMenu':
             if self.world.has_component(1, MapgenComponent):

@@ -9,6 +9,7 @@ from components.actor.player import PlayerComponent
 from components.game.events import EventsComponent
 from components.game.popup import PopupComponent, PopupMenu, PopupChoice
 from components.game.state import StateComponent
+from components.position import PositionComponent
 
 class InputProcessor(esper.Processor):
     def __init__(self):
@@ -94,27 +95,16 @@ class InputProcessor(esper.Processor):
             if key_scancode == libtcod.event.SCANCODE_ESCAPE:
                 events.append({'exit': True})
         
+        elif game_state_component.state == 'Look':
+            events.append(generic_move_keys(key_char, key_scancode))
+            if key_scancode == libtcod.event.SCANCODE_ESCAPE:
+                events.append({'exit': True})
+
+        
         ### INPUTS THAT ARE READ ONLY ON THE PLAYERS TURN
         for ent, (actor, eng, player) in self.world.get_components(ActorComponent, EnergyComponent, PlayerComponent):
             if game_state_component.state == 'Game' and eng.energy == 0:
-                if key_scancode == libtcod.event.SCANCODE_UP or key_char == 'k' or key_scancode == libtcod.event.SCANCODE_KP_8:
-                    action = {'move': (0, -1)}
-                elif key_scancode == libtcod.event.SCANCODE_DOWN or key_char == 'j' or key_scancode == libtcod.event.SCANCODE_KP_2:
-                    action = {'move': (0, 1)}
-                elif key_scancode == libtcod.event.SCANCODE_LEFT or key_char == 'h' or key_scancode == libtcod.event.SCANCODE_KP_4:
-                    action = {'move': (-1, 0)}
-                elif key_scancode == libtcod.event.SCANCODE_RIGHT or key_char == 'l' or key_scancode == libtcod.event.SCANCODE_KP_6:
-                    action = {'move': (1, 0)}
-                elif key_char == 'y' or key_scancode == libtcod.event.SCANCODE_KP_7:
-                    action = {'move': (-1, -1)}
-                elif key_char == 'u' or key_scancode == libtcod.event.SCANCODE_KP_9:
-                    action = {'move': (1, -1)}
-                elif key_char == 'b' or key_scancode == libtcod.event.SCANCODE_KP_1:
-                    action = {'move': (-1, 1)}
-                elif key_char == 'n' or key_scancode == libtcod.event.SCANCODE_KP_3:
-                    action = {'move': (1, 1)}
-                elif key_char == '.' or key_scancode == libtcod.event.SCANCODE_KP_5:
-                    action = {'wait': True}
+                action = generic_move_keys(key_char, key_scancode)
                 
                 if key_char == 'd' and not key.mod:
                     action = {'drop': True}
@@ -128,6 +118,9 @@ class InputProcessor(esper.Processor):
                     action = {'wear': True}
                 if key_char == '>' or key_char == '<':
                     action = {'descend': True}
+                if key_char == 'x':
+                    _pos = self.world.component_for_entity(ent, PositionComponent)
+                    events.append({'look': (_pos.x, _pos.y)})
                 
                 if mouse_click:
                     action = {'mouse_move': mouse_click}
@@ -139,3 +132,27 @@ class InputProcessor(esper.Processor):
         # Attach event component to world entity. It does not have to be the player's turn for this to happen.
         if events:
             self.world.component_for_entity(1, EventsComponent).events.extend(events)
+
+def generic_move_keys(key_char, key_scancode):
+    action = {}
+
+    if   key_char == 'k' or key_scancode == libtcod.event.SCANCODE_KP_8 or key_scancode == libtcod.event.SCANCODE_UP:
+        action = {'move': (0, -1)}
+    elif key_char == 'j' or key_scancode == libtcod.event.SCANCODE_KP_2 or key_scancode == libtcod.event.SCANCODE_DOWN:
+        action = {'move': (0, 1)}
+    elif key_char == 'h' or key_scancode == libtcod.event.SCANCODE_KP_4 or key_scancode == libtcod.event.SCANCODE_LEFT:
+        action = {'move': (-1, 0)}
+    elif key_char == 'l' or key_scancode == libtcod.event.SCANCODE_KP_6 or key_scancode == libtcod.event.SCANCODE_RIGHT:
+        action = {'move': (1, 0)}
+    elif key_char == 'y' or key_scancode == libtcod.event.SCANCODE_KP_7:
+        action = {'move': (-1, -1)}
+    elif key_char == 'u' or key_scancode == libtcod.event.SCANCODE_KP_9:
+        action = {'move': (1, -1)}
+    elif key_char == 'b' or key_scancode == libtcod.event.SCANCODE_KP_1:
+        action = {'move': (-1, 1)}
+    elif key_char == 'n' or key_scancode == libtcod.event.SCANCODE_KP_3:
+        action = {'move': (1, 1)}
+    elif key_char == '.' or key_scancode == libtcod.event.SCANCODE_KP_5:
+        action = {'wait': True}
+    
+    return action

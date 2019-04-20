@@ -43,7 +43,7 @@ class RenderProcessor(esper.Processor):
             map_obj[0].print(3, 3, _string, UI_COLORS['text_mainmenu'])
 
         # Draw the game.
-        if game_state == 'Game' or game_state == 'GameOver' or game_state == 'PopupMenu' or game_state == 'ViewLog':
+        if game_state == 'Game' or game_state == 'GameOver' or game_state == 'Look' or game_state == 'PopupMenu' or game_state == 'ViewLog':
             self.render_border()
             render_stats(self._consoles['stats'], self.world)
             render_entities(self._consoles['map'], self.world)

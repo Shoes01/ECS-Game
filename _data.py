@@ -131,6 +131,7 @@ LOG_COLORS = {
 UI_COLORS = {
     'border_main': COLOR_THEME['BrightWhite'],
     'border_secondary': COLOR_THEME['White'],
+    'cursor': COLOR_THEME['Yellow'],
     'bg': COLOR_THEME['Black'],
     'fg': COLOR_THEME['BrightWhite'],
     'text': COLOR_THEME['BrightWhite'],

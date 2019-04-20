@@ -2,6 +2,7 @@ import esper
 
 from _helper_functions import load_game, save_game
 from components.actor.player import PlayerComponent
+from components.game.cursor import CursorComponent
 from components.game.debug import DebugComponent
 from components.game.dijgen import DijgenComponent
 from components.game.end_game import EndGameComponent
@@ -35,7 +36,9 @@ class EventProcessor(esper.Processor):
             _exit = event.get('exit')
             _key_stroke = event.get('key_stroke')
             _load_game = event.get('load_game')
+            _look = event.get('look')
             _mouse_pos = event.get('mouse_pos')
+            _move_cursor = event.get('move')
             _new_map = event.get('new_map')
             _player_killed = event.get('player_killed')
             _pop_popup_menu = event.get('pop_popup_menu')
@@ -65,10 +68,20 @@ class EventProcessor(esper.Processor):
                 load_game(self.world)
                 events_component.events.append({'close_popup_menu': True})
                 self.world.component_for_entity(1, MessageLogComponent).messages.append({'game_loaded': True})
+            
+            if _look:
+                x, y = _look
+                self.world.add_component(1, CursorComponent(x=x, y=y))
 
             if _mouse_pos:
                 x, y = _mouse_pos
                 self.world.component_for_entity(1, InputComponent).mouse_pos = (x, y)
+            
+            if _move_cursor:
+                dx, dy = _move_cursor
+                cursor_component = self.world.component_for_entity(1, CursorComponent)
+                cursor_component.x += dx
+                cursor_component.y += dy
 
             if _new_map:
                 self.world.add_component(1, MapgenComponent())
