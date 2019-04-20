@@ -9,11 +9,22 @@ __How to play__
 
 Run engine.py to begin the game.
 
-The numpad controls movement. 
+__Controls__
+
+The numpad controls or mouse for movement.
+
 'g': grab items
+
 'd': drop items
+
 'e': eat items
+
 'w': wear items
+
 'i': view your inventory
+
 'm': view message log
+
+'x': look around
+
 'ESC': quit
