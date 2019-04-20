@@ -51,10 +51,3 @@ def tile_has_items(world, x, y):
         if pos.x == x and pos.y == y:
             items.append(ent)
     return items
-
-def tile_occupied(world, x, y):
-    for ent, (actor, pos) in world.get_components(ActorComponent, PositionComponent):
-        if pos.x == x and pos.y == y:
-            return ent
-    
-    return False

@@ -4,7 +4,7 @@ import random
 import tcod as libtcod
 
 from _data import FINAL_FLOOR
-from _helper_functions import loot_algorithm, tile_occupied
+from _helper_functions import loot_algorithm
 from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
@@ -170,7 +170,7 @@ class MapgenProcessor(esper.Processor):
             x = random.randint(boss_room.x, boss_room.x + boss_room.w - 1)
             y = random.randint(boss_room.y, boss_room.y + boss_room.h - 1)
 
-            if not tiles[x, y] and not tile_occupied(self.world, x, y):
+            if not tiles[x, y] and not self.world.get_entities_at(x, y, ActorComponent):
                 new_ent = self.world.create_entity('demon')
                 new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                 new_ent_pos.x = x
@@ -191,7 +191,7 @@ class MapgenProcessor(esper.Processor):
                 x = random.randint(room.x, room.x + room.w - 1)
                 y = random.randint(room.y, room.y + room.h - 1)
                 
-                if not tiles[x, y] and not tile_occupied(self.world, x, y):
+                if not tiles[x, y] and not self.world.get_entities_at(x, y, ActorComponent):
                     new_ent = self.world.create_entity('zombie')
                     new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                     new_ent_pos.x = x
@@ -208,7 +208,7 @@ class MapgenProcessor(esper.Processor):
                 x = random.randint(room.x, room.x + room.w - 1)
                 y = random.randint(room.y, room.y + room.h - 1)
                 
-                if not tiles[x, y] and not tile_occupied(self.world, x, y):
+                if not tiles[x, y] and not self.world.get_entities_at(x, y, ActorComponent):
                     chance = random.randint(0, 100)
                     if chance > 50:
                         new_ent = self.world.create_entity('chest')

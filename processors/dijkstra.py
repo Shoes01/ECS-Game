@@ -1,7 +1,6 @@
 import esper
 import numpy as np
 
-from _helper_functions import tile_occupied
 from collections import deque
 from components.actor.actor import ActorComponent
 from components.game.dijgen import DijgenComponent
@@ -34,7 +33,7 @@ class DijkstraProcessor(esper.Processor):
 
                 for neighbor in directory[current]:
                     if neighbor not in visited:
-                        if tile_occupied(self.world, neighbor[0], neighbor[1]):
+                        if self.world.get_entities_at(neighbor[0], neighbor[1], ActorComponent):
                             dijkstra_map[neighbor[0], neighbor[1]] = dijkstra_map[current[0], current[1]] + 15
                             
                         else:

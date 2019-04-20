@@ -2,6 +2,8 @@ import esper
 import json
 import tcod as libtcod
 
+from typing import Type
+
 from _data import ENTITY_COLORS
 from components.actor.actor import ActorComponent
 from components.actor.boss import BossComponent
@@ -96,6 +98,18 @@ class CustomWorld(esper.World):
         
         return item_table, monster_table
     
+    def get_entities_at(self, x: int, y: int, *component_types: Type):
+        """Get a list of entities with position (x, y) that have the desired components.
+
+        :param component_type: The Component types to retrieve.
+        :return: A list of Entities.
+        """
+        ents = []
+        for ent, (pos, *_) in self.get_components(PositionComponent, *component_types):
+            if pos.x == x and pos.y == y:
+                ents.append(ent)
+        return ents
+
     def create_entity(self, entity):
         # TODO: Fix this somehow? Move the game entity to JSON as well?
         if entity == 'game':
