@@ -14,6 +14,7 @@ class GameWorld(world.CustomWorld):
         self.pop_state = False
         self.state_stack = ['Exit', 'MainMenu']
         self.reset_game = False
+        self.turn = 0
 
     @property
     def state(self):

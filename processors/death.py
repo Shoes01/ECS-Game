@@ -12,7 +12,6 @@ from components.actor.stats import StatsComponent
 from components.actor.velocity import VelocityComponent
 from components.game.events import EventsComponent
 from components.game.message_log import MessageLogComponent
-from components.game.turn_count import TurnCountComponent
 from components.item.pickedup import PickedupComponent
 from components.furniture import FurnitureComponent
 from components.name import NameComponent
@@ -26,9 +25,8 @@ class DeathProcessor(esper.Processor):
     
     def process(self):
         for ent, (dead, inv, name, pos, ren) in self.world.get_components(DeadComponent, InventoryComponent, NameComponent, PositionComponent, RenderComponent):
-            turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
             is_furniture = self.world.has_component(ent, FurnitureComponent)
-            self.world.component_for_entity(1, MessageLogComponent).messages.append({'death': (ren.char, ren.color, turn, is_furniture)})
+            self.world.component_for_entity(1, MessageLogComponent).messages.append({'death': (ren.char, ren.color, self.world.turn, is_furniture)})
             
             inventory = inv.inventory
             name.name = 'corspe of ' + name.name

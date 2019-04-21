@@ -7,7 +7,6 @@ from components.actor.wear import WearComponent
 from components.item.slot import SlotComponent
 from components.item.wearable import WearableComponent
 from components.game.message_log import MessageLogComponent
-from components.game.turn_count import TurnCountComponent
 from components.name import NameComponent
 from game import PopupMenu, PopupChoice
 
@@ -39,7 +38,7 @@ class WearableProcessor(esper.Processor):
                 # Wear the item.
                 item = self.world.component_for_entity(ent, WearComponent).item_id
                 name_component = self.world.component_for_entity(item, NameComponent)
-                turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
+                turn = self.world.turn
                 slot_filled_item = None
                 
 

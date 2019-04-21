@@ -8,7 +8,6 @@ from components.actor.energy import EnergyComponent
 from components.actor.player import PlayerComponent
 from components.game.map import MapComponent
 from components.game.message_log import MessageLogComponent
-from components.game.turn_count import TurnCountComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
 
@@ -27,8 +26,7 @@ class AiInputProcessor(esper.Processor):
     def take_turn_zombie(self, brain, pos, ren):
         if brain.awake is False and self.world.component_for_entity(1, MapComponent).fov_map.fov[pos.x, pos.y]:
             brain.awake = True
-            turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
-            message = {'ai_awake': (ren.char, ren.color, turn)}
+            message = {'ai_awake': (ren.char, ren.color, self.world.turn)}
             self.world.component_for_entity(1, MessageLogComponent).messages.append(message)
 
             return {'wait': True}

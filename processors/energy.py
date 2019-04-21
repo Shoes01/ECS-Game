@@ -12,7 +12,6 @@ from components.actor.velocity import VelocityComponent
 from components.actor.wait import WaitComponent
 from components.actor.wear import WearComponent
 from components.game.redraw import RedrawComponent
-from components.game.turn_count import TurnCountComponent
 
 class EnergyProcessor(esper.Processor):
     def __init__(self):
@@ -59,7 +58,7 @@ class EnergyProcessor(esper.Processor):
             elif ent == 1 and eng.energy == 0:
                 # This tracks the turn number.
                 eng.energy += 10
-                self.world.component_for_entity(ent, TurnCountComponent).turn_count += 1
+                self.world.turn += 1
 
         deincrement = True
         for ent, (eng, player) in self.world.get_components(EnergyComponent, PlayerComponent):

@@ -3,7 +3,6 @@ import esper
 from components.actor.inventory import InventoryComponent
 from components.actor.pickup import PickupComponent
 from components.game.message_log import MessageLogComponent
-from components.game.turn_count import TurnCountComponent
 from components.item.item import ItemComponent
 from components.item.pickedup import PickedupComponent
 from components.name import NameComponent
@@ -17,7 +16,7 @@ class PickupProcessor(esper.Processor):
     
     def process(self):
         for ent, (inv, pick, pos) in self.world.get_components(InventoryComponent, PickupComponent, PositionComponent):
-            turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
+            turn = self.world.turn
 
             if pick.item_id is None:
                 matched_items = []

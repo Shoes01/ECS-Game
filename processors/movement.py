@@ -5,7 +5,6 @@ from components.actor.combat import CombatComponent
 from components.actor.player import PlayerComponent
 from components.actor.velocity import VelocityComponent
 from components.game.message_log import MessageLogComponent
-from components.game.turn_count import TurnCountComponent
 from components.item.item import ItemComponent
 from components.name import NameComponent
 from components.position import PositionComponent
@@ -31,14 +30,11 @@ class MovementProcessor(esper.Processor):
                 # Custom messages for the player too.
                 items = self.world.get_entities_at(pos.x + vel.dx, pos.y + vel.dy, ItemComponent)
                 if items:
-                    turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
-                    name = None
-                    
                     if len(items) == 1:
                         name = self.world.component_for_entity(items.pop(), NameComponent).name
-                        self.world.component_for_entity(1, MessageLogComponent).messages.append({'move_items': (turn, name, 0)})
+                        self.world.component_for_entity(1, MessageLogComponent).messages.append({'move_items': (self.world.turn, name, 0)})
                     else:
-                        self.world.component_for_entity(1, MessageLogComponent).messages.append({'move_items': (turn, None, len(items))})
+                        self.world.component_for_entity(1, MessageLogComponent).messages.append({'move_items': (self.world.turn, None, len(items))})
 
                     
 

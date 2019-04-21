@@ -4,7 +4,6 @@ from components.actor.consume import ConsumeComponent
 from components.actor.inventory import InventoryComponent
 from components.actor.stats import StatsComponent
 from components.game.message_log import MessageLogComponent
-from components.game.turn_count import TurnCountComponent
 from components.item.consumable import ConsumableComponent
 from components.name import NameComponent
 from game import PopupMenu, PopupChoice
@@ -38,7 +37,7 @@ class ConsumableProcessor(esper.Processor):
                 item = self.world.component_for_entity(ent, ConsumeComponent).item_id
                 message_log_component = self.world.component_for_entity(1, MessageLogComponent)
                 name = self.world.component_for_entity(item, NameComponent).name
-                turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
+                turn = self.world.turn
 
                 if self.world.has_component(item, ConsumableComponent):
                     success = True

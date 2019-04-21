@@ -3,7 +3,6 @@ import esper
 from components.actor.equipment import EquipmentComponent
 from components.actor.remove import RemoveComponent
 from components.game.message_log import MessageLogComponent
-from components.game.turn_count import TurnCountComponent
 from components.name import NameComponent
 
 class RemovableProcessor(esper.Processor):
@@ -15,7 +14,7 @@ class RemovableProcessor(esper.Processor):
         for ent, (eqp, rem) in self.world.get_components(EquipmentComponent, RemoveComponent):
             item = rem.item_id
             name_component = self.world.component_for_entity(item, NameComponent)            
-            turn = self.world.component_for_entity(1, TurnCountComponent).turn_count
+            turn = self.world.turn
 
             if item in eqp.equipment:
                 success = True
