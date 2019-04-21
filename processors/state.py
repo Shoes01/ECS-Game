@@ -1,7 +1,6 @@
 import esper
 
 from components.actor.player import PlayerComponent
-from components.game.cursor import CursorComponent
 
 class StateProcessor(esper.Processor):
     def __init__(self):
@@ -30,7 +29,7 @@ class StateProcessor(esper.Processor):
             if self.world.view_log:
                 self.world.view_log = False
                 self.world.state_stack.append('ViewLog')
-            if self.world.has_component(1, CursorComponent):
+            if self.world.cursor.active:
                 self.world.state_stack.append('Look')
         
         elif self.world.state == 'GameOver':
@@ -44,7 +43,7 @@ class StateProcessor(esper.Processor):
             if self.world.pop_state:
                 self.world.state_stack.pop()
                 self.world.pop_state = False
-                self.world.remove_component(1, CursorComponent)
+                self.world.cursor.active = False
                 
         elif self.world.state == 'MainMenu':
             if self.world.generate_map:

@@ -2,7 +2,6 @@ import esper
 
 from _helper_functions import load_game, save_game
 from components.actor.player import PlayerComponent
-from components.game.cursor import CursorComponent
 from components.game.input import InputComponent
 from components.game.map import MapComponent
 from components.game.message_log import MessageLogComponent
@@ -60,7 +59,9 @@ class EventProcessor(esper.Processor):
             
             if _look:
                 x, y = _look
-                self.world.add_component(1, CursorComponent(x=x, y=y))
+                self.world.cursor.active = True
+                self.world.cursor.x = x
+                self.world.cursor.y = y
 
             if _mouse_pos:
                 x, y = _mouse_pos
@@ -68,9 +69,8 @@ class EventProcessor(esper.Processor):
             
             if _move_cursor:
                 dx, dy = _move_cursor
-                cursor_component = self.world.component_for_entity(1, CursorComponent)
-                cursor_component.x += dx
-                cursor_component.y += dy
+                self.world.cursor.x += dx
+                self.world.cursor.y += dy
 
             if _new_map:
                 self.world.generate_map = True

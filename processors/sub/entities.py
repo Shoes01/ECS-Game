@@ -5,7 +5,6 @@ from components.actor.actor import ActorComponent
 from components.actor.corpse import CorpseComponent
 from components.item.item import ItemComponent
 from components.item.pickedup import PickedupComponent
-from components.game.cursor import CursorComponent
 from components.game.map import MapComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
@@ -65,9 +64,9 @@ def render_entities(console_bundle, world):
         console.print(player_pos.x, player_pos.y, player_ren.char, player_ren.color)
 
     # Print cursor.
-    if world.has_component(1, CursorComponent):
-        cursor_component = world.component_for_entity(1, CursorComponent)
-        console.print(cursor_component.x, cursor_component.y, cursor_component.char, cursor_component.color)
+    cursor = world.cursor
+    if cursor.active:
+        console.print(cursor.x, cursor.y, cursor.char, cursor.color)
 
 def prerender_entities(world):
     game_map = world.component_for_entity(1, MapComponent)
