@@ -2,7 +2,6 @@ import esper
 
 from _helper_functions import load_game, save_game
 from components.actor.player import PlayerComponent
-from components.game.input import InputComponent
 from components.game.map import MapComponent
 from components.game.message_log import MessageLogComponent
 from processors.initial import InitialProcessor
@@ -49,8 +48,8 @@ class EventProcessor(esper.Processor):
 
             if _key_stroke:
                 key = _key_stroke
-                self.world.component_for_entity(1, InputComponent).key = key
-                self.world.component_for_entity(1, InputComponent).mouse_pos = None
+                self.world.key = key
+                self.world.mouse_pos = None
 
             if _load_game:
                 load_game(self.world)
@@ -65,7 +64,7 @@ class EventProcessor(esper.Processor):
 
             if _mouse_pos:
                 x, y = _mouse_pos
-                self.world.component_for_entity(1, InputComponent).mouse_pos = (x, y)
+                self.world.mouse_pos = (x, y)
             
             if _move_cursor:
                 dx, dy = _move_cursor

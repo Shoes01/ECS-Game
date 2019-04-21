@@ -1,6 +1,5 @@
 from _data import UI_COLORS
 from components.actor.actor import ActorComponent
-from components.game.input import InputComponent
 from components.game.map import MapComponent
 from components.item.item import ItemComponent
 from components.name import NameComponent
@@ -10,13 +9,12 @@ from components.render import RenderComponent
 def render_tooltips(console_bundle, world):
     console, _, _, _, h = console_bundle
     cursor = world.cursor
-    mouse_pos = world.component_for_entity(1, InputComponent).mouse_pos
     x, y = None, None
     
     if cursor.active:
         x, y = cursor.x, cursor.y
-    elif mouse_pos:
-        x, y = mouse_pos
+    elif world.mouse_pos:
+        x, y = world.mouse_pos
         x -= 1
         y -= 1
     else:

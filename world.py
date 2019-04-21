@@ -13,7 +13,6 @@ from components.actor.inventory import InventoryComponent
 from components.actor.player import PlayerComponent
 from components.actor.stats import StatsComponent
 from components.actor.velocity import VelocityComponent
-from components.game.input import InputComponent
 from components.game.map import MapComponent
 from components.game.message_log import MessageLogComponent
 from components.item.consumable import ConsumableComponent
@@ -84,7 +83,6 @@ class CustomWorld(esper.World):
         if entity == 'game':
             return super().create_entity(
                 EnergyComponent(),
-                InputComponent(),
                 MapComponent(),
                 MessageLogComponent(),
                 PersistComponent()

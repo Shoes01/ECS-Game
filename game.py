@@ -9,6 +9,8 @@ class GameWorld(world.CustomWorld):
         self.debug_mode = False
         self.events = []
         self.generate_map = False
+        self.key = None
+        self.mouse_pos = None
         self.pop_state = False
         self.popup_menus = []
         self.redraw = False
