@@ -17,7 +17,6 @@ from components.game.events import EventsComponent
 from components.game.input import InputComponent
 from components.game.map import MapComponent
 from components.game.message_log import MessageLogComponent
-from components.game.redraw import RedrawComponent
 from components.item.consumable import ConsumableComponent
 from components.item.item import ItemComponent
 from components.item.modifier import ModifierComponent
@@ -90,8 +89,7 @@ class CustomWorld(esper.World):
                 InputComponent(),
                 MapComponent(),
                 MessageLogComponent(),
-                PersistComponent(),
-                RedrawComponent()
+                PersistComponent()
             )
         elif entity == 'player':
             return super().create_entity(

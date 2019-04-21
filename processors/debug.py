@@ -4,7 +4,6 @@ import tcod as libtcod
 
 from components.game.input import InputComponent
 from components.game.map import MapComponent
-from components.game.redraw import RedrawComponent
 
 class DebugProcessor(esper.Processor):
     def __init__(self):
@@ -28,8 +27,8 @@ class DebugProcessor(esper.Processor):
                 key_char = None
 
             # Show dijkstra map, but only when the map needs to be redraw.
-            if self.world.component_for_entity(1, RedrawComponent).redraw is True:
-                self.world.component_for_entity(1, RedrawComponent).redraw = False
+            if self.world.redraw:
+                self.world.redraw = False
                 for (x, y), value in np.ndenumerate(dijkstra_map):
                     if value == 999:
                         map_obj[0].print(x, y, '#', libtcod.pink)

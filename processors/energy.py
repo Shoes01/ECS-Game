@@ -11,7 +11,6 @@ from components.actor.remove import RemoveComponent
 from components.actor.velocity import VelocityComponent
 from components.actor.wait import WaitComponent
 from components.actor.wear import WearComponent
-from components.game.redraw import RedrawComponent
 
 class EnergyProcessor(esper.Processor):
     def __init__(self):
@@ -63,7 +62,7 @@ class EnergyProcessor(esper.Processor):
         deincrement = True
         for ent, (eng, player) in self.world.get_components(EnergyComponent, PlayerComponent):
             if eng.energy == 0:
-                self.world.component_for_entity(1, RedrawComponent).redraw = True
+                self.world.redraw = True
                 deincrement = False
 
         if deincrement:
