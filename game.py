@@ -5,19 +5,19 @@ from _data import map
 class GameWorld(world.CustomWorld):
     def __init__(self):
         super().__init__()
-        self.debug_mode = False
         self.create_dijkstra_map = False
-        self.generate_map = False
-        self.view_log = False
-        self.popup_menus = []
-        self.victory = False
-        self.pop_state = False
-        self.state_stack = ['Exit', 'MainMenu']
-        self.reset_game = False
-        self.turn = 0
-        self.redraw = False
+        self.debug_mode = False
         self.events = []
-
+        self.generate_map = False
+        self.pop_state = False
+        self.popup_menus = []
+        self.redraw = False
+        self.reset_game = False
+        self.state_stack = ['Exit', 'MainMenu']
+        self.turn = 0
+        self.victory = False
+        self.view_log = False
+        
     @property
     def state(self):
         return self.state_stack[-1]
