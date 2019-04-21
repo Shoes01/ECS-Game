@@ -5,23 +5,27 @@ from _data import map, UI_COLORS
 class GameWorld(world.CustomWorld):
     def __init__(self):
         super().__init__()
+        ' Flags. ' 
         self.create_dijkstra_map = False
-        self.debug_mode = False
-        self.events = []
         self.generate_map = False
+        self.pop_state = False
+        self.reset_game = False
+        self.victory = False
+        self.view_log = False
+        
+        ' Data. '
+        self.debug_mode = False # This one is a toggle
+        self.events = []
         self.key = None
         self.messages = []
         self.messages_offset = 0
         self.mouse_pos = None
-        self.pop_state = False
         self.popup_menus = []
-        self.redraw = False
-        self.reset_game = False
+        self.redraw = False # This information needs to communicate cross-tick
         self.state_stack = ['Exit', 'MainMenu']
         self.ticker = 0
-        self.victory = False
-        self.view_log = False
-        
+
+        ' Objects. '
         self.cursor = Cursor()
         self.map = Map()
 
@@ -32,6 +36,14 @@ class GameWorld(world.CustomWorld):
     @property
     def turn(self):
         return self.ticker // 10
+    
+    def reset_flags(self):
+        self.create_dijkstra_map = False
+        self.generate_map = False
+        self.pop_state = False
+        self.reset_game = False
+        self.victory = False
+        self.view_log = False
 
 class Cursor():
     def __init__(self):
