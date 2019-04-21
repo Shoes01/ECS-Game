@@ -12,7 +12,7 @@ class DijkstraProcessor(esper.Processor):
     def process(self):
         if self.world.create_dijkstra_map:
             game_map = self.world.map
-            player_pos = self.world.component_for_entity(2, PositionComponent)
+            player_pos = self.world.component_for_entity(1, PositionComponent)
 
             dijkstra_map = np.ones((game_map.width, game_map.height), dtype=int, order='F') * 999
             

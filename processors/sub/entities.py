@@ -57,9 +57,9 @@ def render_entities(console_bundle, world):
                 console.print(pos.x, pos.y, ren.char, ren.color, ENTITY_COLORS['overlap_bg'])
 
     # Print the player (again), on top of everything else.
-    player_pos = world.component_for_entity(2, PositionComponent)
-    player_ren = world.component_for_entity(2, RenderComponent)
-    if not world.has_component(2, CorpseComponent):
+    player_pos = world.component_for_entity(1, PositionComponent)
+    player_ren = world.component_for_entity(1, RenderComponent)
+    if not world.has_component(1, CorpseComponent):
         console.print(player_pos.x, player_pos.y, player_ren.char, player_ren.color)
 
     # Print cursor.
@@ -71,7 +71,7 @@ def prerender_entities(world):
     game_map = world.map
 
     if game_map.fov_map:
-        pos_player = world.component_for_entity(2, PositionComponent)
+        pos_player = world.component_for_entity(1, PositionComponent)
         game_map.fov_map.compute_fov(x=pos_player.x, y=pos_player.y, radius=10, light_walls=True, algorithm=0)
 
         for ent, (pos, ren) in world.get_components(PositionComponent, RenderComponent):

@@ -16,8 +16,8 @@ class StateProcessor(esper.Processor):
                 self.world.state_stack.pop()
                 self.world.pop_state = False
                 self.world.reset_game = True
-            if self.world.component_for_entity(2, PlayerComponent).killed:
-                self.world.remove_component(2, PlayerComponent)
+            if self.world.component_for_entity(1, PlayerComponent).killed:
+                self.world.remove_component(1, PlayerComponent)
                 self.world.state_stack.append('GameOver')
             if self.world.popup_menus:
                 self.world.state_stack.append('PopupMenu')

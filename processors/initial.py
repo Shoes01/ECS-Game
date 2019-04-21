@@ -7,8 +7,5 @@ class InitialProcessor(esper.Processor):
 
     def process(self):
         if not self.world._entities:
-            # Create game meta-entity. It is ID 1.
-            self.world.create_entity('game')
-
-            # Create the player entity. It is ID 2.
+            # Create the player entity. It is ID 1.
             self.world.create_entity('player')

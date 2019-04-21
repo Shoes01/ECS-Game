@@ -41,7 +41,7 @@ class DeathProcessor(esper.Processor):
             if is_furniture:
                 self.world.delete_entity(ent)
                 return 0
-            elif ent == 2:
+            elif ent == 1:
                 self.world.events.append({'player_killed': True})
             else:
                 self.world.remove_component(ent, BrainComponent)

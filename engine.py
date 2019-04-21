@@ -17,7 +17,7 @@ def main():
     consoles['log'] = (libtcod.console.Console(log.w, log.h, order='F'), log.x, log.y, log.w, log.h)
     consoles['map'] = (libtcod.console.Console(map.w, map.h, order='F'), map.x, map.y, map.w, map.h)
 
-    # Prepare world. '1' is the game entity ID, '2' is the player ID.
+    # Prepare world. '1' is the player ID.
     world = build_world()
 
     # Insert input and display related objects into certain processors.

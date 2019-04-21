@@ -133,7 +133,7 @@ class MapgenProcessor(esper.Processor):
                 new_ent_pos.y = y
 
     def place_player(self):
-        player_pos = self.world.component_for_entity(2, PositionComponent)
+        player_pos = self.world.component_for_entity(1, PositionComponent)
         room = self._leaf_rooms.pop(random.randint(0, len(self._leaf_rooms) - 1))
         self._rooms.remove(room)
 
@@ -176,7 +176,7 @@ class MapgenProcessor(esper.Processor):
 
                 # DEBUG
                 """
-                player_pos = self.world.component_for_entity(2, PositionComponent)
+                player_pos = self.world.component_for_entity(1, PositionComponent)
                 new_ent_pos.x = player_pos.x + 1
                 new_ent_pos.y = player_pos.y + 1
                 """

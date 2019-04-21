@@ -12,10 +12,10 @@ def render_stats(console_bundle, world):
     color = UI_COLORS['text']
 
     # Draw the player stats.
-    player_stats_component = world.component_for_entity(2, StatsComponent)
+    player_stats_component = world.component_for_entity(1, StatsComponent)
 
     console.print(0, 0, 'HP: {0}/{1}'.format(player_stats_component.hp, player_stats_component.hp_max), color)
-    console.print(0, 1, 'PWR: {0}'.format(calculate_power(2, world)), color)
+    console.print(0, 1, 'PWR: {0}'.format(calculate_power(1, world)), color)
     console.print(0, 2, 'TURN: {0}'.format(world.turn), color)
     console.print(0, 3, 'FLOOR: {0}'.format(world.map.floor), color)
 
@@ -23,7 +23,7 @@ def render_stats(console_bundle, world):
     # Draw the item boxes.
     Q_color, W_color, E_color, A_color, S_color, D_color = color_invalid, color_invalid, color_invalid, color_invalid, color_invalid, color_invalid
     Q_item, W_item, E_item, A_item, S_item, D_item = None, None, None, None, None, None
-    for item in world.component_for_entity(2, EquipmentComponent).equipment:
+    for item in world.component_for_entity(1, EquipmentComponent).equipment:
         slot = world.component_for_entity(item, SlotComponent).slot
         if slot == 'mainhand':
             Q_color = color

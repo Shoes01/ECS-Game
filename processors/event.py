@@ -74,7 +74,7 @@ class EventProcessor(esper.Processor):
                 self.world.create_dijkstra_map = True
 
             if _player_killed:
-                self.world.component_for_entity(2, PlayerComponent).killed = True
+                self.world.component_for_entity(1, PlayerComponent).killed = True
 
             if _pop_popup_menu:
                 self.world.popup_menus.pop()
