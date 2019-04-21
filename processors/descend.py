@@ -1,7 +1,6 @@
 import esper
 
 from components.actor.descend import DescendComponent
-from components.game.events import EventsComponent
 from components.stairs import StairsComponent
 from components.position import PositionComponent
 
@@ -14,7 +13,7 @@ class DescendProcessor(esper.Processor):
             # Look to see if we are standing on stairs.
             for stairs, (s_pos, _) in self.world.get_components(PositionComponent, StairsComponent):
                 if pos.x == s_pos.x and pos.y == s_pos.y:
-                    self.world.component_for_entity(1, EventsComponent).events.append({'new_map': True})
+                    self.world.events.append({'new_map': True})
                     break
             else:
                 self.world.remove_component(ent, DescendComponent)

@@ -16,6 +16,7 @@ class GameWorld(world.CustomWorld):
         self.reset_game = False
         self.turn = 0
         self.redraw = False
+        self.events = []
 
     @property
     def state(self):

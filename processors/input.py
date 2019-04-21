@@ -6,7 +6,6 @@ from components.actor.action import ActionComponent
 from components.actor.actor import ActorComponent
 from components.actor.energy import EnergyComponent
 from components.actor.player import PlayerComponent
-from components.game.events import EventsComponent
 from components.position import PositionComponent
 from game import PopupMenu, PopupChoice
 
@@ -33,7 +32,7 @@ class InputProcessor(esper.Processor):
                 mouse_click = event
 
         if mouse:
-            self.world.component_for_entity(1, EventsComponent).events.append({'mouse_pos': (mouse.tile.x, mouse.tile.y)})
+            self.world.events.append({'mouse_pos': (mouse.tile.x, mouse.tile.y)})
 
         try:
             key_char = chr(key.sym)
@@ -130,7 +129,7 @@ class InputProcessor(esper.Processor):
         
         # Attach event component to world entity. It does not have to be the player's turn for this to happen.
         if events:
-            self.world.component_for_entity(1, EventsComponent).events.extend(events)
+            self.world.events.extend(events)
 
 def generic_move_keys(key_char, key_scancode):
     action = {}

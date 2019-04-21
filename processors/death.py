@@ -10,7 +10,6 @@ from components.actor.dead import DeadComponent
 from components.actor.inventory import InventoryComponent
 from components.actor.stats import StatsComponent
 from components.actor.velocity import VelocityComponent
-from components.game.events import EventsComponent
 from components.game.message_log import MessageLogComponent
 from components.item.pickedup import PickedupComponent
 from components.furniture import FurnitureComponent
@@ -44,12 +43,12 @@ class DeathProcessor(esper.Processor):
                 self.world.delete_entity(ent)
                 return 0
             elif ent == 2:
-                self.world.component_for_entity(1, EventsComponent).events.append({'player_killed': True})
+                self.world.events.append({'player_killed': True})
             else:
                 self.world.remove_component(ent, BrainComponent)
             
             if self.world.has_component(ent, BossComponent):
-                self.world.component_for_entity(1, EventsComponent).events.append({'boss_killed': True})
+                self.world.events.append({'boss_killed': True})
 
             self.world.remove_component(ent, ActorComponent)
             if self.world.has_component(ent, CombatComponent): self.world.remove_component(ent, CombatComponent)

@@ -3,7 +3,6 @@ import esper
 from _helper_functions import load_game, save_game
 from components.actor.player import PlayerComponent
 from components.game.cursor import CursorComponent
-from components.game.events import EventsComponent
 from components.game.input import InputComponent
 from components.game.map import MapComponent
 from components.game.message_log import MessageLogComponent
@@ -18,10 +17,8 @@ class EventProcessor(esper.Processor):
         super().__init__()
     
     def process(self):
-        events_component = self.world.component_for_entity(1, EventsComponent)
-        
-        while events_component.events:
-            event = events_component.events.pop()
+        while self.world.events:
+            event = self.world.events.pop()
 
             _boss_killed = event.get('boss_killed')
             _close_popup_menu = event.get('close_popup_menu')
