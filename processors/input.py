@@ -104,7 +104,7 @@ class InputProcessor(esper.Processor):
             if state == 'Game' and eng.energy == 0:
                 action = generic_move_keys(key_char, key_scancode)
                 
-                if key_char == 'd' and not key.mod:
+                if key_char == 'd' and not key.mod & libtcod.event.KMOD_CTRL:
                     action = {'drop': True}
                 if key_char == 'e':
                     action = {'consume': True}

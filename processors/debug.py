@@ -12,7 +12,7 @@ class DebugProcessor(esper.Processor):
             dijkstra_map = self.world.map.dijkstra_map
             key = self.world.key
             key_char = None
-            mouse_pose = self.world.mouse_pos
+            mouse_pos = self.world.mouse_pos
             
             con_obj = self._consoles['con'] # type: (console, x, y, w, h)
             map_obj = self._consoles['map']
