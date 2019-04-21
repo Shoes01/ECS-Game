@@ -2,8 +2,6 @@ import esper
 import numpy as np
 import tcod as libtcod
 
-from components.game.map import MapComponent
-
 class DebugProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
@@ -11,7 +9,7 @@ class DebugProcessor(esper.Processor):
     
     def process(self):
         if self.world.debug_mode and self.world.state == 'Game':
-            dijkstra_map = self.world.component_for_entity(1, MapComponent).dijkstra_map
+            dijkstra_map = self.world.map.dijkstra_map
             key = self.world.key
             key_char = None
             mouse_pose = self.world.mouse_pos

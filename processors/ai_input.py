@@ -6,7 +6,6 @@ from components.actor.actor import ActorComponent
 from components.actor.brain import BrainComponent
 from components.actor.energy import EnergyComponent
 from components.actor.player import PlayerComponent
-from components.game.map import MapComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
 
@@ -23,7 +22,7 @@ class AiInputProcessor(esper.Processor):
                         self.world.add_component(ent, ActionComponent(action))
     
     def take_turn_zombie(self, brain, pos, ren):
-        if brain.awake is False and self.world.component_for_entity(1, MapComponent).fov_map.fov[pos.x, pos.y]:
+        if brain.awake is False and self.world.map.fov_map.fov[pos.x, pos.y]:
             brain.awake = True
             message = {'ai_awake': (ren.char, ren.color, self.world.turn)}
             self.world.messages.append(message)
@@ -36,7 +35,7 @@ class AiInputProcessor(esper.Processor):
                 
     def hunt_player(self, pos):
         x, y = pos.x, pos.y
-        game_map = self.world.component_for_entity(1, MapComponent)
+        game_map = self.world.map
         dijkstra_map = game_map.dijkstra_map
         directory = game_map.directory
         lowest_value = dijkstra_map[x, y]

@@ -5,7 +5,6 @@ from components.actor.actor import ActorComponent
 from components.actor.corpse import CorpseComponent
 from components.item.item import ItemComponent
 from components.item.pickedup import PickedupComponent
-from components.game.map import MapComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
 from components.stairs import StairsComponent
@@ -69,7 +68,7 @@ def render_entities(console_bundle, world):
         console.print(cursor.x, cursor.y, cursor.char, cursor.color)
 
 def prerender_entities(world):
-    game_map = world.component_for_entity(1, MapComponent)
+    game_map = world.map
 
     if game_map.fov_map:
         pos_player = world.component_for_entity(2, PositionComponent)

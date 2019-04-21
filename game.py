@@ -23,6 +23,7 @@ class GameWorld(world.CustomWorld):
         self.view_log = False
         
         self.cursor = Cursor()
+        self.map = Map()
 
     @property
     def state(self):
@@ -35,6 +36,16 @@ class Cursor():
         self.color = UI_COLORS['cursor']
         self.x = 0
         self.y = 0
+
+class Map():
+    def __init__(self):
+        self.height = map.h
+        self.dijkstra_map = None
+        self.directory = None
+        self.fov_map = None
+        self.tiles = None
+        self.width = map.w
+        self.floor = 0
         
 class PopupChoice():
     ' This is a single entry into the popup menu. '

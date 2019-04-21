@@ -1,6 +1,5 @@
 from _data import UI_COLORS
 from components.actor.actor import ActorComponent
-from components.game.map import MapComponent
 from components.item.item import ItemComponent
 from components.name import NameComponent
 from components.position import PositionComponent

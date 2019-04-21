@@ -2,7 +2,6 @@ import esper
 
 from _helper_functions import load_game, save_game
 from components.actor.player import PlayerComponent
-from components.game.map import MapComponent
 from processors.initial import InitialProcessor
 from processors.final import FinalProcessor
 
