@@ -54,11 +54,6 @@ class EnergyProcessor(esper.Processor):
                 eng.energy += 10
                 self.world.remove_component(ent, WearComponent)
 
-            elif ent == 1 and eng.energy == 0:
-                # This tracks the turn number.
-                eng.energy += 10
-                self.world.turn += 1
-
         deincrement = True
         for ent, (eng, player) in self.world.get_components(EnergyComponent, PlayerComponent):
             if eng.energy == 0:
@@ -66,6 +61,7 @@ class EnergyProcessor(esper.Processor):
                 deincrement = False
 
         if deincrement:
+            self.world.ticker += 1
             for ent, (eng) in self.world.get_component(EnergyComponent):
                 if eng.energy > 0:
                     eng.energy -= 1

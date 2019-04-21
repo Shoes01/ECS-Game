@@ -18,7 +18,7 @@ class GameWorld(world.CustomWorld):
         self.redraw = False
         self.reset_game = False
         self.state_stack = ['Exit', 'MainMenu']
-        self.turn = 0
+        self.ticker = 0
         self.victory = False
         self.view_log = False
         
@@ -28,6 +28,10 @@ class GameWorld(world.CustomWorld):
     @property
     def state(self):
         return self.state_stack[-1]
+    
+    @property
+    def turn(self):
+        return self.ticker // 10
 
 class Cursor():
     def __init__(self):

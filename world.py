@@ -80,7 +80,6 @@ class CustomWorld(esper.World):
         # TODO: Fix this somehow? Move the game entity to JSON as well?
         if entity == 'game':
             return super().create_entity(
-                EnergyComponent(),
                 PersistComponent()
             )
         elif entity == 'player':
