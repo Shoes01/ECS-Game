@@ -13,13 +13,11 @@ from components.actor.inventory import InventoryComponent
 from components.actor.player import PlayerComponent
 from components.actor.stats import StatsComponent
 from components.actor.velocity import VelocityComponent
-from components.game.end_game import EndGameComponent
 from components.game.events import EventsComponent
 from components.game.input import InputComponent
 from components.game.map import MapComponent
 from components.game.message_log import MessageLogComponent
 from components.game.redraw import RedrawComponent
-from components.game.state import StateComponent
 from components.game.turn_count import TurnCountComponent
 from components.item.consumable import ConsumableComponent
 from components.item.item import ItemComponent
@@ -95,7 +93,6 @@ class CustomWorld(esper.World):
                 MessageLogComponent(),
                 PersistComponent(),
                 RedrawComponent(),
-                StateComponent(),
                 TurnCountComponent()
             )
         elif entity == 'player':

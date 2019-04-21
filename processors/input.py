@@ -7,7 +7,6 @@ from components.actor.actor import ActorComponent
 from components.actor.energy import EnergyComponent
 from components.actor.player import PlayerComponent
 from components.game.events import EventsComponent
-from components.game.state import StateComponent
 from components.position import PositionComponent
 from game import PopupMenu, PopupChoice
 
@@ -18,7 +17,7 @@ class InputProcessor(esper.Processor):
     def process(self):
         action = None
         events = []
-        game_state_component = self.world.component_for_entity(1, StateComponent)
+        state = self.world.state
         key = None
         key_char = None
         mouse = None
@@ -48,7 +47,7 @@ class InputProcessor(esper.Processor):
         if key_char == 'd' and key.mod & libtcod.event.KMOD_CTRL:
             events.append({'toggle_debug': True})
 
-        if game_state_component.state == 'PopupMenu':
+        if state == 'PopupMenu':
             menu = self.world.popup_menus[-1]
             
             for choice in menu.contents:
@@ -65,7 +64,7 @@ class InputProcessor(esper.Processor):
                 if menu.include_esc and key_scancode == libtcod.event.SCANCODE_ESCAPE:
                     events.append({'pop_popup_menu': True})
     
-        elif game_state_component.state == 'MainMenu':
+        elif state == 'MainMenu':
             if key_scancode == libtcod.event.SCANCODE_ESCAPE:
                 events.append({'exit': True})
             elif key_scancode == libtcod.event.SCANCODE_KP_ENTER or key_scancode == libtcod.event.SCANCODE_RETURN:
@@ -73,7 +72,7 @@ class InputProcessor(esper.Processor):
             elif key_char == 'l':
                 events.append({'load_game': True})
 
-        elif game_state_component.state == 'Game':
+        elif state == 'Game':
             if key_scancode == libtcod.event.SCANCODE_ESCAPE:
                 menu = PopupMenu(title='What would you like to do?')
                 menu.contents.append(PopupChoice(name='Load game', key='l', result={'load_game': True}, action=False))
@@ -83,7 +82,7 @@ class InputProcessor(esper.Processor):
             if key_char == 'm':
                 events.append({'view_log': True})
 
-        elif game_state_component.state == 'ViewLog':
+        elif state == 'ViewLog':
             if key_scancode == libtcod.event.SCANCODE_UP or key_char == 'k' or key_scancode == libtcod.event.SCANCODE_KP_8:
                 events.append({'scroll': +1})
             elif key_scancode == libtcod.event.SCANCODE_DOWN or key_char == 'j' or key_scancode == libtcod.event.SCANCODE_KP_2:
@@ -91,11 +90,11 @@ class InputProcessor(esper.Processor):
             elif key_scancode == libtcod.event.SCANCODE_ESCAPE:
                 events.append({'exit': True})
 
-        elif game_state_component.state == 'GameOver' or game_state_component.state == 'VictoryScreen':
+        elif state == 'GameOver' or state == 'VictoryScreen':
             if key_scancode == libtcod.event.SCANCODE_ESCAPE:
                 events.append({'exit': True})
         
-        elif game_state_component.state == 'Look':
+        elif state == 'Look':
             events.append(generic_move_keys(key_char, key_scancode))
             if key_scancode == libtcod.event.SCANCODE_ESCAPE:
                 events.append({'exit': True})
@@ -103,7 +102,7 @@ class InputProcessor(esper.Processor):
         
         ### INPUTS THAT ARE READ ONLY ON THE PLAYERS TURN
         for ent, (actor, eng, player) in self.world.get_components(ActorComponent, EnergyComponent, PlayerComponent):
-            if game_state_component.state == 'Game' and eng.energy == 0:
+            if state == 'Game' and eng.energy == 0:
                 action = generic_move_keys(key_char, key_scancode)
                 
                 if key_char == 'd' and not key.mod:

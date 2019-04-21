@@ -16,7 +16,7 @@ class StateProcessor(esper.Processor):
             if self.world.pop_state:
                 self.world.state_stack.pop()
                 self.world.pop_state = False
-                self.world.state_stack.clear_database = True
+                self.world.reset_game = True
             if self.world.component_for_entity(2, PlayerComponent).killed:
                 self.world.remove_component(2, PlayerComponent)
                 self.world.state_stack.append('GameOver')
@@ -38,7 +38,7 @@ class StateProcessor(esper.Processor):
                 self.world.state_stack.pop() # Pop to Game
                 self.world.state_stack.pop() # Pop to MainMenu
                 self.world.pop_state = False
-                self.world.state_stack.clear_database = True
+                self.world.reset_game = True
                 
         elif self.world.state == 'Look':
             if self.world.pop_state:
@@ -49,7 +49,7 @@ class StateProcessor(esper.Processor):
         elif self.world.state == 'MainMenu':
             if self.world.generate_map:
                 self.world.generate_map = False
-                 self.world.state_stack.append('Game')
+                self.world.state_stack.append('Game')
             if self.world.pop_state:
                 self.world.state_stack.pop()
                 self.world.pop_state = False
@@ -63,7 +63,7 @@ class StateProcessor(esper.Processor):
                 self.world.state_stack.pop() # Pop to Game
                 self.world.state_stack.pop() # Pop to MainMenu
                 self.world.pop_state = False
-                self.world.state_stack.clear_database = True
+                self.world.reset_game = True
                 
         elif self.world.state == 'ViewLog':
             if self.world.pop_state:

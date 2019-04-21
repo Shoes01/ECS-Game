@@ -3,7 +3,6 @@ import time
 import tcod as libtcod
 
 from _data import con, eqp, log, map
-from components.game.state import StateComponent
 from processors.debug import DebugProcessor
 from processors.input import InputProcessor
 from processors.render import RenderProcessor
@@ -30,7 +29,7 @@ def main():
         world.process()
 
         # Is there a way to exit the game from inside the processors?
-        if world._entities and world.component_for_entity(1, StateComponent).state == 'Exit':
+        if world._entities and world.state == 'Exit':
             return False
 
 if __name__ == '__main__':

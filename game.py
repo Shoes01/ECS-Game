@@ -13,10 +13,11 @@ class GameWorld(world.CustomWorld):
         self.victory = False
         self.pop_state = False
         self.state_stack = ['Exit', 'MainMenu']
+        self.reset_game = False
 
-        @property
-        def state(self):
-            return self.state_stack[-1]
+    @property
+    def state(self):
+        return self.state_stack[-1]
 
 class PopupChoice():
     ' This is a single entry into the popup menu. '

@@ -3,7 +3,6 @@ import tcod as libtcod
 
 from _data import DoubleLineBox, UI_COLORS, COLOR_THEME
 from components.game.redraw import RedrawComponent
-from components.game.state import StateComponent
 from processors.sub.entities import render_entities
 from processors.sub.message_log import render_message_log
 from processors.sub.popup_menu import render_popup_menu
@@ -16,7 +15,7 @@ class RenderProcessor(esper.Processor):
         self._consoles = {}
     
     def process(self):
-        game_state = self.world.component_for_entity(1, StateComponent).state
+        game_state = self.world.state
         
         # Draw the border while Debug mode is active.
         if game_state == 'Game' and (self.world.component_for_entity(1, RedrawComponent).redraw is False or self.world.debug_mode):

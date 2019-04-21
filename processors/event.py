@@ -3,12 +3,10 @@ import esper
 from _helper_functions import load_game, save_game
 from components.actor.player import PlayerComponent
 from components.game.cursor import CursorComponent
-from components.game.end_game import EndGameComponent
 from components.game.events import EventsComponent
 from components.game.input import InputComponent
 from components.game.map import MapComponent
 from components.game.message_log import MessageLogComponent
-from components.game.state import StateComponent
 from processors.initial import InitialProcessor
 from processors.final import FinalProcessor
 
@@ -51,7 +49,7 @@ class EventProcessor(esper.Processor):
                     menus.pop()
 
             if _exit:
-                self.world.add_component(1, EndGameComponent())
+                self.world.pop_state = True
 
             if _key_stroke:
                 key = _key_stroke

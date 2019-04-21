@@ -7,6 +7,6 @@ class FinalProcessor(esper.Processor):
         super().__init__()
     
     def process(self):
-        if self.world._entities and self.world.clear_database:
-            self.world.clear_database = False
+        if self.world._entities and self.world.reset_game:
+            self.world.reset_game = False
             self.world.clear_database()

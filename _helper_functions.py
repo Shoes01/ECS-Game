@@ -5,7 +5,6 @@ from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.stats import StatsComponent
 from components.game.message_log import MessageLogComponent
-from components.game.state import StateComponent
 from components.item.item import ItemComponent
 from components.item.modifier import ModifierComponent
 from components.position import PositionComponent
@@ -21,7 +20,7 @@ def calculate_power(ent, world):
 def load_game(world):
     if not os.path.isfile('savegame.dat'):
         message_log_component = world.component_for_entity(1, MessageLogComponent)
-        state = world.component_for_entity(1, StateComponent).state
+        state = world.state
 
         if state is not 'MainMenu':
             message = 'There is no save file to load.'
