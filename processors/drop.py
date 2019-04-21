@@ -4,7 +4,6 @@ from components.actor.drop import DropComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
 from components.item.pickedup import PickedupComponent
-from components.game.message_log import MessageLogComponent
 from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
@@ -48,4 +47,4 @@ class DropProcessor(esper.Processor):
                 item_pos = self.world.component_for_entity(item, PositionComponent)
                 item_pos.x, item_pos.y = pos.x, pos.y
 
-                self.world.component_for_entity(1, MessageLogComponent).messages.append({'drop': (self.world.component_for_entity(item, NameComponent).name, self.world.turn)})
+                self.world.messages.append({'drop': (self.world.component_for_entity(item, NameComponent).name, self.world.turn)})

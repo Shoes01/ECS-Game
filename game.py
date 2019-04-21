@@ -10,6 +10,8 @@ class GameWorld(world.CustomWorld):
         self.events = []
         self.generate_map = False
         self.key = None
+        self.messages = []
+        self.messages_offset = 0
         self.mouse_pos = None
         self.pop_state = False
         self.popup_menus = []

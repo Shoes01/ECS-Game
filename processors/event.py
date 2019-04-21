@@ -3,7 +3,6 @@ import esper
 from _helper_functions import load_game, save_game
 from components.actor.player import PlayerComponent
 from components.game.map import MapComponent
-from components.game.message_log import MessageLogComponent
 from processors.initial import InitialProcessor
 from processors.final import FinalProcessor
 
@@ -54,7 +53,7 @@ class EventProcessor(esper.Processor):
             if _load_game:
                 load_game(self.world)
                 self.world.events.append({'close_popup_menu': True})
-                self.world.component_for_entity(1, MessageLogComponent).messages.append({'game_loaded': True})
+                self.world.messages.append({'game_loaded': True})
             
             if _look:
                 x, y = _look
@@ -85,11 +84,11 @@ class EventProcessor(esper.Processor):
                 self.world.popup_menus.append(_popup)
             
             if _save_game:
-                self.world.component_for_entity(1, MessageLogComponent).messages.append({'game_saved': True})
+                self.world.messages.append({'game_saved': True})
                 save_game(self.world._next_entity_id, self.world._components, self.world._entities)
 
             if _scroll:
-                self.world.component_for_entity(1, MessageLogComponent).offset += _scroll
+                self.world.messages_offset += _scroll
 
             if _toggle_debug:
                 if self.world.debug_mode:

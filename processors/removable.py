@@ -2,7 +2,6 @@ import esper
 
 from components.actor.equipment import EquipmentComponent
 from components.actor.remove import RemoveComponent
-from components.game.message_log import MessageLogComponent
 from components.name import NameComponent
 
 class RemovableProcessor(esper.Processor):
@@ -20,8 +19,8 @@ class RemovableProcessor(esper.Processor):
                 success = True
                 eqp.equipment.remove(item)                
                 name_component.name = name_component._name
-                self.world.component_for_entity(1, MessageLogComponent).messages.append({'remove': (name_component.name, success, turn)})
+                self.world.messages.append({'remove': (name_component.name, success, turn)})
             else:
                 success = False
                 self.world.remove_component(ent, RemoveComponent)
-                self.world.component_for_entity(1, MessageLogComponent).messages.append({'remove': (name_component.name, success, turn)})
+                self.world.messages.append({'remove': (name_component.name, success, turn)})

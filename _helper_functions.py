@@ -4,7 +4,6 @@ import shelve
 from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.stats import StatsComponent
-from components.game.message_log import MessageLogComponent
 from components.item.item import ItemComponent
 from components.item.modifier import ModifierComponent
 from components.position import PositionComponent
@@ -19,12 +18,11 @@ def calculate_power(ent, world):
 
 def load_game(world):
     if not os.path.isfile('savegame.dat'):
-        message_log_component = world.component_for_entity(1, MessageLogComponent)
         state = world.state
 
         if state is not 'MainMenu':
             message = 'There is no save file to load.'
-            message_log_component.messages.append({'error': message})
+            world.messages.append({'error': message})
         return 0
 
     with shelve.open('savegame', 'r') as data_file:

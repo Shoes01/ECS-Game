@@ -1,29 +1,23 @@
 import tcod as libtcod
 
 from _data import LOG_COLORS
-from components.game.message_log import MessageLogComponent
 
 def render_message_log(console_bundle, world):
-    message_log_component = world.component_for_entity(1, MessageLogComponent)
     console, x, y, w, h = console_bundle
     
-    offset = None
-    messages = message_log_component.messages
-    
-    max_offset = len(messages) - h
+    max_offset = len(world.messages) - h
 
-    if message_log_component.offset >= max_offset > 0:
-        message_log_component.offset = max_offset
+    if world.messages_offset >= max_offset > 0:
+        world.messages_offset = max_offset
         offset = -max_offset
-    elif message_log_component.offset <= 0:
-        message_log_component.offset = 0
+    elif world.messages_offset <= 0:
+        world.messages_offset = 0
         offset = None
     else:
-        offset = -message_log_component.offset
-    
-    
+        offset = -world.messages_offset
+
     dy = h - 1
-    offset_messages = messages[:offset]
+    offset_messages = world.messages[:offset]
     for message in reversed(offset_messages):
         _ai_awake = message.get('ai_awake')
         _combat = message.get('combat')

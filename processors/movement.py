@@ -4,7 +4,6 @@ from components.actor.actor import ActorComponent
 from components.actor.combat import CombatComponent
 from components.actor.player import PlayerComponent
 from components.actor.velocity import VelocityComponent
-from components.game.message_log import MessageLogComponent
 from components.item.item import ItemComponent
 from components.name import NameComponent
 from components.position import PositionComponent
@@ -32,9 +31,9 @@ class MovementProcessor(esper.Processor):
                 if items:
                     if len(items) == 1:
                         name = self.world.component_for_entity(items.pop(), NameComponent).name
-                        self.world.component_for_entity(1, MessageLogComponent).messages.append({'move_items': (self.world.turn, name, 0)})
+                        self.world.messages.append({'move_items': (self.world.turn, name, 0)})
                     else:
-                        self.world.component_for_entity(1, MessageLogComponent).messages.append({'move_items': (self.world.turn, None, len(items))})
+                        self.world.messages.append({'move_items': (self.world.turn, None, len(items))})
 
                     
 

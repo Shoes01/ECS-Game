@@ -7,7 +7,6 @@ from components.actor.combat import CombatComponent
 from components.actor.dead import DeadComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.stats import StatsComponent
-from components.game.message_log import MessageLogComponent
 from components.item.modifier import ModifierComponent
 from components.render import RenderComponent
 
@@ -31,7 +30,7 @@ class CombatProcessor(esper.Processor):
 
             def_ren = self.world.component_for_entity(defender_ID, RenderComponent)
 
-            self.world.component_for_entity(1, MessageLogComponent).messages.append({'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, damage, self.world.turn)})
+            self.world.messages.append({'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, damage, self.world.turn)})
 
             if defender_stats.hp <= 0 and not self.world.has_component(defender_ID, DeadComponent):
                 self.world.add_component(defender_ID, DeadComponent(murderer=attacker_ID))

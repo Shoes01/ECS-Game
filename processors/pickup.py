@@ -2,7 +2,6 @@ import esper
 
 from components.actor.inventory import InventoryComponent
 from components.actor.pickup import PickupComponent
-from components.game.message_log import MessageLogComponent
 from components.item.item import ItemComponent
 from components.item.pickedup import PickedupComponent
 from components.name import NameComponent
@@ -26,7 +25,7 @@ class PickupProcessor(esper.Processor):
                         matched_items.append(item_ent)
                 
                 if len(matched_items) == 0:
-                    self.world.component_for_entity(1, MessageLogComponent).messages.append({'pickup': (None, False, turn)})
+                    self.world.messages.append({'pickup': (None, False, turn)})
                     self.world.remove_component(ent, PickupComponent)
 
                 elif len(matched_items) == 1:
@@ -60,4 +59,4 @@ class PickupProcessor(esper.Processor):
         item_pos = self.world.component_for_entity(item, PositionComponent)
         item_pos.x, item_pos.y = -1, -1
 
-        self.world.component_for_entity(1, MessageLogComponent).messages.append({'pickup': (self.world.component_for_entity(item, NameComponent).name, True, turn)})
+        self.world.messages.append({'pickup': (self.world.component_for_entity(item, NameComponent).name, True, turn)})

@@ -6,7 +6,6 @@ from components.actor.remove import RemoveComponent
 from components.actor.wear import WearComponent
 from components.item.slot import SlotComponent
 from components.item.wearable import WearableComponent
-from components.game.message_log import MessageLogComponent
 from components.name import NameComponent
 from game import PopupMenu, PopupChoice
 
@@ -58,7 +57,7 @@ class WearableProcessor(esper.Processor):
                     # An item is already in the slot we want; swap the two items.
                     slot = self.world.component_for_entity(item, SlotComponent).slot
                     success = 'slot_filled'
-                    self.world.component_for_entity(1, MessageLogComponent).messages.append({'wear': (name_component.name, slot, success, turn)})
+                    self.world.messages.append({'wear': (name_component.name, slot, success, turn)})
                     eqp.equipment.append(item)
                     name_component.name += ' (worn)'
                     self.world.remove_component(ent, WearComponent)
@@ -67,11 +66,11 @@ class WearableProcessor(esper.Processor):
                     # Wear the item!
                     slot = self.world.component_for_entity(item, SlotComponent).slot
                     success = True
-                    self.world.component_for_entity(1, MessageLogComponent).messages.append({'wear': (name_component.name, slot, success, turn)})
+                    self.world.messages.append({'wear': (name_component.name, slot, success, turn)})
                     eqp.equipment.append(item)
                     name_component.name += ' (worn)'
                 else:
                     # This is not a wearable item.
                     success = False
-                    self.world.component_for_entity(1, MessageLogComponent).messages.append({'wear': (name_component.name, None, success, turn)})
+                    self.world.messages.append({'wear': (name_component.name, None, success, turn)})
                     self.world.remove_component(ent, WearComponent)

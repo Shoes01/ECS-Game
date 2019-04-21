@@ -7,7 +7,6 @@ from components.actor.brain import BrainComponent
 from components.actor.energy import EnergyComponent
 from components.actor.player import PlayerComponent
 from components.game.map import MapComponent
-from components.game.message_log import MessageLogComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
 
@@ -27,7 +26,7 @@ class AiInputProcessor(esper.Processor):
         if brain.awake is False and self.world.component_for_entity(1, MapComponent).fov_map.fov[pos.x, pos.y]:
             brain.awake = True
             message = {'ai_awake': (ren.char, ren.color, self.world.turn)}
-            self.world.component_for_entity(1, MessageLogComponent).messages.append(message)
+            self.world.messages.append(message)
 
             return {'wait': True}
         elif brain.awake:                    
