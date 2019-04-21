@@ -84,7 +84,7 @@ class EventProcessor(esper.Processor):
             
             if _save_game:
                 self.world.messages.append({'game_saved': True})
-                save_game(self.world._next_entity_id, self.world._components, self.world._entities)
+                save_game(self.world)
 
             if _scroll:
                 self.world.messages_offset += _scroll

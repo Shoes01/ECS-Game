@@ -29,6 +29,10 @@ def load_game(world):
         world._next_entity_id = data_file['next_entity_id']
         world._components = data_file['components']
         world._entities = data_file['entities']
+        world.messages = data_file['log']
+        world.state_stack = data_file['state']
+        world.ticker = data_file['ticker']
+        world.map = data_file['map']
 
 def loot_algorithm(chance, monster, item, floor):
     net_rarity = (1 + (monster)*5 - (item - 3)*5 + (floor)*5)
@@ -36,8 +40,12 @@ def loot_algorithm(chance, monster, item, floor):
         return True
     return False
 
-def save_game(next_entity_id, components, entities):
+def save_game(world):
     with shelve.open('savegame', 'n') as data_file:
-        data_file['next_entity_id'] = next_entity_id
-        data_file['components'] = components
-        data_file['entities'] = entities
+        data_file['next_entity_id'] = world._next_entity_id
+        data_file['components'] = world._components
+        data_file['entities'] = world._entities
+        data_file['log'] = world.messages
+        data_file['state'] = world.state_stack
+        data_file['ticker'] = world.ticker
+        data_file['map'] = world.map
