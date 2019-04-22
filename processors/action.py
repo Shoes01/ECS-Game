@@ -8,6 +8,7 @@ from components.actor.drop import DropComponent
 from components.actor.open_inv import OpenInventoryComponent
 from components.actor.pickup import PickupComponent
 from components.actor.player import PlayerComponent
+from components.actor.prepare_skill import PrepareSkillComponent
 from components.actor.remove import RemoveComponent
 from components.actor.velocity import VelocityComponent
 from components.actor.wait import WaitComponent
@@ -31,6 +32,7 @@ class ActionProcessor(esper.Processor):
             _move = action.action.get('move')
             _pick_up = action.action.get('pick_up')
             _remove = action.action.get('remove')
+            _skill_prepare = action.action.get('skill_prepare')
             _wait = action.action.get('wait')
             _wear = action.action.get('wear')
 
@@ -40,49 +42,51 @@ class ActionProcessor(esper.Processor):
                 elif _consume:
                     self.world.add_component(ent, ConsumeComponent(item_id=_consume))
                     
-            if _descend:
+            elif _descend:
                 self.world.add_component(ent, DescendComponent())
 
-            if _drop:
+            elif _drop:
                 if _drop is True:
                     self.world.add_component(ent, DropComponent(item_id=None))
                 elif _drop:
                     self.world.add_component(ent, DropComponent(item_id=_drop))    
 
-            if _open_inventory:
+            elif _open_inventory:
                 self.world.add_component(ent, OpenInventoryComponent())
 
-            if _mouse_move:
+            elif _mouse_move:
                 mx, my = _mouse_move.tile.x, _mouse_move.tile.y
                 pos = self.world.component_for_entity(ent, PositionComponent)
 
                 dx = mx - pos.x
                 dy = my - pos.y
-
                 r = math.sqrt( dx**2 + dy**2)
 
                 self.world.add_component(ent, VelocityComponent(dx=round(dx/r), dy=round(dy/r)))
                 self.world.create_dijkstra_map = True
 
-
-            if _move:
+            elif _move:
                 dx, dy = _move
                 self.world.add_component(ent, VelocityComponent(dx=dx, dy=dy))
                 self.world.create_dijkstra_map = True
             
-            if _pick_up:
+            elif _pick_up:
                 if _pick_up is True:
                     self.world.add_component(ent, PickupComponent(item_id=None))
                 elif _pick_up:
                     self.world.add_component(ent, PickupComponent(item_id=_pick_up))
                     
-            if _remove:
+            elif _remove:
                 self.world.add_component(ent, RemoveComponent(item_id=_remove))
+            
+            elif _skill_prepare:
+                self.world.add_component(ent, PrepareSkillComponent(slot=_skill_prepare))
+                pass
 
-            if _wait:
+            elif _wait:
                 self.world.add_component(ent, WaitComponent())
 
-            if _wear:
+            elif _wear:
                 if _wear is True:
                     self.world.add_component(ent, WearComponent(item_id=None))
                 elif _wear:

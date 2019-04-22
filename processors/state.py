@@ -15,7 +15,7 @@ class StateProcessor(esper.Processor):
             if self.world.pop_state:
                 self.world.state_stack.pop()
                 self.world.reset_game = True
-            if self.world.component_for_entity(1, PlayerComponent).killed:
+            elif self.world.component_for_entity(1, PlayerComponent).killed:
                 self.world.remove_component(1, PlayerComponent)
                 self.world.state_stack.append('GameOver')
             elif self.world.cursor.active:
@@ -43,13 +43,17 @@ class StateProcessor(esper.Processor):
         elif self.world.state == 'MainMenu':
             if self.world.generate_map:
                 self.world.state_stack.append('Game')
-            if self.world.pop_state:
+            elif self.world.pop_state:
                 self.world.state_stack.pop()
                 
         elif self.world.state == 'PopupMenu':
             if not self.world.popup_menus:
                 self.world.state_stack.pop()
             if self.world.pop_state:
+                self.world.state_stack.pop()
+        
+        elif self.world.state == 'SkillTargeting':
+            if not self.world.skill_targeting:
                 self.world.state_stack.pop()
         
         elif self.world.state == 'VictoryScreen':

@@ -18,6 +18,7 @@ from processors.movement import MovementProcessor
 from processors.pickup import PickupProcessor
 from processors.removable import RemovableProcessor
 from processors.render import RenderProcessor
+from processors.skill import SkillProcessor
 from processors.state import StateProcessor
 from processors.wearable import WearableProcessor
 from game import GameWorld
@@ -47,6 +48,7 @@ def build_world():
     pickup_processor = PickupProcessor()
     removable_processor = RemovableProcessor()
     render_processor = RenderProcessor()
+    skill_processor = SkillProcessor()
     state_processor = StateProcessor()
     wearable_processor = WearableProcessor()
     
@@ -63,6 +65,7 @@ def build_world():
     world.add_processor(action_processor, 20)
     world.add_processor(event_processor, 20)    
     world.add_processor(inventory_processor, 15)
+    world.add_processor(skill_processor, 15)
     world.add_processor(consumable_processor, 10)
     world.add_processor(descent_processor, 10)
     world.add_processor(pickup_processor, 10)

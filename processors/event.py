@@ -29,6 +29,7 @@ class EventProcessor(esper.Processor):
             _popup = event.get('popup')
             _save_game = event.get('save_game')
             _scroll = event.get('scroll')
+            _skill_done = event.get('skill_done')
             _skill_targeting = event.get('skill_targeting')
             _toggle_debug = event.get('toggle_debug')
             _view_log = event.get('view_log')
@@ -88,6 +89,9 @@ class EventProcessor(esper.Processor):
 
             elif _scroll:
                 self.world.messages_offset += _scroll
+
+            elif _skill_done:
+                self.world.skill_targeting = False
 
             elif _skill_targeting:
                 self.world.skill_targeting = True
