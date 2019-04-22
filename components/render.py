@@ -5,3 +5,4 @@ class RenderComponent():
         self.explored = explored
         self.explored_color = explored_color
         self.visible = visible
+        self.targeted = False
