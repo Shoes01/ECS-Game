@@ -16,14 +16,15 @@ class GameWorld(world.CustomWorld):
         self.view_log = False
         
         ' Data. '
-        self.debug_mode = False # This one is a toggle
+        self.debug_mode = False # This one is a toggle.
         self.events = []
         self.key = None
         self.messages = []
         self.messages_offset = 0
         self.mouse_pos = None
         self.popup_menus = []
-        self.redraw = False # This information needs to communicate cross-tick
+        self.redraw = False # This information needs to communicate cross-tick.
+        self.skill_targeting = False # This one is a toggle.
         self.state_stack = ['Exit', 'MainMenu']
         self.ticker = 0
 

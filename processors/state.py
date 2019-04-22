@@ -18,14 +18,16 @@ class StateProcessor(esper.Processor):
             if self.world.component_for_entity(1, PlayerComponent).killed:
                 self.world.remove_component(1, PlayerComponent)
                 self.world.state_stack.append('GameOver')
-            if self.world.popup_menus:
-                self.world.state_stack.append('PopupMenu')
-            if self.world.victory:
-                self.world.state_stack.append('VictoryScreen')
-            if self.world.view_log:
-                self.world.state_stack.append('ViewLog')
-            if self.world.cursor.active:
+            elif self.world.cursor.active:
                 self.world.state_stack.append('Look')
+            elif self.world.popup_menus:
+                self.world.state_stack.append('PopupMenu')
+            elif self.world.skill_targeting:
+                self.world.state_stack.append('SkillTargeting')
+            elif self.world.victory:
+                self.world.state_stack.append('VictoryScreen')
+            elif self.world.view_log:
+                self.world.state_stack.append('ViewLog')
         
         elif self.world.state == 'GameOver':
             if self.world.pop_state:

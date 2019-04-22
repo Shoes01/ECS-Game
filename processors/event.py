@@ -29,70 +29,74 @@ class EventProcessor(esper.Processor):
             _popup = event.get('popup')
             _save_game = event.get('save_game')
             _scroll = event.get('scroll')
+            _skill_targeting = event.get('skill_targeting')
             _toggle_debug = event.get('toggle_debug')
             _view_log = event.get('view_log')
-
+            
             if _boss_killed:
                 self.world.victory = True
 
-            if _close_popup_menu:
+            elif _close_popup_menu:
                 menus = self.world.popup_menus
                 while len(menus):
                     menus.pop()
 
-            if _exit:
+            elif _exit:
                 self.world.pop_state = True
 
-            if _key_stroke:
+            elif _key_stroke:
                 key = _key_stroke
                 self.world.key = key
                 self.world.mouse_pos = None
 
-            if _load_game:
+            elif _load_game:
                 self.world.load_game()
                 self.world.events.append({'close_popup_menu': True})
                 self.world.messages.append({'game_loaded': True})
             
-            if _look:
+            elif _look:
                 x, y = _look
                 self.world.cursor.active = True
                 self.world.cursor.x = x
                 self.world.cursor.y = y
 
-            if _mouse_pos:
+            elif _mouse_pos:
                 x, y = _mouse_pos
                 self.world.mouse_pos = (x, y)
             
-            if _move_cursor:
+            elif _move_cursor:
                 dx, dy = _move_cursor
                 self.world.cursor.x += dx
                 self.world.cursor.y += dy
 
-            if _new_map:
+            elif _new_map:
                 self.world.generate_map = True
                 self.world.create_dijkstra_map = True
 
-            if _player_killed:
+            elif _player_killed:
                 self.world.component_for_entity(1, PlayerComponent).killed = True
 
-            if _pop_popup_menu:
+            elif _pop_popup_menu:
                 self.world.popup_menus.pop()
 
-            if _popup:
+            elif _popup:
                 self.world.popup_menus.append(_popup)
             
-            if _save_game:
+            elif _save_game:
                 self.world.messages.append({'game_saved': True})
                 self.world.save_game()
 
-            if _scroll:
+            elif _scroll:
                 self.world.messages_offset += _scroll
 
-            if _toggle_debug:
+            elif _skill_targeting:
+                self.world.skill_targeting = True
+
+            elif _toggle_debug:
                 if self.world.debug_mode:
                     self.world.debug_mode = False
                 else:
                     self.world.debug_mode = True
             
-            if _view_log:
+            elif _view_log:
                 self.world.view_log = True

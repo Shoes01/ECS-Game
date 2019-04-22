@@ -102,24 +102,32 @@ class InputProcessor(esper.Processor):
         ### INPUTS THAT ARE READ ONLY ON THE PLAYERS TURN
         for ent, (actor, eng, player) in self.world.get_components(ActorComponent, EnergyComponent, PlayerComponent):
             if state == 'Game' and eng.energy == 0:
+                # Movement keys.
                 action = generic_move_keys(key_char, key_scancode)
                 
-                if key_char == 'd' and not key.mod & libtcod.event.KMOD_CTRL:
+                # Skill keys.
+                if key_char == 'q' or key_char == 'w' or key_char == 'e' or key_char == 'a' or key_char == 's' or key_char == 'd':
+                    events.append({'skill_targeting': True})
+                    action = {'skill_prepare': key_char}
+
+                # Other keys.
+                elif key_char == 'd' and not key.mod & libtcod.event.KMOD_CTRL:
                     action = {'drop': True}
-                if key_char == 'e':
+                elif key_char == 'e':
                     action = {'consume': True}
-                if key_char == 'g':
+                elif key_char == 'g':
                     action = {'pick_up': True}
-                if key_char == 'i':
+                elif key_char == 'i':
                     action = {'open_inventory': True}
-                if key_char == 'w' or key_char == 'r':
+                elif key_char == 'w' or key_char == 'r':
                     action = {'wear': True}
-                if key_char == '>' or key_char == '<':
+                elif key_char == '>' or key_char == '<':
                     action = {'descend': True}
-                if key_char == 'x':
+                elif key_char == 'x':
                     _pos = self.world.component_for_entity(ent, PositionComponent)
                     events.append({'look': (_pos.x, _pos.y)})
                 
+                # Mouse movement.
                 if mouse_click:
                     action = {'mouse_move': mouse_click}
 
