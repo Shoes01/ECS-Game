@@ -11,7 +11,6 @@ from processors.sub.tooltips import render_tooltips
 class RenderProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
-        self._consoles = {}
     
     def process(self):
         game_state = self.world.state
@@ -23,10 +22,10 @@ class RenderProcessor(esper.Processor):
         else:
             self.world.redraw = False
 
-        con_obj = self._consoles['con'] # type: (console, x, y, w, h)
-        eqp_obj = self._consoles['stats']
-        log_obj = self._consoles['log']
-        map_obj = self._consoles['map']
+        con_obj = self.world.consoles['con'] # type: (console, x, y, w, h)
+        eqp_obj = self.world.consoles['stats']
+        log_obj = self.world.consoles['log']
+        map_obj = self.world.consoles['map']
 
         # Draw the main menu.
         if game_state == 'MainMenu':
@@ -41,11 +40,11 @@ class RenderProcessor(esper.Processor):
         # Draw the game.
         if game_state == 'Game' or game_state == 'GameOver' or game_state == 'Look' or game_state == 'PopupMenu' or game_state == 'ViewLog':
             self.render_border()
-            render_stats(self._consoles['stats'], self.world)
-            render_entities(self._consoles['map'], self.world)
-            render_popup_menu(self._consoles['map'], self.world)
-            render_message_log(self._consoles['log'], self.world)
-            render_tooltips(self._consoles['map'], self.world)
+            render_stats(self.world.consoles['stats'], self.world)
+            render_entities(self.world.consoles['map'], self.world)
+            render_popup_menu(self.world.consoles['map'], self.world)
+            render_message_log(self.world.consoles['log'], self.world)
+            render_tooltips(self.world.consoles['map'], self.world)
 
         # Draw the gameover overlay.
         if game_state == 'GameOver':
@@ -56,7 +55,7 @@ class RenderProcessor(esper.Processor):
         if game_state == 'ViewLog':
             map_obj[0].clear()
             log_obj[0].clear()
-            render_message_log(self._consoles['map'], self.world)
+            render_message_log(self.world.consoles['map'], self.world)
 
         eqp_obj[0].blit(dest=con_obj[0], dest_x=eqp_obj[1], dest_y=eqp_obj[2], width=eqp_obj[3], height=eqp_obj[4])
         log_obj[0].blit(dest=con_obj[0], dest_x=log_obj[1], dest_y=log_obj[2], width=log_obj[3], height=log_obj[4])
@@ -70,9 +69,9 @@ class RenderProcessor(esper.Processor):
         map_obj[0].clear()
     
     def render_border(self):
-        con_obj = self._consoles['con'] # type: (console, x, y, w, h)
-        eqp_obj = self._consoles['stats']
-        map_obj = self._consoles['map']
+        con_obj = self.world.consoles['con'] # type: (console, x, y, w, h)
+        eqp_obj = self.world.consoles['stats']
+        map_obj = self.world.consoles['map']
 
         box = DoubleLineBox()
         

@@ -4,7 +4,6 @@ import random
 import tcod as libtcod
 
 from _data import FINAL_FLOOR
-from _helper_functions import loot_algorithm
 from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
@@ -230,8 +229,14 @@ class MapgenProcessor(esper.Processor):
         item_table = self.world.item_table
         for x in reversed(range(0, len(item_table))):
             chance = random.randint(0, 100)
-            if item_table[x] and loot_algorithm(chance=chance, monster=ent_rarity, item=x, floor=floor):
+            if item_table[x] and self.loot_algorithm(chance=chance, monster=ent_rarity, item=x, floor=floor):
                 return random.choice(item_table[x])
+
+    def loot_algorithm(self, chance, monster, item, floor):
+        net_rarity = (1 + (monster)*5 - (item - 3)*5 + (floor)*5)
+        if chance > (100 - net_rarity):
+            return True
+        return False
 
     def create_directory(self, h, tiles, w):
         directory = {}

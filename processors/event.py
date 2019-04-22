@@ -1,6 +1,5 @@
 import esper
 
-from _helper_functions import load_game, save_game
 from components.actor.player import PlayerComponent
 from processors.initial import InitialProcessor
 from processors.final import FinalProcessor
@@ -50,7 +49,7 @@ class EventProcessor(esper.Processor):
                 self.world.mouse_pos = None
 
             if _load_game:
-                load_game(self.world)
+                self.world.load_game()
                 self.world.events.append({'close_popup_menu': True})
                 self.world.messages.append({'game_loaded': True})
             
@@ -84,7 +83,7 @@ class EventProcessor(esper.Processor):
             
             if _save_game:
                 self.world.messages.append({'game_saved': True})
-                save_game(self.world)
+                self.world.save_game()
 
             if _scroll:
                 self.world.messages_offset += _scroll

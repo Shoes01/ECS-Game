@@ -1,3 +1,5 @@
+import os
+import shelve
 import world
 
 from _data import map, UI_COLORS
@@ -26,6 +28,7 @@ class GameWorld(world.CustomWorld):
         self.ticker = 0
 
         ' Objects. '
+        self.consoles = None
         self.cursor = Cursor()
         self.map = Map()
 
@@ -36,7 +39,37 @@ class GameWorld(world.CustomWorld):
     @property
     def turn(self):
         return self.ticker // 10
-    
+        
+    def load_game(self):
+        if not os.path.isfile('savegame.dat'):
+            state = self.state
+
+            if state is not 'MainMenu':
+                message = 'There is no save file to load.'
+                self.messages.append({'error': message})
+            return 0
+
+        with shelve.open('savegame', 'r') as data_file:
+            self.consoles = data_file['consoles']
+            self.map = data_file['map']
+            self.messages = data_file['log']
+            self.state_stack = data_file['state']
+            self.ticker = data_file['ticker']
+            self._components = data_file['components']
+            self._entities = data_file['entities']
+            self._next_entity_id = data_file['next_entity_id']
+            
+    def save_game(self):
+        with shelve.open('savegame', 'n') as data_file:
+            data_file['consoles'] = self.consoles
+            data_file['map'] = self.map
+            data_file['log'] = self.messages
+            data_file['state'] = self.state_stack
+            data_file['ticker'] = self.ticker
+            data_file['components'] = self._components
+            data_file['entities'] = self._entities
+            data_file['next_entity_id'] = self._next_entity_id
+            
     def reset_flags(self):
         self.create_dijkstra_map = False
         self.generate_map = False

@@ -5,7 +5,6 @@ import tcod as libtcod
 class DebugProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
-        self._consoles = {}
     
     def process(self):
         if self.world.debug_mode and self.world.state == 'Game':
@@ -14,9 +13,9 @@ class DebugProcessor(esper.Processor):
             key_char = None
             mouse_pos = self.world.mouse_pos
             
-            con_obj = self._consoles['con'] # type: (console, x, y, w, h)
-            map_obj = self._consoles['map']
-            log_obj = self._consoles['log']
+            con_obj = self.world.consoles['con'] # type: (console, x, y, w, h)
+            map_obj = self.world.consoles['map']
+            log_obj = self.world.consoles['log']
 
             # Prepare input.
             try:

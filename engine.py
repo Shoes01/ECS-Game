@@ -19,18 +19,11 @@ def main():
 
     # Prepare world. '1' is the player ID.
     world = build_world()
-
-    # Insert input and display related objects into certain processors.
-    world.get_processor(DebugProcessor)._consoles = consoles
-    world.get_processor(RenderProcessor)._consoles = consoles
+    world.consoles = consoles
  
-    while True:
-        # Do literally everything else.
+    while not world.state == 'Exit':
+        # Do literally everything.
         world.process()
-
-        # Is there a way to exit the game from inside the processors?
-        if world._entities and world.state == 'Exit':
-            return False
 
 if __name__ == '__main__':
     # cProfile.run('main()') # This runs the profiler
