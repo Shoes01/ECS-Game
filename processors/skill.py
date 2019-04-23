@@ -35,11 +35,9 @@ class SkillProcessor(esper.Processor):
 
             else:
                 # This has failed.
-                self.world.remove_component(ent, PrepareSkillComponent)
                 self.world.events.append({'skill_done': True})
                 return 0
             
-            # There is a skill that can be used here!
             # Fetch direction
             x, y = skill.direction
             hor = None

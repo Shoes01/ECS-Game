@@ -102,8 +102,6 @@ class InputProcessor(esper.Processor):
             if key_scancode == libtcod.event.SCANCODE_ESCAPE:
                 events.append({'skill_done': True})
 
-
-        
         ### INPUTS THAT ARE READ ONLY ON THE PLAYERS TURN
         for ent, (actor, eng, player) in self.world.get_components(ActorComponent, EnergyComponent, PlayerComponent):
             if state == 'Game' and eng.energy == 0:
@@ -111,7 +109,7 @@ class InputProcessor(esper.Processor):
                 action = generic_move_keys(key_char, key_scancode)
                 
                 # Other keys.
-                if key_char == 'd' and not key.mod & libtcod.event.KMOD_CTRL:
+                if key_char == 'd' and key.mod & libtcod.event.KMOD_SHIFT:
                     action = {'drop': True}
                 elif key_char == 'e' and key.mod & libtcod.event.KMOD_SHIFT:
                     action = {'consume': True}
