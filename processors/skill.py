@@ -70,9 +70,12 @@ class SkillProcessor(esper.Processor):
             
             for y in range(0, array_of_effect.shape[1]):
                 for x in range(0, array_of_effect.shape[0]):
-                    if array_of_effect[y][x]:
-                        adjusted_x = xc + x - len(array_of_effect) // 2
-                        adjusted_y = yc + y - len(array_of_effect) // 2
+                    adjusted_x = xc + x - len(array_of_effect) // 2
+                    adjusted_y = yc + y - len(array_of_effect) // 2
+                    tile = self.world.get_entities_at(adjusted_x, adjusted_y, TileComponent).pop()
+                    tile_ren = self.world.component_for_entity(tile, RenderComponent)
 
-                        tile = self.world.get_entities_at(adjusted_x, adjusted_y, TileComponent).pop()
-                        self.world.component_for_entity(tile, RenderComponent).targeted = True
+                    if array_of_effect[y][x]:
+                        tile_ren.targeted = True
+                    else:
+                        tile_ren.targeted = False

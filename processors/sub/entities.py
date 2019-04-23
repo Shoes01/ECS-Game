@@ -16,8 +16,12 @@ def render_entities(console_bundle, world):
     _ducpliates = []
 
     console, x, y, w, h = console_bundle
+    # Print tiles to the console.
     for ent, (pos, ren, tile) in world.get_components(PositionComponent, RenderComponent, TileComponent):
         
+        if world.state is not 'SkillTargeting':
+            ren.targeted = False
+
         if ren.visible:
             if ren.targeted:
                 console.print(pos.x, pos.y, ren.char, fg=ren.color, bg=ENTITY_COLORS['weapon']) # TODO: temp code
@@ -25,9 +29,9 @@ def render_entities(console_bundle, world):
                 console.print(pos.x, pos.y, ren.char, ren.color)
         
         elif ren.explored:
-            console.print(pos.x, pos.y, ren.char, ren.explored_color)            
+            console.print(pos.x, pos.y, ren.char, ren.explored_color)
 
-    # Print corpses to the console.
+    # Print corpses.
     for ent, (corpse, pos, ren) in world.get_components(CorpseComponent, PositionComponent, RenderComponent):
         if ren.visible:
             console.print(pos.x, pos.y, ren.char, ren.color)
@@ -41,7 +45,7 @@ def render_entities(console_bundle, world):
             else:
                 console.print(pos.x, pos.y, ren.char, ren.color, ENTITY_COLORS['overlap_bg'])
 
-    # Print entities to the console.
+    # Print entities.
     for ent, (actor, pos, ren) in world.get_components(ActorComponent, PositionComponent, RenderComponent):
         if ren.visible:
             if (pos.x, pos.y) not in _entity_directory:
