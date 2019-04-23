@@ -19,7 +19,10 @@ def render_entities(console_bundle, world):
     for ent, (pos, ren, tile) in world.get_components(PositionComponent, RenderComponent, TileComponent):
         
         if ren.visible:
-            console.print(pos.x, pos.y, ren.char, ren.color)
+            if ren.targeted:
+                console.print(pos.x, pos.y, ren.char, fg=ren.color, bg=ENTITY_COLORS['weapon']) # TODO: temp code
+            else:
+                console.print(pos.x, pos.y, ren.char, ren.color)
         
         elif ren.explored:
             console.print(pos.x, pos.y, ren.char, ren.explored_color)            

@@ -1,4 +1,5 @@
 import esper
+import numpy as np
 
 from components.actor.equipment import EquipmentComponent
 from components.actor.prepare_skill import PrepareSkillComponent
@@ -19,8 +20,8 @@ class SkillProcessor(esper.Processor):
 
             # Look to see if we have a valid item for that skill.
             for item in eqp.equipment:
-                item_slot = self.world.components_for_entity(item, SlotComponent).slot
-                item_skill_component = self.world.components_for_entity(item, ItemSkillComponent)
+                item_slot = self.world.component_for_entity(item, SlotComponent).slot
+                item_skill_component = self.world.component_for_entity(item, ItemSkillComponent)
 
                 if not item_skill_component:
                     continue
@@ -29,12 +30,14 @@ class SkillProcessor(esper.Processor):
                     (slot == 'e' and item_slot == 'accessory') or
                     (slot == 'a' and item_slot == 'offhand') or
                     (slot == 's' and item_slot == 'torso') or
-                    (slot == 'd' and item_slot == 'boots') or
+                    (slot == 'd' and item_slot == 'boots')):
                     break
 
             else:
                 # This has failed.
+                self.world.remove_component(ent, PrepareSkillComponent)
                 self.world.events.append({'skill_done': True})
+                return 0
             
             # There is a skill that can be used here!
             # Fetch direction
@@ -43,10 +46,10 @@ class SkillProcessor(esper.Processor):
             ver = None
             direction = None
 
-            if x == -1:
+            if x == 1:
                 hor = 'east'
-            elif x == 1:
-                hor == 'west'
+            elif x == -1:
+                hor = 'west'
             
             if y == -1:
                 ver = 'north'
@@ -65,17 +68,11 @@ class SkillProcessor(esper.Processor):
             # Set the tiles to have their bg colors changes.
             xc, yc = pos.x, pos.y
             
-            for x in range(len(array_of_effect)):
-                for y in range(len(array_of_effect)):
+            for y in range(0, array_of_effect.shape[1]):
+                for x in range(0, array_of_effect.shape[0]):
                     if array_of_effect[y][x]:
                         adjusted_x = xc + x - len(array_of_effect) // 2
                         adjusted_y = yc + y - len(array_of_effect) // 2
 
                         tile = self.world.get_entities_at(adjusted_x, adjusted_y, TileComponent).pop()
                         self.world.component_for_entity(tile, RenderComponent).targeted = True
-
-
-            
-
-
-                

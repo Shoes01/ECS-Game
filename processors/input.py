@@ -97,6 +97,11 @@ class InputProcessor(esper.Processor):
             events.append(generic_move_keys(key_char, key_scancode))
             if key_scancode == libtcod.event.SCANCODE_ESCAPE:
                 events.append({'exit': True})
+        
+        elif state == 'SkillTargeting':
+            if key_scancode == libtcod.event.SCANCODE_ESCAPE:
+                events.append({'skill_done': True})
+
 
         
         ### INPUTS THAT ARE READ ONLY ON THE PLAYERS TURN
@@ -105,27 +110,27 @@ class InputProcessor(esper.Processor):
                 # Movement keys.
                 action = generic_move_keys(key_char, key_scancode)
                 
-                # Skill keys.
-                if key_char == 'q' or key_char == 'w' or key_char == 'e' or key_char == 'a' or key_char == 's' or key_char == 'd':
-                    events.append({'skill_targeting': True})
-                    action = {'skill_prepare': key_char}
-
                 # Other keys.
-                elif key_char == 'd' and not key.mod & libtcod.event.KMOD_CTRL:
+                if key_char == 'd' and not key.mod & libtcod.event.KMOD_CTRL:
                     action = {'drop': True}
-                elif key_char == 'e':
+                elif key_char == 'e' and key.mod & libtcod.event.KMOD_SHIFT:
                     action = {'consume': True}
                 elif key_char == 'g':
                     action = {'pick_up': True}
                 elif key_char == 'i':
                     action = {'open_inventory': True}
-                elif key_char == 'w' or key_char == 'r':
+                elif (key_char == 'w' and key.mod & libtcod.event.KMOD_SHIFT) or key_char == 'r':
                     action = {'wear': True}
                 elif key_char == '>' or key_char == '<':
                     action = {'descend': True}
                 elif key_char == 'x':
                     _pos = self.world.component_for_entity(ent, PositionComponent)
                     events.append({'look': (_pos.x, _pos.y)})
+
+                # Skill keys.
+                elif key_char == 'q' or key_char == 'w' or key_char == 'e' or key_char == 'a' or key_char == 's' or key_char == 'd':
+                    events.append({'skill_targeting': True})
+                    action = {'skill_prepare': key_char}
                 
                 # Mouse movement.
                 if mouse_click:

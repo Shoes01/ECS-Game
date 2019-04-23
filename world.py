@@ -17,6 +17,7 @@ from components.item.consumable import ConsumableComponent
 from components.item.item import ItemComponent
 from components.item.modifier import ModifierComponent
 from components.item.pickedup import PickedupComponent
+from components.item.skill import ItemSkillComponent
 from components.item.slot import SlotComponent
 from components.item.wearable import WearableComponent
 from components.furniture import FurnitureComponent
@@ -42,6 +43,8 @@ class CustomWorld(esper.World):
         with open("data/monsters.json", "r") as read_file:
             data.update(json.load(read_file))
         with open("data/other.json", "r") as read_file:
+            data.update(json.load(read_file))
+        with open("data/skills.json", "r") as read_file:
             data.update(json.load(read_file))
         with open("data/tiles.json", "r") as read_file:
             data.update(json.load(read_file))
@@ -152,7 +155,13 @@ class CustomWorld(esper.World):
                 color = value.get('color')
                 explored_color = value.get('explored_color')
                 self.add_component(ent, RenderComponent(char=char, color=ENTITY_COLORS[color], explored_color=ENTITY_COLORS.get(explored_color)))
-            
+
+            elif key == 'skill':
+                name = value
+                east = self._json_data.get(name).get('east')
+                north_east = self._json_data.get(name).get('north_east')
+                self.add_component(ent, ItemSkillComponent(name=name, east=east, north_east=north_east))
+
             elif key == 'slot':
                 slot = value.get('slot')
                 self.add_component(ent, SlotComponent(slot=slot))
