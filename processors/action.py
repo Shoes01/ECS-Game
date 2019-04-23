@@ -95,7 +95,7 @@ class ActionProcessor(esper.Processor):
                         # Change the action... this does not occur often!
                         self.world.remove_component(ent, ActionComponent)
                         self.world.add_component(ent, ActionComponent({'skill_execute': True}))
-                        self.world.events.append({'skill_done': True})
+                        #self.world.events.append({'skill_done': True})
                         return
                     else:
                         prepped_skill.slot = _skill_prepare

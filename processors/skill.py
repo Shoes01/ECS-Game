@@ -79,7 +79,7 @@ class SkillProcessor(esper.Processor):
 
                     if array_of_effect[y][x]:
                         tile_ren.targeted = True
-                        entities_targeted.extend(self.world.get_entities_at(x, y, ActorComponent))
+                        entities_targeted.extend(self.world.get_entities_at(adjusted_x, adjusted_y, ActorComponent))
                     else:
                         tile_ren.targeted = False
             
@@ -87,7 +87,5 @@ class SkillProcessor(esper.Processor):
                 # Do this skill! 
                 if entities_targeted:
                     self.world.add_component(ent, CombatComponent(defender_IDs=entities_targeted))
-                else:
-                    # This failed to hit anyone.
-                    self.world.events.append({'skill_done': True})
-                    return 0
+
+                self.world.events.append({'skill_done': True})
