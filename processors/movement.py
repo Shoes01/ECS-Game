@@ -19,7 +19,7 @@ class MovementProcessor(esper.Processor):
             occupying_entity = self.world.get_entities_at(pos.x + vel.dx, pos.y + vel.dy, ActorComponent)
             if len(occupying_entity) == 1:
                 self.world.remove_component(ent, VelocityComponent)
-                self.world.add_component(ent, CombatComponent(defender_IDs=occupying_entity)
+                self.world.add_component(ent, CombatComponent(defender_IDs=occupying_entity))
             
             if self.world.has_component(ent, PlayerComponent):
                 # Player may run into walls, whereas AI uses the dijkstra map to navigate.

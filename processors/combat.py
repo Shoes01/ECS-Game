@@ -17,20 +17,22 @@ class CombatProcessor(esper.Processor):
     def process(self):
         for ent, (act, com, att_ren) in self.world.get_components(ActorComponent, CombatComponent, RenderComponent):
             attacker_ID = ent
-            defender_ID = self.world.component_for_entity(attacker_ID, CombatComponent).defender_IDs.pop()
+            defender_IDs = self.world.component_for_entity(attacker_ID, CombatComponent).defender_IDs
 
-            if not self.world.has_component(defender_ID, ActorComponent):
-                return 0
-            
-            defender_stats = self.world.component_for_entity(defender_ID, StatsComponent)
+            for defender_ID in defender_IDs:
 
-            damage = calculate_power(attacker_ID, self.world)
+                if not self.world.has_component(defender_ID, ActorComponent):
+                    return 0
+                
+                defender_stats = self.world.component_for_entity(defender_ID, StatsComponent)
 
-            defender_stats.hp -= damage
+                damage = calculate_power(attacker_ID, self.world)
 
-            def_ren = self.world.component_for_entity(defender_ID, RenderComponent)
+                defender_stats.hp -= damage
 
-            self.world.messages.append({'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, damage, self.world.turn)})
+                def_ren = self.world.component_for_entity(defender_ID, RenderComponent)
 
-            if defender_stats.hp <= 0 and not self.world.has_component(defender_ID, DeadComponent):
-                self.world.add_component(defender_ID, DeadComponent(murderer=attacker_ID))
+                self.world.messages.append({'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, damage, self.world.turn)})
+
+                if defender_stats.hp <= 0 and not self.world.has_component(defender_ID, DeadComponent):
+                    self.world.add_component(defender_ID, DeadComponent(murderer=attacker_ID))

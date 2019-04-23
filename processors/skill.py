@@ -79,7 +79,7 @@ class SkillProcessor(esper.Processor):
 
                     if array_of_effect[y][x]:
                         tile_ren.targeted = True
-                        entities_targeted.append(self.world.get_entities_at(x, y, ActorComponent))
+                        entities_targeted.extend(self.world.get_entities_at(x, y, ActorComponent))
                     else:
                         tile_ren.targeted = False
             

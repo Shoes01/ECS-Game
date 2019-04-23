@@ -8,6 +8,8 @@ from components.actor.energy import EnergyComponent
 from components.actor.pickup import PickupComponent
 from components.actor.player import PlayerComponent
 from components.actor.remove import RemoveComponent
+from components.actor.skill_execute import SkillExecutionComponent
+from components.actor.skill_prepare import SkillPreparationComponent
 from components.actor.velocity import VelocityComponent
 from components.actor.wait import WaitComponent
 from components.actor.wear import WearComponent
@@ -19,9 +21,14 @@ class EnergyProcessor(esper.Processor):
     def process(self):
         for ent, (eng) in self.world.get_component(EnergyComponent):
             if self.world.has_component(ent, CombatComponent):
-                eng.energy += 10
+                if self.world.has_component(ent, SkillExecutionComponent):
+                    self.world.remove_component(ent, SkillExecutionComponent)
+                    self.world.remove_component(ent, SkillPreparationComponent)
+                    eng.energy += 20 # TODO: Eventually, each skill should its own cost?
+                else:
+                    eng.energy += 10
                 self.world.remove_component(ent, CombatComponent)
-            
+                
             elif self.world.has_component(ent, ConsumeComponent):
                 eng.energy += 10
                 self.world.remove_component(ent, ConsumeComponent)
