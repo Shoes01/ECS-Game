@@ -104,6 +104,7 @@ class InputProcessor(esper.Processor):
                 action['skill_move'] = action['move']
                 action['move'] = None
             elif key_scancode == libtcod.event.SCANCODE_ESCAPE:
+                action = {'skill_cancel': True}
                 events.append({'skill_done': True})
             elif key_char == 'q' or key_char == 'w' or key_char == 'e' or key_char == 'a' or key_char == 's' or key_char == 'd':
                 action = {'skill_prepare': key_char}

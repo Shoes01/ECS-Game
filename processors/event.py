@@ -1,8 +1,6 @@
 import esper
 
 from components.actor.player import PlayerComponent
-from components.actor.skill_execute import SkillExecutionComponent
-from components.actor.skill_prepare import SkillPreparationComponent
 from processors.initial import InitialProcessor
 from processors.final import FinalProcessor
 
@@ -93,9 +91,6 @@ class EventProcessor(esper.Processor):
                 self.world.messages_offset += _scroll
 
             elif _skill_done:
-                self.world.remove_component(1, SkillPreparationComponent)
-                if self.world.has_component(1, SkillExecutionComponent):
-                    self.world.remove_component(1, SkillExecutionComponent)
                 self.world.skill_targeting = False
 
             elif _skill_targeting:

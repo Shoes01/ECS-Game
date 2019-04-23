@@ -33,6 +33,7 @@ class ActionProcessor(esper.Processor):
             _move = action.action.get('move')
             _pick_up = action.action.get('pick_up')
             _remove = action.action.get('remove')
+            _skill_cancel = action.action.get('skill_cancel')
             _skill_execute = action.action.get('skill_execute')
             _skill_move = action.action.get('skill_move')
             _skill_prepare = action.action.get('skill_prepare')
@@ -81,6 +82,9 @@ class ActionProcessor(esper.Processor):
                     
             elif _remove:
                 self.world.add_component(ent, RemoveComponent(item_id=_remove))
+
+            elif _skill_cancel:
+                self.world.remove_component(ent, SkillPreparationComponent)
             
             elif _skill_execute:
                 self.world.add_component(ent, SkillExecutionComponent())
@@ -95,7 +99,6 @@ class ActionProcessor(esper.Processor):
                         # Change the action... this does not occur often!
                         self.world.remove_component(ent, ActionComponent)
                         self.world.add_component(ent, ActionComponent({'skill_execute': True}))
-                        #self.world.events.append({'skill_done': True})
                         return
                     else:
                         prepped_skill.slot = _skill_prepare

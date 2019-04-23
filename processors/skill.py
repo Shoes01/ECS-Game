@@ -66,7 +66,7 @@ class SkillProcessor(esper.Processor):
             
             array_of_effect = item_skill_component.__dict__[direction]
 
-            # Set the tiles to have their bg colors changes.
+            # Set the tiles to have their bg colors changes, and fetch the entities on those tiles.
             xc, yc = pos.x, pos.y
             
             entities_targeted = []
@@ -84,8 +84,8 @@ class SkillProcessor(esper.Processor):
                         tile_ren.targeted = False
             
             if self.world.has_component(ent, SkillExecutionComponent):
-                # Do this skill! 
                 if entities_targeted:
+                    # Do this skill! 
                     self.world.add_component(ent, CombatComponent(defender_IDs=entities_targeted))
-
+                self.world.remove_component(ent, SkillPreparationComponent)
                 self.world.events.append({'skill_done': True})
