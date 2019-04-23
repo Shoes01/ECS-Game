@@ -8,7 +8,8 @@ from components.actor.drop import DropComponent
 from components.actor.open_inv import OpenInventoryComponent
 from components.actor.pickup import PickupComponent
 from components.actor.player import PlayerComponent
-from components.actor.prepare_skill import PrepareSkillComponent
+from components.actor.skill_execute import SkillExecutionComponent
+from components.actor.skill_prepare import SkillPreparationComponent
 from components.actor.remove import RemoveComponent
 from components.actor.velocity import VelocityComponent
 from components.actor.wait import WaitComponent
@@ -32,6 +33,7 @@ class ActionProcessor(esper.Processor):
             _move = action.action.get('move')
             _pick_up = action.action.get('pick_up')
             _remove = action.action.get('remove')
+            _skill_execute = action.action.get('skill_execute')
             _skill_move = action.action.get('skill_move')
             _skill_prepare = action.action.get('skill_prepare')
             _wait = action.action.get('wait')
@@ -80,18 +82,25 @@ class ActionProcessor(esper.Processor):
             elif _remove:
                 self.world.add_component(ent, RemoveComponent(item_id=_remove))
             
+            elif _skill_execute:
+                self.world.add_component(ent, SkillExecutionComponent())
+
             elif _skill_move:
-                self.world.component_for_entity(ent, PrepareSkillComponent).direction = _skill_move
+                self.world.component_for_entity(ent, SkillPreparationComponent).direction = _skill_move
 
             elif _skill_prepare:
-                if self.world.has_component(ent, PrepareSkillComponent):
-                    prepped_skill = self.world.component_for_entity(ent, PrepareSkillComponent)
+                if self.world.has_component(ent, SkillPreparationComponent):
+                    prepped_skill = self.world.component_for_entity(ent, SkillPreparationComponent)
                     if _skill_prepare == prepped_skill.slot:
+                        # Change the action... this does not occur often!
+                        self.world.remove_component(ent, ActionComponent)
+                        self.world.add_component(ent, ActionComponent({'skill_execute': True}))
                         self.world.events.append({'skill_done': True})
+                        return
                     else:
                         prepped_skill.slot = _skill_prepare
                 else:
-                    self.world.add_component(ent, PrepareSkillComponent(slot=_skill_prepare))
+                    self.world.add_component(ent, SkillPreparationComponent(slot=_skill_prepare))
 
             elif _wait:
                 self.world.add_component(ent, WaitComponent())

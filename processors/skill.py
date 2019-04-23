@@ -1,8 +1,10 @@
 import esper
 import numpy as np
 
+from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
-from components.actor.prepare_skill import PrepareSkillComponent
+from components.actor.skill_execute import SkillExecutionComponent
+from components.actor.skill_prepare import SkillPreparationComponent
 from components.item.skill import ItemSkillComponent
 from components.item.slot import SlotComponent
 from components.position import PositionComponent
@@ -14,7 +16,7 @@ class SkillProcessor(esper.Processor):
         super().__init__()
 
     def process(self):
-        for ent, (eqp, pos, skill) in self.world.get_components(EquipmentComponent, PositionComponent, PrepareSkillComponent):
+        for ent, (eqp, pos, skill) in self.world.get_components(EquipmentComponent, PositionComponent, SkillPreparationComponent):
             slot = skill.slot
             item_skill_component = None
 
@@ -66,6 +68,7 @@ class SkillProcessor(esper.Processor):
             # Set the tiles to have their bg colors changes.
             xc, yc = pos.x, pos.y
             
+            entities_targeted = []
             for y in range(0, array_of_effect.shape[1]):
                 for x in range(0, array_of_effect.shape[0]):
                     adjusted_x = xc + x - len(array_of_effect) // 2
@@ -75,5 +78,10 @@ class SkillProcessor(esper.Processor):
 
                     if array_of_effect[y][x]:
                         tile_ren.targeted = True
+                        entities_targeted.append(self.world.get_entities_at(x, y, ActorComponent))
                     else:
                         tile_ren.targeted = False
+            
+            if self.world.has_component(ent, SkillExecutionComponent):
+                ### Do this skill! 
+                # Attach the list of targeted entities to the combat component
