@@ -17,7 +17,7 @@ class CombatProcessor(esper.Processor):
     def process(self):
         for ent, (act, com, att_ren) in self.world.get_components(ActorComponent, CombatComponent, RenderComponent):
             attacker_ID = ent
-            defender_ID = self.world.component_for_entity(attacker_ID, CombatComponent).defender_ID
+            defender_ID = self.world.component_for_entity(attacker_ID, CombatComponent).defender_IDs.pop()
 
             if not self.world.has_component(defender_ID, ActorComponent):
                 return 0

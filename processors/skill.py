@@ -2,6 +2,7 @@ import esper
 import numpy as np
 
 from components.actor.actor import ActorComponent
+from components.actor.combat import CombatComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.skill_execute import SkillExecutionComponent
 from components.actor.skill_prepare import SkillPreparationComponent
@@ -83,5 +84,10 @@ class SkillProcessor(esper.Processor):
                         tile_ren.targeted = False
             
             if self.world.has_component(ent, SkillExecutionComponent):
-                ### Do this skill! 
-                # Attach the list of targeted entities to the combat component
+                # Do this skill! 
+                if entities_targeted:
+                    self.world.add_component(ent, CombatComponent(defender_IDs=entities_targeted))
+                else:
+                    # This failed to hit anyone.
+                    self.world.events.append({'skill_done': True})
+                    return 0
