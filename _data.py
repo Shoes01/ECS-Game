@@ -102,6 +102,7 @@ COLOR_THEME = {
 }
 
 ENTITY_COLORS = {
+    'armor': COLOR_THEME['Magenta'],
     'chest': COLOR_THEME['Yellow'],
     'corpse': COLOR_THEME['BrightRed'],
     'demon': COLOR_THEME['Red'],

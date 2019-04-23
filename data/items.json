@@ -15,6 +15,18 @@
         "slot": {"slot": "mainhand"},
         "wearable": true
     },
+    "helmet":
+    {
+        "archtype": "item",
+
+        "modifier": {"power": 1},
+        "name": {"name": "Helmet"},
+        "rarity": 0,
+        "render": {"char": "]", "color": "armor"},
+        "skill": "headbutt",
+        "slot": {"slot": "head"},
+        "wearable": true
+    },
 
     "comment": "########################## RARITY ONE ITEMS ##########################",
 

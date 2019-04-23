@@ -80,8 +80,13 @@ class ActionProcessor(esper.Processor):
                 self.world.add_component(ent, RemoveComponent(item_id=_remove))
             
             elif _skill_prepare:
+                if self.world.has_component(ent, PrepareSkillComponent):
+                    prepped_skill = self.world.component_for_entity(ent, PrepareSkillComponent)
+                    if _skill_prepare == prepped_skill.slot:
+                        self.world.events.append({'skill_done': True})
+                    else:
+                        prepped_skill.slot = _skill_prepare
                 self.world.add_component(ent, PrepareSkillComponent(slot=_skill_prepare))
-                pass
 
             elif _wait:
                 self.world.add_component(ent, WaitComponent())

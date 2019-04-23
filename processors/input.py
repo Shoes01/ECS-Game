@@ -101,6 +101,8 @@ class InputProcessor(esper.Processor):
         elif state == 'SkillTargeting':
             if key_scancode == libtcod.event.SCANCODE_ESCAPE:
                 events.append({'skill_done': True})
+            elif key_char == 'q' or key_char == 'w' or key_char == 'e' or key_char == 'a' or key_char == 's' or key_char == 'd':
+                action = {'skill_prepare': key_char}
 
         ### INPUTS THAT ARE READ ONLY ON THE PLAYERS TURN
         for ent, (actor, eng, player) in self.world.get_components(ActorComponent, EnergyComponent, PlayerComponent):
