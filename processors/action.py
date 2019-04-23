@@ -32,6 +32,7 @@ class ActionProcessor(esper.Processor):
             _move = action.action.get('move')
             _pick_up = action.action.get('pick_up')
             _remove = action.action.get('remove')
+            _skill_move = action.action.get('skill_move')
             _skill_prepare = action.action.get('skill_prepare')
             _wait = action.action.get('wait')
             _wear = action.action.get('wear')
@@ -79,6 +80,9 @@ class ActionProcessor(esper.Processor):
             elif _remove:
                 self.world.add_component(ent, RemoveComponent(item_id=_remove))
             
+            elif _skill_move:
+                self.world.component_for_entity(ent, PrepareSkillComponent).direction = _skill_move
+
             elif _skill_prepare:
                 if self.world.has_component(ent, PrepareSkillComponent):
                     prepped_skill = self.world.component_for_entity(ent, PrepareSkillComponent)
@@ -86,7 +90,8 @@ class ActionProcessor(esper.Processor):
                         self.world.events.append({'skill_done': True})
                     else:
                         prepped_skill.slot = _skill_prepare
-                self.world.add_component(ent, PrepareSkillComponent(slot=_skill_prepare))
+                else:
+                    self.world.add_component(ent, PrepareSkillComponent(slot=_skill_prepare))
 
             elif _wait:
                 self.world.add_component(ent, WaitComponent())
