@@ -40,7 +40,7 @@ def render_stats(console_bundle, world):
         elif slot == 'torso':
             S_color = color
             S_item = world.component_for_entity(item, RenderComponent)
-        elif slot == 'boots':
+        elif slot == 'feet':
             D_color = color
             D_item = world.component_for_entity(item, RenderComponent)
 
@@ -50,7 +50,7 @@ def render_stats(console_bundle, world):
     draw_letter_box(8, 0 + y_offset, 4, 4, 'E', console, E_color, E_item) # Slot: accessory
     draw_letter_box(0, 4 + y_offset, 4, 4, 'A', console, A_color, A_item) # Slot: offhand
     draw_letter_box(4, 4 + y_offset, 4, 4, 'S', console, S_color, S_item) # Slot: torso
-    draw_letter_box(8, 4 + y_offset, 4, 4, 'D', console, D_color, D_item) # Slot: boots
+    draw_letter_box(8, 4 + y_offset, 4, 4, 'D', console, D_color, D_item) # Slot: feet
 
 def draw_letter_box(x, y, w, h, char, console, color, item):
     # Draw the little box, and put the letter in it.

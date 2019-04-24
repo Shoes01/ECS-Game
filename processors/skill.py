@@ -26,16 +26,18 @@ class SkillProcessor(esper.Processor):
             # Look to see if we have a valid item for that skill.
             for item in eqp.equipment:
                 item_slot = self.world.component_for_entity(item, SlotComponent).slot
-                item_skill_component = self.world.component_for_entity(item, ItemSkillComponent)
-
-                if not item_skill_component:
+                
+                if self.world.has_component(item, ItemSkillComponent):
+                    item_skill_component = self.world.component_for_entity(item, ItemSkillComponent)
+                else:
                     continue
-                elif ((slot == 'q' and item_slot == 'mainhand') or
+
+                if ((slot == 'q' and item_slot == 'mainhand') or
                     (slot == 'w' and item_slot == 'head') or
                     (slot == 'e' and item_slot == 'accessory') or
                     (slot == 'a' and item_slot == 'offhand') or
                     (slot == 's' and item_slot == 'torso') or
-                    (slot == 'd' and item_slot == 'boots')):
+                    (slot == 'd' and item_slot == 'feet')):
                     skill_name = item_skill_component.name
                     break
 
@@ -86,10 +88,9 @@ class SkillProcessor(esper.Processor):
 
                     if array_of_effect[y][x]:
                         entities_targeted.extend(self.world.get_entities_at(adjusted_x, adjusted_y, ActorComponent))
-                        if array_of_effect[y][x] == 1:
-                            tile_ren.highlight_color = ENTITY_COLORS['skill_1']
-                        elif array_of_effect[y][x] == 2:
-                            tile_ren.highlight_color = ENTITY_COLORS['skill_2']
+                        number = str(array_of_effect[y][x])
+                        string = 'skill_' + number
+                        tile_ren.highlight_color = ENTITY_COLORS[string]
                     else:
                         tile_ren.highlight_color = None
             

@@ -1,5 +1,6 @@
 {
     "comment": "The 'item' archtype bestows a lot of blank components: Item, Position.",
+    "comment": "Item slots are: head, torso, mainhand, offhand, feet, accessory",
 
     "comment": "########################## RARITY ZERO ITEMS ##########################",
 
@@ -25,6 +26,18 @@
         "render": {"char": "]", "color": "armor"},
         "skill": "headbutt",
         "slot": {"slot": "head"},
+        "wearable": true
+    },
+    "boots":
+    {
+        "archtype": "item",
+
+        "modifier": {"power": 1},
+        "name": {"name": "Boots"},
+        "rarity": 0,
+        "render": {"char": "]", "color": "armor"},
+        "skill": "charge",
+        "slot": {"slot": "feet"},
         "wearable": true
     },
 
