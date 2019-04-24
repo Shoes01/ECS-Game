@@ -3,7 +3,7 @@
         "1: Deal damage to this tile.",
         "2: Deal damage to this tile, BUT the skill will fail if there is a wall here.",
         "3: Player ends in this tile.",
-        "4: The skill will fail if there is an entity here."
+        "4: Nothing, BUT the skill will fail if there is an entity here."
     ],
 
     "lunge":{

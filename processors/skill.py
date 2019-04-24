@@ -1,6 +1,7 @@
 import esper
 import numpy as np
 
+from _data import ENTITY_COLORS
 from components.actor.actor import ActorComponent
 from components.actor.combat import CombatComponent
 from components.actor.equipment import EquipmentComponent
@@ -84,10 +85,13 @@ class SkillProcessor(esper.Processor):
                     tile_ren = self.world.component_for_entity(tile, RenderComponent)
 
                     if array_of_effect[y][x]:
-                        tile_ren.targeted = True
                         entities_targeted.extend(self.world.get_entities_at(adjusted_x, adjusted_y, ActorComponent))
+                        if array_of_effect[y][x] == 1:
+                            tile_ren.highlight_color = ENTITY_COLORS['skill_1']
+                        elif array_of_effect[y][x] == 2:
+                            tile_ren.highlight_color = ENTITY_COLORS['skill_2']
                     else:
-                        tile_ren.targeted = False
+                        tile_ren.highlight_color = None
             
             if self.world.has_component(ent, SkillExecutionComponent):
                 self.world.component_for_entity(ent, SkillExecutionComponent).cost = item_skill_component.cost

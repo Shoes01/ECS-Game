@@ -111,6 +111,8 @@ ENTITY_COLORS = {
     'overlap_bg': COLOR_THEME['BrightBlack'],
     'player': COLOR_THEME['BrightMagenta'],
     'potion_heal': COLOR_THEME['Red'],
+    'skill_1': COLOR_THEME['Blue'],
+    'skill_1': COLOR_THEME['BrightBlue'],
     'stairs': COLOR_THEME['White'],
     'stairs_explored': COLOR_THEME['BrightBlack'],
     'wall': COLOR_THEME['White'],

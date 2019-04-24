@@ -20,11 +20,11 @@ def render_entities(console_bundle, world):
     for ent, (pos, ren, tile) in world.get_components(PositionComponent, RenderComponent, TileComponent):
         
         if world.state is not 'SkillTargeting':
-            ren.targeted = False
+            ren.highlight_color = None
 
         if ren.visible:
-            if ren.targeted:
-                console.print(pos.x, pos.y, ren.char, fg=ren.color, bg=ENTITY_COLORS['weapon']) # TODO: temp code
+            if ren.highlight_color:
+                console.print(pos.x, pos.y, ren.char, fg=ren.color, bg=ren.highlight_color)
             else:
                 console.print(pos.x, pos.y, ren.char, ren.color)
         
