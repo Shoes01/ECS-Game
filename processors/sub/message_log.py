@@ -32,6 +32,7 @@ def render_message_log(console_bundle, world):
         _move_items = message.get('move_items')
         _pickup = message.get('pickup')
         _remove = message.get('remove')
+        _skill = message.get('skill')
         _wear = message.get('wear')
 
         if _ai_awake:
@@ -40,14 +41,14 @@ def render_message_log(console_bundle, world):
             libtcod.console_set_color_control(libtcod.COLCTRL_1, color, libtcod.black)
             console.print(0, 0 + dy, '(Turn %s) %c%s%c wakes up!' % (turn, libtcod.COLCTRL_1, char, libtcod.COLCTRL_STOP), LOG_COLORS['warning'])
 
-        if _combat:
+        elif _combat:
             att_char, att_color, def_char, def_color, damage, turn = _combat
 
             libtcod.console_set_color_control(libtcod.COLCTRL_1, att_color, libtcod.black)
             libtcod.console_set_color_control(libtcod.COLCTRL_2, def_color, libtcod.black)
             console.print(0, 0 + dy, '(Turn %s) %c%s%c hits %c%s%c for %s.' % (turn, libtcod.COLCTRL_1, att_char, libtcod.COLCTRL_STOP, libtcod.COLCTRL_2, def_char, libtcod.COLCTRL_STOP, damage), LOG_COLORS['combat'])
 
-        if _consume:
+        elif _consume:
             name, success, turn = _consume
 
             if success:
@@ -55,7 +56,7 @@ def render_message_log(console_bundle, world):
             else:
                 console.print(0, 0 + dy, '(Turn %s) You cannot consume your %s!' % (turn, name), LOG_COLORS['failure'])
 
-        if _death:
+        elif _death:
             char, color, turn, is_furniture = _death
 
             libtcod.console_set_color_control(libtcod.COLCTRL_1, color, libtcod.black)
@@ -64,33 +65,33 @@ def render_message_log(console_bundle, world):
             else:
                 console.print(0, 0 + dy, '(Turn %s) The %c%s%c has died!' % (turn, libtcod.COLCTRL_1, char, libtcod.COLCTRL_STOP), LOG_COLORS['death'])
         
-        if _drop:
+        elif _drop:
             name, turn = _drop
 
             console.print(0, 0 + dy, '(Turn %s) You drop your %s.' % (turn, name), LOG_COLORS['success'])
 
-        if _error:
+        elif _error:
             message= _error
 
             console.print(0, 0 + dy, message, LOG_COLORS['error'])
         
-        if _game_loaded:
+        elif _game_loaded:
             console.print(0, 0 + dy, 'Game loaded.', LOG_COLORS['system_message'])
             
-        if _game_saved:
+        elif _game_saved:
             console.print(0, 0 + dy, 'Game saved.', LOG_COLORS['system_message'])
 
-        if _heal:
+        elif _heal:
             value, turn = _heal
 
             console.print(0, 0 + dy, '(Turn %s) You heal for %s point(s).' % (turn, value), LOG_COLORS['success'])
         
-        if _max_hp:
+        elif _max_hp:
             value, turn = _max_hp
 
             console.print(0, 0 + dy, '(Turn %s) Your max hp increases by %s point(s).' % (turn, value), LOG_COLORS['success'])
         
-        if _move_items:
+        elif _move_items:
             turn, name, number = _move_items
 
             if name:
@@ -100,7 +101,7 @@ def render_message_log(console_bundle, world):
                 
                 
 
-        if _pickup:
+        elif _pickup:
             name, success, turn = _pickup
 
             if success:
@@ -108,7 +109,7 @@ def render_message_log(console_bundle, world):
             else:
                 console.print(0, 0 + dy, '(Turn %s) There is nothing here to pick up.' % (turn), LOG_COLORS['failure'])
 
-        if _remove:
+        elif _remove:
             name, success, turn = _remove
 
             if success:
@@ -116,7 +117,17 @@ def render_message_log(console_bundle, world):
             else:
                 console.print(0, 0 + dy, '(Turn %s) You are not wearing your %s!' % (turn, name), LOG_COLORS['failure'])
 
-        if _wear:
+        elif _skill:
+            legal_item, legal_target, name, turn = _skill
+
+            if legal_item and legal_target:
+                console.print(0, 0 + dy, '(Turn %s) You use your %s skill!' % (turn, name), LOG_COLORS['success'])
+            elif legal_item:
+                console.print(0, 0 + dy, '(Turn %s) No valid target found.' % (turn), LOG_COLORS['failure'])
+            else:
+                console.print(0, 0 + dy, '(Turn %s) No valid item found.' % (turn), LOG_COLORS['failure'])
+
+        elif _wear:
             name, slot, success, turn = _wear
 
             if success is True:

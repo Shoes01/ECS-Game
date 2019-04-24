@@ -20,6 +20,7 @@ class SkillProcessor(esper.Processor):
         for ent, (eqp, pos, skill) in self.world.get_components(EquipmentComponent, PositionComponent, SkillPreparationComponent):
             slot = skill.slot
             item_skill_component = None
+            skill_name = None
 
             # Look to see if we have a valid item for that skill.
             for item in eqp.equipment:
@@ -34,10 +35,15 @@ class SkillProcessor(esper.Processor):
                     (slot == 'a' and item_slot == 'offhand') or
                     (slot == 's' and item_slot == 'torso') or
                     (slot == 'd' and item_slot == 'boots')):
+                    skill_name = item_skill_component.name
                     break
 
             else:
                 # This has failed.
+                legal_target = False
+                legal_item = False
+                self.world.messages.append({'skill': (legal_item, legal_target, skill_name, self.world.turn)})
+                self.world.remove_component(ent, SkillPreparationComponent)
                 self.world.events.append({'skill_done': True})
                 return 0
             
@@ -85,7 +91,14 @@ class SkillProcessor(esper.Processor):
             
             if self.world.has_component(ent, SkillExecutionComponent):
                 if entities_targeted:
-                    # Do this skill! 
+                    # Do this skill!
+                    legal_target = True
+                    legal_item = True
+                    self.world.messages.append({'skill': (legal_item, legal_target, skill_name, self.world.turn)})
                     self.world.add_component(ent, CombatComponent(defender_IDs=entities_targeted))
+                else:
+                    legal_target = False
+                    legal_item = True
+                    self.world.messages.append({'skill': (legal_item, legal_target, skill_name, self.world.turn)})
                 self.world.remove_component(ent, SkillPreparationComponent)
                 self.world.events.append({'skill_done': True})
