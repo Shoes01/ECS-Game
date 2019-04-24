@@ -90,6 +90,7 @@ class SkillProcessor(esper.Processor):
                         tile_ren.targeted = False
             
             if self.world.has_component(ent, SkillExecutionComponent):
+                self.world.component_for_entity(ent, SkillExecutionComponent).cost = item_skill_component.cost
                 if entities_targeted:
                     # Do this skill!
                     legal_target = True

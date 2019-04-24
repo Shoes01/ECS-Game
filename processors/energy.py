@@ -22,8 +22,8 @@ class EnergyProcessor(esper.Processor):
         for ent, (eng) in self.world.get_component(EnergyComponent):
             if self.world.has_component(ent, CombatComponent):
                 if self.world.has_component(ent, SkillExecutionComponent):
+                    eng.energy += self.world.component_for_entity(ent, SkillExecutionComponent).cost
                     self.world.remove_component(ent, SkillExecutionComponent)
-                    eng.energy += 20 # TODO: Eventually, each skill should its own cost?
                 else:
                     eng.energy += 10
                 self.world.remove_component(ent, CombatComponent)

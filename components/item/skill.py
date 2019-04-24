@@ -1,7 +1,8 @@
 import numpy as np
 
 class ItemSkillComponent():
-    def __init__(self, name, east, north_east):
+    def __init__(self, cost, name, east, north_east):
+        self.cost = cost
         self.name = name
         self.east = np.array(east)
         self.north = np.rot90(self.east)
