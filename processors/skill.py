@@ -43,9 +43,10 @@ class SkillProcessor(esper.Processor):
 
             else:
                 # This has failed.
-                legal_target = False
+                legal_target = True
                 legal_item = False
-                self.world.messages.append({'skill': (legal_item, legal_target, skill_name, self.world.turn)})
+                legal_tile = True
+                self.world.messages.append({'skill': (legal_item, legal_target, legal_tile, skill_name, self.world.turn)})
                 self.world.remove_component(ent, SkillPreparationComponent)
                 self.world.events.append({'skill_done': True})
                 return 0
@@ -79,32 +80,53 @@ class SkillProcessor(esper.Processor):
             xc, yc = pos.x, pos.y
             
             entities_targeted = []
+            legal_tile = True
             for y in range(0, array_of_effect.shape[1]):
                 for x in range(0, array_of_effect.shape[0]):
                     adjusted_x = xc + x - len(array_of_effect) // 2
                     adjusted_y = yc + y - len(array_of_effect) // 2
+                    
                     tile = self.world.get_entities_at(adjusted_x, adjusted_y, TileComponent).pop()
                     tile_ren = self.world.component_for_entity(tile, RenderComponent)
 
-                    if array_of_effect[y][x]:
-                        entities_targeted.extend(self.world.get_entities_at(adjusted_x, adjusted_y, ActorComponent))
-                        number = str(array_of_effect[y][x])
-                        string = 'skill_' + number
-                        tile_ren.highlight_color = ENTITY_COLORS[string]
-                    else:
+                    if array_of_effect[y][x] == 0:
                         tile_ren.highlight_color = None
+                    else:
+                        number = array_of_effect[y][x]
+                        string = 'skill_' + str(number)
+                        
+                        ### Choose how to highlight the tiles.
+                        entities = self.world.get_entities_at(adjusted_x, adjusted_y)
+                        # Assume it works.
+                        tile_ren.highlight_color = ENTITY_COLORS[string] 
+                        # Now look for problems.
+                        for entity in entities:
+                            actor = self.world.has_component(entity, ActorComponent)
+                            if actor:
+                                entities_targeted.append(entity)
+                            wall = False
+                            if self.world.has_component(entity, TileComponent) and self.world.component_for_entity(entity, TileComponent).blocks_path:
+                                wall = True
+                            
+                            if number == 2 and wall:
+                                legal_tile = False
+                                tile_ren.highlight_color = ENTITY_COLORS['skill_blocked']
+                            elif number == 4 and (wall or actor):
+                                legal_tile = False
+                                tile_ren.highlight_color = ENTITY_COLORS['skill_blocked']
             
             if self.world.has_component(ent, SkillExecutionComponent):
                 self.world.component_for_entity(ent, SkillExecutionComponent).cost = item_skill_component.cost
-                if entities_targeted:
+                if entities_targeted and legal_tile:
                     # Do this skill!
                     legal_target = True
                     legal_item = True
-                    self.world.messages.append({'skill': (legal_item, legal_target, skill_name, self.world.turn)})
+                    self.world.messages.append({'skill': (legal_item, legal_target, legal_tile, skill_name, self.world.turn)})
                     self.world.add_component(ent, CombatComponent(defender_IDs=entities_targeted))
                 else:
                     legal_target = False
                     legal_item = True
-                    self.world.messages.append({'skill': (legal_item, legal_target, skill_name, self.world.turn)})
+                    self.world.messages.append({'skill': (legal_item, legal_target, legal_tile, skill_name, self.world.turn)})
+                    self.world.remove_component(ent, SkillExecutionComponent)
                 self.world.remove_component(ent, SkillPreparationComponent)
                 self.world.events.append({'skill_done': True})

@@ -118,14 +118,18 @@ def render_message_log(console_bundle, world):
                 console.print(0, 0 + dy, '(Turn %s) You are not wearing your %s!' % (turn, name), LOG_COLORS['failure'])
 
         elif _skill:
-            legal_item, legal_target, name, turn = _skill
+            legal_item, legal_target, legal_tile, name, turn = _skill
 
-            if legal_item and legal_target:
+            if legal_item and legal_target and legal_tile:
                 console.print(0, 0 + dy, '(Turn %s) You use your %s skill!' % (turn, name), LOG_COLORS['success'])
-            elif legal_item:
+            elif not legal_tile:
+                console.print(0, 0 + dy, '(Turn %s) There is something in your way.' % (turn), LOG_COLORS['failure'])
+            elif not legal_target:
                 console.print(0, 0 + dy, '(Turn %s) No valid target found.' % (turn), LOG_COLORS['failure'])
-            else:
+            elif not legal_item:
                 console.print(0, 0 + dy, '(Turn %s) No valid item found.' % (turn), LOG_COLORS['failure'])
+            else:
+                console.print(0, 0 + dy, '(Turn %s) You cannot do that here.' % (turn), LOG_COLORS['failure'])
 
         elif _wear:
             name, slot, success, turn = _wear

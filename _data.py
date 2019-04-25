@@ -115,6 +115,7 @@ ENTITY_COLORS = {
     'skill_2': COLOR_THEME['BrightBlue'],
     'skill_3': COLOR_THEME['BrightMagenta'],
     'skill_4': COLOR_THEME['Magenta'],
+    'skill_blocked': COLOR_THEME['BrightRed'],
     'stairs': COLOR_THEME['White'],
     'stairs_explored': COLOR_THEME['BrightBlack'],
     'wall': COLOR_THEME['White'],
