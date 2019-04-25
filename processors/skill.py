@@ -37,7 +37,8 @@ class SkillProcessor(esper.Processor):
                     (slot == 'e' and item_slot == 'accessory') or
                     (slot == 'a' and item_slot == 'offhand') or
                     (slot == 's' and item_slot == 'torso') or
-                    (slot == 'd' and item_slot == 'feet')):
+                    (slot == 'd' and item_slot == 'feet')
+                ):
                     skill_name = item_skill_component.name
                     break
 
@@ -108,10 +109,10 @@ class SkillProcessor(esper.Processor):
                             if self.world.has_component(entity, TileComponent) and self.world.component_for_entity(entity, TileComponent).blocks_path:
                                 wall = True
                             
-                            if number == 2 and wall:
-                                legal_tile = False
-                                tile_ren.highlight_color = ENTITY_COLORS['skill_blocked']
-                            elif number == 4 and (wall or actor):
+                            if ((number == 2 and wall) or
+                                (number == 3 and actor) or
+                                (number == 4 and (wall or actor))
+                            ):
                                 legal_tile = False
                                 tile_ren.highlight_color = ENTITY_COLORS['skill_blocked']
             
