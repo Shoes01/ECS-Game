@@ -160,10 +160,11 @@ class SkillProcessor(esper.Processor):
                     self.world.messages.append({'skill': (legal_item, legal_target, legal_tile, skill_name, self.world.turn)})
                     tile = tile_destination.pop()
                     tile_pos = self.world.component_for_entity(tile, PositionComponent)
-                    ent_pos = self.world.component_for_entity(pos, PositionComponent)
+                    ent_pos = self.world.component_for_entity(ent, PositionComponent)
                     dx = tile_pos.x - ent_pos.x
                     dy = tile_pos.y - ent_pos.y
                     self.world.add_component(ent, VelocityComponent(dx=dx, dy=dy)) 
+                    self.world.remove_component(ent, SkillExecutionComponent)
                 else:
                     self.world.messages.append({'skill': (legal_item, legal_target, legal_tile, skill_name, self.world.turn)})
                     self.world.remove_component(ent, SkillExecutionComponent)
