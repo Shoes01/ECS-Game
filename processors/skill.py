@@ -7,6 +7,7 @@ from components.actor.combat import CombatComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.skill_execute import SkillExecutionComponent
 from components.actor.skill_prepare import SkillPreparationComponent
+from components.actor.velocity import VelocityComponent
 from components.item.skill import ItemSkillComponent
 from components.item.slot import SlotComponent
 from components.position import PositionComponent
@@ -22,6 +23,10 @@ class SkillProcessor(esper.Processor):
             slot = skill.slot
             item_skill_component = None
             skill_name = None
+
+            legal_target = False
+            legal_item = False
+            legal_tile = True
 
             # Look to see if we have a valid item for that skill.
             for item in eqp.equipment:
@@ -39,14 +44,12 @@ class SkillProcessor(esper.Processor):
                     (slot == 's' and item_slot == 'torso') or
                     (slot == 'd' and item_slot == 'feet')
                 ):
+                    legal_item = True
                     skill_name = item_skill_component.name
                     break
 
             else:
                 # This has failed.
-                legal_target = True
-                legal_item = False
-                legal_tile = True
                 self.world.messages.append({'skill': (legal_item, legal_target, legal_tile, skill_name, self.world.turn)})
                 self.world.remove_component(ent, SkillPreparationComponent)
                 self.world.events.append({'skill_done': True})
@@ -80,53 +83,88 @@ class SkillProcessor(esper.Processor):
             # Set the tiles to have their bg colors changes, and fetch the entities on those tiles.
             xc, yc = pos.x, pos.y
             
-            entities_targeted = []
-            legal_tile = True
+            entities_to_attack = []
+            tile_destination = []
+
             for y in range(0, array_of_effect.shape[1]):
                 for x in range(0, array_of_effect.shape[0]):
                     adjusted_x = xc + x - len(array_of_effect) // 2
                     adjusted_y = yc + y - len(array_of_effect) // 2
                     
-                    tile = self.world.get_entities_at(adjusted_x, adjusted_y, TileComponent).pop()
-                    tile_ren = self.world.component_for_entity(tile, RenderComponent)
+                    entities = self.world.get_entities_at(adjusted_x, adjusted_y)
 
-                    if array_of_effect[y][x] == 0:
-                        tile_ren.highlight_color = None
-                    else:
-                        number = array_of_effect[y][x]
-                        string = 'skill_' + str(number)
+                    #tile = self.world.get_entities_at(adjusted_x, adjusted_y, TileComponent).pop()
+                    #tile_ren = self.world.component_for_entity(tile, RenderComponent)
+
+                    number = array_of_effect[y][x]
+                    skill = 'skill_' + str(number)
+                    
+                    for entity in entities:
+                        # Classify the entity first.
+                        actor = False
+                        floor = False
+                        wall = False
                         
-                        ### Choose how to highlight the tiles.
-                        entities = self.world.get_entities_at(adjusted_x, adjusted_y)
-                        # Assume it works.
-                        tile_ren.highlight_color = ENTITY_COLORS[string] 
-                        # Now look for problems.
-                        for entity in entities:
-                            actor = self.world.has_component(entity, ActorComponent)
+                        if self.world.has_component(entity, ActorComponent):
+                            actor = True
+
+                        elif self.world.has_component(entity, TileComponent):
+                            tile_component = self.world.component_for_entity(entity, TileComponent)
+                            self.world.component_for_entity(entity, RenderComponent).highlight_color = ENTITY_COLORS.get(skill) # Color the tile; this will be undone of the number == 0
+
+                            if tile_component.blocks_path:
+                                wall = tile_component
+                            else:
+                                floor = tile_component
+
+                        ### Figure out if the skill happens!
+                        if number == 0: # This tile is not part of the skill.
+                            if wall:
+                                wall.highlight_color = None
+                            elif floor:
+                                floor.highlight_color = None
+                        
+                        elif number == 1: # This skill deals damage to entities.
                             if actor:
-                                entities_targeted.append(entity)
-                            wall = False
-                            if self.world.has_component(entity, TileComponent) and self.world.component_for_entity(entity, TileComponent).blocks_path:
-                                wall = True
-                            
-                            if ((number == 2 and wall) or
-                                (number == 3 and actor) or
-                                (number == 4 and (wall or actor))
-                            ):
+                                entities_to_attack.append(entity)
+                                legal_target = True
+
+                        elif number == 2: # This skill deals damage to entities. This skill is blocked by terrain.
+                            if actor:
+                                entities_to_attack.append(entity)
+                            elif wall:
                                 legal_tile = False
-                                tile_ren.highlight_color = ENTITY_COLORS['skill_blocked']
+                                self.world.component_for_entity(entity, RenderComponent).highlight_color = ENTITY_COLORS['skill_blocked']
+                            
+                        elif number == 3: # This skill moves the acting entity to this location. This skill is blocked by terrain.
+                            if floor:
+                                tile_destination.append(entity)
+                                legal_target = True
+                            elif actor or wall:
+                                legal_tile = False
+                                self.world.component_for_entity(entity, RenderComponent).highlight_color = ENTITY_COLORS['skill_blocked']
+                            
+                        elif number == 4: # This skill does nothing on its own. This skill is blocked by terrain and actors.
+                            if wall or actor:
+                                legal_tile = False
+                                self.world.component_for_entity(entity, RenderComponent).highlight_color = ENTITY_COLORS['skill_blocked']
             
             if self.world.has_component(ent, SkillExecutionComponent):
                 self.world.component_for_entity(ent, SkillExecutionComponent).cost = item_skill_component.cost
-                if entities_targeted and legal_tile:
+                if entities_to_attack and legal_tile:
                     # Do this skill!
-                    legal_target = True
-                    legal_item = True
                     self.world.messages.append({'skill': (legal_item, legal_target, legal_tile, skill_name, self.world.turn)})
-                    self.world.add_component(ent, CombatComponent(defender_IDs=entities_targeted))
+                    self.world.add_component(ent, CombatComponent(defender_IDs=entities_to_attack))
+                elif tile_destination and legal_tile:
+                    # Do this skill!
+                    self.world.messages.append({'skill': (legal_item, legal_target, legal_tile, skill_name, self.world.turn)})
+                    tile = tile_destination.pop()
+                    tile_pos = self.world.component_for_entity(tile, PositionComponent)
+                    ent_pos = self.world.component_for_entity(pos, PositionComponent)
+                    dx = tile_pos.x - ent_pos.x
+                    dy = tile_pos.y - ent_pos.y
+                    self.world.add_component(ent, VelocityComponent(dx=dx, dy=dy)) 
                 else:
-                    legal_target = False
-                    legal_item = True
                     self.world.messages.append({'skill': (legal_item, legal_target, legal_tile, skill_name, self.world.turn)})
                     self.world.remove_component(ent, SkillExecutionComponent)
                 self.world.remove_component(ent, SkillPreparationComponent)

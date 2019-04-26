@@ -5,6 +5,7 @@ from components.actor.action import ActionComponent
 from components.actor.consume import ConsumeComponent
 from components.actor.descend import DescendComponent
 from components.actor.drop import DropComponent
+from components.actor.energy import EnergyComponent
 from components.actor.open_inv import OpenInventoryComponent
 from components.actor.pickup import PickupComponent
 from components.actor.player import PlayerComponent
@@ -24,21 +25,23 @@ class ActionProcessor(esper.Processor):
         super().__init__()
     
     def process(self):
-        for ent, (action) in self.world.get_component(ActionComponent):
-            _consume = action.action.get('consume')
-            _descend = action.action.get('descend')
-            _drop = action.action.get('drop')
-            _open_inventory = action.action.get('open_inventory')
-            _mouse_move = action.action.get('mouse_move')
-            _move = action.action.get('move')
-            _pick_up = action.action.get('pick_up')
-            _remove = action.action.get('remove')
-            _skill_cancel = action.action.get('skill_cancel')
-            _skill_execute = action.action.get('skill_execute')
-            _skill_move = action.action.get('skill_move')
-            _skill_prepare = action.action.get('skill_prepare')
-            _wait = action.action.get('wait')
-            _wear = action.action.get('wear')
+        for ent, (act) in self.world.get_component(ActionComponent):
+            _consume = act.action.get('consume')
+            _descend = act.action.get('descend')
+            _drop = act.action.get('drop')
+            _open_inventory = act.action.get('open_inventory')
+            _mouse_move = act.action.get('mouse_move')
+            _move = act.action.get('move')
+            _pick_up = act.action.get('pick_up')
+            _remove = act.action.get('remove')
+            _skill_cancel = act.action.get('skill_cancel')
+            _skill_execute = act.action.get('skill_execute')
+            _skill_move = act.action.get('skill_move')
+            _skill_prepare = act.action.get('skill_prepare')
+            _wait = act.action.get('wait')
+            _wear = act.action.get('wear')
+
+            self.world.component_for_entity(ent, EnergyComponent).action = list(act.action.keys()).pop() # There should only be one action in the dict...
 
             if _consume:
                 if _consume is True:
