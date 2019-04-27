@@ -41,8 +41,6 @@ class ActionProcessor(esper.Processor):
             _wait = act.action.get('wait')
             _wear = act.action.get('wear')
 
-            self.world.component_for_entity(ent, EnergyComponent).action = list(act.action.keys()).pop() # There should only be one action in the dict...
-
             if _consume:
                 if _consume is True:
                     self.world.add_component(ent, ConsumeComponent(item_id=None))

@@ -51,7 +51,6 @@ class GameWorld(world.CustomWorld):
             return 0
 
         with shelve.open('savegame', 'r') as data_file:
-            #self.consoles = data_file['consoles']
             self.map = data_file['map']
             self.messages = data_file['log']
             self.state_stack = data_file['state']
@@ -62,7 +61,6 @@ class GameWorld(world.CustomWorld):
             
     def save_game(self):
         with shelve.open('savegame', 'n') as data_file:
-            #data_file['consoles'] = self.consoles
             data_file['map'] = self.map
             data_file['log'] = self.messages
             data_file['state'] = self.state_stack
