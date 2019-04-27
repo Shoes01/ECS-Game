@@ -37,13 +37,7 @@ class SkillProcessor(esper.Processor):
                 else:
                     continue
 
-                if ((slot == 'q' and item_slot == 'mainhand') or
-                    (slot == 'w' and item_slot == 'head') or
-                    (slot == 'e' and item_slot == 'accessory') or
-                    (slot == 'a' and item_slot == 'offhand') or
-                    (slot == 's' and item_slot == 'torso') or
-                    (slot == 'd' and item_slot == 'feet')
-                ):
+                if slot == item_slot:
                     legal_item = True
                     skill_name = item_skill_component.name
                     break

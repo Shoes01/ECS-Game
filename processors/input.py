@@ -106,8 +106,18 @@ class InputProcessor(esper.Processor):
             elif key_scancode == libtcod.event.SCANCODE_ESCAPE:
                 action = {'skill_cancel': True}
                 events.append({'skill_done': True})
-            elif key_char == 'q' or key_char == 'w' or key_char == 'e' or key_char == 'a' or key_char == 's' or key_char == 'd':
-                action = {'skill_prepare': key_char}
+            elif key_char == 'q':
+                action = {'skill_prepare': 'mainhand'}
+            elif key_char == 'w':
+                action = {'skill_prepare': 'head'}
+            elif key_char == 'e':
+                action = {'skill_prepare': 'accessory'}
+            elif key_char == 'a':
+                action = {'skill_prepare': 'offhand'}
+            elif key_char == 's':
+                action = {'skill_prepare': 'torso'}
+            elif key_char == 'd':
+                action = {'skill_prepare': 'feet'}
             elif key_scancode == libtcod.event.SCANCODE_SPACE:
                 action = {'skill_execute': True}
 
@@ -135,9 +145,24 @@ class InputProcessor(esper.Processor):
                     events.append({'look': (_pos.x, _pos.y)})
 
                 # Skill keys.
-                elif key_char == 'q' or key_char == 'w' or key_char == 'e' or key_char == 'a' or key_char == 's' or key_char == 'd':
+                elif key_char == 'q':
                     events.append({'skill_targeting': True})
-                    action = {'skill_prepare': key_char}
+                    action = {'skill_prepare': 'mainhand'}
+                elif key_char == 'w':
+                    events.append({'skill_targeting': True})
+                    action = {'skill_prepare': 'head'}
+                elif key_char == 'e':
+                    events.append({'skill_targeting': True})
+                    action = {'skill_prepare': 'accessory'}
+                elif key_char == 'a':
+                    events.append({'skill_targeting': True})
+                    action = {'skill_prepare': 'offhand'}
+                elif key_char == 's':
+                    events.append({'skill_targeting': True})
+                    action = {'skill_prepare': 'torso'}
+                elif key_char == 'd':
+                    events.append({'skill_targeting': True})
+                    action = {'skill_prepare': 'feet'}
                 
                 # Mouse movement.
                 if mouse_click:

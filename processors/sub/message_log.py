@@ -11,7 +11,7 @@ def render_message_log(console_bundle, world):
     console, x, y, w, h = world.consoles['log']
 
     # Hijack the message log to print skill descriptions.
-    if world.state == 'SkillTargeting':
+    if world.state == 'SkillTargeting' and world.has_component(1, SkillPreparationComponent): # TODO: If we lack this skill, we should not be in this state
         item_name = None
         skill_name = None
         skill_description = None
@@ -28,7 +28,7 @@ def render_message_log(console_bundle, world):
                 skill_description = item_skill_component.description
                 
                 console.print(0, 0, item_name, LOG_COLORS['skill'])
-                console.print(0, 1, skill_name, LOG_COLORS['skill'])
+                console.print(0, 1, skill_name.capitalize(), LOG_COLORS['skill'])
                 console.print(0, 3, skill_description, LOG_COLORS['skill']) # TODO: Need some word wrap here.
                 break
         

@@ -9,7 +9,6 @@ from components.actor.pickup import PickupComponent
 from components.actor.player import PlayerComponent
 from components.actor.remove import RemoveComponent
 from components.actor.skill_execute import SkillExecutionComponent
-from components.actor.skill_prepare import SkillPreparationComponent
 from components.actor.velocity import VelocityComponent
 from components.actor.wait import WaitComponent
 from components.actor.wear import WearComponent
