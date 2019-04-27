@@ -10,6 +10,7 @@ from components.actor.skill_prepare import SkillPreparationComponent
 from components.actor.velocity import VelocityComponent
 from components.item.skill import ItemSkillComponent
 from components.item.slot import SlotComponent
+from components.name import NameComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
 from components.tile import TileComponent
@@ -20,31 +21,29 @@ class SkillProcessor(esper.Processor):
 
     def process(self):
         for ent, (eqp, pos, skill) in self.world.get_components(EquipmentComponent, PositionComponent, SkillPreparationComponent):
-            slot = skill.slot
+            item_name = None
             item_skill_component = None
             skill_name = None
+            slot = skill.slot
 
+            has_item = False
             legal_target = False
             legal_item = False
             legal_tile = True
-
+            
             # Look to see if we have a valid item for that skill.
             for item in eqp.equipment:
-                item_slot = self.world.component_for_entity(item, SlotComponent).slot
-                
-                if self.world.has_component(item, ItemSkillComponent):
-                    item_skill_component = self.world.component_for_entity(item, ItemSkillComponent)
-                else:
-                    continue
-
-                if slot == item_slot:
-                    legal_item = True
-                    skill_name = item_skill_component.name
-                    break
-
+                if slot == self.world.component_for_entity(item, SlotComponent).slot:
+                    has_item = True
+                    item_name = self.world.component_for_entity(item, NameComponent)._name
+                    if self.world.has_component(item, ItemSkillComponent):
+                        item_skill_component = self.world.component_for_entity(item, ItemSkillComponent)
+                        legal_item = True
+                        skill_name = item_skill_component.name
+                        break
             else:
-                # This has failed.
-                self.world.messages.append({'skill': (legal_item, legal_target, legal_tile, skill_name, self.world.turn)})
+                # We have failed to find an item, or to find an item with a skill.
+                self.world.messages.append({'skill': (has_item, legal_item, legal_target, legal_tile, item_name, self.world.turn)})
                 self.world.remove_component(ent, SkillPreparationComponent)
                 self.world.events.append({'skill_done': True})
                 return 0
@@ -145,13 +144,12 @@ class SkillProcessor(esper.Processor):
             
             if self.world.has_component(ent, SkillExecutionComponent):
                 self.world.component_for_entity(ent, SkillExecutionComponent).cost = item_skill_component.cost
+                
                 if entities_to_attack and legal_tile:
-                    # Do this skill!
-                    self.world.messages.append({'skill': (legal_item, legal_target, legal_tile, skill_name, self.world.turn)})
+                    # Do this skill!    
                     self.world.add_component(ent, CombatComponent(defender_IDs=entities_to_attack))
                 elif tile_destination and legal_tile:
                     # Do this skill!
-                    self.world.messages.append({'skill': (legal_item, legal_target, legal_tile, skill_name, self.world.turn)})
                     tile = tile_destination.pop()
                     tile_pos = self.world.component_for_entity(tile, PositionComponent)
                     ent_pos = self.world.component_for_entity(ent, PositionComponent)
@@ -160,7 +158,8 @@ class SkillProcessor(esper.Processor):
                     self.world.add_component(ent, VelocityComponent(dx=dx, dy=dy)) 
                     self.world.remove_component(ent, SkillExecutionComponent)
                 else:
-                    self.world.messages.append({'skill': (legal_item, legal_target, legal_tile, skill_name, self.world.turn)})
                     self.world.remove_component(ent, SkillExecutionComponent)
+                
+                self.world.messages.append({'skill': (has_item, legal_item, legal_target, legal_tile, skill_name, self.world.turn)})
                 self.world.remove_component(ent, SkillPreparationComponent)
                 self.world.events.append({'skill_done': True})

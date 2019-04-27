@@ -22,7 +22,7 @@ def render_message_log(console_bundle, world):
             item_slot_component = world.component_for_entity(item, SlotComponent)
             if item_slot_component.slot == slot:
                 
-                item_name = world.component_for_entity(item, NameComponent).name
+                item_name = world.component_for_entity(item, NameComponent)._name
                 item_skill_component = world.component_for_entity(item, ItemSkillComponent)
                 skill_name = item_skill_component.name
                 skill_description = item_skill_component.description
@@ -148,10 +148,12 @@ def render_message_log(console_bundle, world):
                 console.print(0, 0 + dy, '(Turn %s) You are not wearing your %s!' % (turn, name), LOG_COLORS['failure'])
 
         elif _skill:
-            legal_item, legal_target, legal_tile, name, turn = _skill
+            has_item, legal_item, legal_target, legal_tile, name, turn = _skill
 
-            if not legal_item:
+            if not has_item:
                 console.print(0, 0 + dy, '(Turn %s) No valid item found.' % (turn), LOG_COLORS['failure'])
+            elif not legal_item:
+                console.print(0, 0 + dy, '(Turn %s) The %s has no skill.' % (turn, name), LOG_COLORS['failure'])
             elif not legal_tile:
                 console.print(0, 0 + dy, '(Turn %s) There is something in your way.' % (turn), LOG_COLORS['failure'])
             elif not legal_target:
