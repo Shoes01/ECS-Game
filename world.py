@@ -158,10 +158,11 @@ class CustomWorld(esper.World):
 
             elif key == 'skill':
                 name = value
+                description = self._json_data.get(name).get('description')
                 cost = self._json_data.get(name).get('cost')
                 east = self._json_data.get(name).get('east')
                 north_east = self._json_data.get(name).get('north_east')
-                self.add_component(ent, ItemSkillComponent(cost=cost, name=name, east=east, north_east=north_east))
+                self.add_component(ent, ItemSkillComponent(cost=cost, name=name, description=description, east=east, north_east=north_east))
 
             elif key == 'slot':
                 slot = value.get('slot')

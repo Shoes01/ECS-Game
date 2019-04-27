@@ -1,8 +1,40 @@
 import tcod as libtcod
 
 from _data import LOG_COLORS
+from components.actor.equipment import EquipmentComponent
+from components.actor.skill_prepare import SkillPreparationComponent
+from components.item.skill import ItemSkillComponent
+from components.item.slot import SlotComponent
+from components.name import NameComponent
 
 def render_message_log(console_bundle, world):
+    console, x, y, w, h = world.consoles['log']
+
+    # Hijack the message log to print skill descriptions.
+    if world.state == 'SkillTargeting':
+        item_name = None
+        skill_name = None
+        skill_description = None
+        slot = world.component_for_entity(1, SkillPreparationComponent).slot
+        eqp_component = world.component_for_entity(1, EquipmentComponent)
+        
+        for item in eqp_component.equipment:
+            item_slot_component = world.component_for_entity(item, SlotComponent)
+            if item_slot_component.slot == slot:
+                
+                item_name = world.component_for_entity(item, NameComponent).name
+                item_skill_component = world.component_for_entity(item, ItemSkillComponent)
+                skill_name = item_skill_component.name
+                skill_description = item_skill_component.description
+                
+                console.print(0, 0, item_name, LOG_COLORS['skill'])
+                console.print(0, 1, skill_name, LOG_COLORS['skill'])
+                console.print(0, 3, skill_description, LOG_COLORS['skill']) # TODO: Need some word wrap here.
+                break
+        
+        return 0
+    
+    # Draw the regular message log.
     console, x, y, w, h = console_bundle
     
     max_offset = len(world.messages) - h
@@ -99,8 +131,6 @@ def render_message_log(console_bundle, world):
             else:
                 console.print(0, 0 + dy, '(Turn %s) There are %s items here.' % (turn, str(number)), LOG_COLORS['warning'])
                 
-                
-
         elif _pickup:
             name, success, turn = _pickup
 

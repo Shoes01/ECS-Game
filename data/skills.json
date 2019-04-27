@@ -8,6 +8,7 @@
 
     "lunge":{
         "cost": 20,
+        "description": "Lunge forward.",
         "east":
         [
             [0, 0, 0, 0, 0],
@@ -27,6 +28,7 @@
     },
     "cleave":{
         "cost": 20,
+        "description": "A swinging swipe.",
         "east":
         [
             [0, 0, 0, 0, 0],
@@ -46,6 +48,7 @@
     },
     "headbutt":{
         "cost": 10,
+        "description": "Use your head for something.",
         "east":
         [
             [0, 0, 0, 0, 0],
@@ -63,8 +66,9 @@
             [0, 0, 0, 0, 0]
         ]
     },
-    "charge":{
+    "sprint":{
         "cost": 10,
+        "description": "Sprint to a safer location.",
         "east":
         [
             [0, 0, 0, 0, 0],

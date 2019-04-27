@@ -129,6 +129,7 @@ LOG_COLORS = {
     'death': COLOR_THEME['Red'],
     'error': COLOR_THEME['BrightRed'],
     'failure': COLOR_THEME['Red'],
+    'skill': COLOR_THEME['BrightGreen'],
     'system_message': COLOR_THEME['Green'],
     'success': COLOR_THEME['Blue'],
     'warning': COLOR_THEME['BrightYellow']
