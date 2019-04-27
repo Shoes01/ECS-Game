@@ -21,7 +21,7 @@ def main():
     world = build_world()
     world.consoles = consoles
  
-    while not world.state == 'Exit':
+    while world.state:
         # Do literally everything.
         world.process()
 

@@ -35,7 +35,7 @@ class EventProcessor(esper.Processor):
             _view_log = event.get('view_log')
             
             if _boss_killed:
-                self.world.victory = True
+                self.world.flag_victory = True
 
             elif _close_popup_menu:
                 menus = self.world.popup_menus
@@ -43,7 +43,7 @@ class EventProcessor(esper.Processor):
                     menus.pop()
 
             elif _exit:
-                self.world.pop_state = True
+                self.world.flag_pop_state = True
 
             elif _key_stroke:
                 key = _key_stroke
@@ -71,8 +71,8 @@ class EventProcessor(esper.Processor):
                 self.world.cursor.y += dy
 
             elif _new_map:
-                self.world.generate_map = True
-                self.world.create_dijkstra_map = True
+                self.world.flag_generate_map = True
+                self.world.flag_create_dijkstra_map = True
 
             elif _player_killed:
                 self.world.component_for_entity(1, PlayerComponent).killed = True
@@ -91,16 +91,16 @@ class EventProcessor(esper.Processor):
                 self.world.messages_offset += _scroll
 
             elif _skill_done:
-                self.world.skill_targeting = False
+                self.world.toggle_skill_targeting = False
 
             elif _skill_targeting:
-                self.world.skill_targeting = True
+                self.world.toggle_skill_targeting = True
 
             elif _toggle_debug:
-                if self.world.debug_mode:
-                    self.world.debug_mode = False
+                if self.world.toggle_debug_mode:
+                    self.world.toggle_debug_mode = False
                 else:
-                    self.world.debug_mode = True
+                    self.world.toggle_debug_mode = True
             
             elif _view_log:
-                self.world.view_log = True
+                self.world.flag_view_log = True

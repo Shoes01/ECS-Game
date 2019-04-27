@@ -8,15 +8,14 @@ class GameWorld(world.CustomWorld):
     def __init__(self):
         super().__init__()
         ' Flags. ' 
-        self.create_dijkstra_map = False
-        self.generate_map = False
-        self.pop_state = False
-        self.reset_game = False
-        self.victory = False
-        self.view_log = False
+        self.flag_create_dijkstra_map = False
+        self.flag_generate_map = False
+        self.flag_pop_state = False
+        self.flag_reset_game = False
+        self.flag_victory = False
+        self.flag_view_log = False
         
         ' Data. '
-        self.debug_mode = False # This one is a toggle.
         self.events = []
         self.key = None
         self.messages = []
@@ -24,9 +23,10 @@ class GameWorld(world.CustomWorld):
         self.mouse_pos = None
         self.popup_menus = []
         self.redraw = False # This information needs to communicate cross-tick.
-        self.skill_targeting = False # This one is a toggle.
-        self.state_stack = ['Exit', 'MainMenu']
+        self.state_stack = ['MainMenu']
         self.ticker = 0
+        self.toggle_debug_mode = False
+        self.toggle_skill_targeting = False
 
         ' Objects. '
         self.consoles = None
@@ -35,7 +35,10 @@ class GameWorld(world.CustomWorld):
 
     @property
     def state(self):
-        return self.state_stack[-1]
+        try:
+            return self.state_stack[-1]
+        except:
+            return None
     
     @property
     def turn(self):
@@ -70,12 +73,12 @@ class GameWorld(world.CustomWorld):
             data_file['next_entity_id'] = self._next_entity_id
             
     def reset_flags(self):
-        self.create_dijkstra_map = False
-        self.generate_map = False
-        self.pop_state = False
-        self.reset_game = False
-        self.victory = False
-        self.view_log = False
+        self.flag_create_dijkstra_map = False
+        self.flag_generate_map = False
+        self.flag_pop_state = False
+        self.flag_reset_game = False
+        self.flag_victory = False
+        self.flag_view_log = False
 
 class Cursor():
     def __init__(self):

@@ -7,7 +7,7 @@ class DebugProcessor(esper.Processor):
         super().__init__()
     
     def process(self):
-        if self.world.debug_mode and self.world.state == 'Game':
+        if self.world.toggle_debug_mode and self.world.state == 'Game':
             dijkstra_map = self.world.map.dijkstra_map
             key = self.world.key
             key_char = None

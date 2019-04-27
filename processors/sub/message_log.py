@@ -7,7 +7,10 @@ from components.item.skill import ItemSkillComponent
 from components.item.slot import SlotComponent
 from components.name import NameComponent
 
-def render_message_log(console_bundle, world):
+def render_message_log(world):
+    if world.state == 'MainMenu':
+        return 0
+        
     console, x, y, w, h = world.consoles['log']
 
     # Hijack the message log to print skill descriptions.
@@ -35,7 +38,7 @@ def render_message_log(console_bundle, world):
         return 0
     
     # Draw the regular message log.
-    console, x, y, w, h = console_bundle
+    console, x, y, w, h = world.consoles['log']
     
     max_offset = len(world.messages) - h
 

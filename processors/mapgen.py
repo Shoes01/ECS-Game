@@ -24,7 +24,7 @@ class MapgenProcessor(esper.Processor):
         self._leaf_rooms = []
 
     def process(self):
-        if self.world.generate_map:
+        if self.world.flag_generate_map:
             game_map = self.world.map
             game_map.floor += 1
 

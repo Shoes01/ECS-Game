@@ -5,12 +5,15 @@ from components.actor.stats import StatsComponent
 from components.item.slot import SlotComponent
 from components.render import RenderComponent
 
-def render_stats(console_bundle, world):
-    console, x, y, w, h = console_bundle
+def render_stats(world):
+    if world.state == 'MainMenu':
+        return 0
         
-    color_invalid = UI_COLORS['text_invalid']
+    console, x, y, w, h = world.consoles['stats']
+    
     color = UI_COLORS['text']
-
+    color_invalid = UI_COLORS['text_invalid']
+    
     # Draw the player stats.
     player_stats_component = world.component_for_entity(1, StatsComponent)
 
@@ -18,7 +21,6 @@ def render_stats(console_bundle, world):
     console.print(0, 1, 'PWR: {0}'.format(calculate_power(1, world)), color)
     console.print(0, 2, 'TURN: {0}'.format(world.turn), color)
     console.print(0, 3, 'FLOOR: {0}'.format(world.map.floor), color)
-
 
     # Draw the item boxes.
     Q_color, W_color, E_color, A_color, S_color, D_color = color_invalid, color_invalid, color_invalid, color_invalid, color_invalid, color_invalid

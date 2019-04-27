@@ -13,62 +13,53 @@ class RenderProcessor(esper.Processor):
         super().__init__()
     
     def process(self):
-        game_state = self.world.state
-        
-        # Draw the border while Debug mode is active.
-        if game_state == 'Game' and (self.world.redraw is False or self.world.debug_mode):
-            self.render_border()
-            return 0
-        else:
+        self.render_border()
+
+        if self.world.redraw and not self.world.toggle_debug_mode:
             self.world.redraw = False
-
-        con_obj = self.world.consoles['con'] # type: (console, x, y, w, h)
-        eqp_obj = self.world.consoles['stats']
-        log_obj = self.world.consoles['log']
-        map_obj = self.world.consoles['map']
-
-        # Draw the main menu.
-        if game_state == 'MainMenu':
-            _string = 'Welcome to the Main Menu.\n\nPress ENTER to begin.\nPress L to load the last save.\n\nPress ESC to quit.'
-            map_obj[0].print(3, 3, _string, UI_COLORS['text_mainmenu'])
-
-        # Draw the victory screen
-        if game_state == 'VictoryScreen':
-            _string = 'You have won! Press ESC to return to the Main Menu.'
-            map_obj[0].print(3, 3, _string, UI_COLORS['text_mainmenu'])
-
-        # Draw the game.
-        if game_state == 'Game' or game_state == 'GameOver' or game_state == 'Look' or game_state == 'PopupMenu' or game_state == 'ViewLog' or game_state == 'SkillTargeting':
-            self.render_border()
-            render_stats(self.world.consoles['stats'], self.world)
-            render_entities(self.world.consoles['map'], self.world)
-            render_popup_menu(self.world.consoles['map'], self.world)
-            render_message_log(self.world.consoles['log'], self.world)
-            render_tooltips(self.world.consoles['map'], self.world)
+        else:
+            return 0
+        
+        # Draw pretty much all game elements.
+        render_stats(self.world)
+        render_entities(self.world)
+        render_popup_menu(self.world)
+        render_message_log(self.world)
+        render_tooltips(self.world)
 
         # Draw the gameover overlay.
-        if game_state == 'GameOver':
+        if self.world.state == 'GameOver':
             libtcod.console_set_color_control(libtcod.COLCTRL_1, COLOR_THEME['BrightRed'], COLOR_THEME['Red'])
-            map_obj[0].print(3, 3, 'You have %cDIED%c! Press ESC to return to the Main Menu.' % (libtcod.COLCTRL_1, libtcod.COLCTRL_STOP), UI_COLORS['text_mainmenu'], bg_blend=libtcod.BKGND_NONE)
+            self.world.consoles['map'][0].print(3, 3, 'You have %cDIED%c! Press ESC to return to the Main Menu.' % (libtcod.COLCTRL_1, libtcod.COLCTRL_STOP), UI_COLORS['text_mainmenu'], bg_blend=libtcod.BKGND_NONE)
         
-        # Draw the message log overlay.
-        if game_state == 'ViewLog':
-            map_obj[0].clear()
-            log_obj[0].clear()
-            render_message_log(self.world.consoles['map'], self.world)
+        # Draw the main menu.
+        elif self.world.state == 'MainMenu':
+            _string = 'Welcome to the Main Menu.\n\nPress ENTER to begin.\nPress L to load the last save.\n\nPress ESC to quit.'
+            self.world.consoles['map'][0].print(3, 3, _string, UI_COLORS['text_mainmenu'])
 
-        eqp_obj[0].blit(dest=con_obj[0], dest_x=eqp_obj[1], dest_y=eqp_obj[2], width=eqp_obj[3], height=eqp_obj[4])
-        log_obj[0].blit(dest=con_obj[0], dest_x=log_obj[1], dest_y=log_obj[2], width=log_obj[3], height=log_obj[4])
-        map_obj[0].blit(dest=con_obj[0], dest_x=map_obj[1], dest_y=map_obj[2], width=map_obj[3], height=map_obj[4])
-        
+        # Draw the flag_victory screen
+        elif self.world.state == 'VictoryScreen':
+            _string = 'You have won! Press ESC to return to the Main Menu.'
+            self.world.consoles['map'][0].print(3, 3, _string, UI_COLORS['text_mainmenu'])
+
+        for key, value in self.world.consoles.items():
+            ### Is the console blitting to itself?
+            # key: console name
+            # value: console, x, y, w, h
+            if key == 'con':
+                continue
+            
+            value[0].blit(dest=self.world.consoles['con'][0], dest_x=value[1], dest_y=value[2], width=value[3], height=value[4])
+
         libtcod.console_flush()
-        
-        con_obj[0].clear()
-        eqp_obj[0].clear()
-        log_obj[0].clear()
-        map_obj[0].clear()
-    
+
+        for key, value in self.world.consoles.items():
+            value[0].clear()
+
     def render_border(self):
+        if self.world.state == 'MainMenu':
+            return 0
+
         con_obj = self.world.consoles['con'] # type: (console, x, y, w, h)
         eqp_obj = self.world.consoles['stats']
         map_obj = self.world.consoles['map']

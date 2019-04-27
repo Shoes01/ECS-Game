@@ -5,8 +5,11 @@ from components.name import NameComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
 
-def render_tooltips(console_bundle, world):
-    console, _, _, _, h = console_bundle
+def render_tooltips(world):
+    if world.state == 'MainMenu':
+        return 0
+        
+    console, _, _, _, h = world.consoles['map']
     cursor = world.cursor
     x, y = None, None
     

@@ -1,10 +1,10 @@
 from _data import map, UI_COLORS
 
-def render_popup_menu(console_bundle, world):
+def render_popup_menu(world):
     if not world.popup_menus:
-        return
+        return 0
 
-    console = console_bundle[0]
+    console = world.consoles['map'][0]
     menus = world.popup_menus
     if not menus:
         return 0
