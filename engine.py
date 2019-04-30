@@ -6,7 +6,7 @@ from _data import con, eqp, log, map
 from processors.debug import DebugProcessor
 from processors.input import InputProcessor
 from processors.render import RenderProcessor
-from new_world import build_world
+from game import GameWorld
 
 def main():
     # Prepare console.
@@ -18,7 +18,7 @@ def main():
     consoles['map'] = (libtcod.console.Console(map.w, map.h, order='F'), map.x, map.y, map.w, map.h)
 
     # Prepare world. '1' is the player ID.
-    world = build_world()
+    world = GameWorld()
     world.consoles = consoles
  
     while world.state:
