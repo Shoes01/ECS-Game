@@ -7,7 +7,7 @@ from components.actor.wear import WearComponent
 from components.item.slot import SlotComponent
 from components.item.wearable import WearableComponent
 from components.name import NameComponent
-from game import PopupMenu, PopupChoice
+from menu import PopupMenu, PopupChoice
 
 class WearableProcessor(esper.Processor):
     def __init__(self):

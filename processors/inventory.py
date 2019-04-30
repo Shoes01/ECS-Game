@@ -6,7 +6,7 @@ from components.actor.open_inv import OpenInventoryComponent
 from components.item.consumable import ConsumableComponent
 from components.item.wearable import WearableComponent
 from components.name import NameComponent
-from game import PopupMenu, PopupChoice
+from menu import PopupMenu, PopupChoice
 
 class InventoryProcessor(esper.Processor):
     def __init__(self):

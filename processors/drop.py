@@ -7,7 +7,7 @@ from components.item.pickedup import PickedupComponent
 from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
-from game import PopupMenu, PopupChoice
+from menu import PopupMenu, PopupChoice
 
 class DropProcessor(esper.Processor):
     def __init__(self):

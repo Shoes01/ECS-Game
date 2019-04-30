@@ -5,7 +5,7 @@ from components.actor.inventory import InventoryComponent
 from components.actor.stats import StatsComponent
 from components.item.consumable import ConsumableComponent
 from components.name import NameComponent
-from game import PopupMenu, PopupChoice
+from menu import PopupMenu, PopupChoice
 
 class ConsumableProcessor(esper.Processor):
     def __init__(self):

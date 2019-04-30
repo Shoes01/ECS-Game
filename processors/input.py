@@ -7,7 +7,7 @@ from components.actor.actor import ActorComponent
 from components.actor.energy import EnergyComponent
 from components.actor.player import PlayerComponent
 from components.position import PositionComponent
-from game import PopupMenu, PopupChoice
+from menu import PopupMenu, PopupChoice
 
 class InputProcessor(esper.Processor):
     def __init__(self):
