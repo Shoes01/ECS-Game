@@ -3,10 +3,8 @@ import esper
 from components.actor.combat import CombatComponent
 from components.actor.energy import EnergyComponent
 from components.actor.player import PlayerComponent
-from components.actor.remove import RemoveComponent
 from components.actor.skill_execute import SkillExecutionComponent
 from components.actor.wait import WaitComponent
-from components.actor.wear import WearComponent
 from queue import Queue
 
 class EnergyProcessor(esper.Processor):
@@ -24,7 +22,9 @@ class EnergyProcessor(esper.Processor):
             _descend = event.get('descend')
             _drop = event.get('drop')
             _move = event.get('move')
-            _pick_up = event.('pick_up')
+            _pick_up = event.get('pick_up')
+            _remove = event.get('remove')
+            _wear = event.get('wear')
 
             if _consume:
                 self.world.component_for_entity(ent, EnergyComponent).energy += 10
@@ -36,6 +36,10 @@ class EnergyProcessor(esper.Processor):
                 self.world.component_for_entity(ent, EnergyComponent).energy += 10
             elif _pick_up:
                 self.world.component_for_entity(ent, EnergyComponent).energy += 10
+            elif _remove:
+                self.world.component_for_entity(ent, EnergyComponent).energy += 10
+            elif _wear:
+                self.world.component_for_entity(ent, EnergyComponent).energy += 10
 
         for ent, (eng) in self.world.get_component(EnergyComponent):
             if self.world.has_component(ent, CombatComponent):
@@ -45,18 +49,10 @@ class EnergyProcessor(esper.Processor):
                 else:
                     eng.energy += 10
                 self.world.remove_component(ent, CombatComponent)
-            
-            elif self.world.has_component(ent, RemoveComponent):
-                eng.energy += 10
-                self.world.remove_component(ent, RemoveComponent)
 
             elif self.world.has_component(ent, WaitComponent):
                 eng.energy += 10
                 self.world.remove_component(ent, WaitComponent)
-            
-            elif self.world.has_component(ent, WearComponent):
-                eng.energy += 10
-                self.world.remove_component(ent, WearComponent)
 
         deincrement = True
         for ent, (eng, player) in self.world.get_components(EnergyComponent, PlayerComponent):

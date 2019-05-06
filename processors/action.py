@@ -6,9 +6,7 @@ from components.actor.energy import EnergyComponent
 from components.actor.player import PlayerComponent
 from components.actor.skill_execute import SkillExecutionComponent
 from components.actor.skill_prepare import SkillPreparationComponent
-from components.actor.remove import RemoveComponent
 from components.actor.wait import WaitComponent
-from components.actor.wear import WearComponent
 from components.position import PositionComponent
 from processors.consumable import ConsumableProcessor
 from processors.descend import DescendProcessor
@@ -16,6 +14,8 @@ from processors.drop import DropProcessor
 from processors.inventory import InventoryProcessor
 from processors.movement import MovementProcessor
 from processors.pickup import PickupProcessor
+from processors.removable import RemovableProcessor
+from processors.wearable import WearableProcessor
 from queue import Queue
 
 class ActionProcessor(esper.Processor):
@@ -78,7 +78,7 @@ class ActionProcessor(esper.Processor):
                 self.world.get_processor(PickupProcessor).queue.put({'ent': ent, 'item': _pick_up})
                     
             elif _remove:
-                self.world.add_component(ent, RemoveComponent(item_id=_remove))
+                self.world.get_processor(RemovableProcessor).queue.put({'ent': ent, 'item': _remove})
 
             elif _skill_cancel:
                 self.world.remove_component(ent, SkillPreparationComponent)
@@ -106,8 +106,4 @@ class ActionProcessor(esper.Processor):
                 self.world.add_component(ent, WaitComponent())
 
             elif _wear:
-                if _wear is True:
-                    self.world.add_component(ent, WearComponent(item_id=None))
-                elif _wear:
-                    self.world.add_component(ent, WearComponent(item_id=_wear))
-                    
+                self.world.get_processor(WearableProcessor).queue.put({'ent': ent, 'item': _wear})
