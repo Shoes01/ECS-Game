@@ -13,6 +13,7 @@ from components.name import NameComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
 from components.tile import TileComponent
+from processors.movement import MovementProcessor
 
 class SkillProcessor(esper.Processor):
     def __init__(self):
@@ -154,7 +155,7 @@ class SkillProcessor(esper.Processor):
                     ent_pos = self.world.component_for_entity(ent, PositionComponent)
                     dx = tile_pos.x - ent_pos.x
                     dy = tile_pos.y - ent_pos.y
-                    # self.world.add_component(ent, VelocityComponent(dx=dx, dy=dy)) # TODO: move this to the new processor
+                    self.world.get_processor(MovementProcessor).queue.put{'ent': ent, 'move': (dx, dy)}
                     self.world.remove_component(ent, SkillExecutionComponent)
                 else:
                     self.world.remove_component(ent, SkillExecutionComponent)
