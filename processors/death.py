@@ -4,7 +4,6 @@ from _data import ENTITY_COLORS
 from components.actor.actor import ActorComponent
 from components.actor.boss import BossComponent
 from components.actor.brain import BrainComponent
-from components.actor.combat import CombatComponent
 from components.actor.corpse import CorpseComponent
 from components.actor.dead import DeadComponent
 from components.actor.inventory import InventoryComponent
@@ -49,7 +48,6 @@ class DeathProcessor(esper.Processor):
                 self.world.events.append({'boss_killed': True})
 
             self.world.remove_component(ent, ActorComponent)
-            if self.world.has_component(ent, CombatComponent): self.world.remove_component(ent, CombatComponent)
             self.world.remove_component(ent, DeadComponent)
             
             self.world.add_component(ent, CorpseComponent())

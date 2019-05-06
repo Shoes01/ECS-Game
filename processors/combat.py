@@ -3,21 +3,27 @@ import tcod as libtcod
 
 from _helper_functions import calculate_power
 from components.actor.actor import ActorComponent
-from components.actor.combat import CombatComponent
 from components.actor.dead import DeadComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.stats import StatsComponent
 from components.item.modifier import ModifierComponent
 from components.render import RenderComponent
+from processors.energy import EnergyProcessor
+from queue import Queue
 
 class CombatProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
+        self.queue = Queue()
     
     def process(self):
-        for ent, (act, com, att_ren) in self.world.get_components(ActorComponent, CombatComponent, RenderComponent):
-            attacker_ID = ent
-            defender_IDs = self.world.component_for_entity(attacker_ID, CombatComponent).defender_IDs
+        while not self.queue.empty():
+            event = self.queue.get()
+
+            attacker_ID = event['ent']
+            att_ren = self.world.component_for_entity(attacker_ID, RenderComponent)
+
+            defender_IDs = event['defender_IDs']
 
             for defender_ID in defender_IDs:
 
@@ -33,6 +39,7 @@ class CombatProcessor(esper.Processor):
                 def_ren = self.world.component_for_entity(defender_ID, RenderComponent)
 
                 self.world.messages.append({'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, damage, self.world.turn)})
+                self.world.get_processor(EnergyProcessor).queue.put({'ent': attacker_ID, 'bump_attack': True})
 
                 if defender_stats.hp <= 0 and not self.world.has_component(defender_ID, DeadComponent):
                     self.world.add_component(defender_ID, DeadComponent(murderer=attacker_ID))

@@ -3,7 +3,6 @@ import numpy as np
 
 from _data import ENTITY_COLORS
 from components.actor.actor import ActorComponent
-from components.actor.combat import CombatComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.skill_execute import SkillExecutionComponent
 from components.actor.skill_prepare import SkillPreparationComponent
@@ -13,6 +12,7 @@ from components.name import NameComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
 from components.tile import TileComponent
+from processors.combat import CombatProcessor
 from processors.movement import MovementProcessor
 
 class SkillProcessor(esper.Processor):
@@ -147,7 +147,7 @@ class SkillProcessor(esper.Processor):
                 
                 if entities_to_attack and legal_tile:
                     # Do this skill!    
-                    self.world.add_component(ent, CombatComponent(defender_IDs=entities_to_attack))
+                    self.world.get_processor(CombatProcessor).queue.put({'ent': ent, 'defender_IDs': entities_to_attack})
                 elif tile_destination and legal_tile:
                     # Do this skill!
                     tile = tile_destination.pop()

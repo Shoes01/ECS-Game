@@ -1,12 +1,12 @@
 import esper
 
 from components.actor.actor import ActorComponent
-from components.actor.combat import CombatComponent
 from components.actor.player import PlayerComponent
 from components.item.item import ItemComponent
 from components.name import NameComponent
 from components.position import PositionComponent
 from components.tile import TileComponent
+from processors.combat import CombatProcessor
 from processors.energy import EnergyProcessor
 from queue import Queue
 
@@ -28,7 +28,7 @@ class MovementProcessor(esper.Processor):
             occupying_entity = self.world.get_entities_at(pos.x + dx, pos.y + dy, ActorComponent)
             if len(occupying_entity) == 1:
                 success = False
-                self.world.add_component(ent, CombatComponent(defender_IDs=occupying_entity))
+                self.world.get_processor(CombatProcessor).queue.put(){'ent': ent, 'defender_IDs': occupying_entity}
             
             if self.world.has_component(ent, PlayerComponent):
                 # Player may run into walls, whereas AI uses the dijkstra map to navigate.
