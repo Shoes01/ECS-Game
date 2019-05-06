@@ -32,24 +32,20 @@ class ActionProcessor(esper.Processor):
 
             ent = event['ent']
 
+            _consume = event.get('consume')
+            _descend = event.get('descend')
+            _drop = event.get('drop')
+            _open_inventory = event.get('open_inventory')
+            _mouse_move = event.get('mouse_move')
             _move = event.get('move')
+            _pick_up = event.get('pick_up')
+            _remove = event.get('remove')
+            _skill_cancel = event.get('skill_cancel')
+            _skill_execute = event.get('skill_execute')
+            _skill_move = event.get('skill_move')
+            _skill_prepare = event.get('skill_prepare')
             _wait = event.get('wait')
-
-        for ent, (act) in self.world.get_component(ActionComponent):
-            _consume = act.action.get('consume')
-            _descend = act.action.get('descend')
-            _drop = act.action.get('drop')
-            _open_inventory = act.action.get('open_inventory')
-            _mouse_move = act.action.get('mouse_move')
-            _move = act.action.get('move')
-            _pick_up = act.action.get('pick_up')
-            _remove = act.action.get('remove')
-            _skill_cancel = act.action.get('skill_cancel')
-            _skill_execute = act.action.get('skill_execute')
-            _skill_move = act.action.get('skill_move')
-            _skill_prepare = act.action.get('skill_prepare')
-            _wait = act.action.get('wait')
-            _wear = act.action.get('wear')
+            _wear = event.get('wear')
 
             if _consume:
                 if _consume is True:

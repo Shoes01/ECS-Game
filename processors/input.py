@@ -2,12 +2,12 @@ import esper
 import tcod as libtcod
 import tcod.event
 
-from components.actor.action import ActionComponent
 from components.actor.actor import ActorComponent
 from components.actor.energy import EnergyComponent
 from components.actor.player import PlayerComponent
 from components.position import PositionComponent
 from menu import PopupMenu, PopupChoice
+from processors.action import ActionProcessor
 
 class InputProcessor(esper.Processor):
     def __init__(self):
@@ -169,8 +169,8 @@ class InputProcessor(esper.Processor):
                     action = {'mouse_move': mouse_click}
 
             # Attach action component to player entity. This ends their turn.
-            if action:
-                self.world.add_component(ent, ActionComponent(action=action))
+            action['ent'] = 1
+            self.world.get_processor(ActionProcessor).queue.put(action)
         
         # Attach event component to world entity. It does not have to be the player's turn for this to happen.
         if events:
