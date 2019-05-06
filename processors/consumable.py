@@ -1,20 +1,26 @@
 import esper
 
-from components.actor.consume import ConsumeComponent
 from components.actor.inventory import InventoryComponent
 from components.actor.stats import StatsComponent
 from components.item.consumable import ConsumableComponent
 from components.name import NameComponent
 from menu import PopupMenu, PopupChoice
+from processors.energy import EnergyProcessor
+from queue import Queue
 
 class ConsumableProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
+        self.queue = Queue()
     
     def process(self):
-        for ent, (con) in self.world.get_component(ConsumeComponent):
+        while not self.queue.empty():
+            event = self.queue.get()
+
+            ent = event['ent']
+            item = event['item']
             
-            if con.item_id is None:
+            if item is True:
                 # Create popup menu for player to choose from.
                 menu = PopupMenu(title='Which item would you like to consume?')
 
@@ -29,11 +35,9 @@ class ConsumableProcessor(esper.Processor):
                     n += 1
                 
                 self.world.popup_menus.append(menu)
-                self.world.remove_component(ent, ConsumeComponent)
 
             else:
                 # Consume the item.
-                item = self.world.component_for_entity(ent, ConsumeComponent).item_id
                 name = self.world.component_for_entity(item, NameComponent).name
                 turn = self.world.turn
 
@@ -43,10 +47,10 @@ class ConsumableProcessor(esper.Processor):
                     self.consume_item(ent, item, turn)
                     self.world.component_for_entity(ent, InventoryComponent).inventory.remove(item)
                     self.world.delete_entity(item)
+                    self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'consume': True})
                 else:
                     success = False
                     self.world.messages.append({'consume': (name, success, turn)})
-                    self.world.remove_component(ent, ConsumeComponent)
 
     def consume_item(self, ent, item, turn):
         con_component = self.world.component_for_entity(item, ConsumableComponent)

@@ -16,6 +16,7 @@ from components.actor.velocity import VelocityComponent
 from components.actor.wait import WaitComponent
 from components.actor.wear import WearComponent
 from components.position import PositionComponent
+from processors.consumable import ConsumableProcessor
 from queue import Queue
 
 class ActionProcessor(esper.Processor):
@@ -48,10 +49,7 @@ class ActionProcessor(esper.Processor):
             _wear = event.get('wear')
 
             if _consume:
-                if _consume is True:
-                    self.world.add_component(ent, ConsumeComponent(item_id=None))
-                elif _consume:
-                    self.world.add_component(ent, ConsumeComponent(item_id=_consume))
+                self.world.get_processor(ConsumableProcessor).queue.put({'ent': ent, 'item': _consume})
                     
             elif _descend:
                 self.world.add_component(ent, DescendComponent())
