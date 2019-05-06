@@ -6,11 +6,11 @@ from components.actor.energy import EnergyComponent
 from components.actor.player import PlayerComponent
 from components.actor.skill_execute import SkillExecutionComponent
 from components.actor.skill_prepare import SkillPreparationComponent
-from components.actor.wait import WaitComponent
 from components.position import PositionComponent
 from processors.consumable import ConsumableProcessor
 from processors.descend import DescendProcessor
 from processors.drop import DropProcessor
+from processors.energy import EnergyProcessor
 from processors.inventory import InventoryProcessor
 from processors.movement import MovementProcessor
 from processors.pickup import PickupProcessor
@@ -103,7 +103,7 @@ class ActionProcessor(esper.Processor):
                     self.world.add_component(ent, SkillPreparationComponent(slot=_skill_prepare))
 
             elif _wait:
-                self.world.add_component(ent, WaitComponent())
+                self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'wait': True})
 
             elif _wear:
                 self.world.get_processor(WearableProcessor).queue.put({'ent': ent, 'item': _wear})

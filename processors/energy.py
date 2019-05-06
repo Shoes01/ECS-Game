@@ -4,7 +4,6 @@ from components.actor.combat import CombatComponent
 from components.actor.energy import EnergyComponent
 from components.actor.player import PlayerComponent
 from components.actor.skill_execute import SkillExecutionComponent
-from components.actor.wait import WaitComponent
 from queue import Queue
 
 class EnergyProcessor(esper.Processor):
@@ -49,10 +48,6 @@ class EnergyProcessor(esper.Processor):
                 else:
                     eng.energy += 10
                 self.world.remove_component(ent, CombatComponent)
-
-            elif self.world.has_component(ent, WaitComponent):
-                eng.energy += 10
-                self.world.remove_component(ent, WaitComponent)
 
         deincrement = True
         for ent, (eng, player) in self.world.get_components(EnergyComponent, PlayerComponent):
