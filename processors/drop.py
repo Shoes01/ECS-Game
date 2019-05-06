@@ -1,6 +1,5 @@
 import esper
 
-from components.actor.drop import DropComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
 from components.item.pickedup import PickedupComponent
@@ -8,15 +7,26 @@ from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
 from menu import PopupMenu, PopupChoice
+from processors.energy import EnergyProcessor
+from queue import Queue
 
 class DropProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
+        self.queue = Queue()
     
     def process(self):
-        for ent, (drop, eqp, inv, pos) in self.world.get_components(DropComponent, EquipmentComponent, InventoryComponent, PositionComponent):
+        while not self.queue.empty():
+            event = self.queue.get()
+
+            ent = event['ent']
+            item = event['item']
+
+            eqp = self.world.component_for_entity(ent, EquipmentComponent)
+            inv = self.world.component_for_entity(ent, InventoryComponent)
+            pos = self.world.component_for_entity(ent, PositionComponent)
             
-            if drop.item_id is None:
+            if item is True:
                 # Create popup menu for player to choose from.
                 menu = PopupMenu(title='Which item would you like to drop?')
                 
@@ -33,11 +43,8 @@ class DropProcessor(esper.Processor):
                     n += 1
                 
                 self.world.popup_menus.append(menu)
-                self.world.remove_component(ent, DropComponent)
             
             else:
-                item = drop.item_id
-
                 # Remove the item from the player.
                 inv.inventory.remove(item)
                 self.world.remove_component(item, PersistComponent)
@@ -47,4 +54,5 @@ class DropProcessor(esper.Processor):
                 item_pos = self.world.component_for_entity(item, PositionComponent)
                 item_pos.x, item_pos.y = pos.x, pos.y
 
+                self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'drop': True})
                 self.world.messages.append({'drop': (self.world.component_for_entity(item, NameComponent).name, self.world.turn)})

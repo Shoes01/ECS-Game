@@ -2,7 +2,6 @@ import esper
 import math
 
 from components.actor.action import ActionComponent
-from components.actor.drop import DropComponent
 from components.actor.energy import EnergyComponent
 from components.actor.open_inv import OpenInventoryComponent
 from components.actor.pickup import PickupComponent
@@ -10,12 +9,12 @@ from components.actor.player import PlayerComponent
 from components.actor.skill_execute import SkillExecutionComponent
 from components.actor.skill_prepare import SkillPreparationComponent
 from components.actor.remove import RemoveComponent
-
 from components.actor.wait import WaitComponent
 from components.actor.wear import WearComponent
 from components.position import PositionComponent
 from processors.consumable import ConsumableProcessor
 from processors.descend import DescendProcessor
+from processors.drop import DropProcessor
 from processors.movement import MovementProcessor
 from queue import Queue
 
@@ -55,10 +54,7 @@ class ActionProcessor(esper.Processor):
                 self.world.get_processor(DescendProcessor).queue.put({'ent': ent})
 
             elif _drop:
-                if _drop is True:
-                    self.world.add_component(ent, DropComponent(item_id=None))
-                elif _drop:
-                    self.world.add_component(ent, DropComponent(item_id=_drop))    
+                self.world.get_processor(DropProcessor).queue.put({'ent': ent, 'item': _drop})
 
             elif _open_inventory:
                 self.world.add_component(ent, OpenInventoryComponent())
