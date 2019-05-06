@@ -2,18 +2,26 @@ import esper
 
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
-from components.actor.open_inv import OpenInventoryComponent
 from components.item.consumable import ConsumableComponent
 from components.item.wearable import WearableComponent
 from components.name import NameComponent
 from menu import PopupMenu, PopupChoice
+from queue import Queue
 
 class InventoryProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
+        self.queue = Queue()
     
     def process(self):
-        for ent, (eqp, inv, op_inv) in self.world.get_components(EquipmentComponent, InventoryComponent, OpenInventoryComponent):
+        while not self.queue.empty():
+            event = self.queue.get()
+
+            ent = event['ent']
+
+            eqp = self.world.component_for_entity(ent, EquipmentComponent)
+            inv = self.world.component_for_entity(ent, InventoryComponent)
+
             # Generate a list of items that the player may select.
             # Selecting an item opens a submenu with possible actions.
             menu = PopupMenu(title='Inventory', auto_close=False)
@@ -60,4 +68,3 @@ class InventoryProcessor(esper.Processor):
                 n += 1
             
             self.world.popup_menus.append(menu)
-            self.world.remove_component(ent, OpenInventoryComponent)

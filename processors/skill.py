@@ -155,7 +155,7 @@ class SkillProcessor(esper.Processor):
                     ent_pos = self.world.component_for_entity(ent, PositionComponent)
                     dx = tile_pos.x - ent_pos.x
                     dy = tile_pos.y - ent_pos.y
-                    self.world.get_processor(MovementProcessor).queue.put{'ent': ent, 'move': (dx, dy)}
+                    self.world.get_processor(MovementProcessor).queue.put({'ent': ent, 'move': (dx, dy)})
                     self.world.remove_component(ent, SkillExecutionComponent)
                 else:
                     self.world.remove_component(ent, SkillExecutionComponent)

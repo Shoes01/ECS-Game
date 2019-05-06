@@ -3,7 +3,6 @@ import math
 
 from components.actor.action import ActionComponent
 from components.actor.energy import EnergyComponent
-from components.actor.open_inv import OpenInventoryComponent
 from components.actor.pickup import PickupComponent
 from components.actor.player import PlayerComponent
 from components.actor.skill_execute import SkillExecutionComponent
@@ -15,6 +14,7 @@ from components.position import PositionComponent
 from processors.consumable import ConsumableProcessor
 from processors.descend import DescendProcessor
 from processors.drop import DropProcessor
+from processors.inventory import InventoryProcessor
 from processors.movement import MovementProcessor
 from queue import Queue
 
@@ -57,7 +57,7 @@ class ActionProcessor(esper.Processor):
                 self.world.get_processor(DropProcessor).queue.put({'ent': ent, 'item': _drop})
 
             elif _open_inventory:
-                self.world.add_component(ent, OpenInventoryComponent())
+                self.world.get_processor(InventoryProcessor).queue.put({'ent': ent})
 
             elif _mouse_move:
                 mx, my = _mouse_move.tile.x, _mouse_move.tile.y
