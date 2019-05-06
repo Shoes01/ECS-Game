@@ -30,6 +30,11 @@ class ActionProcessor(esper.Processor):
         while not self.queue.empty():
             event = self.queue.get()
 
+            ent = event['ent']
+
+            _move = event.get('move')
+            _wait = event.get('wait')
+
         for ent, (act) in self.world.get_component(ActionComponent):
             _consume = act.action.get('consume')
             _descend = act.action.get('descend')
