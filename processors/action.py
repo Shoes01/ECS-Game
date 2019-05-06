@@ -16,6 +16,7 @@ from components.actor.velocity import VelocityComponent
 from components.actor.wait import WaitComponent
 from components.actor.wear import WearComponent
 from components.position import PositionComponent
+from queue import Queue
 
 class ActionProcessor(esper.Processor):
     ' The ActionProcessor adds and removes Components based on the action. '
@@ -23,8 +24,12 @@ class ActionProcessor(esper.Processor):
     ' It is like the EventProcessor, but for the character and not the user. '
     def __init__(self):
         super().__init__()
+        self.queue = Queue()
     
     def process(self):
+        while not self.queue.empty():
+            event = self.queue.get()
+
         for ent, (act) in self.world.get_component(ActionComponent):
             _consume = act.action.get('consume')
             _descend = act.action.get('descend')
