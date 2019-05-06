@@ -5,7 +5,6 @@ from components.actor.actor import ActorComponent
 from components.actor.boss import BossComponent
 from components.actor.brain import BrainComponent
 from components.actor.corpse import CorpseComponent
-from components.actor.dead import DeadComponent
 from components.actor.inventory import InventoryComponent
 from components.actor.stats import StatsComponent
 from components.item.pickedup import PickedupComponent
@@ -14,13 +13,23 @@ from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
+from queue import Queue
 
 class DeathProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
+        self.queue = Queue()
     
     def process(self):
-        for ent, (dead, inv, name, pos, ren) in self.world.get_components(DeadComponent, InventoryComponent, NameComponent, PositionComponent, RenderComponent):
+        while not self.queue.empty():
+            event = self.queue.get()
+
+            ent = event['ent']
+            inv = self.world.component_for_entity(ent, InventoryComponent)
+            name = self.world.component_for_entity(ent, NameComponent)
+            pos = self.world.component_for_entity(ent, PositionComponent)
+            ren = self.world.component_for_entity(ent, RenderComponent)
+
             is_furniture = self.world.has_component(ent, FurnitureComponent)
             self.world.messages.append({'death': (ren.char, ren.color, self.world.turn, is_furniture)})
             
@@ -48,6 +57,5 @@ class DeathProcessor(esper.Processor):
                 self.world.events.append({'boss_killed': True})
 
             self.world.remove_component(ent, ActorComponent)
-            self.world.remove_component(ent, DeadComponent)
             
             self.world.add_component(ent, CorpseComponent())

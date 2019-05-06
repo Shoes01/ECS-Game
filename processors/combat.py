@@ -3,11 +3,11 @@ import tcod as libtcod
 
 from _helper_functions import calculate_power
 from components.actor.actor import ActorComponent
-from components.actor.dead import DeadComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.stats import StatsComponent
 from components.item.modifier import ModifierComponent
 from components.render import RenderComponent
+from processors.death import DeathProcessor
 from processors.energy import EnergyProcessor
 from queue import Queue
 
@@ -41,5 +41,5 @@ class CombatProcessor(esper.Processor):
                 self.world.messages.append({'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, damage, self.world.turn)})
                 self.world.get_processor(EnergyProcessor).queue.put({'ent': attacker_ID, 'bump_attack': True})
 
-                if defender_stats.hp <= 0 and not self.world.has_component(defender_ID, DeadComponent):
-                    self.world.add_component(defender_ID, DeadComponent(murderer=attacker_ID))
+                if defender_stats.hp <= 0:
+                    self.world.get_processor(DeathProcessor).queue.put({'ent': defender_ID})
