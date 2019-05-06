@@ -2,7 +2,6 @@ import esper
 
 from components.actor.combat import CombatComponent
 from components.actor.energy import EnergyComponent
-from components.actor.pickup import PickupComponent
 from components.actor.player import PlayerComponent
 from components.actor.remove import RemoveComponent
 from components.actor.skill_execute import SkillExecutionComponent
@@ -25,6 +24,7 @@ class EnergyProcessor(esper.Processor):
             _descend = event.get('descend')
             _drop = event.get('drop')
             _move = event.get('move')
+            _pick_up = event.('pick_up')
 
             if _consume:
                 self.world.component_for_entity(ent, EnergyComponent).energy += 10
@@ -33,6 +33,8 @@ class EnergyProcessor(esper.Processor):
             elif _drop:
                 self.world.component_for_entity(ent, EnergyComponent).energy += 10
             elif _move:
+                self.world.component_for_entity(ent, EnergyComponent).energy += 10
+            elif _pick_up:
                 self.world.component_for_entity(ent, EnergyComponent).energy += 10
 
         for ent, (eng) in self.world.get_component(EnergyComponent):
@@ -43,10 +45,6 @@ class EnergyProcessor(esper.Processor):
                 else:
                     eng.energy += 10
                 self.world.remove_component(ent, CombatComponent)
-
-            elif self.world.has_component(ent, PickupComponent):
-                eng.energy += 10
-                self.world.remove_component(ent, PickupComponent)
             
             elif self.world.has_component(ent, RemoveComponent):
                 eng.energy += 10

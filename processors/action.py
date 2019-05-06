@@ -3,7 +3,6 @@ import math
 
 from components.actor.action import ActionComponent
 from components.actor.energy import EnergyComponent
-from components.actor.pickup import PickupComponent
 from components.actor.player import PlayerComponent
 from components.actor.skill_execute import SkillExecutionComponent
 from components.actor.skill_prepare import SkillPreparationComponent
@@ -16,6 +15,7 @@ from processors.descend import DescendProcessor
 from processors.drop import DropProcessor
 from processors.inventory import InventoryProcessor
 from processors.movement import MovementProcessor
+from processors.pickup import PickupProcessor
 from queue import Queue
 
 class ActionProcessor(esper.Processor):
@@ -75,10 +75,7 @@ class ActionProcessor(esper.Processor):
                 self.world.flag_create_dijkstra_map = True
             
             elif _pick_up:
-                if _pick_up is True:
-                    self.world.add_component(ent, PickupComponent(item_id=None))
-                elif _pick_up:
-                    self.world.add_component(ent, PickupComponent(item_id=_pick_up))
+                self.world.get_processor(PickupProcessor).queue.put({'ent': ent, 'item': _pick_up})
                     
             elif _remove:
                 self.world.add_component(ent, RemoveComponent(item_id=_remove))

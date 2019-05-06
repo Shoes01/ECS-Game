@@ -1,23 +1,32 @@
 import esper
 
 from components.actor.inventory import InventoryComponent
-from components.actor.pickup import PickupComponent
 from components.item.item import ItemComponent
 from components.item.pickedup import PickedupComponent
 from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
 from menu import PopupMenu, PopupChoice
+from processors.energy import EnergyProcessor
+from queue import Queue
 
 class PickupProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
+        self.queue = Queue()
     
     def process(self):
-        for ent, (inv, pick, pos) in self.world.get_components(InventoryComponent, PickupComponent, PositionComponent):
+        while not self.queue.empty():
+            event = self.queue.get()
+
+            ent = event['ent']
+            item = event['item']
+
+            inv = self.world.component_for_entity(ent, InventoryComponent)
+            pos = self.world.component_for_entity(ent, PositionComponent)
             turn = self.world.turn
 
-            if pick.item_id is None:
+            if item is True:
                 matched_items = []
 
                 for item_ent, (item, item_pos) in self.world.get_components(ItemComponent, PositionComponent):
@@ -26,10 +35,9 @@ class PickupProcessor(esper.Processor):
                 
                 if len(matched_items) == 0:
                     self.world.messages.append({'pickup': (None, False, turn)})
-                    self.world.remove_component(ent, PickupComponent)
 
                 elif len(matched_items) == 1:
-                    self.pick_up(matched_items.pop(), inv, turn)
+                    self.pick_up(ent, matched_items.pop(), inv, turn)
                 
                 elif len(matched_items) > 1:
                     # Create popup menu for player to choose from.
@@ -44,12 +52,11 @@ class PickupProcessor(esper.Processor):
                         n += 1
 
                     self.world.popup_menus.append(menu)
-                    self.world.remove_component(ent, PickupComponent)
 
             else:
-                self.pick_up(pick.item_id, inv, turn)
+                self.pick_up(ent, item, inv, turn)
     
-    def pick_up(self, item, inv_component, turn):
+    def pick_up(self, ent, item, inv_component, turn):
         # Attach item to player.
         inv_component.inventory.append(item)
         self.world.add_component(item, PersistComponent())
@@ -59,4 +66,5 @@ class PickupProcessor(esper.Processor):
         item_pos = self.world.component_for_entity(item, PositionComponent)
         item_pos.x, item_pos.y = -1, -1
 
+        self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'pick_up': True})
         self.world.messages.append({'pickup': (self.world.component_for_entity(item, NameComponent).name, True, turn)})
