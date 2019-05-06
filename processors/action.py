@@ -2,7 +2,6 @@ import esper
 import math
 
 from components.actor.action import ActionComponent
-from components.actor.consume import ConsumeComponent
 from components.actor.descend import DescendComponent
 from components.actor.drop import DropComponent
 from components.actor.energy import EnergyComponent
@@ -12,11 +11,12 @@ from components.actor.player import PlayerComponent
 from components.actor.skill_execute import SkillExecutionComponent
 from components.actor.skill_prepare import SkillPreparationComponent
 from components.actor.remove import RemoveComponent
-from components.actor.velocity import VelocityComponent
+
 from components.actor.wait import WaitComponent
 from components.actor.wear import WearComponent
 from components.position import PositionComponent
 from processors.consumable import ConsumableProcessor
+from processors.movement import MovementProcessor
 from queue import Queue
 
 class ActionProcessor(esper.Processor):
@@ -71,12 +71,11 @@ class ActionProcessor(esper.Processor):
                 dy = my - pos.y
                 r = math.sqrt( dx**2 + dy**2)
 
-                self.world.add_component(ent, VelocityComponent(dx=round(dx/r), dy=round(dy/r)))
+                # self.world.add_component(ent, VelocityComponent(dx=round(dx/r), dy=round(dy/r)))
                 self.world.flag_create_dijkstra_map = True
 
             elif _move:
-                dx, dy = _move
-                self.world.add_component(ent, VelocityComponent(dx=dx, dy=dy))
+                self.world.get_processor(MovementProcessor).queue.put({'ent': ent, 'move': _move})
                 self.world.flag_create_dijkstra_map = True
             
             elif _pick_up:
@@ -119,4 +118,3 @@ class ActionProcessor(esper.Processor):
                 elif _wear:
                     self.world.add_component(ent, WearComponent(item_id=_wear))
                     
-            self.world.remove_component(ent, ActionComponent)

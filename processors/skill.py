@@ -7,7 +7,6 @@ from components.actor.combat import CombatComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.skill_execute import SkillExecutionComponent
 from components.actor.skill_prepare import SkillPreparationComponent
-from components.actor.velocity import VelocityComponent
 from components.item.skill import ItemSkillComponent
 from components.item.slot import SlotComponent
 from components.name import NameComponent
@@ -155,7 +154,7 @@ class SkillProcessor(esper.Processor):
                     ent_pos = self.world.component_for_entity(ent, PositionComponent)
                     dx = tile_pos.x - ent_pos.x
                     dy = tile_pos.y - ent_pos.y
-                    self.world.add_component(ent, VelocityComponent(dx=dx, dy=dy)) 
+                    # self.world.add_component(ent, VelocityComponent(dx=dx, dy=dy)) # TODO: move this to the new processor
                     self.world.remove_component(ent, SkillExecutionComponent)
                 else:
                     self.world.remove_component(ent, SkillExecutionComponent)

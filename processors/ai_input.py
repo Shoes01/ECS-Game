@@ -16,9 +16,10 @@ class AiInputProcessor(esper.Processor):
         for ent, (actor, brain, eng, pos, ren) in self.world.get_components(ActorComponent, BrainComponent, EnergyComponent, PositionComponent, RenderComponent):
             if eng.energy == 0:
                 action = self.take_turn(brain, pos, ren)
-                action['ent'] = ent
-                self.world.get_processor(ActionProcessor).queue.put(action)
-
+                
+                if action:
+                    action['ent'] = ent
+                    self.world.get_processor(ActionProcessor).queue.put(action)
     
     def take_turn(self, brain, pos, ren):
         if brain.brain == 'zombie':

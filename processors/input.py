@@ -169,8 +169,9 @@ class InputProcessor(esper.Processor):
                     action = {'mouse_move': mouse_click}
 
             # Attach action component to player entity. This ends their turn.
-            action['ent'] = 1
-            self.world.get_processor(ActionProcessor).queue.put(action)
+            if action:
+                action['ent'] = 1
+                self.world.get_processor(ActionProcessor).queue.put(action)
         
         # Attach event component to world entity. It does not have to be the player's turn for this to happen.
         if events:
