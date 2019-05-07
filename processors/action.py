@@ -1,9 +1,6 @@
 import esper
 import math
 
-from components.actor.action import ActionComponent
-from components.actor.energy import EnergyComponent
-from components.actor.player import PlayerComponent
 from components.actor.skill_execute import SkillExecutionComponent
 from components.actor.skill_prepare import SkillPreparationComponent
 from components.position import PositionComponent
@@ -94,7 +91,7 @@ class ActionProcessor(esper.Processor):
                     prepped_skill = self.world.component_for_entity(ent, SkillPreparationComponent)
                     if _skill_prepare == prepped_skill.slot:
                         # Change the action... this does not occur often!
-                        self.world.remove_component(ent, ActionComponent)
+                        # self.world.remove_component(ent, ActionComponent) # TODO: fix this
                         self.world.add_component(ent, ActionComponent({'skill_execute': True}))
                         return
                     else:

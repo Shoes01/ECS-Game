@@ -15,7 +15,7 @@ class RenderProcessor(esper.Processor):
     def process(self):
         self.render_border()
 
-        if self.world.redraw and not self.world.toggle_debug_mode:
+        if self.world.redraw and not self.world.toggle_debug_mode and not self.world.state == 'Game':
             self.world.redraw = False
         else:
             return 0

@@ -78,7 +78,7 @@ class GameWorld(esper.World):
         self.messages_offset = 0
         self.mouse_pos = None
         self.popup_menus = []
-        self.redraw = False # This information needs to communicate cross-tick.
+        self.redraw = True # This information needs to communicate cross-tick.
         self.state_stack = ['MainMenu']
         self.ticker = 0
         self.toggle_debug_mode = False
