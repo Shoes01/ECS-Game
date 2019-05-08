@@ -12,6 +12,7 @@ from processors.inventory import InventoryProcessor
 from processors.movement import MovementProcessor
 from processors.pickup import PickupProcessor
 from processors.removable import RemovableProcessor
+from processors.skill import SkillProcessor
 from processors.wearable import WearableProcessor
 from queue import Queue
 
@@ -78,26 +79,16 @@ class ActionProcessor(esper.Processor):
                 self.world.get_processor(RemovableProcessor).queue.put({'ent': ent, 'item': _remove})
 
             elif _skill_cancel:
-                self.world.remove_component(ent, SkillPreparationComponent)
+                self.world.get_processor(SkillProcessor).queue.put({'ent': ent, 'skill_clear': True})
             
             elif _skill_execute:
-                self.world.add_component(ent, SkillExecutionComponent())
+                self.world.get_processor(SkillProcessor).queue.put({'ent': ent, 'skill_confirm': True})
 
             elif _skill_move:
-                self.world.component_for_entity(ent, SkillPreparationComponent).direction = _skill_move
+                self.world.get_processor(SkillProcessor).queue.put({'ent': ent, 'skill_move': _skill_move})
 
             elif _skill_prepare:
-                if self.world.has_component(ent, SkillPreparationComponent):
-                    prepped_skill = self.world.component_for_entity(ent, SkillPreparationComponent)
-                    if _skill_prepare == prepped_skill.slot:
-                        # Change the action... this does not occur often!
-                        # self.world.remove_component(ent, ActionComponent) # TODO: fix this
-                        self.world.add_component(ent, ActionComponent({'skill_execute': True}))
-                        return
-                    else:
-                        prepped_skill.slot = _skill_prepare
-                else:
-                    self.world.add_component(ent, SkillPreparationComponent(slot=_skill_prepare))
+                self.world.get_processor(SkillProcessor).queue.put({'ent': ent, 'skill_prepare': _skill_prepare})
 
             elif _wait:
                 self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'wait': True})

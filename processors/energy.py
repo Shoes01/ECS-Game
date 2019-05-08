@@ -23,6 +23,7 @@ class EnergyProcessor(esper.Processor):
             _move = event.get('move')
             _pick_up = event.get('pick_up')
             _remove = event.get('remove')
+            _skill = event.get('skill')
             _wear = event.get('wear')
 
             if _bump_attack:
@@ -39,13 +40,17 @@ class EnergyProcessor(esper.Processor):
                 self.world.component_for_entity(ent, EnergyComponent).energy += 10
             elif _remove:
                 self.world.component_for_entity(ent, EnergyComponent).energy += 10
+            elif _skill:
+                self.world.component_for_entity(ent, EnergyComponent).energy += 10
             elif _wear:
                 self.world.component_for_entity(ent, EnergyComponent).energy += 10
 
+        self.world.redraw = True
+        
         if self.world.component_for_entity(1, EnergyComponent).energy == 0:
             return 0
 
-        self.world.redraw = True
+        self.world.ticker += 1
 
         for ent, (eng) in self.world.get_component(EnergyComponent):
             if eng.energy > 0:
