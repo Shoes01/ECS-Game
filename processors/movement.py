@@ -31,6 +31,7 @@ class MovementProcessor(esper.Processor):
                 self.world.get_processor(CombatProcessor).queue.put({'ent': ent, 'defender_IDs': occupying_entity})
             
             if self.world.has_component(ent, PlayerComponent):
+                self.world.flag_recompute_fov = True
                 # Player may run into walls, whereas AI uses the dijkstra map to navigate.
                 for ent_tile, (pos_tile, tile) in self.world.get_components(PositionComponent, TileComponent):
                     if pos_tile.x == pos.x + dx and pos_tile.y == pos.y + dy and tile.blocks_path:

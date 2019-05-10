@@ -13,14 +13,26 @@ from components.tile import TileComponent
 def render_entities(world):
     if world.state == 'MainMenu' or world.state == 'PopupMenu':
         return 0
-        
-    prerender_entities(world)
+
+    if world.flag_recompute_fov:
+        world.flag_recompute_fov = False
+        pos_player = world.component_for_entity(1, PositionComponent)
+        world.map.fov_map.compute_fov(x=pos_player.x, y=pos_player.y, radius=10, light_walls=True, algorithm=0)
+
     _entity_directory = []
     _ducpliates = []
 
     console, x, y, w, h = world.consoles['map']
 
+    # BUG: this won't work, because the order of my code has no impact on the order of the entities.
     for ent, (pos, ren) in world.get_components(PositionComponent, RenderComponent):
+
+        # Prerender the entity
+        if world.map.fov_map.fov[pos.x, pos.y]:
+            ren.explored = True
+            ren.visible = True
+        else:
+            ren.visible = False
 
         # Print tiles to the console.
         if world.has_component(ent, TileComponent):
@@ -79,17 +91,3 @@ def render_entities(world):
     cursor = world.cursor
     if cursor.active:
         console.print(cursor.x, cursor.y, cursor.char, cursor.color)
-
-def prerender_entities(world):
-    fov_map = world.map.fov_map
-
-    if fov_map:
-        pos_player = world.component_for_entity(1, PositionComponent)
-        fov_map.compute_fov(x=pos_player.x, y=pos_player.y, radius=10, light_walls=True, algorithm=0)
-
-        for ent, (pos, ren) in world.get_components(PositionComponent, RenderComponent):
-            if fov_map.fov[pos.x, pos.y]:
-                ren.explored = True
-                ren.visible = True
-            else:
-                ren.visible = False

@@ -67,6 +67,7 @@ class GameWorld(esper.World):
         self.flag_create_dijkstra_map = False
         self.flag_generate_map = False
         self.flag_pop_state = False
+        self.flag_recompute_fov = True
         self.flag_reset_game = False
         self.flag_victory = False
         self.flag_view_log = False
