@@ -2,7 +2,6 @@ import esper
 
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
-from components.item.pickedup import PickedupComponent
 from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
@@ -50,9 +49,7 @@ class DropProcessor(esper.Processor):
                 self.world.remove_component(item, PersistComponent)
                 
                 # Return the item to the map.
-                self.world.remove_component(item, PickedupComponent)
-                item_pos = self.world.component_for_entity(item, PositionComponent)
-                item_pos.x, item_pos.y = pos.x, pos.y
+                item_pos = self.world.add_component(item, PositionComponent(x=pos.x, y=pos.y))
 
                 self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'drop': True})
                 self.world.messages.append({'drop': (self.world.component_for_entity(item, NameComponent).name, self.world.turn)})

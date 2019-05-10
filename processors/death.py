@@ -7,7 +7,6 @@ from components.actor.brain import BrainComponent
 from components.actor.corpse import CorpseComponent
 from components.actor.inventory import InventoryComponent
 from components.actor.stats import StatsComponent
-from components.item.pickedup import PickedupComponent
 from components.furniture import FurnitureComponent
 from components.name import NameComponent
 from components.persist import PersistComponent
@@ -39,9 +38,7 @@ class DeathProcessor(esper.Processor):
             ren.color = ENTITY_COLORS['corpse']
 
             for item in inventory:
-                self.world.remove_component(item, PickedupComponent)
-                item_pos = self.world.component_for_entity(item, PositionComponent)
-                item_pos.x, item_pos.y = pos.x, pos.y
+                self.world.add_component(item, PositionComponent(x=pos.x, y=pos.y))
                 if self.world.has_component(item, PersistComponent):
                     self.world.remove_component(item, PersistComponent)
 

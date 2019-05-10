@@ -7,7 +7,6 @@ from _data import FINAL_FLOOR
 from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
-from components.item.pickedup import PickedupComponent
 from components.item.wearable import WearableComponent
 from components.furniture import FurnitureComponent
 from components.persist import PersistComponent
@@ -220,10 +219,10 @@ class MapgenProcessor(esper.Processor):
             loot = self.generate_loot(floor, rar.rarity)
             if loot:
                 new_ent = self.world.create_entity(loot)
+                self.world.remove_component(new_ent, PositionComponent)
                 inv.inventory.append(new_ent)
                 if self.world.has_component(ent, EquipmentComponent) and self.world.has_component(new_ent, WearableComponent):
                     self.world.component_for_entity(ent, EquipmentComponent).equipment.append(new_ent)
-                self.world.add_component(new_ent, PickedupComponent())
     
     def generate_loot(self, floor, ent_rarity):
         item_table = self.world.item_table

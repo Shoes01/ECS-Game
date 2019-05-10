@@ -120,6 +120,8 @@ class SkillProcessor(esper.Processor):
         
         entities_to_attack = []
         tile_destination = []
+        legal_tile = True
+        legal_target = False
 
         for y in range(0, array_of_effect.shape[1]):
             for x in range(0, array_of_effect.shape[0]):
@@ -220,8 +222,9 @@ class SkillProcessor(esper.Processor):
             if slot:
                 self._item = self.find_item(ent, slot)
                 self._direction = (1, 0)
-                self.highlight_tiles(ent)                
-                self.world.events.append({'skill_targeting': True})
+                if self._item:
+                    self.highlight_tiles(ent)                
+                    self.world.events.append({'skill_targeting': True})
 
             elif move:
                 (dx, dy) = move

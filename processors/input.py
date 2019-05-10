@@ -146,22 +146,16 @@ class InputProcessor(esper.Processor):
 
                 # Skill keys.
                 elif key_char == 'q':
-                    events.append({'skill_targeting': True})
                     action = {'skill_prepare': 'mainhand'}
                 elif key_char == 'w':
-                    events.append({'skill_targeting': True})
                     action = {'skill_prepare': 'head'}
                 elif key_char == 'e':
-                    events.append({'skill_targeting': True})
                     action = {'skill_prepare': 'accessory'}
                 elif key_char == 'a':
-                    events.append({'skill_targeting': True})
                     action = {'skill_prepare': 'offhand'}
                 elif key_char == 's':
-                    events.append({'skill_targeting': True})
                     action = {'skill_prepare': 'torso'}
                 elif key_char == 'd':
-                    events.append({'skill_targeting': True})
                     action = {'skill_prepare': 'feet'}
                 
                 # Mouse movement.

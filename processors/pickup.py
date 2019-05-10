@@ -2,7 +2,6 @@ import esper
 
 from components.actor.inventory import InventoryComponent
 from components.item.item import ItemComponent
-from components.item.pickedup import PickedupComponent
 from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
@@ -62,9 +61,7 @@ class PickupProcessor(esper.Processor):
         self.world.add_component(item, PersistComponent())
 
         # Remove the item from the map.
-        self.world.add_component(item, PickedupComponent())
-        item_pos = self.world.component_for_entity(item, PositionComponent)
-        item_pos.x, item_pos.y = -1, -1
+        self.world.remove_component(item, PositionComponent)
 
         self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'pick_up': True})
         self.world.messages.append({'pickup': (self.world.component_for_entity(item, NameComponent).name, True, turn)})

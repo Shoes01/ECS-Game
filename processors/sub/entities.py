@@ -4,7 +4,6 @@ from _data import ENTITY_COLORS
 from components.actor.actor import ActorComponent
 from components.actor.corpse import CorpseComponent
 from components.item.item import ItemComponent
-from components.item.pickedup import PickedupComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
 from components.stairs import StairsComponent
@@ -72,7 +71,7 @@ def render_entities(world):
 
     # Print items.
     for (pos, ren) in _sorted_list.get('item') or []:
-        if ren.visible and not world.has_component(ent, PickedupComponent):
+        if ren.visible:
             if (pos.x, pos.y) not in _entity_directory:
                 _entity_directory.append((pos.x, pos.y))
                 console.print(pos.x, pos.y, ren.char, ren.color)

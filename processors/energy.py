@@ -27,23 +27,23 @@ class EnergyProcessor(esper.Processor):
             _wear = event.get('wear')
 
             if _bump_attack:
-                self.world.component_for_entity(ent, EnergyComponent).energy += 10
+                self.world.component_for_entity(ent, EnergyComponent).energy += 1
             elif _consume:
-                self.world.component_for_entity(ent, EnergyComponent).energy += 10
+                self.world.component_for_entity(ent, EnergyComponent).energy += 1
             elif _descend:
-                self.world.component_for_entity(ent, EnergyComponent).energy += 10
+                self.world.component_for_entity(ent, EnergyComponent).energy += 1
             elif _drop:
-                self.world.component_for_entity(ent, EnergyComponent).energy += 10
+                self.world.component_for_entity(ent, EnergyComponent).energy += 1
             elif _move:
-                self.world.component_for_entity(ent, EnergyComponent).energy += 10
+                self.world.component_for_entity(ent, EnergyComponent).energy += 1
             elif _pick_up:
-                self.world.component_for_entity(ent, EnergyComponent).energy += 10
+                self.world.component_for_entity(ent, EnergyComponent).energy += 1
             elif _remove:
-                self.world.component_for_entity(ent, EnergyComponent).energy += 10
+                self.world.component_for_entity(ent, EnergyComponent).energy += 1
             elif _skill:
-                self.world.component_for_entity(ent, EnergyComponent).energy += 10
+                self.world.component_for_entity(ent, EnergyComponent).energy += 1
             elif _wear:
-                self.world.component_for_entity(ent, EnergyComponent).energy += 10
+                self.world.component_for_entity(ent, EnergyComponent).energy += 1
 
         self.world.redraw = True
         

@@ -20,7 +20,6 @@ from components.actor.stats import StatsComponent
 from components.item.consumable import ConsumableComponent
 from components.item.item import ItemComponent
 from components.item.modifier import ModifierComponent
-from components.item.pickedup import PickedupComponent
 from components.item.skill import ItemSkillComponent
 from components.item.slot import SlotComponent
 from components.item.wearable import WearableComponent
@@ -103,7 +102,7 @@ class GameWorld(esper.World):
     
     @property
     def turn(self):
-        return self.ticker // 10
+        return self.ticker # // 10
 
     def build_world(self):
         # Instantiate Processors.
