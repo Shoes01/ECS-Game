@@ -11,6 +11,7 @@ from processors.sub.tooltips import render_tooltips
 class RenderProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
+        self.count = 0
     
     def process(self):
         self.render_border()
@@ -20,6 +21,9 @@ class RenderProcessor(esper.Processor):
         else:
             return 0
         
+        # print('rendering... ({})'.format(self.count))
+        # self.count += 1
+
         # Draw pretty much all game elements.
         render_stats(self.world)
         render_entities(self.world)

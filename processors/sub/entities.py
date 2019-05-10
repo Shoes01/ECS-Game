@@ -21,12 +21,18 @@ def render_entities(world):
 
     _entity_directory = []
     _ducpliates = []
+    _sorted_list = {
+        'tile': [],
+        'corpse': [],
+        'item': [],
+        'stairs': [],
+        'actor': []
+    }
 
     console, x, y, w, h = world.consoles['map']
 
-    # BUG: this won't work, because the order of my code has no impact on the order of the entities.
+    # Sort them into lists.
     for ent, (pos, ren) in world.get_components(PositionComponent, RenderComponent):
-
         # Prerender the entity
         if world.map.fov_map.fov[pos.x, pos.y]:
             ren.explored = True
@@ -34,52 +40,62 @@ def render_entities(world):
         else:
             ren.visible = False
 
-        # Print tiles to the console.
         if world.has_component(ent, TileComponent):
-            
-            if world.state is not 'SkillTargeting':
-                ren.highlight_color = None
+            _sorted_list['tile'].append((pos, ren))
+        elif world.has_component(ent, CorpseComponent):
+            _sorted_list['corpse'].append((pos, ren))
+        elif world.has_component(ent, ItemComponent):
+            _sorted_list['item'].append((pos, ren))
+        elif world.has_component(ent, StairsComponent):
+            _sorted_list['stairs'].append((pos, ren))
+        elif world.has_component(ent, ActorComponent):
+            _sorted_list['actor'].append((pos, ren))
 
-            if ren.visible:
-                if ren.highlight_color:
-                    console.print(pos.x, pos.y, ren.char, fg=ren.color, bg=ren.highlight_color)
-                else:
-                    console.print(pos.x, pos.y, ren.char, ren.color)
-            
-            elif ren.explored:
-                console.print(pos.x, pos.y, ren.char, ren.explored_color)
+    # Print tiles to the console.
+    for (pos, ren) in _sorted_list.get('tile') or []:
+        if world.state is not 'SkillTargeting':
+            ren.highlight_color = None
 
-        # Print corpses.
-        if world.has_component(ent, CorpseComponent):
-            if ren.visible:
+        if ren.visible:
+            if ren.highlight_color:
+                console.print(pos.x, pos.y, ren.char, fg=ren.color, bg=ren.highlight_color)
+            else:
                 console.print(pos.x, pos.y, ren.char, ren.color)
+        
+        elif ren.explored:
+            console.print(pos.x, pos.y, ren.char, ren.explored_color)
 
-        # Print items.
-        if world.has_component(ent, ItemComponent):
-            if ren.visible and not world.has_component(ent, PickedupComponent):
-                if (pos.x, pos.y) not in _entity_directory:
-                    _entity_directory.append((pos.x, pos.y))
-                    console.print(pos.x, pos.y, ren.char, ren.color)
-                else:
-                    console.print(pos.x, pos.y, ren.char, ren.color, ENTITY_COLORS['overlap_bg'])
+    # Print corpses.
+    for (pos, ren) in _sorted_list.get('corpse') or []:
+        if ren.visible:
+            console.print(pos.x, pos.y, ren.char, ren.color)
 
-        # Print stairs.
-        if world.has_component(ent, StairsComponent):
-            if ren.visible:
-                if (pos.x, pos.y) not in _entity_directory:
-                    _entity_directory.append((pos.x, pos.y))
-                    console.print(pos.x, pos.y, ren.char, ren.color)
-                else:
-                    console.print(pos.x, pos.y, ren.char, ren.color, ENTITY_COLORS['overlap_bg'])
+    # Print items.
+    for (pos, ren) in _sorted_list.get('item') or []:
+        if ren.visible and not world.has_component(ent, PickedupComponent):
+            if (pos.x, pos.y) not in _entity_directory:
+                _entity_directory.append((pos.x, pos.y))
+                console.print(pos.x, pos.y, ren.char, ren.color)
+            else:
+                console.print(pos.x, pos.y, ren.char, ren.color, ENTITY_COLORS['overlap_bg'])
 
-        # Print entities.
-        if world.has_component(ent, ActorComponent):
-            if ren.visible:
-                if (pos.x, pos.y) not in _entity_directory:
-                    _entity_directory.append((pos.x, pos.y))
-                    console.print(pos.x, pos.y, ren.char, ren.color)
-                else:
-                    console.print(pos.x, pos.y, ren.char, ren.color, ENTITY_COLORS['overlap_bg'])
+    # Print stairs.
+    for (pos, ren) in _sorted_list.get('stairs') or []:
+        if ren.visible:
+            if (pos.x, pos.y) not in _entity_directory:
+                _entity_directory.append((pos.x, pos.y))
+                console.print(pos.x, pos.y, ren.char, ren.color)
+            else:
+                console.print(pos.x, pos.y, ren.char, ren.color, ENTITY_COLORS['overlap_bg'])
+
+    # Print entities.
+    for (pos, ren) in _sorted_list.get('actor') or []:
+        if ren.visible:
+            if (pos.x, pos.y) not in _entity_directory:
+                _entity_directory.append((pos.x, pos.y))
+                console.print(pos.x, pos.y, ren.char, ren.color)
+            else:
+                console.print(pos.x, pos.y, ren.char, ren.color, ENTITY_COLORS['overlap_bg'])
 
     # Print the player (again), on top of everything else.
     player_pos = world.component_for_entity(1, PositionComponent)
