@@ -1,13 +1,17 @@
 import esper
 
-from processors.initial import InitialProcessor
+from queue import Queue
 
 class FinalProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
+        self.queue = Queue()
     
     def process(self):
-        if self.world._entities and self.world.flag_reset_game:
-            self.world.clear_database()
+        while not self.queue.empty():
+            event = self.queue.get()
+
+            if event.get('reset_game'):
+                self.world.clear_database()
         
         self.world.reset_flags()
