@@ -3,6 +3,7 @@ import esper
 from components.actor.player import PlayerComponent
 from processors.initial import InitialProcessor
 from processors.final import FinalProcessor
+from queue import Queue
 
 class EventProcessor(esper.Processor):
     ' The EventProcessor adds and removes Components based on the event. '
@@ -10,12 +11,16 @@ class EventProcessor(esper.Processor):
     ' It is like the ActionProcessor, but for the user and not the character. '
     def __init__(self):
         super().__init__()
+        self.queue = Queue()
     
     def process(self):
+        while not self.queue.empty():
+            event = self.queue.get()
+
+
         while self.world.events:
             event = self.world.events.pop()
 
-            _boss_killed = event.get('boss_killed')
             _close_popup_menu = event.get('close_popup_menu')
             _exit = event.get('exit')
             _key_stroke = event.get('key_stroke')
@@ -33,11 +38,9 @@ class EventProcessor(esper.Processor):
             _skill_targeting = event.get('skill_targeting')
             _toggle_debug = event.get('toggle_debug')
             _view_log = event.get('view_log')
-            
-            if _boss_killed:
-                self.world.flag_victory = True
+        
 
-            elif _close_popup_menu:
+            if _close_popup_menu:
                 menus = self.world.popup_menus
                 while len(menus):
                     menus.pop()

@@ -12,6 +12,7 @@ from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
+from processors.state import StateProcessor
 from queue import Queue
 
 class DeathProcessor(esper.Processor):
@@ -51,7 +52,7 @@ class DeathProcessor(esper.Processor):
                 self.world.remove_component(ent, BrainComponent)
             
             if self.world.has_component(ent, BossComponent):
-                self.world.events.append({'boss_killed': True})
+                self.world.get_processor(StateProcessor).queue.put({'boss_killed': True})
 
             self.world.remove_component(ent, ActorComponent)
             

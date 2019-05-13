@@ -41,7 +41,7 @@ class RenderProcessor(esper.Processor):
             _string = 'Welcome to the Main Menu.\n\nPress ENTER to begin.\nPress L to load the last save.\n\nPress ESC to quit.'
             self.world.consoles['map'][0].print(3, 3, _string, UI_COLORS['text_mainmenu'])
 
-        # Draw the flag_victory screen
+        # Draw the victory screen
         elif self.world.state == 'VictoryScreen':
             _string = 'You have won! Press ESC to return to the Main Menu.'
             self.world.consoles['map'][0].print(3, 3, _string, UI_COLORS['text_mainmenu'])

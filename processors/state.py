@@ -1,15 +1,21 @@
 import esper
 
 from components.actor.player import PlayerComponent
+from queue import Queue
 
 class StateProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
+        self.queue = Queue()
     
     def process(self):
-        if self.world.state == 'Exit':
-            # This state signals the engine to turn off. There is no coming back.
-            pass
+        while not self.queue.empty():
+            event = self.queue.get()
+
+            _boss_killed = event.get('boss_killed')
+
+            if _boss_killed:
+                self.world.state_stack.append('VictoryScreen')
 
         if self.world.state == 'Game':
             if self.world.flag_pop_state:
@@ -24,8 +30,6 @@ class StateProcessor(esper.Processor):
                 self.world.state_stack.append('PopupMenu')
             elif self.world.toggle_skill_targeting:
                 self.world.state_stack.append('SkillTargeting')
-            elif self.world.flag_victory:
-                self.world.state_stack.append('VictoryScreen')
             elif self.world.flag_view_log:
                 self.world.state_stack.append('ViewLog')
         
