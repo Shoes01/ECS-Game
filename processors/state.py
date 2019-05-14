@@ -1,6 +1,7 @@
 import esper
 
 from components.actor.player import PlayerComponent
+from fsm import GameStateMachine
 from processors.final import FinalProcessor
 from queue import Queue
 
@@ -8,6 +9,7 @@ class StateProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
         self.queue = Queue()
+        self.state_machine = GameStateMachine()
     
     def process(self):
         while not self.queue.empty():
@@ -17,6 +19,8 @@ class StateProcessor(esper.Processor):
 
             if _boss_killed:
                 self.world.state_stack.append('VictoryScreen')
+
+            self.fsm_state = self.state_machine.on_event(event).__str__() # Only look at the string?
 
         if self.world.state == 'Game':
             if self.world.flag_pop_state:

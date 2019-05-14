@@ -91,6 +91,8 @@ class GameWorld(esper.World):
         self.cursor = Cursor()
         self.map = Map()
 
+        self.fsm_state = None
+
     @property
     def state(self):
         try:
