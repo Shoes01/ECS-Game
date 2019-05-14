@@ -36,9 +36,9 @@ class State:
 
 class MainMenu(State):
     def on_event(self, event):
-        if event.get('generate_map')
+        if event.get('generate_map'):
             return Game()
-        elif event.get('pop')
+        elif event.get('pop'):
             return Exit()
         return self
 

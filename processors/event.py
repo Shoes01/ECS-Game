@@ -3,6 +3,8 @@ import esper
 from components.actor.player import PlayerComponent
 from processors.initial import InitialProcessor
 from processors.final import FinalProcessor
+from processors.mapgen import MapgenProcessor
+from processors.state import StateProcessor
 from queue import Queue
 
 class EventProcessor(esper.Processor):
@@ -74,7 +76,8 @@ class EventProcessor(esper.Processor):
                 self.world.cursor.y += dy
 
             elif _new_map:
-                self.world.flag_generate_map = True
+                self.world.get_processor(MapgenProcessor).queue.put({'generate_map': True})
+                self.world.get_processor(StateProcessor).queue.put({'generate_map': True})
                 self.world.flag_create_dijkstra_map = True
 
             elif _player_killed:

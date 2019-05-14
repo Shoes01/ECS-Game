@@ -15,15 +15,19 @@ from components.rarity import RarityComponent
 from components.render import RenderComponent
 from components.stairs import StairsComponent
 from components.tile import TileComponent
+from queue import Queue
 
 class MapgenProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
+        self.queue = Queue()
         self._rooms = []
         self._leaf_rooms = []
 
     def process(self):
-        if self.world.flag_generate_map:
+        while not self.queue.empty():
+            self.queue.get() # At the moment, there will only be one kind of event queued here.
+
             game_map = self.world.map
             game_map.floor += 1
 
