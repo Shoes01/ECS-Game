@@ -24,7 +24,6 @@ class EventProcessor(esper.Processor):
             event = self.world.events.pop()
 
             _close_popup_menu = event.get('close_popup_menu')
-            _exit = event.get('exit')
             _key_stroke = event.get('key_stroke')
             _load_game = event.get('load_game')
             _look = event.get('look')
@@ -44,9 +43,6 @@ class EventProcessor(esper.Processor):
                 menus = self.world.popup_menus
                 while len(menus):
                     menus.pop()
-
-            elif _exit:
-                self.world.flag_pop_state = True
 
             elif _key_stroke:
                 key = _key_stroke

@@ -36,10 +36,10 @@ class State:
 
 class MainMenu(State):
     def on_event(self, event):
-        if event.get('generate_map'):
-            return Game()
-        elif event.get('pop'):
+        if event.get('exit'):
             return Exit()
+        elif event.get('generate_map'):
+            return Game()
         return self
 
 class Exit(State):
@@ -50,18 +50,20 @@ class Game(State):
     def on_event(self, event):
         if event.get('boss_killed'):
             return VictoryScreen()
+        elif event.get('exit'):
+            return MainMenu()
         elif event.get('view_log'):
             return ViewLog()
         return self
 
 class VictoryScreen(State):
     def on_event(self, event):
-        if event:
+        if event.get('exit'):
             return MainMenu()
         return self
 
 class ViewLog(State):
     def on_event(self, event):
-        if event:
+        if event.get('exit'):
             return Game()
         return self

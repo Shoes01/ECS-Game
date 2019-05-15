@@ -13,21 +13,7 @@ class StateProcessor(esper.Processor):
     
     def process(self):
         while not self.queue.empty():
-            event = self.queue.get()
-
-            _boss_killed = event.get('boss_killed')
-            _generate_map = event.get('generate_map')
-            _view_log = event.get('view_log')
-
-            if _boss_killed:
-                self.world.state_stack.append('VictoryScreen')
-            elif _generate_map:
-                self.world.state_stack.append('Game')
-            elif _view_log:
-                self.world.state_stack.append('ViewLog')
-
-
-            self.world.fsm_state = self.state_machine.on_event(event).__str__() # Only look at the string?
+            self.world.fsm_state = self.state_machine.on_event(self.queue.get()).__str__() # Only look at the string?
 
         if self.world.state == 'Game':
             if self.world.flag_pop_state:

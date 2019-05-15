@@ -63,7 +63,6 @@ class GameWorld(esper.World):
         self.build_world()
         
         ' Flags. ' 
-        self.flag_pop_state = False
         self.flag_recompute_fov = True
         
         ' Data. '
@@ -228,9 +227,6 @@ class GameWorld(esper.World):
             data_file['components'] = self._components
             data_file['entities'] = self._entities
             data_file['next_entity_id'] = self._next_entity_id
-            
-    def reset_flags(self):
-        self.flag_pop_state = False
 
     def create_entity(self, entity):
         # TODO: Fix this somehow? Move the game entity to JSON as well?

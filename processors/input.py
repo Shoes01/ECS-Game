@@ -66,7 +66,7 @@ class InputProcessor(esper.Processor):
     
         elif state == 'MainMenu':
             if key_scancode == libtcod.event.SCANCODE_ESCAPE:
-                events.append({'exit': True})
+                self.world.get_processor(StateProcessor).queue.put({'exit': True})
             elif key_scancode == libtcod.event.SCANCODE_KP_ENTER or key_scancode == libtcod.event.SCANCODE_RETURN:
                 events.append({'new_map': True})
             elif key_char == 'l':
@@ -88,16 +88,16 @@ class InputProcessor(esper.Processor):
             elif key_scancode == libtcod.event.SCANCODE_DOWN or key_char == 'j' or key_scancode == libtcod.event.SCANCODE_KP_2:
                 events.append({'scroll': -1})
             elif key_scancode == libtcod.event.SCANCODE_ESCAPE:
-                events.append({'exit': True})
+                self.world.get_processor(StateProcessor).queue.put({'exit': True})
 
         elif state == 'GameOver' or state == 'VictoryScreen':
             if key_scancode == libtcod.event.SCANCODE_ESCAPE:
-                events.append({'exit': True})
+                self.world.get_processor(StateProcessor).queue.put({'exit': True})
         
         elif state == 'Look':
             events.append(generic_move_keys(key_char, key_scancode))
             if key_scancode == libtcod.event.SCANCODE_ESCAPE:
-                events.append({'exit': True})
+                self.world.get_processor(StateProcessor).queue.put({'exit': True})
         
         elif state == 'SkillTargeting':
             action = generic_move_keys(key_char, key_scancode)

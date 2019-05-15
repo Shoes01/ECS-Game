@@ -13,5 +13,3 @@ class FinalProcessor(esper.Processor):
 
             if event.get('reset_game'):
                 self.world.clear_database()
-        
-        self.world.reset_flags()
