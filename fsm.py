@@ -50,10 +50,18 @@ class Game(State):
     def on_event(self, event):
         if event.get('boss_killed'):
             return VictoryScreen()
+        elif event.get('view_log'):
+            return ViewLog()
         return self
 
 class VictoryScreen(State):
     def on_event(self, event):
         if event:
             return MainMenu()
+        return self
+
+class ViewLog(State):
+    def on_event(self, event):
+        if event:
+            return Game()
         return self

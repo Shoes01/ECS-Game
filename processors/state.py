@@ -17,11 +17,15 @@ class StateProcessor(esper.Processor):
 
             _boss_killed = event.get('boss_killed')
             _generate_map = event.get('generate_map')
+            _view_log = event.get('view_log')
 
             if _boss_killed:
                 self.world.state_stack.append('VictoryScreen')
             elif _generate_map:
                 self.world.state_stack.append('Game')
+            elif _view_log:
+                self.world.state_stack.append('ViewLog')
+
 
             self.world.fsm_state = self.state_machine.on_event(event).__str__() # Only look at the string?
 
@@ -38,8 +42,6 @@ class StateProcessor(esper.Processor):
                 self.world.state_stack.append('PopupMenu')
             elif self.world.toggle_skill_targeting:
                 self.world.state_stack.append('SkillTargeting')
-            elif self.world.flag_view_log:
-                self.world.state_stack.append('ViewLog')
         
         elif self.world.state == 'GameOver':
             if self.world.flag_pop_state:

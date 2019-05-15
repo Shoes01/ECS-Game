@@ -38,9 +38,7 @@ class EventProcessor(esper.Processor):
             _scroll = event.get('scroll')
             _skill_done = event.get('skill_done')
             _skill_targeting = event.get('skill_targeting')
-            _toggle_debug = event.get('toggle_debug')
-            _view_log = event.get('view_log')
-        
+            _toggle_debug = event.get('toggle_debug')        
 
             if _close_popup_menu:
                 menus = self.world.popup_menus
@@ -106,6 +104,3 @@ class EventProcessor(esper.Processor):
                     self.world.toggle_debug_mode = False
                 else:
                     self.world.toggle_debug_mode = True
-            
-            elif _view_log:
-                self.world.flag_view_log = True

@@ -8,6 +8,7 @@ from components.actor.player import PlayerComponent
 from components.position import PositionComponent
 from menu import PopupMenu, PopupChoice
 from processors.action import ActionProcessor
+from processors.state import StateProcessor
 
 class InputProcessor(esper.Processor):
     def __init__(self):
@@ -79,7 +80,7 @@ class InputProcessor(esper.Processor):
                 menu.contents.append(PopupChoice(name='Save game', key='s', result={'save_game': True}, action=False))
                 events.append({'popup': menu})
             if key_char == 'm':
-                events.append({'view_log': True})
+                self.world.get_processor(StateProcessor).queue.put({'view_log': True})
 
         elif state == 'ViewLog':
             if key_scancode == libtcod.event.SCANCODE_UP or key_char == 'k' or key_scancode == libtcod.event.SCANCODE_KP_8:
