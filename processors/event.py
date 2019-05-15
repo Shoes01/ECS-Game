@@ -78,7 +78,6 @@ class EventProcessor(esper.Processor):
             elif _new_map:
                 self.world.get_processor(MapgenProcessor).queue.put({'generate_map': True})
                 self.world.get_processor(StateProcessor).queue.put({'generate_map': True})
-                self.world.flag_create_dijkstra_map = True
 
             elif _player_killed:
                 self.world.component_for_entity(1, PlayerComponent).killed = True

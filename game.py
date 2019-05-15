@@ -63,7 +63,6 @@ class GameWorld(esper.World):
         self.build_world()
         
         ' Flags. ' 
-        self.flag_create_dijkstra_map = False
         self.flag_pop_state = False
         self.flag_recompute_fov = True
         self.flag_view_log = False
@@ -232,7 +231,6 @@ class GameWorld(esper.World):
             data_file['next_entity_id'] = self._next_entity_id
             
     def reset_flags(self):
-        self.flag_create_dijkstra_map = False
         self.flag_pop_state = False
         self.flag_view_log = False
 

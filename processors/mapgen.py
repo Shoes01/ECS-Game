@@ -15,6 +15,7 @@ from components.rarity import RarityComponent
 from components.render import RenderComponent
 from components.stairs import StairsComponent
 from components.tile import TileComponent
+from processors.dijkstra import DijkstraProcessor
 from queue import Queue
 
 class MapgenProcessor(esper.Processor):
@@ -27,6 +28,8 @@ class MapgenProcessor(esper.Processor):
     def process(self):
         while not self.queue.empty():
             self.queue.get() # At the moment, there will only be one kind of event queued here.
+
+            self.world.get_processor(DijkstraProcessor).queue.put({'update_dijkstra': True})
 
             game_map = self.world.map
             game_map.floor += 1

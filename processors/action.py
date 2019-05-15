@@ -65,12 +65,12 @@ class ActionProcessor(esper.Processor):
                 dy = my - pos.y
                 r = math.sqrt( dx**2 + dy**2)
 
-                # self.world.add_component(ent, VelocityComponent(dx=round(dx/r), dy=round(dy/r)))
-                self.world.flag_create_dijkstra_map = True
+                _move = round(dx/r), round(dy/r)
+
+                self.world.get_processor(MovementProcessor).queue.put({'ent': ent, 'move': _move})
 
             elif _move:
                 self.world.get_processor(MovementProcessor).queue.put({'ent': ent, 'move': _move})
-                self.world.flag_create_dijkstra_map = True
             
             elif _pick_up:
                 self.world.get_processor(PickupProcessor).queue.put({'ent': ent, 'item': _pick_up})

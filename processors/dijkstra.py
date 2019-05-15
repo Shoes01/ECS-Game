@@ -4,13 +4,17 @@ import numpy as np
 from collections import deque
 from components.actor.actor import ActorComponent
 from components.position import PositionComponent
+from queue import Queue
 
 class DijkstraProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
+        self.queue = Queue()
 
     def process(self):
-        if self.world.flag_create_dijkstra_map:
+        if not self.queue.empty():
+            self.queue.get()
+
             game_map = self.world.map
             player_pos = self.world.component_for_entity(1, PositionComponent)
 
@@ -45,5 +49,3 @@ class DijkstraProcessor(esper.Processor):
             # Push results to game entity.            
             game_map.dijkstra_map = dijkstra_map
             game_map.directory = directory
-
-            self.world.flag_create_dijkstra_map = False

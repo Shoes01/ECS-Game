@@ -7,6 +7,7 @@ from components.name import NameComponent
 from components.position import PositionComponent
 from components.tile import TileComponent
 from processors.combat import CombatProcessor
+from processors.dijkstra import DijkstraProcessor
 from processors.energy import EnergyProcessor
 from queue import Queue
 
@@ -32,10 +33,13 @@ class MovementProcessor(esper.Processor):
             
             if self.world.has_component(ent, PlayerComponent):
                 self.world.flag_recompute_fov = True
+                self.world.get_processor(DijkstraProcessor).queue.put({'update_dijkstra': True})
+
                 # Player may run into walls, whereas AI uses the dijkstra map to navigate.
                 for ent_tile, (pos_tile, tile) in self.world.get_components(PositionComponent, TileComponent):
                     if pos_tile.x == pos.x + dx and pos_tile.y == pos.y + dy and tile.blocks_path:
                         success = False
+
                 # Custom messages for the player too.
                 items = self.world.get_entities_at(pos.x + dx, pos.y + dy, ItemComponent)
                 if items:

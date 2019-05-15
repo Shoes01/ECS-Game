@@ -23,7 +23,6 @@ class StateProcessor(esper.Processor):
             elif _generate_map:
                 self.world.state_stack.append('Game')
 
-
             self.world.fsm_state = self.state_machine.on_event(event).__str__() # Only look at the string?
 
         if self.world.state == 'Game':
