@@ -56,9 +56,9 @@ class EventProcessor(esper.Processor):
             
             elif _look:
                 x, y = _look
-                self.world.cursor.active = True
                 self.world.cursor.x = x
                 self.world.cursor.y = y
+                self.world.get_processor(StateProcessor).queue.put({'look': True})
 
             elif _mouse_pos:
                 x, y = _mouse_pos

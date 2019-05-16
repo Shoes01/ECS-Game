@@ -1,3 +1,5 @@
+from processors.final import FinalProcessor
+
 class GameStateMachine:
     def __init__(self):
         self.state = MainMenu()
@@ -37,6 +39,7 @@ class State:
 class MainMenu(State):
     def on_event(self, event):
         if event.get('exit'):
+            # Code can be added here to quit the game. TODO
             return Exit()
         elif event.get('generate_map'):
             return Game()
@@ -51,15 +54,51 @@ class Game(State):
         if event.get('boss_killed'):
             return VictoryScreen()
         elif event.get('exit'):
+            self.world.get_processor(FinalProcessor).queue.put({'reset_game': True}) # TODO: this doesn't work
             return MainMenu()
+        elif event.get('look'):
+            return Look()        
+        elif event.get('player_killed'):
+            # Remove player component. TODO
+            return GameOver()
+        elif event.get('popup_menu'): # TODO: need an event for this
+            return PopupMenu()
+        elif event.get('skill_targeting'): # TODO: need an event for this
+            return SkillTargeting()
         elif event.get('view_log'):
             return ViewLog()
+        return self
+
+class GameOver(State):
+    def on_event(self, event):
+        if event.get('exit'):
+            self.world.get_processor(FinalProcessor).queue.put({'reset_game': True})
+            return MainMenu()
+        return self
+
+class Look(State):
+    def on_event(self, event):
+        if event.get('exit'):
+            return Game()
+        return self
+
+class PopupMenu(State):
+    def on_event(self, event):
+        if event.get('exit'): # TODO: When there are no more menus, this event needs to be sent.
+            return Game()
+        return self
+
+class SkillTargeting(State):
+    def on_event(self, event):
+        if event.get('exit'):
+            return Game()
         return self
 
 class VictoryScreen(State):
     def on_event(self, event):
         if event.get('exit'):
-            return MainMenu()
+            self.world.get_processor(FinalProcessor).queue.put({'reset_game': True})
+            return MainMenu() # Also need to reset the game
         return self
 
 class ViewLog(State):

@@ -103,5 +103,5 @@ def render_entities(world, recompute_fov):
 
     # Print cursor.
     cursor = world.cursor
-    if cursor.active:
+    if world.state == 'Look':
         console.print(cursor.x, cursor.y, cursor.char, cursor.color)
