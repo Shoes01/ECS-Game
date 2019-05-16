@@ -69,7 +69,7 @@ class GameWorld(esper.World):
         self.messages_offset = 0
         self.mouse_pos = None
         self.popup_menus = []
-        self.state_stack = ['MainMenu']
+        self.state = 'MainMenu'
         self.ticker = 0
         self.toggle_debug_mode = False
         self.toggle_skill_targeting = False
@@ -82,15 +82,6 @@ class GameWorld(esper.World):
         self.consoles = None
         self.cursor = Cursor()
         self.map = Map()
-
-        self.fsm_state = None
-
-    @property
-    def state(self):
-        try:
-            return self.state_stack[-1]
-        except:
-            return None
     
     @property
     def turn(self):
@@ -166,7 +157,7 @@ class GameWorld(esper.World):
         with shelve.open('savegame', 'r') as data_file:
             self.map = data_file['map']
             self.messages = data_file['log']
-            self.state_stack = data_file['state']
+            self.state = data_file['state']
             self.ticker = data_file['ticker']
             self._components = data_file['components']
             self._entities = data_file['entities']
@@ -192,7 +183,7 @@ class GameWorld(esper.World):
         with shelve.open('savegame', 'n') as data_file:
             data_file['map'] = self.map
             data_file['log'] = self.messages
-            data_file['state'] = self.state_stack
+            data_file['state'] = self.state
             data_file['ticker'] = self.ticker
             data_file['components'] = self._components
             data_file['entities'] = self._entities

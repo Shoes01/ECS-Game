@@ -59,7 +59,6 @@ class Game(State):
         elif event.get('look'):
             return Look()        
         elif event.get('player_killed'):
-            # Remove player component. TODO
             return GameOver()
         elif event.get('popup_menu'): # TODO: need an event for this
             return PopupMenu()
@@ -98,7 +97,7 @@ class VictoryScreen(State):
     def on_event(self, event):
         if event.get('exit'):
             self.world.get_processor(FinalProcessor).queue.put({'reset_game': True})
-            return MainMenu() # Also need to reset the game
+            return MainMenu()
         return self
 
 class ViewLog(State):
