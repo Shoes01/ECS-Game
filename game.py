@@ -97,60 +97,34 @@ class GameWorld(esper.World):
         return self.ticker # // 10
 
     def build_world(self):
-        # Instantiate Processors.
-        action_processor = ActionProcessor()
-        ai_input_processor = AiInputProcessor()
-        combat_processor = CombatProcessor()
-        consumable_processor = ConsumableProcessor()
-        debug_processor = DebugProcessor()
-        death_processor = DeathProcessor()
-        descent_processor = DescendProcessor()
-        dijkstra_processor = DijkstraProcessor()
-        drop_processor = DropProcessor()
-        energy_processor = EnergyProcessor()
-        event_processor = EventProcessor()
-        final_processor = FinalProcessor()
-        initial_processor = InitialProcessor()
-        input_processor = InputProcessor()
-        inventory_processor = InventoryProcessor()
-        mapgen_processor = MapgenProcessor()
-        movement_processor = MovementProcessor()
-        pickup_processor = PickupProcessor()
-        removable_processor = RemovableProcessor()
-        render_processor = RenderProcessor()
-        skill_processor = SkillProcessor()
-        state_processor = StateProcessor()
-        wearable_processor = WearableProcessor()
-        
-        # Add them to the self.
-        ## UPKEEP
-        self.add_processor(initial_processor, 999)
-        ## RENDER
-        self.add_processor(render_processor, 40)
-        self.add_processor(debug_processor, 39)
-        ## INPUT
-        self.add_processor(ai_input_processor, 30)
-        self.add_processor(input_processor, 30)
-        ## UPDATE
-        self.add_processor(action_processor, 20)
-        self.add_processor(event_processor, 20)    
-        self.add_processor(inventory_processor, 15)
-        self.add_processor(skill_processor, 15)
-        self.add_processor(consumable_processor, 10)
-        self.add_processor(descent_processor, 10)
-        self.add_processor(pickup_processor, 10)
-        self.add_processor(movement_processor, 10)
-        self.add_processor(wearable_processor, 10)
-        self.add_processor(drop_processor, 10)
-        self.add_processor(combat_processor, 5)
-        self.add_processor(removable_processor, 5)
-        self.add_processor(death_processor, 4)
-        self.add_processor(mapgen_processor, 3)
-        self.add_processor(dijkstra_processor, 2)
-        self.add_processor(energy_processor, 2)
-        ## ENDSTEP
-        self.add_processor(state_processor, 1)
-        self.add_processor(final_processor, 0)
+        ' Upkeep. '
+        self.add_processor(InitialProcessor(), 999)
+        ' Render. '
+        self.add_processor(RenderProcessor(), 40)
+        self.add_processor(DebugProcessor(), 39)
+        ' Input. '
+        self.add_processor(AiInputProcessor(), 30)
+        self.add_processor(InputProcessor(), 30)
+        ' Update. '
+        self.add_processor(ActionProcessor(), 20)
+        self.add_processor(EventProcessor(), 20)    
+        self.add_processor(InventoryProcessor(), 15)
+        self.add_processor(SkillProcessor(), 15)
+        self.add_processor(ConsumableProcessor(), 10)
+        self.add_processor(DescendProcessor(), 10)
+        self.add_processor(PickupProcessor(), 10)
+        self.add_processor(MovementProcessor(), 10)
+        self.add_processor(WearableProcessor(), 10)
+        self.add_processor(DropProcessor(), 10)
+        self.add_processor(CombatProcessor(), 5)
+        self.add_processor(RemovableProcessor(), 5)
+        self.add_processor(DeathProcessor(), 4)
+        self.add_processor(MapgenProcessor(), 3)
+        self.add_processor(DijkstraProcessor(), 2)
+        self.add_processor(EnergyProcessor(), 2)
+        ' Endstep. '
+        self.add_processor(StateProcessor(), 1)
+        self.add_processor(FinalProcessor(), 0)
 
     def get_entities_at(self, x: int, y: int, *component_types: Type):
             """Get a list of entities with position (x, y) that have the desired components.
