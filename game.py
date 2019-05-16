@@ -62,9 +62,6 @@ class GameWorld(esper.World):
         super().__init__()
         self.build_world()
         
-        ' Flags. ' 
-        self.flag_recompute_fov = True
-        
         ' Data. '
         self.events = []
         self.key = None

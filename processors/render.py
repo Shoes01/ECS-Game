@@ -7,11 +7,12 @@ from processors.sub.message_log import render_message_log
 from processors.sub.popup_menu import render_popup_menu
 from processors.sub.stats import render_stats
 from processors.sub.tooltips import render_tooltips
+from queue import Queue
 
 class RenderProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
-        self.count = 0
+        self.queue = Queue()
     
     def process(self):
         self.render_border()
@@ -20,13 +21,16 @@ class RenderProcessor(esper.Processor):
             self.world.redraw = False
         else:
             return 0
-        
-        # print('rendering... ({})'.format(self.count))
-        # self.count += 1
+
+        recompute_fov = False
+        while not self.queue.empty():
+            event = self.queue.get()
+            if event.get('recompute_fov'):
+                recompute_fov = True
 
         # Draw pretty much all game elements.
         render_stats(self.world)
-        render_entities(self.world)
+        render_entities(self.world, recompute_fov)
         render_popup_menu(self.world)
         render_message_log(self.world)
         render_tooltips(self.world)

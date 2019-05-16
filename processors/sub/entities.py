@@ -9,12 +9,11 @@ from components.render import RenderComponent
 from components.stairs import StairsComponent
 from components.tile import TileComponent
 
-def render_entities(world):
+def render_entities(world, recompute_fov):
     if world.state == 'MainMenu' or world.state == 'PopupMenu':
         return 0
 
-    if world.flag_recompute_fov:
-        world.flag_recompute_fov = False
+    if recompute_fov:
         pos_player = world.component_for_entity(1, PositionComponent)
         world.map.fov_map.compute_fov(x=pos_player.x, y=pos_player.y, radius=10, light_walls=True, algorithm=0)
 
