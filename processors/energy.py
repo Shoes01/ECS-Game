@@ -44,8 +44,6 @@ class EnergyProcessor(esper.Processor):
                 self.world.component_for_entity(ent, EnergyComponent).energy += 1
             elif _wear:
                 self.world.component_for_entity(ent, EnergyComponent).energy += 1
-
-        self.world.redraw = True
         
         if self.world.component_for_entity(1, EnergyComponent).energy == 0:
             return 0

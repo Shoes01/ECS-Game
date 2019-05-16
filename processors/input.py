@@ -8,7 +8,9 @@ from components.actor.player import PlayerComponent
 from components.position import PositionComponent
 from menu import PopupMenu, PopupChoice
 from processors.action import ActionProcessor
+from processors.debug import DebugProcessor
 from processors.state import StateProcessor
+from processors.render import RenderProcessor
 
 class InputProcessor(esper.Processor):
     def __init__(self):
@@ -34,6 +36,10 @@ class InputProcessor(esper.Processor):
 
         if mouse:
             self.world.events.append({'mouse_pos': (mouse.tile.x, mouse.tile.y)})
+
+        if key or mouse_click:
+            self.world.get_processor(DebugProcessor).queue.put({'redraw': True})
+            self.world.get_processor(RenderProcessor).queue.put({'redraw': True})
 
         try:
             key_char = chr(key.sym)

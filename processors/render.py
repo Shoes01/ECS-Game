@@ -16,21 +16,22 @@ class RenderProcessor(esper.Processor):
     
     def process(self):
         self.render_border()
+        
+        _recompute_fov = False
+        _redraw = False
 
-        if self.world.redraw and not self.world.toggle_debug_mode:
-            self.world.redraw = False
-        else:
-            return 0
-
-        recompute_fov = False
         while not self.queue.empty():
             event = self.queue.get()
-            if event.get('recompute_fov'):
-                recompute_fov = True
+
+            _recompute_fov = event.get('recompute_fov')
+            _redraw = event.get('redraw')
+
+        if not _redraw:
+            return 0
 
         # Draw pretty much all game elements.
         render_stats(self.world)
-        render_entities(self.world, recompute_fov)
+        render_entities(self.world, _recompute_fov)
         render_popup_menu(self.world)
         render_message_log(self.world)
         render_tooltips(self.world)

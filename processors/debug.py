@@ -2,9 +2,12 @@ import esper
 import numpy as np
 import tcod as libtcod
 
+from queue import Queue
+
 class DebugProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
+        self.queue = Queue()
     
     def process(self):
         if self.world.toggle_debug_mode and self.world.state == 'Game':
@@ -12,6 +15,11 @@ class DebugProcessor(esper.Processor):
             key = self.world.key
             key_char = None
             mouse_pos = self.world.mouse_pos
+            _redraw = False
+
+            while not self.queue.empty():
+                event = self.queue.get()
+                _redraw = event.get('redraw')
             
             con_obj = self.world.consoles['con'] # type: (console, x, y, w, h)
             map_obj = self.world.consoles['map']
@@ -24,8 +32,7 @@ class DebugProcessor(esper.Processor):
                 key_char = None
 
             # Show dijkstra map, but only when the map needs to be redraw.
-            if self.world.redraw:
-                self.world.redraw = False
+            if _redraw:
                 for (x, y), value in np.ndenumerate(dijkstra_map):
                     if value == 999:
                         map_obj[0].print(x, y, '#', libtcod.pink)
