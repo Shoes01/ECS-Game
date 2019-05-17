@@ -13,7 +13,7 @@ def render_tooltips(world):
     cursor = world.cursor
     x, y = None, None
     
-    if self.world.state == 'Look':
+    if world.state == 'Look':
         x, y = cursor.x, cursor.y
     elif world.mouse_pos:
         x, y = world.mouse_pos

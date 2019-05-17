@@ -1,11 +1,15 @@
 from processors.final import FinalProcessor
 
 class GameStateMachine:
+    state_processor = None
+    
     def __init__(self):
-        self.state = MainMenu()
+        self.state = MainMenu(self.state_processor)
 
     def on_event(self, event):
-        self.state = self.state.on_event(event)
+        state_class = self.state.on_event(event)
+        
+        self.state = state_class(self.state_processor)
 
         return self.state
 
@@ -14,7 +18,8 @@ class State:
     We define a state object which provides some utility functions for the
     individual states within the state machine.
     """
-    def __init__(self):
+    def __init__(self, state_processor):
+        self.state_processor = state_processor
         # print('Processing current state:', str(self)) # This is printed every time a State is changed.
         pass
 
@@ -39,69 +44,56 @@ class State:
 class MainMenu(State):
     def on_event(self, event):
         if event.get('exit'):
-            # Code can be added here to quit the game. TODO
-            return Exit()
+            raise SystemExit(1)
         elif event.get('generate_map'):
-            return Game()
-        return self
-
-class Exit(State):
-    def on_event(self, event):
-        return self
+            return Game
 
 class Game(State):
     def on_event(self, event):
         if event.get('boss_killed'):
-            return VictoryScreen()
+            return VictoryScreen
         elif event.get('exit'):
-            self.world.get_processor(FinalProcessor).queue.put({'reset_game': True}) # TODO: this doesn't work
-            return MainMenu()
+            self.state_processor.world.get_processor(FinalProcessor).queue.put({'reset_game': True})
+            return MainMenu
         elif event.get('look'):
-            return Look()        
+            return Look
         elif event.get('player_killed'):
-            return GameOver()
+            return GameOver
         elif event.get('popup_menu'): # TODO: need an event for this
-            return PopupMenu()
+            return PopupMenu
         elif event.get('skill_targeting'): # TODO: need an event for this
-            return SkillTargeting()
+            return SkillTargeting
         elif event.get('view_log'):
-            return ViewLog()
-        return self
+            return ViewLog
 
 class GameOver(State):
     def on_event(self, event):
         if event.get('exit'):
-            self.world.get_processor(FinalProcessor).queue.put({'reset_game': True})
-            return MainMenu()
-        return self
+            self.state_processor.world.get_processor(FinalProcessor).queue.put({'reset_game': True})
+            return MainMenu
 
 class Look(State):
     def on_event(self, event):
         if event.get('exit'):
-            return Game()
-        return self
+            return Game
 
 class PopupMenu(State):
     def on_event(self, event):
         if event.get('exit'): # TODO: When there are no more menus, this event needs to be sent.
-            return Game()
-        return self
+            return Game
 
 class SkillTargeting(State):
     def on_event(self, event):
         if event.get('exit'):
-            return Game()
-        return self
+            return Game
 
 class VictoryScreen(State):
     def on_event(self, event):
         if event.get('exit'):
-            self.world.get_processor(FinalProcessor).queue.put({'reset_game': True})
-            return MainMenu()
-        return self
+            self.state_processor.world.get_processor(FinalProcessor).queue.put({'reset_game': True})
+            return MainMenu
 
 class ViewLog(State):
     def on_event(self, event):
         if event.get('exit'):
-            return Game()
-        return self
+            return Game

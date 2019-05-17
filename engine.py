@@ -21,9 +21,13 @@ def main():
     world = GameWorld()
     world.consoles = consoles
  
-    while world.state:
-        # Do literally everything.
-        world.process()
+    while True:
+        try:
+            # Do literally everything.
+            world.process()
+        except SystemExit:
+            print('\n\n    Goodbye.\n')
+            return False
 
 if __name__ == '__main__':
     # cProfile.run('main()') # This runs the profiler
