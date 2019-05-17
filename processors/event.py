@@ -88,7 +88,5 @@ class EventProcessor(esper.Processor):
                 self.world.messages_offset += _scroll
 
             elif _toggle_debug:
-                if self.world.toggle_debug_mode:
-                    self.world.toggle_debug_mode = False
-                else:
-                    self.world.toggle_debug_mode = True
+                self.world.toggle_debug_mode = not self.world.toggle_debug_mode
+                

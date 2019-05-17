@@ -8,7 +8,6 @@ class GameStateMachine:
 
     def on_event(self, event):
         state_class = self.state.on_event(event)
-        
         self.state = state_class(self.state_processor)
 
         return self.state
@@ -20,8 +19,6 @@ class State:
     """
     def __init__(self, state_processor):
         self.state_processor = state_processor
-        # print('Processing current state:', str(self)) # This is printed every time a State is changed.
-        pass
 
     def on_event(self, event):
         """
