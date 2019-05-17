@@ -13,6 +13,7 @@ class RenderProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
         self.queue = Queue()
+        self.queue.put({'redraw': True})
     
     def process(self):
         self.render_border()
