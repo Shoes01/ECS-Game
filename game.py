@@ -72,7 +72,6 @@ class GameWorld(esper.World):
         self.state = 'MainMenu'
         self.ticker = 0
         self.toggle_debug_mode = False
-        self.toggle_skill_targeting = False
         self._json_data = self.load_data()
 
         ' Tables. '

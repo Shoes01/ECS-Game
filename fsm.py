@@ -61,7 +61,7 @@ class Game(State):
             return GameOver
         elif event.get('popup_menu'): # TODO: need an event for this
             return PopupMenu
-        elif event.get('skill_targeting'): # TODO: need an event for this
+        elif event.get('skill_targeting'):
             return SkillTargeting
         elif event.get('view_log'):
             return ViewLog

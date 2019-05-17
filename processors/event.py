@@ -35,8 +35,6 @@ class EventProcessor(esper.Processor):
             _popup = event.get('popup')
             _save_game = event.get('save_game')
             _scroll = event.get('scroll')
-            _skill_done = event.get('skill_done')
-            _skill_targeting = event.get('skill_targeting')
             _toggle_debug = event.get('toggle_debug')        
 
             if _close_popup_menu:
@@ -88,12 +86,6 @@ class EventProcessor(esper.Processor):
 
             elif _scroll:
                 self.world.messages_offset += _scroll
-
-            elif _skill_done:
-                self.world.toggle_skill_targeting = False
-
-            elif _skill_targeting:
-                self.world.toggle_skill_targeting = True
 
             elif _toggle_debug:
                 if self.world.toggle_debug_mode:

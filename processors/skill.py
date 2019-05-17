@@ -14,6 +14,7 @@ from components.tile import TileComponent
 from processors.combat import CombatProcessor
 from processors.energy import EnergyProcessor
 from processors.movement import MovementProcessor
+from processors.state import StateProcessor
 from queue import Queue
 
 class SkillProcessor(esper.Processor):
@@ -223,8 +224,8 @@ class SkillProcessor(esper.Processor):
                 self._item = self.find_item(ent, slot)
                 self._direction = (1, 0)
                 if self._item:
-                    self.highlight_tiles(ent)                
-                    self.world.events.append({'skill_targeting': True})
+                    self.highlight_tiles(ent)
+                    self.world.get_processor(StateProcessor).queue.put({'skill_targeting': True})
 
             elif move:
                 (dx, dy) = move
@@ -242,4 +243,4 @@ class SkillProcessor(esper.Processor):
                 self.unhighlight_tiles(ent)
                 self._item = None
                 self._direction = None
-                self.world.events.append({'skill_done': True})
+                self.world.get_processor(StateProcessor).queue.put({'exit': True})
