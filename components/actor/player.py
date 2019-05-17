@@ -1,3 +1,4 @@
+' Tag the entity as being player controlled. '
+
 class PlayerComponent():
-    def __init__(self, killed=False):
-        self.killed = killed
+    pass

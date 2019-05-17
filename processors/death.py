@@ -49,7 +49,7 @@ class DeathProcessor(esper.Processor):
                 return 0
             elif ent == 1:
                 self.world.remove_component(ent, PlayerComponent)
-                self.world.events.append({'player_killed': True})
+                self.world.get_processor(StateProcessor).queue.put({'player_killed': True})
             else:
                 self.world.remove_component(ent, BrainComponent)
             

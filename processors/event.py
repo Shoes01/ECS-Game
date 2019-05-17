@@ -30,7 +30,6 @@ class EventProcessor(esper.Processor):
             _mouse_pos = event.get('mouse_pos')
             _move_cursor = event.get('move')
             _new_map = event.get('new_map')
-            _player_killed = event.get('player_killed')
             _pop_popup_menu = event.get('pop_popup_menu')
             _popup = event.get('popup')
             _save_game = event.get('save_game')
@@ -70,9 +69,6 @@ class EventProcessor(esper.Processor):
             elif _new_map:
                 self.world.get_processor(MapgenProcessor).queue.put({'generate_map': True})
                 self.world.get_processor(StateProcessor).queue.put({'generate_map': True})
-
-            elif _player_killed:
-                self.world.component_for_entity(1, PlayerComponent).killed = True
 
             elif _pop_popup_menu:
                 self.world.popup_menus.pop()
