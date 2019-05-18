@@ -27,4 +27,4 @@ class PopupMenu():
         # Subtitle
         # Definition panel (in the case of items)
         # Category bool: if set to true, the renderer will sort items by their type. (items don't have a type yet)
-        # Equipped bool: if set to true, the equipped items will be listed on the side?
+        # Equipped bool: if set to true, the equipped items will be listed on the side?zz

@@ -62,14 +62,15 @@ class InputProcessor(esper.Processor):
                     if choice.action:
                         action = choice.result
                     else:
-                        events.append(choice.result)
+                        self.world.get_processor(StateProcessor).queue.put(choice.result)
+                        # events.append(choice.result) # what is this
                     
                     if menu.auto_close:
-                        events.append({'close_popup_menu': True})
+                        self.world.get_processor(StateProcessor).queue.put({'exit': True})
 
             else:
                 if menu.include_esc and key_scancode == libtcod.event.SCANCODE_ESCAPE:
-                    events.append({'pop_popup_menu': True})
+                    self.world.get_processor(StateProcessor).queue.put({'pop': True})
     
         elif state == 'MainMenu':
             if key_scancode == libtcod.event.SCANCODE_ESCAPE:
@@ -86,7 +87,7 @@ class InputProcessor(esper.Processor):
                 menu.contents.append(PopupChoice(name='Load game', key='l', result={'load_game': True}, action=False))
                 menu.contents.append(PopupChoice(name='Quit', key='q', result={'exit': True}, action=False))
                 menu.contents.append(PopupChoice(name='Save game', key='s', result={'save_game': True}, action=False))
-                events.append({'popup': menu})
+                self.world.get_processor(StateProcessor).queue.put({'popup': menu})
             if key_char == 'm':
                 self.world.get_processor(StateProcessor).queue.put({'view_log': True})
 

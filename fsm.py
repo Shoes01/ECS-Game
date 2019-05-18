@@ -56,7 +56,8 @@ class Game(State):
             return Look
         elif event.get('player_killed'):
             return GameOver
-        elif event.get('popup_menu'): # TODO: need an event for this
+        elif event.get('popup'):
+            self.state_processor.world.popup_menus.append(event['popup'])
             return PopupMenu
         elif event.get('skill_targeting'):
             return SkillTargeting
@@ -77,7 +78,18 @@ class Look(State):
 class PopupMenu(State):
     def on_event(self, event):
         if event.get('exit'): # TODO: When there are no more menus, this event needs to be sent.
+            while self.state_processor.world.popup_menus:
+                self.state_processor.world.popup_menus.pop()
             return Game
+        elif event.get('pop'):
+            self.state_processor.world.popup_menus.pop()
+            if self.state_processor.world.popup_menus:
+                return PopupMenu
+            else:
+                return Game
+        elif event.get('popup'):
+            self.state_processor.world.popup_menus.append(event['popup'])
+            return PopupMenu
 
 class SkillTargeting(State):
     def on_event(self, event):

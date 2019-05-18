@@ -6,6 +6,7 @@ from components.item.consumable import ConsumableComponent
 from components.item.wearable import WearableComponent
 from components.name import NameComponent
 from menu import PopupMenu, PopupChoice
+from processors.state import StateProcessor
 from queue import Queue
 
 class InventoryProcessor(esper.Processor):
@@ -67,4 +68,4 @@ class InventoryProcessor(esper.Processor):
                 menu.contents.append(PopupChoice(name=_name, key=_key, result=_menu_result, action=False))
                 n += 1
             
-            self.world.popup_menus.append(menu)
+            self.world.get_processor(StateProcessor).queue.put({'popup': menu})

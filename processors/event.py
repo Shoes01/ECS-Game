@@ -30,7 +30,6 @@ class EventProcessor(esper.Processor):
             _mouse_pos = event.get('mouse_pos')
             _move_cursor = event.get('move')
             _pop_popup_menu = event.get('pop_popup_menu')
-            _popup = event.get('popup')
             _save_game = event.get('save_game')
             _scroll = event.get('scroll')
             _toggle_debug = event.get('toggle_debug')        
@@ -67,9 +66,6 @@ class EventProcessor(esper.Processor):
 
             elif _pop_popup_menu:
                 self.world.popup_menus.pop()
-
-            elif _popup:
-                self.world.popup_menus.append(_popup)
             
             elif _save_game:
                 self.world.messages.append({'game_saved': True})
