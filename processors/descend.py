@@ -3,6 +3,8 @@ import esper
 from components.stairs import StairsComponent
 from components.position import PositionComponent
 from processors.energy import EnergyProcessor
+from processors.mapgen import MapgenProcessor
+from processors.state import StateProcessor
 from queue import Queue
 
 class DescendProcessor(esper.Processor):
@@ -21,6 +23,7 @@ class DescendProcessor(esper.Processor):
             # Look to see if we are standing on stairs.
             for stairs, (s_pos, _) in self.world.get_components(PositionComponent, StairsComponent):
                 if pos.x == s_pos.x and pos.y == s_pos.y:
-                    self.world.events.append({'new_map': True})
+                    self.world.get_processor(MapgenProcessor).queue.put({'generate_map': True})
+                    self.world.get_processor(StateProcessor).queue.put({'generate_map': True})
                     self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'descend': True})
                     break

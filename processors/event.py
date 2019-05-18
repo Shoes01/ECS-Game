@@ -29,7 +29,6 @@ class EventProcessor(esper.Processor):
             _look = event.get('look')
             _mouse_pos = event.get('mouse_pos')
             _move_cursor = event.get('move')
-            _new_map = event.get('new_map')
             _pop_popup_menu = event.get('pop_popup_menu')
             _popup = event.get('popup')
             _save_game = event.get('save_game')
@@ -65,10 +64,6 @@ class EventProcessor(esper.Processor):
                 dx, dy = _move_cursor
                 self.world.cursor.x += dx
                 self.world.cursor.y += dy
-
-            elif _new_map:
-                self.world.get_processor(MapgenProcessor).queue.put({'generate_map': True})
-                self.world.get_processor(StateProcessor).queue.put({'generate_map': True})
 
             elif _pop_popup_menu:
                 self.world.popup_menus.pop()

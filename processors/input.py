@@ -9,6 +9,7 @@ from components.position import PositionComponent
 from menu import PopupMenu, PopupChoice
 from processors.action import ActionProcessor
 from processors.debug import DebugProcessor
+from processors.mapgen import MapgenProcessor
 from processors.state import StateProcessor
 from processors.render import RenderProcessor
 
@@ -74,7 +75,8 @@ class InputProcessor(esper.Processor):
             if key_scancode == libtcod.event.SCANCODE_ESCAPE:
                 self.world.get_processor(StateProcessor).queue.put({'exit': True})
             elif key_scancode == libtcod.event.SCANCODE_KP_ENTER or key_scancode == libtcod.event.SCANCODE_RETURN:
-                events.append({'new_map': True})
+                self.world.get_processor(MapgenProcessor).queue.put({'generate_map': True})
+                self.world.get_processor(StateProcessor).queue.put({'generate_map': True})
             elif key_char == 'l':
                 events.append({'load_game': True})
 
