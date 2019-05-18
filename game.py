@@ -69,6 +69,7 @@ class GameWorld(esper.World):
         self.messages_offset = 0
         self.mouse_pos = None
         self.popup_menus = []
+        self.running = True
         self.state = 'MainMenu'
         self.ticker = 0
         self.toggle_debug_mode = False

@@ -1,9 +1,8 @@
 from processors.final import FinalProcessor
 
 class GameStateMachine:
-    state_processor = None
-    
-    def __init__(self):
+    def __init__(self, processor):
+        self.state_processor = processor
         self.state = MainMenu(self.state_processor)
 
     def on_event(self, event):
@@ -41,7 +40,8 @@ class State:
 class MainMenu(State):
     def on_event(self, event):
         if event.get('exit'):
-            raise SystemExit(1)
+            self.state_processor.world.running = False
+            return MainMenu
         elif event.get('generate_map'):
             return Game
 

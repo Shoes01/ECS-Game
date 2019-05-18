@@ -7,8 +7,7 @@ class StateProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
         self.queue = Queue()
-        self.state_machine = GameStateMachine()
-        self.state_machine.state_processor = self
+        self.state_machine = GameStateMachine(self)
 
     def process(self):
         while not self.queue.empty():
