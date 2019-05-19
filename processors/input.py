@@ -116,7 +116,6 @@ class InputProcessor(esper.Processor):
                 action['move'] = None
             elif key_scancode == libtcod.event.SCANCODE_ESCAPE:
                 action = {'skill_cancel': True}
-                self.world.get_processor(StateProcessor).queue.put({'exit': True})
             elif key_char == 'q':
                 action = {'skill_prepare': 'mainhand'}
             elif key_char == 'w':
