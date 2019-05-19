@@ -37,7 +37,7 @@ class InputProcessor(esper.Processor):
                 mouse_click = event
 
         if mouse:
-            events['mouse_pos'] = (mouse.tile.x, mouse.tile.y)
+            self.world.get_processor(EventProcessor).queue.put({'mouse_pos': (mouse.tile.x, mouse.tile.y)})
 
         if key or mouse_click:
             self.world.get_processor(DebugProcessor).queue.put({'redraw': True})
@@ -80,7 +80,7 @@ class InputProcessor(esper.Processor):
                 self.world.get_processor(MapgenProcessor).queue.put({'generate_map': True})
                 self.world.get_processor(StateProcessor).queue.put({'generate_map': True})
             elif key_char == 'l':
-                events['load_game'] = True
+                self.world.get_processor(StateProcessor).queue.put({'load_game': True})
 
         elif state == 'Game':
             if key_scancode == libtcod.event.SCANCODE_ESCAPE:

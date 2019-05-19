@@ -28,6 +28,9 @@ class MainMenu(State):
             return MainMenu
         elif event.get('generate_map'):
             return Game
+        elif event.get('load_game'):
+            self.state_processor.world.load_game()
+            return Game
         return MainMenu
 
 class Game(State):

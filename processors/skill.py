@@ -243,4 +243,4 @@ class SkillProcessor(esper.Processor):
                 self.unhighlight_tiles(ent)
                 self._item = None
                 self._direction = None
-                #self.world.get_processor(StateProcessor).queue.put({'exit': True})
+                self.world.get_processor(StateProcessor).queue.put({'exit': True})
