@@ -3,6 +3,7 @@ import esper
 from components.actor.energy import EnergyComponent
 from components.actor.player import PlayerComponent
 from components.actor.skill_execute import SkillExecutionComponent
+from processors.render import RenderProcessor
 from queue import Queue
 
 class EnergyProcessor(esper.Processor):

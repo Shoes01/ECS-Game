@@ -7,12 +7,13 @@ from components.actor.energy import EnergyComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
 from processors.action import ActionProcessor
-
+from processors.render import RenderProcessor
 class AiInputProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
     
     def process(self):
+        _redraw = False
         for ent, (actor, brain, eng, pos, ren) in self.world.get_components(ActorComponent, BrainComponent, EnergyComponent, PositionComponent, RenderComponent):
             if eng.energy == 0:
                 action = self.take_turn(brain, pos, ren)
@@ -20,6 +21,10 @@ class AiInputProcessor(esper.Processor):
                 if action:
                     action['ent'] = ent
                     self.world.get_processor(ActionProcessor).queue.put(action)
+                    _redraw = True
+        
+        self.world.get_processor(RenderProcessor).queue.put({'redraw': _redraw})
+        
     
     def take_turn(self, brain, pos, ren):
         if brain.brain == 'zombie':

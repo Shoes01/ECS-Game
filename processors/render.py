@@ -24,8 +24,10 @@ class RenderProcessor(esper.Processor):
         while not self.queue.empty():
             event = self.queue.get()
 
-            _recompute_fov = event.get('recompute_fov')
-            _redraw = event.get('redraw')
+            if event.get('recompute_fov'):
+                _recompute_fov = True
+            elif event.get('redraw'):
+                _redraw = True
 
         if not _redraw:
             return 0

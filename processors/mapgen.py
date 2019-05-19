@@ -16,6 +16,7 @@ from components.render import RenderComponent
 from components.stairs import StairsComponent
 from components.tile import TileComponent
 from processors.dijkstra import DijkstraProcessor
+from processors.render import RenderProcessor
 from queue import Queue
 
 class MapgenProcessor(esper.Processor):
@@ -265,5 +266,8 @@ class MapgenProcessor(esper.Processor):
         for ent, (pos, tile) in self.world.get_components(PositionComponent, TileComponent):
             fov_map.walkable[pos.x, pos.y] = not tile.blocks_path
             fov_map.transparent[pos.x, pos.y] = not tile.blocks_sight
+        
+        self.world.get_processor(RenderProcessor).queue.put({'recompute_fov': True})
+        self.world.get_processor(RenderProcessor).queue.put({'redraw': True})
         
         return fov_map
