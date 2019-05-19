@@ -19,10 +19,6 @@ class EventProcessor(esper.Processor):
         while not self.queue.empty():
             event = self.queue.get()
 
-
-        while self.world.events:
-            event = self.world.events.pop()
-
             _close_popup_menu = event.get('close_popup_menu')
             _key_stroke = event.get('key_stroke')
             _load_game = event.get('load_game')
@@ -46,7 +42,7 @@ class EventProcessor(esper.Processor):
 
             elif _load_game:
                 self.world.load_game()
-                self.world.events.append({'close_popup_menu': True})
+                self.world.get_processor(StateProcessor).queue.put({'pop': True})
                 self.world.messages.append({'game_loaded': True})
             
             elif _look:

@@ -9,6 +9,7 @@ from components.position import PositionComponent
 from menu import PopupMenu, PopupChoice
 from processors.action import ActionProcessor
 from processors.debug import DebugProcessor
+from processors.event import EventProcessor
 from processors.mapgen import MapgenProcessor
 from processors.state import StateProcessor
 from processors.render import RenderProcessor
@@ -19,7 +20,7 @@ class InputProcessor(esper.Processor):
     
     def process(self):
         action = None
-        events = []
+        events = {}
         state = self.world.state
         key = None
         key_char = None
@@ -36,7 +37,7 @@ class InputProcessor(esper.Processor):
                 mouse_click = event
 
         if mouse:
-            self.world.events.append({'mouse_pos': (mouse.tile.x, mouse.tile.y)})
+            events['mouse_pos'] = (mouse.tile.x, mouse.tile.y)
 
         if key or mouse_click:
             self.world.get_processor(DebugProcessor).queue.put({'redraw': True})
@@ -52,7 +53,7 @@ class InputProcessor(esper.Processor):
 
         ### INPUTS THAT ARE READ REGARDLESS OF TURN
         if key_char == 'd' and key.mod & libtcod.event.KMOD_CTRL:
-            events.append({'toggle_debug': True})
+            events['toggle_debug'] = True
 
         if state == 'PopupMenu':
             menu = self.world.popup_menus[-1]
@@ -63,7 +64,7 @@ class InputProcessor(esper.Processor):
                         action = choice.result
                     else:
                         self.world.get_processor(StateProcessor).queue.put(choice.result)
-                        # events.append(choice.result) # what is this
+                        events.update(choice.result)
                     
                     if menu.auto_close:
                         self.world.get_processor(StateProcessor).queue.put({'exit': True})
@@ -79,7 +80,7 @@ class InputProcessor(esper.Processor):
                 self.world.get_processor(MapgenProcessor).queue.put({'generate_map': True})
                 self.world.get_processor(StateProcessor).queue.put({'generate_map': True})
             elif key_char == 'l':
-                events.append({'load_game': True})
+                events['load_game'] = True
 
         elif state == 'Game':
             if key_scancode == libtcod.event.SCANCODE_ESCAPE:
@@ -93,9 +94,9 @@ class InputProcessor(esper.Processor):
 
         elif state == 'ViewLog':
             if key_scancode == libtcod.event.SCANCODE_UP or key_char == 'k' or key_scancode == libtcod.event.SCANCODE_KP_8:
-                events.append({'scroll': +1})
+                events['scroll'] = +1
             elif key_scancode == libtcod.event.SCANCODE_DOWN or key_char == 'j' or key_scancode == libtcod.event.SCANCODE_KP_2:
-                events.append({'scroll': -1})
+                events['scroll'] = -1
             elif key_scancode == libtcod.event.SCANCODE_ESCAPE:
                 self.world.get_processor(StateProcessor).queue.put({'exit': True})
 
@@ -104,7 +105,7 @@ class InputProcessor(esper.Processor):
                 self.world.get_processor(StateProcessor).queue.put({'exit': True})
         
         elif state == 'Look':
-            events.append(generic_move_keys(key_char, key_scancode))
+            events.update(generic_move_keys(key_char, key_scancode))
             if key_scancode == libtcod.event.SCANCODE_ESCAPE:
                 self.world.get_processor(StateProcessor).queue.put({'exit': True})
         
@@ -152,7 +153,7 @@ class InputProcessor(esper.Processor):
                     action = {'descend': True}
                 elif key_char == 'x':
                     _pos = self.world.component_for_entity(ent, PositionComponent)
-                    events.append({'look': (_pos.x, _pos.y)})
+                    events['look'] = (_pos.x, _pos.y)
 
                 # Skill keys.
                 elif key_char == 'q':
@@ -179,7 +180,7 @@ class InputProcessor(esper.Processor):
         
         # Attach event component to world entity. It does not have to be the player's turn for this to happen.
         if events:
-            self.world.events.extend(events)
+            self.world.get_processor(EventProcessor).queue.put(events)
 
 def generic_move_keys(key_char, key_scancode):
     action = {}

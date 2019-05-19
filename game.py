@@ -63,7 +63,6 @@ class GameWorld(esper.World):
         self.build_world()
         
         ' Data. '
-        self.events = []
         self.key = None
         self.messages = []
         self.messages_offset = 0
