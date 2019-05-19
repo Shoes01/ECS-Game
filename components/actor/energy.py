@@ -1,3 +1,3 @@
 class EnergyComponent():
-    def __init__(self, energy=10):
+    def __init__(self, energy=1):
         self.energy = energy

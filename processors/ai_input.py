@@ -25,7 +25,6 @@ class AiInputProcessor(esper.Processor):
         
         self.world.get_processor(RenderProcessor).queue.put({'redraw': _redraw})
         
-    
     def take_turn(self, brain, pos, ren):
         if brain.brain == 'zombie':
             if brain.awake is False and self.world.map.fov_map.fov[pos.x, pos.y]:
