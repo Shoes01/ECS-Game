@@ -11,4 +11,4 @@ class StateProcessor(esper.Processor):
 
     def process(self):
         while not self.queue.empty():
-            self.world.state = self.state_machine.on_event(self.queue.get()).__str__() # Only look at the string?
+            self.world.state = self.state_machine.on_event(self.queue.get()).__str__()

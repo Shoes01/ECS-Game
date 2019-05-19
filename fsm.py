@@ -28,6 +28,7 @@ class MainMenu(State):
             return MainMenu
         elif event.get('generate_map'):
             return Game
+        return MainMenu
 
 class Game(State):
     def on_event(self, event):
@@ -47,17 +48,20 @@ class Game(State):
             return SkillTargeting
         elif event.get('view_log'):
             return ViewLog
+        return Game
 
 class GameOver(State):
     def on_event(self, event):
         if event.get('exit'):
             self.state_processor.world.get_processor(FinalProcessor).queue.put({'reset_game': True})
             return MainMenu
+        return GameOver
 
 class Look(State):
     def on_event(self, event):
         if event.get('exit'):
             return Game
+        return Look
 
 class PopupMenu(State):
     def on_event(self, event):
@@ -74,19 +78,23 @@ class PopupMenu(State):
         elif event.get('popup'):
             self.state_processor.world.popup_menus.append(event['popup'])
             return PopupMenu
+        return PopupMenu
 
 class SkillTargeting(State):
     def on_event(self, event):
         if event.get('exit'):
             return Game
+        return SkillTargeting
 
 class VictoryScreen(State):
     def on_event(self, event):
         if event.get('exit'):
             self.state_processor.world.get_processor(FinalProcessor).queue.put({'reset_game': True})
             return MainMenu
+        return VictoryScreen
 
 class ViewLog(State):
     def on_event(self, event):
         if event.get('exit'):
             return Game
+        return ViewLog
