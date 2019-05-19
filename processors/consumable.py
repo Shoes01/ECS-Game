@@ -6,6 +6,7 @@ from components.item.consumable import ConsumableComponent
 from components.name import NameComponent
 from menu import PopupMenu, PopupChoice
 from processors.energy import EnergyProcessor
+from processors.state import StateProcessor
 from queue import Queue
 
 class ConsumableProcessor(esper.Processor):
@@ -34,7 +35,7 @@ class ConsumableProcessor(esper.Processor):
                     menu.contents.append(PopupChoice(name=_name, key=_key, result=_result))
                     n += 1
                 
-                self.world.popup_menus.append(menu)
+                self.world.get_processor(StateProcessor).queue.put({'popup': menu})
 
             else:
                 # Consume the item.

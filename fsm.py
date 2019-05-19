@@ -77,7 +77,7 @@ class Look(State):
 
 class PopupMenu(State):
     def on_event(self, event):
-        if event.get('exit'): # TODO: When there are no more menus, this event needs to be sent.
+        if event.get('exit'):
             while self.state_processor.world.popup_menus:
                 self.state_processor.world.popup_menus.pop()
             return Game

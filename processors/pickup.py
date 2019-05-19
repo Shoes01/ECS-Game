@@ -7,6 +7,7 @@ from components.persist import PersistComponent
 from components.position import PositionComponent
 from menu import PopupMenu, PopupChoice
 from processors.energy import EnergyProcessor
+from processors.state import StateProcessor
 from queue import Queue
 
 class PickupProcessor(esper.Processor):
@@ -50,7 +51,7 @@ class PickupProcessor(esper.Processor):
                         menu.contents.append(PopupChoice(name=_name, key=_key, result=_result))
                         n += 1
 
-                    self.world.popup_menus.append(menu)
+                    self.world.get_processor(StateProcessor).queue.put({'popup': menu})
 
             else:
                 self.pick_up(ent, item, inv, turn)

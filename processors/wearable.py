@@ -8,6 +8,7 @@ from components.name import NameComponent
 from menu import PopupMenu, PopupChoice
 from processors.energy import EnergyProcessor
 from processors.removable import RemovableProcessor
+from processors.state import StateProcessor
 from queue import Queue
 
 class WearableProcessor(esper.Processor):
@@ -38,7 +39,7 @@ class WearableProcessor(esper.Processor):
                     menu.contents.append(PopupChoice(name=_name, key=_key, result=_result))
                     n += 1
                 
-                self.world.popup_menus.append(menu)
+                self.world.get_processor(StateProcessor).queue.put({'popup': menu})
 
             else:
                 # Wear the item.

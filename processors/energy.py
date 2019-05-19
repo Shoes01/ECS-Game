@@ -25,6 +25,7 @@ class EnergyProcessor(esper.Processor):
             _pick_up = event.get('pick_up')
             _remove = event.get('remove')
             _skill = event.get('skill')
+            _wait = event.get('wait')
             _wear = event.get('wear')
 
             if _bump_attack:
@@ -42,6 +43,8 @@ class EnergyProcessor(esper.Processor):
             elif _remove:
                 self.world.component_for_entity(ent, EnergyComponent).energy += 1
             elif _skill:
+                self.world.component_for_entity(ent, EnergyComponent).energy += 1
+            elif _wait:
                 self.world.component_for_entity(ent, EnergyComponent).energy += 1
             elif _wear:
                 self.world.component_for_entity(ent, EnergyComponent).energy += 1
