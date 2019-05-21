@@ -57,7 +57,7 @@ class WearableProcessor(esper.Processor):
 
                 if item in eqp.equipment:
                     # Already worn, so remove it.
-                    self.world.get_processor(RemovableProcessor).queue.get({'ent': ent, 'item': item})
+                    self.world.get_processor(RemovableProcessor).queue.put({'ent': ent, 'item': item})
                 elif slot_filled:
                     # An item is already in the slot we want; swap the two items.
                     slot = self.world.component_for_entity(item, SlotComponent).slot
@@ -65,7 +65,7 @@ class WearableProcessor(esper.Processor):
                     self.world.messages.append({'wear': (name_component.name, slot, success, turn)})
                     eqp.equipment.append(item)
                     name_component.name += ' (worn)'
-                    self.world.get_processor(RemovableProcessor).queue.get({'ent': ent, 'item': slot_filled_item})
+                    self.world.get_processor(RemovableProcessor).queue.put({'ent': ent, 'item': slot_filled_item})
                 elif self.world.has_component(item, WearableComponent):
                     # Wear the item!
                     slot = self.world.component_for_entity(item, SlotComponent).slot
