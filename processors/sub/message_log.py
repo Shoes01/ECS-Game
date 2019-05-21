@@ -2,7 +2,6 @@ import tcod as libtcod
 
 from _data import LOG_COLORS
 from components.actor.equipment import EquipmentComponent
-from components.actor.skill_prepare import SkillPreparationComponent
 from components.item.skill import ItemSkillComponent
 from components.item.slot import SlotComponent
 from components.name import NameComponent
@@ -14,13 +13,12 @@ def render_message_log(world):
     console, x, y, w, h = world.consoles['log']
 
     # Hijack the message log to print skill descriptions.
-    if world.state == 'SkillTargeting' and world.has_component(1, SkillPreparationComponent): # TODO: If we lack this skill, we should not be in this state
+    if world.state == 'SkillTargeting': # TODO: If we lack this skill, we should not be in this state
         return 0 # TODO: This will be an interesting issue to solve!
         
         item_name = None
         skill_name = None
         skill_description = None
-        slot = world.component_for_entity(1, SkillPreparationComponent).slot
         eqp_component = world.component_for_entity(1, EquipmentComponent)
         
         for item in eqp_component.equipment:

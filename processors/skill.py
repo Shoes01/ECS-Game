@@ -3,8 +3,6 @@ import esper
 from _data import ENTITY_COLORS
 from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
-from components.actor.skill_execute import SkillExecutionComponent
-from components.actor.skill_prepare import SkillPreparationComponent
 from components.item.skill import ItemSkillComponent
 from components.item.slot import SlotComponent
 from components.name import NameComponent

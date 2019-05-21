@@ -1,8 +1,6 @@
 import esper
 import math
 
-from components.actor.skill_execute import SkillExecutionComponent
-from components.actor.skill_prepare import SkillPreparationComponent
 from components.position import PositionComponent
 from processors.consumable import ConsumableProcessor
 from processors.descend import DescendProcessor
