@@ -67,9 +67,26 @@ class SkillProcessor(esper.Processor):
 
     def find_item(self, ent, slot):
         eqp = self.world.component_for_entity(ent, EquipmentComponent)
+        has_item = False
+        legal_item = False
+        name = None
+        turn = self.world.turn
+
         for item in eqp.equipment:
-            if slot == self.world.component_for_entity(item, SlotComponent).slot and self.world.has_component(item, ItemSkillComponent):
-                return item
+            if slot == self.world.component_for_entity(item, SlotComponent).slot:
+                if self.world.has_component(item, ItemSkillComponent):
+                    return item
+                else:
+                    has_item = True
+                    legal_item = False
+                    name = self.world.component_for_entity(item, NameComponent)._name
+            else:
+                has_item = False
+        
+        if has_item:
+            self.world.messages.append({'skill': (has_item, legal_item, False, False, name, turn)})
+        else:
+            self.world.messages.append({'skill': (has_item, legal_item, False, False, name, turn)})
 
     def get_direction_name(self, direction):
         x, y = direction
