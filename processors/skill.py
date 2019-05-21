@@ -198,14 +198,14 @@ class SkillProcessor(esper.Processor):
             return 0
     
         if results['targets']:
-            self.world.get_processor(CombatProcessor).queue.put({'ent': ent, 'defender_IDs': results['targets']})
+            self.world.get_processor(CombatProcessor).queue.put({'ent': ent, 'defender_IDs': results['targets'], 'skill': True})
             self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'skill': True})
         elif results['destination']:
             tile_pos = self.world.component_for_entity(results['destination'], PositionComponent)
             ent_pos = self.world.component_for_entity(ent, PositionComponent)
             dx = tile_pos.x - ent_pos.x
             dy = tile_pos.y - ent_pos.y
-            self.world.get_processor(MovementProcessor).queue.put({'ent': ent, 'move': (dx, dy)})
+            self.world.get_processor(MovementProcessor).queue.put({'ent': ent, 'move': (dx, dy), 'skill': True})
             self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'skill': True})
         
         self.world.messages.append({'skill': (True, True, True, True, name, turn)})

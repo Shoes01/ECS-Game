@@ -23,11 +23,12 @@ class MovementProcessor(esper.Processor):
 
             ent = event['ent']
             dx, dy = event['move']
+            skill = event.get('skill')
             
             pos = self.world.component_for_entity(ent, PositionComponent)
+            occupying_entity = self.world.get_entities_at(pos.x + dx, pos.y + dy, ActorComponent)
             success = True
 
-            occupying_entity = self.world.get_entities_at(pos.x + dx, pos.y + dy, ActorComponent)
             if len(occupying_entity) == 1:
                 success = False
                 self.world.get_processor(CombatProcessor).queue.put({'ent': ent, 'defender_IDs': occupying_entity})
@@ -53,4 +54,6 @@ class MovementProcessor(esper.Processor):
             if success:
                 pos.x += dx
                 pos.y += dy
-                self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'move': True})
+                
+                if not skill:
+                    self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'move': True})

@@ -22,24 +22,24 @@ class CombatProcessor(esper.Processor):
 
             attacker_ID = event['ent']
             att_ren = self.world.component_for_entity(attacker_ID, RenderComponent)
-
             defender_IDs = event['defender_IDs']
+            skill = event.get('skill')
 
             for defender_ID in defender_IDs:
-
                 if not self.world.has_component(defender_ID, ActorComponent):
-                    return 0
-                
-                defender_stats = self.world.component_for_entity(defender_ID, StatsComponent)
+                    print('ERROR: Why is the entity attaking a non-actor?')
+                    continue
 
                 damage = calculate_power(attacker_ID, self.world)
-
+                defender_stats = self.world.component_for_entity(defender_ID, StatsComponent)
+                
                 defender_stats.hp -= damage
-
+                
                 def_ren = self.world.component_for_entity(defender_ID, RenderComponent)
-
                 self.world.messages.append({'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, damage, self.world.turn)})
-                self.world.get_processor(EnergyProcessor).queue.put({'ent': attacker_ID, 'bump_attack': True})
+
+                if not skill:
+                    self.world.get_processor(EnergyProcessor).queue.put({'ent': attacker_ID, 'bump_attack': True})
 
                 if defender_stats.hp <= 0:
                     self.world.get_processor(DeathProcessor).queue.put({'ent': defender_ID})
