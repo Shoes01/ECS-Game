@@ -6,34 +6,22 @@ from components.item.skill import ItemSkillComponent
 from components.item.slot import SlotComponent
 from components.name import NameComponent
 
-def render_message_log(world):
+def render_message_log(world, item):
     if world.state == 'MainMenu':
         return 0
         
     console, x, y, w, h = world.consoles['log']
 
     # Hijack the message log to print skill descriptions.
-    if world.state == 'SkillTargeting': # TODO: If we lack this skill, we should not be in this state
-        return 0 # TODO: This will be an interesting issue to solve!
+    if world.state == 'SkillTargeting' and item:
+        item_name = world.component_for_entity(item, NameComponent)._name
+        item_skill_component = world.component_for_entity(item, ItemSkillComponent)
+        skill_name = item_skill_component.name
+        skill_description = item_skill_component.description
         
-        item_name = None
-        skill_name = None
-        skill_description = None
-        eqp_component = world.component_for_entity(1, EquipmentComponent)
-        
-        for item in eqp_component.equipment:
-            item_slot_component = world.component_for_entity(item, SlotComponent)
-            if item_slot_component.slot == slot:
-                
-                item_name = world.component_for_entity(item, NameComponent)._name
-                item_skill_component = world.component_for_entity(item, ItemSkillComponent)
-                skill_name = item_skill_component.name
-                skill_description = item_skill_component.description
-                
-                console.print(0, 0, item_name, LOG_COLORS['skill'])
-                console.print(0, 1, skill_name.capitalize(), LOG_COLORS['skill'])
-                console.print(0, 3, skill_description, LOG_COLORS['skill']) # TODO: Need some word wrap here.
-                break
+        console.print(0, 0, item_name, LOG_COLORS['skill'])
+        console.print(0, 1, skill_name.capitalize(), LOG_COLORS['skill'])
+        console.print(0, 3, skill_description, LOG_COLORS['skill']) # TODO: Need some word wrap here.
         
         return 0
     

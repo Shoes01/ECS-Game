@@ -12,6 +12,7 @@ from queue import Queue
 class RenderProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
+        self.item = None
         self.queue = Queue()
         self.queue.put({'redraw': True})
     
@@ -28,6 +29,10 @@ class RenderProcessor(esper.Processor):
                 _recompute_fov = True
             elif event.get('redraw'):
                 _redraw = True
+            elif event.get('item'):
+                self.item = event['item']
+            elif event.get('item') is False:
+                self.item = None
 
         if not _redraw:
             return 0
@@ -36,7 +41,7 @@ class RenderProcessor(esper.Processor):
         render_stats(self.world)
         render_entities(self.world, _recompute_fov)
         render_popup_menu(self.world)
-        render_message_log(self.world)
+        render_message_log(self.world, self.item)
         render_tooltips(self.world)
 
         # Draw the gameover overlay.

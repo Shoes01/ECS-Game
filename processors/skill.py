@@ -12,6 +12,7 @@ from components.tile import TileComponent
 from processors.combat import CombatProcessor
 from processors.energy import EnergyProcessor
 from processors.movement import MovementProcessor
+from processors.render import RenderProcessor
 from processors.state import StateProcessor
 from queue import Queue
 
@@ -40,6 +41,7 @@ class SkillProcessor(esper.Processor):
                     results = self.get_tiles(ent)
                     self.highlight_tiles(results['tiles'])
                     self.world.get_processor(StateProcessor).queue.put({'skill_targeting': True})
+                    self.world.get_processor(RenderProcessor).queue.put({'item': self._item})
 
             elif move:
                 (dx, dy) = move
@@ -62,6 +64,7 @@ class SkillProcessor(esper.Processor):
                 self._item = None
                 self._direction = None
                 self.world.get_processor(StateProcessor).queue.put({'exit': True})
+                self.world.get_processor(RenderProcessor).queue.put({'item': False})
 
     def find_item(self, ent, slot):
         eqp = self.world.component_for_entity(ent, EquipmentComponent)
@@ -188,11 +191,11 @@ class SkillProcessor(esper.Processor):
         name = self.world.component_for_entity(item, NameComponent)._name
         turn = self.world.turn
 
-        if not results['targets'] and not results['destination']:
-            self.world.messages.append({'skill': (True, True, False, True, name, turn)})
-            return 0
-        elif not results['legal_target']:
+        if not results['legal_target']:
             self.world.messages.append({'skill': (True, True, True, False, name, turn)})
+            return 0
+        elif not results['targets'] and not results['destination']:
+            self.world.messages.append({'skill': (True, True, False, True, name, turn)})
             return 0
     
         if results['targets']:
