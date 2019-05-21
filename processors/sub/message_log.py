@@ -16,6 +16,7 @@ def render_message_log(world):
     # Hijack the message log to print skill descriptions.
     if world.state == 'SkillTargeting' and world.has_component(1, SkillPreparationComponent): # TODO: If we lack this skill, we should not be in this state
         return 0 # TODO: This will be an interesting issue to solve!
+        
         item_name = None
         skill_name = None
         skill_description = None
