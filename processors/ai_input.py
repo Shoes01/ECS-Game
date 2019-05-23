@@ -6,7 +6,7 @@ from components.actor.brain import BrainComponent
 from components.actor.energy import EnergyComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
-from processors.action import ActionProcessor
+from processors.movement import MovementProcessor
 from processors.render import RenderProcessor
 class AiInputProcessor(esper.Processor):
     def __init__(self):
@@ -20,7 +20,7 @@ class AiInputProcessor(esper.Processor):
                 
                 if action:
                     action['ent'] = ent
-                    self.world.get_processor(ActionProcessor).queue.put(action)
+                    self.world.get_processor(action['processor']).queue.put(action)
                     _redraw = True
         
         self.world.get_processor(RenderProcessor).queue.put({'redraw': _redraw})
@@ -31,7 +31,7 @@ class AiInputProcessor(esper.Processor):
                 brain.awake = True
                 message = {'ai_awake': (ren.char, ren.color, self.world.turn)}
                 self.world.messages.append(message)
-                return {'wait': True}
+                return {'move': False, 'processor': MovementProcessor}
 
             elif brain.awake:                    
                 return self.hunt_player(pos)
@@ -56,4 +56,4 @@ class AiInputProcessor(esper.Processor):
             neighbour = random.choice(directory[x, y])
             best_direction = neighbour[0] - x, neighbour[1] - y
 
-        return {'move': best_direction}
+        return {'move': best_direction, 'processor': MovementProcessor}

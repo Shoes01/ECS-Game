@@ -2,10 +2,10 @@ from _data import map
 
 class PopupChoice():
     ' This is a single entry into the popup menu. '
-    def __init__(self, name, key, result, action=True, valid=True):
+    def __init__(self, name, key, result, processor, valid=True):
         self.name = name     # The name of the choice.
         self.key = key       # The key to select this choice.
-        self.action = action # If it is False, then this choice is an event.
+        self.processor = processor # The processor that the results will be fed into.
         self.result = result # type: dict
         self.valid = valid   # If this is False, then the option is greyed out (at the moment, it can still be selected).
         

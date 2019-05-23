@@ -22,9 +22,14 @@ class MovementProcessor(esper.Processor):
             event = self.queue.get()
 
             ent = event['ent']
-            dx, dy = event['move']
+            move = event['move']
             skill = event.get('skill')
             
+            if move is False:
+                self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'wait': True})
+                continue
+            
+            dx, dy = move
             pos = self.world.component_for_entity(ent, PositionComponent)
             occupying_entity = self.world.get_entities_at(pos.x + dx, pos.y + dy, ActorComponent)
             success = True

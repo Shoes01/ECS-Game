@@ -35,8 +35,8 @@ class WearableProcessor(esper.Processor):
                         continue
                     _name = self.world.component_for_entity(item, NameComponent).name
                     _key = chr(n)
-                    _result = {'wear': item}
-                    menu.contents.append(PopupChoice(name=_name, key=_key, result=_result))
+                    _result = {'item': item}
+                    menu.contents.append(PopupChoice(name=_name, key=_key, result=_result, processor=WearableProcessor))
                     n += 1
                 
                 self.world.get_processor(StateProcessor).queue.put({'popup': menu})
@@ -73,7 +73,7 @@ class WearableProcessor(esper.Processor):
                     self.world.messages.append({'wear': (name_component.name, slot, success, turn)})
                     eqp.equipment.append(item)
                     name_component.name += ' (worn)'
-                    self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'wear': True})
+                    self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'item': True})
                 else:
                     # This is not a wearable item.
                     success = False

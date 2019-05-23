@@ -32,7 +32,7 @@ class ConsumableProcessor(esper.Processor):
                     _name = self.world.component_for_entity(item, NameComponent).name
                     _key = chr(n)
                     _result = {'consume': item}
-                    menu.contents.append(PopupChoice(name=_name, key=_key, result=_result))
+                    menu.contents.append(PopupChoice(name=_name, key=_key, result=_result, processor=ConsumableProcessor))
                     n += 1
                 
                 self.world.get_processor(StateProcessor).queue.put({'popup': menu})

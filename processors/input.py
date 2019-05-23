@@ -1,4 +1,5 @@
 import esper
+import math
 import tcod as libtcod
 import tcod.event
 
@@ -7,13 +8,21 @@ from components.actor.energy import EnergyComponent
 from components.actor.player import PlayerComponent
 from components.position import PositionComponent
 from menu import PopupMenu, PopupChoice
-from processors.action import ActionProcessor
+from processors.consumable import ConsumableProcessor
 from processors.debug import DebugProcessor
+from processors.descend import DescendProcessor
+from processors.drop import DropProcessor
+from processors.energy import EnergyProcessor
 from processors.event import EventProcessor
+from processors.inventory import InventoryProcessor
 from processors.mapgen import MapgenProcessor
+from processors.movement import MovementProcessor
+from processors.pickup import PickupProcessor
+from processors.removable import RemovableProcessor
 from processors.skill import SkillProcessor
 from processors.state import StateProcessor
 from processors.render import RenderProcessor
+from processors.wearable import WearableProcessor
 
 class InputProcessor(esper.Processor):
     def __init__(self):
@@ -74,13 +83,9 @@ class InputProcessor(esper.Processor):
         
         for choice in menu.contents:
             if key_char == choice.key:
-                if choice.action:
-                    event = choice.result
-                    event['ent'] = 1
-                    self.world.get_processor(ActionProcessor).queue.put(event)
-                else:
-                    self.world.get_processor(StateProcessor).queue.put(choice.result)
-                    self.world.get_processor(EventProcessor).queue.put(choice.result)
+                event = choice.result
+                event['ent'] = 1
+                self.world.get_processor(choice.processor).queue.put(event)
                 
                 if menu.auto_close:
                     self.world.get_processor(StateProcessor).queue.put({'exit': True})
@@ -145,9 +150,9 @@ class InputProcessor(esper.Processor):
     def handle_game_input(self, key, key_char, key_scancode, mouse_click):
         if key_scancode == libtcod.event.SCANCODE_ESCAPE:
             menu = PopupMenu(title='What would you like to do?')
-            menu.contents.append(PopupChoice(name='Load game', key='l', result={'load_game': True}, action=False))
-            menu.contents.append(PopupChoice(name='Quit', key='q', result={'exit': True}, action=False))
-            menu.contents.append(PopupChoice(name='Save game', key='s', result={'save_game': True}, action=False))
+            menu.contents.append(PopupChoice(name='Load game', key='l', result={'load_game': True}, processor=EventProcessor))
+            menu.contents.append(PopupChoice(name='Quit', key='q', result={'exit': True}, processor=StateProcessor))
+            menu.contents.append(PopupChoice(name='Save game', key='s', result={'save_game': True}, processor=EventProcessor))
             self.world.get_processor(StateProcessor).queue.put({'popup': menu})
         elif key_char == 'm':
             self.world.get_processor(StateProcessor).queue.put({'view_log': True})
@@ -160,21 +165,21 @@ class InputProcessor(esper.Processor):
             result = self.generic_move_keys(key_char, key_scancode)
             if result:
                 result['ent'] = 1
-                self.world.get_processor(ActionProcessor).queue.put(result)
+                self.world.get_processor(MovementProcessor).queue.put(result)
             
             # Other keys.
             elif key_char == 'd' and key.mod & libtcod.event.KMOD_SHIFT:
-                self.world.get_processor(ActionProcessor).queue.put({'drop': True, 'ent': 1})
+                self.world.get_processor(DropProcessor).queue.put({'item': True, 'ent': 1})
             elif key_char == 'e' and key.mod & libtcod.event.KMOD_SHIFT:
-                self.world.get_processor(ActionProcessor).queue.put({'consume': True, 'ent': 1})
+                self.world.get_processor(ConsumableProcessor).queue.put({'item': True, 'ent': 1})
             elif key_char == 'g':
-                self.world.get_processor(ActionProcessor).queue.put({'pick_up': True, 'ent': 1})
+                self.world.get_processor(PickupProcessor).queue.put({'item': True, 'ent': 1})
             elif key_char == 'i':
-                self.world.get_processor(ActionProcessor).queue.put({'open_inventory': True, 'ent': 1})
+                self.world.get_processor(InventoryProcessor).queue.put({'open_inventory': True, 'ent': 1})
             elif (key_char == 'w' and key.mod & libtcod.event.KMOD_SHIFT) or key_char == 'r':
-                self.world.get_processor(ActionProcessor).queue.put({'wear': True, 'ent': 1})
+                self.world.get_processor(WearableProcessor).queue.put({'item': True, 'ent': 1})
             elif key_char == '>' or key_char == '<':
-                self.world.get_processor(ActionProcessor).queue.put({'descend': True, 'ent': 1})
+                self.world.get_processor(DescendProcessor).queue.put({'descend': True, 'ent': 1})
 
             # Skill keys.
             elif key_char == 'q':
@@ -192,7 +197,15 @@ class InputProcessor(esper.Processor):
             
             # Mouse movement.
             if mouse_click:
-                self.world.get_processor(ActionProcessor).queue.put({'mouse_move': mouse_click, 'ent': 1})
+                mx, my = mouse_click.tile.x, mouse_click.tile.y
+                pos = self.world.component_for_entity(1, PositionComponent)
+
+                dx = mx - pos.x
+                dy = my - pos.y
+                r = math.sqrt( dx**2 + dy**2)
+
+                _move = round(dx/r), round(dy/r)
+                self.world.get_processor(MovementProcessor).queue.put({'move': _move, 'ent': 1})
 
     def generic_move_keys(self, key_char, key_scancode):
         result = {}
@@ -214,6 +227,6 @@ class InputProcessor(esper.Processor):
         elif key_char == 'n' or key_scancode == libtcod.event.SCANCODE_KP_3:
             result = {'move': (1, 1)}
         elif key_char == '.' or key_scancode == libtcod.event.SCANCODE_KP_5:
-            result = {'wait': True}
+            result = {'move': False}
         
         return result

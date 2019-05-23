@@ -33,7 +33,6 @@ from components.stairs import StairsComponent
 from components.tile import TileComponent
 
 ' Processors. '
-from processors.action import ActionProcessor
 from processors.ai_input import AiInputProcessor
 from processors.combat import CombatProcessor
 from processors.consumable import ConsumableProcessor
@@ -96,7 +95,7 @@ class GameWorld(esper.World):
         self.add_processor(AiInputProcessor(), 30)
         self.add_processor(InputProcessor(), 30)
         ' Update. '
-        self.add_processor(ActionProcessor(), 20)
+
         self.add_processor(EventProcessor(), 20)    
         self.add_processor(InventoryProcessor(), 15)
         self.add_processor(SkillProcessor(), 15)

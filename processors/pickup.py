@@ -47,8 +47,8 @@ class PickupProcessor(esper.Processor):
                     for item in matched_items:
                         _name = self.world.component_for_entity(item, NameComponent).name
                         _key = chr(n)
-                        _result = {'pick_up': item}
-                        menu.contents.append(PopupChoice(name=_name, key=_key, result=_result))
+                        _result = {'item': item}
+                        menu.contents.append(PopupChoice(name=_name, key=_key, result=_result, processor=PickupProcessor))
                         n += 1
 
                     self.world.get_processor(StateProcessor).queue.put({'popup': menu})

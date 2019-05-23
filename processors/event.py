@@ -10,7 +10,6 @@ from queue import Queue
 class EventProcessor(esper.Processor):
     ' The EventProcessor adds and removes Components based on the event. '
     ' This, in turn, will cause the StateProcessor to change the game state. '
-    ' It is like the ActionProcessor, but for the user and not the character. '
     def __init__(self):
         super().__init__()
         self.queue = Queue()
