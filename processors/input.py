@@ -128,7 +128,6 @@ class InputProcessor(esper.Processor):
     def handle_skilltargeting_input(self, key_char, key_scancode):
         result = self.generic_move_keys(key_char, key_scancode)
         if result:
-            # TODO: This no longer need sto be changed due to queues?
             self.world.get_processor(SkillProcessor).queue.put({'ent': 1, 'skill_move': result['move']})
         elif key_scancode == libtcod.event.SCANCODE_ESCAPE:
             self.world.get_processor(SkillProcessor).queue.put({'ent': 1, 'skill_clear': True})
@@ -163,9 +162,7 @@ class InputProcessor(esper.Processor):
         elif self.world.component_for_entity(1, EnergyComponent).energy == 0:
             # Movement keys.
             result = self.generic_move_keys(key_char, key_scancode)
-            if result:
-                result['ent'] = 1
-                self.world.get_processor(MovementProcessor).queue.put(result)
+            self.world.get_processor(MovementProcessor).queue.put(result)
             
             # Other keys.
             elif key_char == 'd' and key.mod & libtcod.event.KMOD_SHIFT:
@@ -211,22 +208,22 @@ class InputProcessor(esper.Processor):
         result = {}
 
         if   key_char == 'k' or key_scancode == libtcod.event.SCANCODE_KP_8 or key_scancode == libtcod.event.SCANCODE_UP:
-            result = {'move': (0, -1)}
+            result = {'ent': 1, 'move': (0, -1)}
         elif key_char == 'j' or key_scancode == libtcod.event.SCANCODE_KP_2 or key_scancode == libtcod.event.SCANCODE_DOWN:
-            result = {'move': (0, 1)}
+            result = {'ent': 1, 'move': (0, 1)}
         elif key_char == 'h' or key_scancode == libtcod.event.SCANCODE_KP_4 or key_scancode == libtcod.event.SCANCODE_LEFT:
-            result = {'move': (-1, 0)}
+            result = {'ent': 1, 'move': (-1, 0)}
         elif key_char == 'l' or key_scancode == libtcod.event.SCANCODE_KP_6 or key_scancode == libtcod.event.SCANCODE_RIGHT:
-            result = {'move': (1, 0)}
+            result = {'ent': 1, 'move': (1, 0)}
         elif key_char == 'y' or key_scancode == libtcod.event.SCANCODE_KP_7:
-            result = {'move': (-1, -1)}
+            result = {'ent': 1, 'move': (-1, -1)}
         elif key_char == 'u' or key_scancode == libtcod.event.SCANCODE_KP_9:
-            result = {'move': (1, -1)}
+            result = {'ent': 1, 'move': (1, -1)}
         elif key_char == 'b' or key_scancode == libtcod.event.SCANCODE_KP_1:
-            result = {'move': (-1, 1)}
+            result = {'ent': 1, 'move': (-1, 1)}
         elif key_char == 'n' or key_scancode == libtcod.event.SCANCODE_KP_3:
-            result = {'move': (1, 1)}
+            result = {'ent': 1, 'move': (1, 1)}
         elif key_char == '.' or key_scancode == libtcod.event.SCANCODE_KP_5:
-            result = {'move': False}
+            result = {'ent': 1, 'move': False}
         
         return result
