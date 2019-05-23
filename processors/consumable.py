@@ -31,7 +31,7 @@ class ConsumableProcessor(esper.Processor):
                         continue
                     _name = self.world.component_for_entity(item, NameComponent).name
                     _key = chr(n)
-                    _result = {'consume': item}
+                    _result = {'ent': ent, 'item': item}
                     menu.contents.append(PopupChoice(name=_name, key=_key, result=_result, processor=ConsumableProcessor))
                     n += 1
                 

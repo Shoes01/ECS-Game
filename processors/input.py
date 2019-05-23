@@ -83,9 +83,7 @@ class InputProcessor(esper.Processor):
         
         for choice in menu.contents:
             if key_char == choice.key:
-                event = choice.result
-                event['ent'] = 1
-                self.world.get_processor(choice.processor).queue.put(event)
+                self.world.get_processor(choice.processor).queue.put(choice.result)
                 
                 if menu.auto_close:
                     self.world.get_processor(StateProcessor).queue.put({'exit': True})

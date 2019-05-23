@@ -35,7 +35,7 @@ class DropProcessor(esper.Processor):
                 for item in inv.inventory:
                     _name = self.world.component_for_entity(item, NameComponent).name
                     _key = chr(n)
-                    _result = {'item': item}
+                    _result = {'ent': ent, 'item': item}
                     _processor = None
                     if item in eqp.equipment:
                         _processor = WearableProcessor

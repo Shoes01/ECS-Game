@@ -39,35 +39,36 @@ class InventoryProcessor(esper.Processor):
                 
                 # Prepare the result of the menu: the submenu!
                 submenu = PopupMenu(title=_name)
+                _result = {'ent': ent, 'item': item}
                 
                 # Consume
-                _result = {'item': item}
+                _processor = ConsumableProcessor
                 _validity = False
                 if self.world.has_component(item, ConsumableComponent):
                     _validity = True
-                submenu.contents.append(PopupChoice(name='Consume', key='c', result=_result, valid=_validity, processor=ConsumableProcessor))
+                submenu.contents.append(PopupChoice(name='Consume', key='c', result=_result, valid=_validity, processor=_processor))
 
                 # Drop
-                _result = {'item': item}
+                _processor = DropProcessor
                 _validity = True
                 if item in eqp.equipment:
-                    _result = {'remove': item} # If the player tries to drop the item, they will unequip it instead.
+                    _processor = RemovableProcessor
                     _validity = False
                 submenu.contents.append(PopupChoice(name='Drop', key='d', result=_result, valid=_validity, processor=DropProcessor))
 
                 # Remove
-                _result = {'item': item}
+                _processor = RemovableProcessor
                 _validity = False
                 if item in eqp.equipment:
                     _validity = True
                 submenu.contents.append(PopupChoice(name='Remove', key='r', result=_result, valid=_validity, processor=RemovableProcessor))
 
                 # Wear
-                _result = {'item': item}
+                _processor = WearableProcessor
                 _validity = False
                 if self.world.has_component(item, WearableComponent) and item not in eqp.equipment:
                     _validity = True
-                submenu.contents.append(PopupChoice(name='Wear', key='w', result=_result, valid=_validity, processor=WearableProcessor))
+                submenu.contents.append(PopupChoice(name='Wear', key='w', result=_result, valid=_validity, processor=_processor))
                 
                 _menu_result = {'popup': submenu}
                 menu.contents.append(PopupChoice(name=_name, key=_key, result=_menu_result, processor=StateProcessor))
