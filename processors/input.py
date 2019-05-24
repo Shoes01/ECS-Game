@@ -160,7 +160,8 @@ class InputProcessor(esper.Processor):
         elif self.world.component_for_entity(1, EnergyComponent).energy == 0:
             # Movement keys.
             result = self.generic_move_keys(key_char, key_scancode)
-            self.world.get_processor(MovementProcessor).queue.put(result)
+            if result:
+                self.world.get_processor(MovementProcessor).queue.put(result)
             
             # Other keys.
             elif key_char == 'd' and key.mod & libtcod.event.KMOD_SHIFT:
@@ -204,7 +205,6 @@ class InputProcessor(esper.Processor):
 
     def generic_move_keys(self, key_char, key_scancode):
         result = {}
-
         if   key_char == 'k' or key_scancode == libtcod.event.SCANCODE_KP_8 or key_scancode == libtcod.event.SCANCODE_UP:
             result = {'ent': 1, 'move': (0, -1)}
         elif key_char == 'j' or key_scancode == libtcod.event.SCANCODE_KP_2 or key_scancode == libtcod.event.SCANCODE_DOWN:
