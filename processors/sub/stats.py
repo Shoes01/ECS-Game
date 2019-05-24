@@ -18,7 +18,7 @@ def render_stats(world):
     player_stats_component = world.component_for_entity(1, StatsComponent)
 
     console.print(0, 0, 'HP: {0}/{1}'.format(player_stats_component.hp, player_stats_component.hp_max), color)
-    console.print(0, 1, 'PWR: {0}'.format(calculate_atk(1, world)), color)
+    console.print(0, 1, 'ATK: {0}'.format(calculate_atk(1, world)), color)
     console.print(0, 2, 'TURN: {0}'.format(world.turn), color)
     console.print(0, 3, 'FLOOR: {0}'.format(world.map.floor), color)
 

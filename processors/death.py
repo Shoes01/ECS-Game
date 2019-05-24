@@ -7,7 +7,6 @@ from components.actor.brain import BrainComponent
 from components.actor.corpse import CorpseComponent
 from components.actor.inventory import InventoryComponent
 from components.actor.player import PlayerComponent
-from components.actor.stats import StatsComponent
 from components.furniture import FurnitureComponent
 from components.name import NameComponent
 from components.persist import PersistComponent
