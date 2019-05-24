@@ -19,9 +19,9 @@ class ConsumableProcessor(esper.Processor):
             event = self.queue.get()
 
             ent = event['ent']
-            item = event['item']
+            item = event.get('item')
             
-            if item is True:
+            if not item:
                 # Create popup menu for player to choose from.
                 menu = PopupMenu(title='Which item would you like to consume?')
 

@@ -21,13 +21,13 @@ class DropProcessor(esper.Processor):
             event = self.queue.get()
 
             ent = event['ent']
-            item = event['item']
+            item = event.get('item')
 
             eqp = self.world.component_for_entity(ent, EquipmentComponent)
             inv = self.world.component_for_entity(ent, InventoryComponent)
             pos = self.world.component_for_entity(ent, PositionComponent)
             
-            if item is True:
+            if not item:
                 # Create popup menu for player to choose from.
                 menu = PopupMenu(title='Which item would you like to drop?')
                 
@@ -52,7 +52,7 @@ class DropProcessor(esper.Processor):
                 self.world.remove_component(item, PersistComponent)
                 
                 # Return the item to the map.
-                item_pos = self.world.add_component(item, PositionComponent(x=pos.x, y=pos.y))
+                self.world.add_component(item, PositionComponent(x=pos.x, y=pos.y))
 
                 self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'drop': True})
                 self.world.messages.append({'drop': (self.world.component_for_entity(item, NameComponent).name, self.world.turn)})

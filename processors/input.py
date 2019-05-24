@@ -164,17 +164,17 @@ class InputProcessor(esper.Processor):
             
             # Other keys.
             elif key_char == 'd' and key.mod & libtcod.event.KMOD_SHIFT:
-                self.world.get_processor(DropProcessor).queue.put({'item': True, 'ent': 1})
+                self.world.get_processor(DropProcessor).queue.put({'ent': 1})
             elif key_char == 'e' and key.mod & libtcod.event.KMOD_SHIFT:
-                self.world.get_processor(ConsumableProcessor).queue.put({'item': True, 'ent': 1})
+                self.world.get_processor(ConsumableProcessor).queue.put({'ent': 1})
             elif key_char == 'g':
-                self.world.get_processor(PickupProcessor).queue.put({'item': True, 'ent': 1})
+                self.world.get_processor(PickupProcessor).queue.put({'ent': 1})
             elif key_char == 'i':
-                self.world.get_processor(InventoryProcessor).queue.put({'open_inventory': True, 'ent': 1})
+                self.world.get_processor(InventoryProcessor).queue.put({'ent': 1})
             elif (key_char == 'w' and key.mod & libtcod.event.KMOD_SHIFT) or key_char == 'r':
-                self.world.get_processor(WearableProcessor).queue.put({'item': True, 'ent': 1})
+                self.world.get_processor(WearableProcessor).queue.put({'ent': 1})
             elif key_char == '>' or key_char == '<':
-                self.world.get_processor(DescendProcessor).queue.put({'descend': True, 'ent': 1})
+                self.world.get_processor(DescendProcessor).queue.put({'ent': 1})
 
             # Skill keys.
             elif key_char == 'q':

@@ -20,13 +20,13 @@ class PickupProcessor(esper.Processor):
             event = self.queue.get()
 
             ent = event['ent']
-            item = event['item']
+            item = event.get('item')
 
             inv = self.world.component_for_entity(ent, InventoryComponent)
             pos = self.world.component_for_entity(ent, PositionComponent)
             turn = self.world.turn
 
-            if item is True:
+            if not item:
                 matched_items = []
 
                 for item_ent, (item, item_pos) in self.world.get_components(ItemComponent, PositionComponent):

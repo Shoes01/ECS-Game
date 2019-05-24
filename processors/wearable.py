@@ -21,11 +21,11 @@ class WearableProcessor(esper.Processor):
             event = self.queue.get()
 
             ent = event['ent']
-            item = event['item']
+            item = event.get('item')
 
             eqp = self.world.component_for_entity(ent, EquipmentComponent)
 
-            if item is True:
+            if not item:
                 # Create popup menu for player to choose from.
                 menu = PopupMenu(title='Which item would you like to wear or remove?')
                 
