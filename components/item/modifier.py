@@ -1,3 +1,3 @@
 class ModifierComponent():
-    def __init__(self, power=0):
-        self.power = power
+    def __init__(self, atk=0):
+        self.atk = atk

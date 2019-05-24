@@ -2,10 +2,10 @@ from components.actor.equipment import EquipmentComponent
 from components.actor.stats import StatsComponent
 from components.item.modifier import ModifierComponent
 
-def calculate_power(ent, world):
-    power = world.component_for_entity(ent, StatsComponent).power
+def calculate_atk(ent, world):
+    atk = world.component_for_entity(ent, StatsComponent).atk
 
     for item_id in world.component_for_entity(ent, EquipmentComponent).equipment:
-        power += world.component_for_entity(item_id, ModifierComponent).power
+        atk += world.component_for_entity(item_id, ModifierComponent).atk
 
-    return power
+    return atk

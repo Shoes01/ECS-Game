@@ -200,7 +200,7 @@ class GameWorld(esper.World):
                 PlayerComponent(),
                 PositionComponent(),
                 RenderComponent(char='@', color=ENTITY_COLORS['player']),
-                StatsComponent(hp=500, power=10)
+                StatsComponent(hp=500, atk=10)
             )
         
         ent = super().create_entity()
@@ -244,8 +244,8 @@ class GameWorld(esper.World):
                 self.add_component(ent, InventoryComponent())
             
             elif key == 'modifier':
-                power = value.get('power')
-                self.add_component(ent, ModifierComponent(power=power))
+                atk = value.get('atk')
+                self.add_component(ent, ModifierComponent(atk=atk))
             
             elif key == 'name':
                 name = value.get('name')
@@ -281,8 +281,8 @@ class GameWorld(esper.World):
             
             elif key == 'stats':
                 hp = value.get('hp')
-                power = value.get('power')
-                self.add_component(ent, StatsComponent(hp=hp, power=power))
+                atk = value.get('atk')
+                self.add_component(ent, StatsComponent(hp=hp, atk=atk))
 
             elif key == 'tile':
                 blocks_path = value.get('blocks_path')

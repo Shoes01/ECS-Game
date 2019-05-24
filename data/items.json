@@ -8,7 +8,7 @@
     {
         "archtype": "item",
 
-        "modifier": {"power": 5},
+        "modifier": {"atk": 5},
         "name": {"name": "Sword"},
         "rarity": 0,
         "render": {"char": ")", "color": "weapon"},
@@ -20,7 +20,7 @@
     {
         "archtype": "item",
 
-        "modifier": {"power": 1},
+        "modifier": {"atk": 1},
         "name": {"name": "Helmet"},
         "rarity": 0,
         "render": {"char": "]", "color": "armor"},
@@ -32,7 +32,7 @@
     {
         "archtype": "item",
 
-        "modifier": {"power": 1},
+        "modifier": {"atk": 1},
         "name": {"name": "Boots"},
         "rarity": 0,
         "render": {"char": "]", "color": "armor"},
@@ -47,7 +47,7 @@
     {
         "archtype": "item",
 
-        "modifier": {"power": 7},
+        "modifier": {"atk": 7},
         "name": {"name": "Hammer"},
         "rarity": 1,
         "render": {"char": ")", "color": "weapon"},
@@ -62,7 +62,7 @@
     {
         "archtype": "item",
 
-        "modifier": {"power": 10},
+        "modifier": {"atk": 10},
         "name": {"name": "Long Sword"},
         "rarity": 2,
         "render": {"char": ")", "color": "weapon"},
@@ -76,7 +76,7 @@
     {
         "archtype": "item",
 
-        "modifier": {"power": 15},
+        "modifier": {"atk": 15},
         "name": {"name": "Great Sword"},
         "rarity": 3,
         "render": {"char": ")", "color": "weapon"},
@@ -90,7 +90,7 @@
     {
         "archtype": "item",
 
-        "modifier": {"power": 22},
+        "modifier": {"atk": 22},
         "name": {"name": "War Hammer"},
         "rarity": 4,
         "render": {"char": ")", "color": "weapon"},
@@ -104,7 +104,7 @@
     {
         "archtype": "item",
 
-        "modifier": {"power": 15},
+        "modifier": {"atk": 15},
         "name": {"name": "Dagger"},
         "rarity": 5,
         "render": {"char": ")", "color": "weapon"},
