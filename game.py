@@ -245,6 +245,10 @@ class GameWorld(esper.World):
             
             elif key == 'modifier':
                 atk = value.get('atk')
+                dfn = value.get('dfn')
+                mag = value.get('mag')
+                res = value.get('res')
+                spd = value.get('spd')
                 self.add_component(ent, ModifierComponent(atk=atk))
             
             elif key == 'name':
@@ -282,7 +286,11 @@ class GameWorld(esper.World):
             elif key == 'stats':
                 hp = value.get('hp')
                 atk = value.get('atk')
-                self.add_component(ent, StatsComponent(hp=hp, atk=atk))
+                dfn = value.get('dfn')
+                mag = value.get('mag')
+                res = value.get('res')
+                spd = value.get('spd')
+                self.add_component(ent, StatsComponent(hp=hp, atk=atk, dfn=dfn, mag=mag, res=res, spd=spd))
 
             elif key == 'tile':
                 blocks_path = value.get('blocks_path')
