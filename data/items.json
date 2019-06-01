@@ -25,7 +25,7 @@
         "render": {"char": "]", "color": "armor"},
         "skill": "headbutt",
         "slot": {"slot": "head"},
-        "stats": {"attack": 1},
+        "stats": {"defense": 5},
         "wearable": true
     },
     "boots":
@@ -37,7 +37,18 @@
         "render": {"char": "]", "color": "armor"},
         "skill": "sprint",
         "slot": {"slot": "feet"},
-        "stats": {"attack": 1},
+        "stats": {"speed": 10},
+        "wearable": true
+    },
+    "shield":
+    {
+        "archtype": "item",
+
+        "name": {"name": "Shield"},
+        "rarity": 0,
+        "render": {"char": "]", "color": "armor"},
+        "slot": {"slot": "offhand"},
+        "stats": {"defense": 10},
         "wearable": true
     },
 
