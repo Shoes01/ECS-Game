@@ -16,10 +16,8 @@ from components.actor.energy import EnergyComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
 from components.actor.player import PlayerComponent
-from components.actor.stats import StatsComponent
 from components.item.consumable import ConsumableComponent
 from components.item.item import ItemComponent
-from components.item.modifier import ModifierComponent
 from components.item.skill import ItemSkillComponent
 from components.item.slot import SlotComponent
 from components.item.wearable import WearableComponent
@@ -30,6 +28,7 @@ from components.position import PositionComponent
 from components.rarity import RarityComponent
 from components.render import RenderComponent
 from components.stairs import StairsComponent
+from components.stats import StatsComponent
 from components.tile import TileComponent
 
 ' Processors. '
@@ -241,14 +240,6 @@ class GameWorld(esper.World):
             
             elif key == 'inventory':
                 self.add_component(ent, InventoryComponent())
-            
-            elif key == 'modifier':
-                attack = value.get('attack')
-                defense = value.get('defense')
-                magic = value.get('magic')
-                resistance = value.get('resistance')
-                speed = value.get('speed')
-                self.add_component(ent, ModifierComponent(attack=attack))
             
             elif key == 'name':
                 name = value.get('name')

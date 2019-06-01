@@ -4,9 +4,8 @@ import tcod as libtcod
 from _helper_functions import calculate_attack
 from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
-from components.actor.stats import StatsComponent
-from components.item.modifier import ModifierComponent
 from components.render import RenderComponent
+from components.stats import StatsComponent
 from processors.death import DeathProcessor
 from processors.energy import EnergyProcessor
 from queue import Queue

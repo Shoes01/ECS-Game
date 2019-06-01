@@ -1,9 +1,9 @@
 from _data import SingleLineBox, UI_COLORS
 from _helper_functions import calculate_attack
 from components.actor.equipment import EquipmentComponent
-from components.actor.stats import StatsComponent
 from components.item.slot import SlotComponent
 from components.render import RenderComponent
+from components.stats import StatsComponent
 
 def render_stats(world):
     if world.state == 'MainMenu':

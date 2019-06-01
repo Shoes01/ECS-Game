@@ -1,9 +1,9 @@
 import esper
 
 from components.actor.inventory import InventoryComponent
-from components.actor.stats import StatsComponent
 from components.item.consumable import ConsumableComponent
 from components.name import NameComponent
+from components.stats import StatsComponent
 from menu import PopupMenu, PopupChoice
 from processors.energy import EnergyProcessor
 from processors.state import StateProcessor

@@ -8,36 +8,36 @@
     {
         "archtype": "item",
 
-        "modifier": {"attack": 5},
         "name": {"name": "Sword"},
         "rarity": 0,
         "render": {"char": ")", "color": "weapon"},
         "skill": "lunge",
         "slot": {"slot": "mainhand"},
+        "stats": {"attack": 5},
         "wearable": true
     },
     "helmet":
     {
         "archtype": "item",
 
-        "modifier": {"attack": 1},
         "name": {"name": "Helmet"},
         "rarity": 0,
         "render": {"char": "]", "color": "armor"},
         "skill": "headbutt",
         "slot": {"slot": "head"},
+        "stats": {"attack": 1},
         "wearable": true
     },
     "boots":
     {
         "archtype": "item",
 
-        "modifier": {"attack": 1},
         "name": {"name": "Boots"},
         "rarity": 0,
         "render": {"char": "]", "color": "armor"},
         "skill": "sprint",
         "slot": {"slot": "feet"},
+        "stats": {"attack": 1},
         "wearable": true
     },
 
@@ -47,12 +47,12 @@
     {
         "archtype": "item",
 
-        "modifier": {"attack": 7},
         "name": {"name": "Hammer"},
         "rarity": 1,
         "render": {"char": ")", "color": "weapon"},
         "skill": "cleave",
         "slot": {"slot": "mainhand"},
+        "stats": {"attack": 7},
         "wearable": true
     },
 
@@ -62,11 +62,11 @@
     {
         "archtype": "item",
 
-        "modifier": {"attack": 10},
         "name": {"name": "Long Sword"},
         "rarity": 2,
         "render": {"char": ")", "color": "weapon"},
         "slot": {"slot": "mainhand"},
+        "stats": {"attack": 10},
         "wearable": true
     },
 
@@ -76,11 +76,11 @@
     {
         "archtype": "item",
 
-        "modifier": {"attack": 15},
         "name": {"name": "Great Sword"},
         "rarity": 3,
         "render": {"char": ")", "color": "weapon"},
         "slot": {"slot": "mainhand"},
+        "stats": {"attack": 15},
         "wearable": true
     },
 
@@ -90,11 +90,11 @@
     {
         "archtype": "item",
 
-        "modifier": {"attack": 22},
         "name": {"name": "War Hammer"},
         "rarity": 4,
         "render": {"char": ")", "color": "weapon"},
         "slot": {"slot": "mainhand"},
+        "stats": {"attack": 22},
         "wearable": true
     },
 
@@ -104,11 +104,11 @@
     {
         "archtype": "item",
 
-        "modifier": {"attack": 15},
         "name": {"name": "Dagger"},
         "rarity": 5,
         "render": {"char": ")", "color": "weapon"},
         "slot": {"slot": "offhand"},
+        "stats": {"attack": 15},
         "wearable": true
     }
 }
