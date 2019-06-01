@@ -95,7 +95,6 @@ class GameWorld(esper.World):
         self.add_processor(AiInputProcessor(), 30)
         self.add_processor(InputProcessor(), 30)
         ' Update. '
-
         self.add_processor(EventProcessor(), 20)    
         self.add_processor(InventoryProcessor(), 15)
         self.add_processor(SkillProcessor(), 15)
@@ -200,7 +199,7 @@ class GameWorld(esper.World):
                 PlayerComponent(),
                 PositionComponent(),
                 RenderComponent(char='@', color=ENTITY_COLORS['player']),
-                StatsComponent(hp=500, atk=10)
+                StatsComponent(hp=500, attack=10)
             )
         
         ent = super().create_entity()
@@ -244,12 +243,12 @@ class GameWorld(esper.World):
                 self.add_component(ent, InventoryComponent())
             
             elif key == 'modifier':
-                atk = value.get('atk')
-                dfn = value.get('dfn')
-                mag = value.get('mag')
-                res = value.get('res')
-                spd = value.get('spd')
-                self.add_component(ent, ModifierComponent(atk=atk))
+                attack = value.get('attack')
+                defense = value.get('defense')
+                magic = value.get('magic')
+                resistance = value.get('resistance')
+                speed = value.get('speed')
+                self.add_component(ent, ModifierComponent(attack=attack))
             
             elif key == 'name':
                 name = value.get('name')
@@ -285,12 +284,12 @@ class GameWorld(esper.World):
             
             elif key == 'stats':
                 hp = value.get('hp')
-                atk = value.get('atk')
-                dfn = value.get('dfn')
-                mag = value.get('mag')
-                res = value.get('res')
-                spd = value.get('spd')
-                self.add_component(ent, StatsComponent(hp=hp, atk=atk, dfn=dfn, mag=mag, res=res, spd=spd))
+                attack = value.get('attack')
+                defense = value.get('defense')
+                magic = value.get('magic')
+                resistance = value.get('resistance')
+                speed = value.get('speed')
+                self.add_component(ent, StatsComponent(hp=hp, attack=attack, defense=defense, magic=magic, resistance=resistance, speed=speed))
 
             elif key == 'tile':
                 blocks_path = value.get('blocks_path')

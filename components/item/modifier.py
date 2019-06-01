@@ -1,3 +1,3 @@
 class ModifierComponent():
-    def __init__(self, atk=0):
-        self.atk = atk
+    def __init__(self, attack=0):
+        self.attack = attack

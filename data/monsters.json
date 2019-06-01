@@ -10,7 +10,7 @@
         "name": {"name": "Demon"},
         "rarity": 7,
         "render": {"char": "&", "color": "demon"},
-        "stats": {"hp": 20, "atk": 8}
+        "stats": {"hp": 20, "attack": 8}
     },
     "zombie":
     {
@@ -20,6 +20,6 @@
         "name": {"name": "Zombie"},
         "rarity": 0,
         "render": {"char": "Z", "color": "zombie"},
-        "stats": {"hp": 11, "atk": 5}
+        "stats": {"hp": 11, "attack": 5}
     }
 }

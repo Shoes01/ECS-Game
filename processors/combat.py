@@ -1,7 +1,7 @@
 import esper
 import tcod as libtcod
 
-from _helper_functions import calculate_atk
+from _helper_functions import calculate_attack
 from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.stats import StatsComponent
@@ -30,7 +30,7 @@ class CombatProcessor(esper.Processor):
                     print('ERROR: Why is the entity attaking a non-actor?')
                     continue
 
-                damage = calculate_atk(attacker_ID, self.world)
+                damage = calculate_attack(attacker_ID, self.world)
                 defender_stats = self.world.component_for_entity(defender_ID, StatsComponent)
                 
                 defender_stats.hp -= damage
