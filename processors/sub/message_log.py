@@ -65,11 +65,20 @@ def render_message_log(world, item):
             console.print(0, 0 + dy, '(Turn %s) %c%s%c wakes up!' % (turn, libtcod.COLCTRL_1, char, libtcod.COLCTRL_STOP), LOG_COLORS['warning'])
 
         elif _combat:
-            att_char, att_color, def_char, def_color, damage, turn = _combat
+            att_char, att_color, def_char, def_color, damage, counter_attack, double_attack, turn = _combat
 
             libtcod.console_set_color_control(libtcod.COLCTRL_1, att_color, libtcod.black)
             libtcod.console_set_color_control(libtcod.COLCTRL_2, def_color, libtcod.black)
-            console.print(0, 0 + dy, '(Turn %s) %c%s%c hits %c%s%c for %s.' % (turn, libtcod.COLCTRL_1, att_char, libtcod.COLCTRL_STOP, libtcod.COLCTRL_2, def_char, libtcod.COLCTRL_STOP, damage), LOG_COLORS['combat'])
+            if double_attack:
+                double_attack = "twice"
+            else:
+                double_attack = "."
+
+            if counter_attack:
+                console.print(0, 0 + dy, '(Turn %s) %c%s%c counter-attacks %c%s%c for %s%s' % (turn, libtcod.COLCTRL_1, att_char, libtcod.COLCTRL_STOP, libtcod.COLCTRL_2, def_char, libtcod.COLCTRL_STOP, damage, double_attack), LOG_COLORS['combat'])
+            else:
+                console.print(0, 0 + dy, '(Turn %s) %c%s%c hits %c%s%c for %s%s' % (turn, libtcod.COLCTRL_1, att_char, libtcod.COLCTRL_STOP, libtcod.COLCTRL_2, def_char, libtcod.COLCTRL_STOP, damage, double_attack), LOG_COLORS['combat'])
+                
 
         elif _consume:
             name, success, turn = _consume
