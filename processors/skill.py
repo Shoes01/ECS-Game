@@ -187,19 +187,20 @@ class SkillProcessor(esper.Processor):
             self.world.component_for_entity(tile, RenderComponent).highlight_color = color
 
     def do_skill(self, ent, direction, item, results):
-        # has_item, legal_item, legal_target, legal_tile, name, turn
         name = self.world.component_for_entity(item, NameComponent)._name
         turn = self.world.turn
 
         if not results['legal_target']:
-            self.world.messages.append({'skill': (True, True, True, False, name, turn)})
+            self.world.messages.append({'skill': (True, True, True, False, name, turn)}) # has_item, legal_item, legal_target, legal_tile, name, turn
             return 0
         elif not results['targets'] and not results['destination']:
             self.world.messages.append({'skill': (True, True, False, True, name, turn)})
             return 0
     
         if results['targets']:
-            self.world.get_processor(CombatProcessor).queue.put({'ent': ent, 'defender_IDs': results['targets'], 'skill': True})
+            skill_component = self.world.component_for_entity(item, ItemSkillComponent)
+            _skill = skill_component.nature
+            self.world.get_processor(CombatProcessor).queue.put({'ent': ent, 'defender_IDs': results['targets'], 'skill': _skill})
             self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'skill': True})
         elif results['destination']:
             tile_pos = self.world.component_for_entity(results['destination'], PositionComponent)

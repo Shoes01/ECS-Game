@@ -1,7 +1,7 @@
 import esper
 import tcod as libtcod
 
-from _helper_functions import calculate_attack
+from _helper_functions import calculate_attack, calculate_magic_attack
 from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
 from components.render import RenderComponent
@@ -29,10 +29,27 @@ class CombatProcessor(esper.Processor):
                     print('ERROR: Why is the entity attaking a non-actor?')
                     continue
 
-                damage = calculate_attack(attacker_ID, self.world)
-                defender_stats = self.world.component_for_entity(defender_ID, StatsComponent)
+                damage = 0
+
+                if skill:
+                    nature = skill # Eventually the skill tuple will contain more information...
+                    if nature == 'physical':
+                        damage = calculate_attack(attacker_ID, self.world)
+                        defender_stats = self.world.component_for_entity(defender_ID, StatsComponent)
+                        damage = damage - defender_stats.defense
+                    elif nature == 'magical':
+                        damage = calculate_magic_attack(attacker_ID, self.world)
+                        defender_stats = self.world.component_for_entity(defender_ID, StatsComponent)
+                        damage = damage - defender_stats.resistance
+                else:
+                    # Hitting a monster with the item will always deal physical damage.
+                    # Future exceptions: wands could use charges to zap.
+                    damage = calculate_attack(attacker_ID, self.world)
+                    defender_stats = self.world.component_for_entity(defender_ID, StatsComponent)
+                    damage = damage - defender_stats.defense
                 
-                defender_stats.hp -= damage
+                if damage > 0:
+                    defender_stats.hp -= damage
                 
                 def_ren = self.world.component_for_entity(defender_ID, RenderComponent)
                 self.world.messages.append({'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, damage, self.world.turn)})

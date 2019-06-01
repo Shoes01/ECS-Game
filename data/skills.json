@@ -9,6 +9,7 @@
     "lunge":{
         "cost": 20,
         "description": "Lunge forward.",
+        "nature": "physical",
         "east":
         [
             [0, 0, 0, 0, 0],
@@ -29,6 +30,7 @@
     "cleave":{
         "cost": 20,
         "description": "A swinging swipe.",
+        "nature": "physical",
         "east":
         [
             [0, 0, 0, 0, 0],
@@ -49,6 +51,7 @@
     "headbutt":{
         "cost": 10,
         "description": "Use your head for something.",
+        "nature": "physical",
         "east":
         [
             [0, 0, 0, 0, 0],
