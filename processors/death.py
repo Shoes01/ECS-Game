@@ -30,6 +30,10 @@ class DeathProcessor(esper.Processor):
             pos = self.world.component_for_entity(ent, PositionComponent)
             ren = self.world.component_for_entity(ent, RenderComponent)
 
+            if self.world.has_component(ent, CorpseComponent):
+                print('This entity has died an additional time!?')
+                return 0
+
             is_furniture = self.world.has_component(ent, FurnitureComponent)
             self.world.messages.append({'death': (ren.char, ren.color, self.world.turn, is_furniture)})
             
