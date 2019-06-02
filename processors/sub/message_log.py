@@ -27,6 +27,8 @@ def render_message_log(world, item):
     
     # Draw the regular message log.
     console, x, y, w, h = world.consoles['log']
+    if world.state == 'ViewLog':
+        console, x, y, w, h = world.consoles['map']
     
     max_offset = len(world.messages) - h
 
