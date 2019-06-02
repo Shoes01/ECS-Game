@@ -27,6 +27,7 @@ from components.persist import PersistComponent
 from components.position import PositionComponent
 from components.rarity import RarityComponent
 from components.render import RenderComponent
+from components.soul import SoulComponent
 from components.stairs import StairsComponent
 from components.stats import StatsComponent
 from components.tile import TileComponent
@@ -271,6 +272,11 @@ class GameWorld(esper.World):
                 slot = value.get('slot')
                 self.add_component(ent, SlotComponent(slot=slot))
             
+            elif key == 'soul':
+                eccentricity = value.get('eccentricity')
+                max_rarity = value.get('max_rarity')
+                self.add_component(ent, SoulComponent(eccentricity=eccentricity, max_rarity=max_rarity))
+
             elif key == 'stairs':
                 self.add_component(ent, StairsComponent())
             
