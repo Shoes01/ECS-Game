@@ -2,6 +2,12 @@ import numpy as np
 import random
 
 class SoulComponent:
+    """
+    The soul is a 2x3 matrix whose values are added to the stats of the unit.
+    The stats are decided in this way:
+    [[  HP, ATK, MAG],
+     [ SPD, DEF, RES]]
+    """
     def __init__(self, eccentricity, max_rarity):
         self.eccentricity = eccentricity
         self.max_rarity = max_rarity
