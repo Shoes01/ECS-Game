@@ -1,11 +1,8 @@
 import esper
 import tcod as libtcod
 
-from collections import Counter
-
-from _helper_functions import calculate_attack, calculate_magic_attack
+from _helper_functions import generate_stats
 from components.actor.actor import ActorComponent
-from components.actor.equipment import EquipmentComponent
 from components.render import RenderComponent
 from components.stats import StatsComponent
 from components.furniture import FurnitureComponent
@@ -66,18 +63,3 @@ class CombatProcessor(esper.Processor):
                     self.queue.put({'ent': defender_ID, 'defender_IDs': [attacker_ID], 'counter_attack': True})
 
                 self.world.messages.append({'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, damage, counter_attack, double_attack, self.world.turn)})
-
-
-def generate_stats(ent, world):
-    ent_stats = world.component_for_entity(ent, StatsComponent).__dict__
-    if not world.has_component(ent, EquipmentComponent):
-        return ent_stats
-    
-    ent_stats = Counter(ent_stats)
-
-    for item_id in world.component_for_entity(ent, EquipmentComponent).equipment:
-        if world.has_component(item_id, StatsComponent):
-            item_stats = Counter(world.component_for_entity(item_id, StatsComponent).__dict__)
-            ent_stats.update(item_stats)
-
-    return ent_stats

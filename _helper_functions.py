@@ -1,18 +1,17 @@
+from collections import Counter
 from components.actor.equipment import EquipmentComponent
 from components.stats import StatsComponent
 
-def calculate_attack(ent, world):
-    attack = world.component_for_entity(ent, StatsComponent).attack
+def generate_stats(ent, world):
+    ent_stats = world.component_for_entity(ent, StatsComponent).__dict__
+    if not world.has_component(ent, EquipmentComponent):
+        return ent_stats
+    
+    ent_stats = Counter(ent_stats)
 
     for item_id in world.component_for_entity(ent, EquipmentComponent).equipment:
-        attack += world.component_for_entity(item_id, StatsComponent).attack
+        if world.has_component(item_id, StatsComponent):
+            item_stats = Counter(world.component_for_entity(item_id, StatsComponent).__dict__)
+            ent_stats.update(item_stats)
 
-    return attack
-
-def calculate_magic_attack(ent, world):
-    magic = world.component_for_entity(ent, StatsComponent).magic
-
-    for item_id in world.component_for_entity(ent, EquipmentComponent).equipment:
-        magic += world.component_for_entity(item_id, StatsComponent).magic
-
-    return magic
+    return ent_stats

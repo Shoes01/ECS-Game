@@ -1,9 +1,8 @@
 from _data import SingleLineBox, UI_COLORS
-from _helper_functions import calculate_attack
+from _helper_functions import generate_stats
 from components.actor.equipment import EquipmentComponent
 from components.item.slot import SlotComponent
 from components.render import RenderComponent
-from components.stats import StatsComponent
 
 def render_stats(world):
     if world.state == 'MainMenu':
@@ -15,10 +14,10 @@ def render_stats(world):
     color_invalid = UI_COLORS['text_invalid']
     
     # Draw the player stats.
-    player_stats_component = world.component_for_entity(1, StatsComponent)
+    player_stats = generate_stats(1, world)
 
-    console.print(0, 0, 'HP: {0}/{1}'.format(player_stats_component.hp, player_stats_component.hp_max), color)
-    console.print(0, 1, 'ATK: {0}'.format(calculate_attack(1, world)), color)
+    console.print(0, 0, 'HP: {0}/{1}'.format(player_stats['hp'], player_stats['hp_max']), color)
+    console.print(0, 1, 'ATK: {0}'.format(player_stats['attack']), color)
     console.print(0, 2, 'TURN: {0}'.format(world.turn), color)
     console.print(0, 3, 'FLOOR: {0}'.format(world.map.floor), color)
 
