@@ -59,17 +59,16 @@ class RenderProcessor(esper.Processor):
             _string = 'You have won! Press ESC to return to the Main Menu.'
             self.world.consoles['map'][0].print(3, 3, _string, UI_COLORS['text_mainmenu'])
 
+        # Blit the consoles.
         for key, value in self.world.consoles.items():
-            ### Is the console blitting to itself?
             # key: console name
             # value: console, x, y, w, h
-            if key == 'con':
-                continue
-            
+            if key == 'con': continue
             value[0].blit(dest=self.world.consoles['con'][0], dest_x=value[1], dest_y=value[2], width=value[3], height=value[4])
 
         libtcod.console_flush()
 
+        # Clear the consoles.
         for key, value in self.world.consoles.items():
             value[0].clear()
 

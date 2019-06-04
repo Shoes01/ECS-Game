@@ -16,7 +16,7 @@ def render_stats(world):
     # Draw the player stats.
     player_stats = generate_stats(1, world)
 
-    console.print(0, 0, 'HP: {0}/{1}'.format(player_stats['hp'], player_stats['hp_max']), color)
+    console.print(0, 0, 'HP: {0}'.format(player_stats['hp']), color)
     console.print(0, 1, 'ATK: {0}'.format(player_stats['attack']), color)
     console.print(0, 2, 'TURN: {0}'.format(world.turn), color)
     console.print(0, 3, 'FLOOR: {0}'.format(world.map.floor), color)
