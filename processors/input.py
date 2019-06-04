@@ -77,7 +77,9 @@ class InputProcessor(esper.Processor):
             self.handle_game_input(key, key_char, key_scancode, mouse_click)
         elif self.world.state == 'SkillTargeting':
             self.handle_skilltargeting_input(key_char, key_scancode)
-
+        elif self.world.state == 'ViewCharacterSheet':
+            self.handle_viewcharactersheet_input(key_char, key_scancode)
+        
     def handle_popupmenu_input(self, key_char, key_scancode):
         menu = self.world.popup_menus[-1]
         
@@ -156,7 +158,10 @@ class InputProcessor(esper.Processor):
         elif key_char == 'x':
             _pos = self.world.component_for_entity(1, PositionComponent)
             self.world.get_processor(EventProcessor).queue.put({'look': (_pos.x, _pos.y)})
+        elif key_char == 'c':
+            self.world.get_processor(StateProcessor).queue.put({'view_character_sheet': True})
         
+        # These keys can only be read if the player has move priority.
         elif self.world.component_for_entity(1, EnergyComponent).energy == 0:
             # Movement keys.
             result = self.generic_move_keys(key_char, key_scancode)
@@ -202,6 +207,10 @@ class InputProcessor(esper.Processor):
 
                 _move = round(dx/r), round(dy/r)
                 self.world.get_processor(MovementProcessor).queue.put({'move': _move, 'ent': 1})
+
+    def handle_viewcharactersheet_input(self, key_char, key_scancode):
+        if key_scancode == libtcod.event.SCANCODE_ESCAPE:
+            self.world.get_processor(StateProcessor).queue.put({'exit': True})
 
     def generic_move_keys(self, key_char, key_scancode):
         result = {}

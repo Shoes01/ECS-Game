@@ -49,9 +49,17 @@ class Game(State):
             return PopupMenu
         elif event.get('skill_targeting'):
             return SkillTargeting
+        elif event.get('view_character_sheet'):
+            return ViewCharacterSheet
         elif event.get('view_log'):
             return ViewLog
         return Game
+
+class ViewCharacterSheet(State):
+    def on_event(self, event):
+        if event.get('exit'):
+            return Game
+        return ViewCharacterSheet
 
 class GameOver(State):
     def on_event(self, event):
