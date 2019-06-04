@@ -39,7 +39,7 @@
         "name": {"name": "Kobold"},
         "render": {"char": "k", "color": "kobold"},
         "soul": {"eccentricity": 10, "max_rarity": 2},
-        "stats": {"hp": 10, "attack": 4, "defense": 2, "magic": 5, "resistance": 4, "speed": 7},
+        "stats": {"hp": 10, "attack": 4, "defense": 2, "magic": 5, "resistance": 4, "speed": 7}
     },
     "goblin":
     {

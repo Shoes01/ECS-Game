@@ -4,13 +4,15 @@ from components.soul import SoulComponent
 from components.stats import StatsComponent
 
 def generate_stats(ent, world):
-    ent_stats = world.component_for_entity(ent, StatsComponent).__dict__
+    ent_stats = Counter(world.component_for_entity(ent, StatsComponent).__dict__)
     
     if world.has_component(ent, EquipmentComponent):
         for item_id in world.component_for_entity(ent, EquipmentComponent).equipment:
             if world.has_component(item_id, StatsComponent):
                 item_stats = Counter(world.component_for_entity(item_id, StatsComponent).__dict__)
-                Counter(ent_stats).update(item_stats)
+                ent_stats.update(item_stats)
+        
+    ent_stats = dict(ent_stats)
 
     if world.has_component(ent, SoulComponent):
         ent_soul = world.component_for_entity(ent, SoulComponent)
