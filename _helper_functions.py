@@ -12,19 +12,8 @@ def generate_stats(ent, world):
                 item_stats = Counter(world.component_for_entity(item_id, StatsComponent).__dict__)
                 ent_stats.update(item_stats)
         
-    ent_stats = dict(ent_stats)
-
     if world.has_component(ent, SoulComponent):
-        ent_soul = world.component_for_entity(ent, SoulComponent).soul
+        ent_soul = Counter(world.component_for_entity(ent, SoulComponent).soul)
+        ent_stats.update(ent_soul)
 
-        # Each position in the soul represents a stat. See soul.py for more details.
-        # [[  HP, ATK, MAG],
-        #  [ SPD, DEF, RES]]
-        ent_stats['hp'] += ent_soul[0][0]
-        ent_stats['speed'] += ent_soul[1][0]
-        ent_stats['attack'] += ent_soul[0][1]
-        ent_stats['defense'] += ent_soul[1][1]
-        ent_stats['magic'] += ent_soul[0][2]
-        ent_stats['resistance'] += ent_soul[1][2]
-
-    return ent_stats
+    return dict(ent_stats)

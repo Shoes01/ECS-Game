@@ -12,7 +12,19 @@ class SoulComponent:
         self.eccentricity = eccentricity
         self.max_rarity = max_rarity
         
-        self.soul = self.generate_soul()
+        self.np_soul = self.generate_soul()
+
+    @property
+    def soul(self):
+        soul = {}
+        soul['hp'] = self.np_soul[0][0]
+        soul['speed'] = self.np_soul[1][0]
+        soul['attack'] = self.np_soul[0][1]
+        soul['defense'] = self.np_soul[1][1]
+        soul['magic'] = self.np_soul[0][2]
+        soul['resistance'] = self.np_soul[1][2]
+
+        return soul
 
     def generate_soul(self):
         attempts = 0

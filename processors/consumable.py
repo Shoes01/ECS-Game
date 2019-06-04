@@ -60,10 +60,4 @@ class ConsumableProcessor(esper.Processor):
         for key, value in con_component.effects.items():
             if key == 'heal':
                 stats_component.hp += value
-                if stats_component.hp > stats_component.hp_max:
-                    stats_component.hp = stats_component.hp_max
                 self.world.messages.append({'heal': (value, turn)})
-            
-            elif key == 'max_hp':
-                stats_component.hp_max += value
-                self.world.messages.append({'max_hp': (value, turn)})
