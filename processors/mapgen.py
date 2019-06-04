@@ -28,12 +28,18 @@ class MapgenProcessor(esper.Processor):
 
     def process(self):
         while not self.queue.empty():
-            self.queue.get() # At the moment, there will only be one kind of event queued here.
+            event = self.queue.get()
+
+            new_map = event.get('generate_map')
+            new_dungeon = event.get('generate_dungeon')
 
             self.world.get_processor(DijkstraProcessor).queue.put({'update_dijkstra': True})
 
             game_map = self.world.map
-            game_map.floor += 1
+            if new_dungeon:
+                game_map.floor = 0
+            else:
+                game_map.floor += 1
 
             # Create new map.
             game_map.tiles = self.create_map(game_map.floor, game_map.height, game_map.width)

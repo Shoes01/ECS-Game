@@ -199,6 +199,7 @@ class GameWorld(esper.World):
                 PlayerComponent(),
                 PositionComponent(),
                 RenderComponent(char='@', color=ENTITY_COLORS['player']),
+                SoulComponent(eccentricity=5, max_rarity=10),
                 StatsComponent(hp=500, attack=10)
             )
         

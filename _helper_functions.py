@@ -15,7 +15,7 @@ def generate_stats(ent, world):
     ent_stats = dict(ent_stats)
 
     if world.has_component(ent, SoulComponent):
-        ent_soul = world.component_for_entity(ent, SoulComponent)
+        ent_soul = world.component_for_entity(ent, SoulComponent).soul
 
         # Each position in the soul represents a stat. See soul.py for more details.
         # [[  HP, ATK, MAG],
