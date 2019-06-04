@@ -9,49 +9,44 @@ def render_character_sheet(world):
         return 0
     
     console, _, _, w, h = world.consoles['map']
+    color = UI_COLORS['text']
+    player_base_stats = world.component_for_entity(1, StatsComponent).__dict__
+    player_stats = generate_stats(1, world)
+    soul_stats = world.component_for_entity(1, SoulComponent).soul
+    titles = {
+        'attack': 'Attack:',
+        'defense': 'Defense:',
+        'magic': 'Magic:',
+        'resistance': 'Resist:',
+        'hp': 'Health:',
+        'speed': 'Speed:'
+        }
+
+    # Draw sheet.
     console.draw_frame(x=0, y=0, width=w, height=h, title="Character Sheet", clear=True, fg=UI_COLORS['fg'], bg=UI_COLORS['bg'])
 
-    color = UI_COLORS['text']
     # Print base stats.
-    player_base_stats = world.component_for_entity(1, StatsComponent).__dict__
     x, y = 3, 5
-
     console.print(x - 1, y - 1, 'Base Stats:', color)
-
-    console.print(x, y + 0, 'ATK: {0}'.format(player_base_stats['attack']), color)
-    console.print(x, y + 1, 'DEF: {0}'.format(player_base_stats['defense']), color)
-    console.print(x, y + 2, 'HP:  {0}'.format(player_base_stats['hp']), color)
-    console.print(x, y + 3, 'MAG: {0}'.format(player_base_stats['magic']), color)
-    console.print(x, y + 4, 'RES: {0}'.format(player_base_stats['resistance']), color)
-    console.print(x, y + 5, 'SPD: {0}'.format(player_base_stats['speed']), color)
+    i = 0
+    for key in titles:
+        console.print(x, y + i, f"{titles[key]:8} {player_base_stats[key]:3}", color)
+        i += 1
 
     # Print soul stats.
-    soul_stats = world.component_for_entity(1, SoulComponent).soul
-    x, y = 15, 5
-
+    x, y = 20, 5
     console.print(x - 1, y - 1, 'Soul Stats:', color)
+    i = 0
+    for key in titles:
+        console.print(x, y + i, f"{titles[key]:8} {soul_stats[key]:3}", color)
+        i += 1
 
-    console.print(x, y + 0, 'ATK: {0}'.format(soul_stats['attack']), color)
-    console.print(x, y + 1, 'DEF: {0}'.format(soul_stats['defense']), color)
-    console.print(x, y + 2, 'HP:  {0}'.format(soul_stats['hp']), color)
-    console.print(x, y + 3, 'MAG: {0}'.format(soul_stats['magic']), color)
-    console.print(x, y + 4, 'RES: {0}'.format(soul_stats['resistance']), color)
-    console.print(x, y + 5, 'SPD: {0}'.format(soul_stats['speed']), color)
-
-    
     # Print total stats.
-    player_stats = generate_stats(1, world)
     x, y = 3, 14
+    console.print(x - 1, y - 1, 'Total Stats:', color)    
+    i = 0
+    for key in titles:
+        console.print(x, y + i, f"{titles[key]:8} {player_stats[key]:3} ({player_base_stats[key]:3} + {soul_stats[key]:3})", color)
+        i += 1
 
-    console.print(x - 1, y - 1, 'Total Stats:', color)
-
-    console.print(x, y + 0, 'ATK: {0}'.format(player_stats['attack']), color)
-    console.print(x, y + 1, 'DEF: {0}'.format(player_stats['defense']), color)
-    console.print(x, y + 2, 'HP:  {0}'.format(player_stats['hp']), color)
-    console.print(x, y + 3, 'MAG: {0}'.format(player_stats['magic']), color)
-    console.print(x, y + 4, 'RES: {0}'.format(player_stats['resistance']), color)
-    console.print(x, y + 5, 'SPD: {0}'.format(player_stats['speed']), color)
-
-    # Display base stats, soul, and total stats
     # Displays item slots and their items
-    # Print to Map
