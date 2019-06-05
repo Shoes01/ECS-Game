@@ -1,5 +1,4 @@
 import esper
-import tcod as libtcod
 
 class InitialProcessor(esper.Processor):
     def __init__(self):

@@ -1,5 +1,3 @@
-import tcod as libtcod
-
 from collections import namedtuple
 
 ### GAME MAP DATA

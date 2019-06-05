@@ -1,5 +1,4 @@
 import esper
-import tcod as libtcod
 
 from _helper_functions import generate_stats
 from components.actor.actor import ActorComponent

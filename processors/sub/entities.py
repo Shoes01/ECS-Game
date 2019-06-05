@@ -1,5 +1,3 @@
-import tcod as libtcod
-
 from _data import ENTITY_COLORS
 from components.actor.actor import ActorComponent
 from components.actor.corpse import CorpseComponent
