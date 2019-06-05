@@ -202,12 +202,25 @@ class MapgenProcessor(esper.Processor):
                 y = random.randint(room.y, room.y + room.h - 1)
                 
                 if not tiles[x, y] and not self.world.get_entities_at(x, y, ActorComponent):
-                    new_ent = self.world.create_entity('zombie')
+                    new_ent = self.choose_monster(floor)
                     new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                     new_ent_pos.x = x
                     new_ent_pos.y = y
                     
                 number_of_monsters -= 1
+
+    def choose_monster(self, floor):
+        # How are monsters generated?
+        # I need a list of potential monsters to generate.
+        list_of_monsters = []
+        monster_table = self.world.monster_table
+        for i in range(0, floor + 1):
+            list_ = monster_table[i]
+            list_of_monsters.extend(list_)
+        
+        monster = random.choice(list_of_monsters)
+        
+        return self.world.create_entity(monster)
 
     def place_loot(self, tiles):
         for room in self._rooms:

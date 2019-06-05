@@ -106,6 +106,7 @@ ENTITY_COLORS = {
     'demon': COLOR_THEME['Red'],
     'floor': COLOR_THEME['White'],
     'floor_explored': COLOR_THEME['BrightBlack'],
+    'monster': COLOR_THEME['Green'],
     'overlap_bg': COLOR_THEME['BrightBlack'],
     'player': COLOR_THEME['BrightMagenta'],
     'potion_heal': COLOR_THEME['Red'],
