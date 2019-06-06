@@ -9,7 +9,7 @@
         "brain": true,
         "name": {"name": "Demon"},
         "rarity": 7,
-        "render": {"char": "&", "color": "demon"},
+        "render": {"char": "&", "color": "mon_demon"},
         "stats": {"hp": 20, "attack": 8}
     },
     "zombie":
@@ -19,7 +19,7 @@
         "brain": true,
         "name": {"name": "Zombie"},
         "rarity": 0,
-        "render": {"char": "Z", "color": "zombie"},
+        "render": {"char": "Z", "color": "mon_zombie"},
         "stats": {"hp": 11, "attack": 5}
     },
 
@@ -31,7 +31,7 @@
         "brain": true,
         "name": {"name": "Rat"},
         "rarity": 0,
-        "render": {"char": "r", "color": "monster"},
+        "render": {"char": "r", "color": "mon_rat"},
         "soul": {"eccentricity": 0, "max_rarity": 1},
         "stats": {"hp": 5, "attack": 2, "defense": 1, "magic": 0, "resistance": 0, "speed": 2}
     },
@@ -41,7 +41,7 @@
         "brain": true,
         "name": {"name": "Kobold"},
         "rarity": 0,
-        "render": {"char": "k", "color": "monster"},
+        "render": {"char": "k", "color": "mon_kobold"},
         "soul": {"eccentricity": 10, "max_rarity": 2},
         "stats": {"hp": 10, "attack": 1, "defense": 1, "magic": 5, "resistance": 4, "speed": 7}
     },
@@ -51,7 +51,7 @@
         "brain": true,
         "name": {"name": "Goblin"},
         "rarity": 0,
-        "render": {"char": "g", "color": "monster"},
+        "render": {"char": "g", "color": "mon_goblin"},
         "soul": {"eccentricity": 5, "max_rarity": 2},
         "stats": {"hp": 12, "attack": 5, "defense": 4, "magic": 3, "resistance": 2, "speed": 3}
     },
@@ -61,7 +61,7 @@
         "brain": true,
         "name": {"name": "Orc"},
         "rarity": 0,
-        "render": {"char": "o", "color": "monster"},
+        "render": {"char": "o", "color": "mon_orc"},
         "soul": {"eccentricity": 2, "max_rarity": 4},
         "stats": {"hp": 25, "attack": 8, "defense": 7, "magic": 3, "resistance": 10, "speed": 6}
     }

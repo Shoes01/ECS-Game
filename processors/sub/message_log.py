@@ -72,7 +72,7 @@ def render_message_log(world, item):
             libtcod.console_set_color_control(libtcod.COLCTRL_1, att_color, libtcod.black)
             libtcod.console_set_color_control(libtcod.COLCTRL_2, def_color, libtcod.black)
             if double_attack:
-                double_attack = "twice"
+                double_attack = " twice!"
             else:
                 double_attack = "."
 

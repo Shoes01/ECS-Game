@@ -103,10 +103,14 @@ ENTITY_COLORS = {
     'armor': COLOR_THEME['Magenta'],
     'chest': COLOR_THEME['Yellow'],
     'corpse': COLOR_THEME['BrightRed'],
-    'demon': COLOR_THEME['Red'],
     'floor': COLOR_THEME['White'],
     'floor_explored': COLOR_THEME['BrightBlack'],
-    'monster': COLOR_THEME['Green'],
+    'mon_demon': COLOR_THEME['Red'],
+    'mon_goblin': COLOR_THEME['Yellow'],
+    'mon_orc': COLOR_THEME['Cyan'],
+    'mon_rat': COLOR_THEME['BrightBlack'],
+    'mon_kobold': COLOR_THEME['Blue'],
+    'mon_zombie': COLOR_THEME['Green'],
     'overlap_bg': COLOR_THEME['BrightBlack'],
     'player': COLOR_THEME['BrightMagenta'],
     'potion_heal': COLOR_THEME['Red'],
@@ -119,8 +123,7 @@ ENTITY_COLORS = {
     'stairs_explored': COLOR_THEME['BrightBlack'],
     'wall': COLOR_THEME['White'],
     'wall_explored': COLOR_THEME['BrightBlack'],
-    'weapon': COLOR_THEME['Blue'],
-    'zombie': COLOR_THEME['Green']
+    'weapon': COLOR_THEME['Blue']
 }
 
 LOG_COLORS = {
