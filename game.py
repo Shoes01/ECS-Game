@@ -161,8 +161,8 @@ class GameWorld(esper.World):
             self._next_entity_id = data_file['next_entity_id']
             
     def load_tables(self):
-        item_table = {0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: []}
-        monster_table = {0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: []}
+        item_table = [[] for i in range(8)] # There are 8 levels of rarity, starting at 0
+        monster_table = [[] for i in range(8)]
         
         for ent, components in self._json_data.items():
             if ent == 'comment': continue
