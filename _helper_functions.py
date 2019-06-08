@@ -3,9 +3,12 @@ from components.actor.equipment import EquipmentComponent
 from components.soul import SoulComponent
 from components.stats import StatsComponent
 
-def generate_stats(ent, world):
+def generate_stats(ent, world):    
     ent_stats = Counter(world.component_for_entity(ent, StatsComponent).__dict__)
     
+    if ent is not 1: # This is maybe temporary...
+        return ent_stats
+
     if world.has_component(ent, EquipmentComponent):
         for item_id in world.component_for_entity(ent, EquipmentComponent).equipment:
             if world.has_component(item_id, StatsComponent):

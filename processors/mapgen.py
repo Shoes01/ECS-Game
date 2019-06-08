@@ -202,16 +202,16 @@ class MapgenProcessor(esper.Processor):
                 y = random.randint(room.y, room.y + room.h - 1)
                 
                 if not tiles[x, y] and not self.world.get_entities_at(x, y, ActorComponent):
-                    new_ent = self.choose_monster(floor)
+                    new_ent = self.gen_random_monster(floor)
                     new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                     new_ent_pos.x = x
                     new_ent_pos.y = y
+
+                    # Give the monster a loadout at this time. 
                     
                 number_of_monsters -= 1
 
-    def choose_monster(self, floor):
-        # How are monsters generated?
-        # I need a list of potential monsters to generate.
+    def gen_random_monster(self, floor):
         list_of_monsters = []
         monster_table = self.world.monster_table
         for i in range(0, floor + 1):
@@ -242,6 +242,7 @@ class MapgenProcessor(esper.Processor):
                 number_of_items -= 1
 
     def distribute_items(self, floor):
+        # Move this section into the monster gen itself.
         for ent, (actor, inv, rar) in self.world.get_components(ActorComponent, InventoryComponent, RarityComponent):
             loot = self.generate_loot(floor, rar.rarity)
             if loot:
