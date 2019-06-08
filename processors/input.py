@@ -20,6 +20,7 @@ from processors.movement import MovementProcessor
 from processors.pickup import PickupProcessor
 from processors.removable import RemovableProcessor
 from processors.skill import SkillProcessor
+from processors.soul import SoulProcessor
 from processors.state import StateProcessor
 from processors.render import RenderProcessor
 from processors.wearable import WearableProcessor
@@ -79,6 +80,8 @@ class InputProcessor(esper.Processor):
             self.handle_skilltargeting_input(key_char, key_scancode)
         elif self.world.state == 'ViewCharacterSheet':
             self.handle_viewcharactersheet_input(key_char, key_scancode)
+        elif self.world.state == 'SoulState':
+            self.handle_soulstate_input(key_char, key_scancode)
         
     def handle_popupmenu_input(self, key_char, key_scancode):
         menu = self.world.popup_menus[-1]
@@ -211,6 +214,15 @@ class InputProcessor(esper.Processor):
     def handle_viewcharactersheet_input(self, key_char, key_scancode):
         if key_scancode == libtcod.event.SCANCODE_ESCAPE:
             self.world.get_processor(StateProcessor).queue.put({'exit': True})
+
+    def handle_soulstate_input(self, key_char, key_scancode):
+        result = self.generic_move_keys(key_char, key_scancode)
+        if key_scancode == libtcod.event.SCANCODE_ESCAPE:
+            self.world.get_processor(StateProcessor).queue.put({'exit': True})
+        elif result:
+            self.world.get_processor(SoulProcessor).queue.put({'rotate': result['move']})
+        elif key_scancode == libtcod.event.SCANCODE_KP_ENTER or key_scancode == libtcod.event.SCANCODE_RETURN:
+            self.world.get_processor(SoulProcessor).queue.put({'confirm': True})
 
     def generic_move_keys(self, key_char, key_scancode):
         result = {}

@@ -6,6 +6,7 @@ from components.name import NameComponent
 from components.stats import StatsComponent
 from menu import PopupMenu, PopupChoice
 from processors.energy import EnergyProcessor
+from processors.soul import SoulProcessor
 from processors.state import StateProcessor
 from queue import Queue
 
@@ -18,9 +19,16 @@ class ConsumableProcessor(esper.Processor):
         while not self.queue.empty():
             event = self.queue.get()
 
+            consumed = event.get('consumed')
             ent = event['ent']
             item = event.get('item')
             
+            if consumed:
+                self.world.component_for_entity(ent, InventoryComponent).inventory.remove(consumed)
+                self.world.delete_entity(consumed)
+                self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'consume': True})
+                continue
+
             if not item:
                 # Create popup menu for player to choose from.
                 menu = PopupMenu(title='Which item would you like to consume?')
@@ -46,9 +54,6 @@ class ConsumableProcessor(esper.Processor):
                     success = True
                     self.world.messages.append({'consume': (name, success, turn)})
                     self.consume_item(ent, item, turn)
-                    self.world.component_for_entity(ent, InventoryComponent).inventory.remove(item)
-                    self.world.delete_entity(item)
-                    self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'consume': True})
                 else:
                     success = False
                     self.world.messages.append({'consume': (name, success, turn)})
@@ -61,3 +66,7 @@ class ConsumableProcessor(esper.Processor):
             if key == 'heal':
                 stats_component.hp += value
                 self.world.messages.append({'heal': (value, turn)})
+                self.queue.put({'consumed': item})
+            
+            elif key == 'soul':
+                self.world.get_processor(SoulProcessor).queue.put({'soul': value, 'jar': item})

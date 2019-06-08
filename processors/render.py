@@ -6,6 +6,7 @@ from processors.sub.character_sheet import render_character_sheet
 from processors.sub.entities import render_entities
 from processors.sub.message_log import render_message_log
 from processors.sub.popup_menu import render_popup_menu
+from processors.sub.soul_sheet import render_soul_sheet
 from processors.sub.stats import render_stats
 from processors.sub.tooltips import render_tooltips
 from queue import Queue
@@ -45,6 +46,7 @@ class RenderProcessor(esper.Processor):
         render_message_log(self.world, self.item)
         render_tooltips(self.world)
         render_character_sheet(self.world)
+        render_soul_sheet(self.world)
 
         # Draw the gameover overlay.
         if self.world.state == 'GameOver':

@@ -49,6 +49,8 @@ class Game(State):
             return PopupMenu
         elif event.get('skill_targeting'):
             return SkillTargeting
+        elif event.get('soul_state'):
+            return SoulState
         elif event.get('view_character_sheet'):
             return ViewCharacterSheet
         elif event.get('view_log'):
@@ -96,6 +98,12 @@ class SkillTargeting(State):
         if event.get('exit'):
             return Game
         return SkillTargeting
+
+class SoulState(State):
+    def on_event(self, event):
+        if event.get('exit'):
+            return Game
+        return SoulState
 
 class VictoryScreen(State):
     def on_event(self, event):

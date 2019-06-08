@@ -54,7 +54,7 @@ class DeathProcessor(esper.Processor):
             if self.world.has_component(ent, SoulComponent):
                 # Create an item. Give it a position and a render component. Make it consumable. Name it a Soul Jar.
                 soul_jar = self.world.create_entity('soul_jar')
-                soul = self.world.component_for_entity(ent, SoulComponent).soul
+                soul = self.world.component_for_entity(ent, SoulComponent)
                 soul_jar_con = self.world.component_for_entity(soul_jar, ConsumableComponent)
                 soul_jar_con.effects['soul'] = soul
                 soul_jar_pos = self.world.component_for_entity(soul_jar, PositionComponent)

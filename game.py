@@ -53,6 +53,7 @@ from processors.pickup import PickupProcessor
 from processors.removable import RemovableProcessor
 from processors.render import RenderProcessor
 from processors.skill import SkillProcessor
+from processors.soul import SoulProcessor
 from processors.state import StateProcessor
 from processors.wearable import WearableProcessor
 
@@ -105,6 +106,7 @@ class GameWorld(esper.World):
         self.add_processor(WearableProcessor(), 10)
         self.add_processor(DropProcessor(), 10)
         self.add_processor(CombatProcessor(), 5)
+        self.add_processor(SoulProcessor(), 5)
         self.add_processor(RemovableProcessor(), 5)
         self.add_processor(DeathProcessor(), 4)
         self.add_processor(MapgenProcessor(), 3)
