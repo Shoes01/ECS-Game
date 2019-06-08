@@ -8,10 +8,12 @@ from components.actor.corpse import CorpseComponent
 from components.actor.inventory import InventoryComponent
 from components.actor.player import PlayerComponent
 from components.furniture import FurnitureComponent
+from components.item.consumable import ConsumableComponent
 from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
+from components.soul import SoulComponent
 from processors.state import StateProcessor
 from queue import Queue
 
@@ -42,10 +44,22 @@ class DeathProcessor(esper.Processor):
             ren.char = '%'
             ren.color = ENTITY_COLORS['corpse']
 
+            # Drop the items the entity is carrying.
             for item in inventory:
                 self.world.add_component(item, PositionComponent(x=pos.x, y=pos.y))
                 if self.world.has_component(item, PersistComponent):
                     self.world.remove_component(item, PersistComponent)
+
+            # Drop the soul the entity is carrying.
+            if self.world.has_component(ent, SoulComponent):
+                # Create an item. Give it a position and a render component. Make it consumable. Name it a Soul Jar.
+                soul_jar = self.world.create_entity('soul_jar')
+                soul = self.world.component_for_entity(ent, SoulComponent).soul
+                soul_jar_con = self.world.component_for_entity(soul_jar, ConsumableComponent)
+                soul_jar_con.effects['soul'] = soul
+                soul_jar_pos = self.world.component_for_entity(soul_jar, PositionComponent)
+                soul_jar_pos.x = pos.x
+                soul_jar_pos.y = pos.y
 
             if is_furniture:
                 self.world.delete_entity(ent)

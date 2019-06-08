@@ -129,8 +129,10 @@ class GameWorld(esper.World):
     def load_data(self):
         data = None
 
-        with open("data/items.json", "r") as read_file:
+        with open("data/consumables.json", "r") as read_file:
             data = json.load(read_file)
+        with open("data/items.json", "r") as read_file:
+            data.update(json.load(read_file))
         with open("data/monsters.json", "r") as read_file:
             data.update(json.load(read_file))
         with open("data/other.json", "r") as read_file:
@@ -228,6 +230,9 @@ class GameWorld(esper.World):
             elif key == 'brain':
                 self.add_component(ent, BrainComponent())
             
+            elif key == 'consumable':
+                self.add_component(ent, ConsumableComponent(effects=value))
+
             elif key == 'energy':
                 self.add_component(ent, EnergyComponent())
             
