@@ -1,7 +1,8 @@
 import esper
 import numpy as np
+import processors.consumable # This is to avoid a cyclical import.
 
-# from processors.consumable import ConsumableProcessor
+from components.soul import SoulComponent
 from processors.state import StateProcessor
 from queue import Queue
 
@@ -16,6 +17,7 @@ class SoulProcessor(esper.Processor):
         while not self.queue.empty():
             event = self.queue.get()
 
+            ent = event.get('ent')
             confirm = event.get('confirm')
             jar = event.get('jar')
             rotate = event.get('rotate')
@@ -35,6 +37,8 @@ class SoulProcessor(esper.Processor):
 
             if confirm:
                 # Add the soul to the player's soul
-                # self.world.get_processor(ConsumableProcessor).queue.put({'consumed': self.jar})
+                self.world.component_for_entity(ent, SoulComponent).np_soul += self.soul.np_soul
+                self.world.get_processor(processors.consumable.ConsumableProcessor).queue.put({'ent': ent, 'consumed': self.jar})
                 self.world.get_processor(StateProcessor).queue.put({'exit': True})
+                self.jar = None
                 self.soul = None

@@ -1,6 +1,8 @@
+import numpy as np
+
 from _data import UI_COLORS
 from components.soul import SoulComponent
-from processors.soul import SoulProcessor
+import processors.soul # Avoid cyclical import
 
 def render_soul_sheet(world):
     if world.state is not 'SoulState':
@@ -8,15 +10,15 @@ def render_soul_sheet(world):
     
     console, _, _, w, h = world.consoles['map']
     color = UI_COLORS['text']
-    new_soul = world.get_processor(SoulProcessor).soul.soul
+    new_soul = world.get_processor(processors.soul.SoulProcessor).soul
     player_soul = world.component_for_entity(1, SoulComponent).soul
     titles = {
-        'attack': 'Attack:',
-        'defense': 'Defense:',
-        'magic': 'Magic:',
-        'resistance': 'Resist:',
         'hp': 'Health:',
-        'speed': 'Speed:'
+        'attack': 'Attack:',
+        'magic': 'Magic:',
+        'speed': 'Speed:',
+        'defense': 'Defense:',
+        'resistance': 'Resist:'
         }
 
     # Draw sheet.
@@ -24,13 +26,18 @@ def render_soul_sheet(world):
 
     # Print player soul and new soul.
     x, y = 3, 5
-    console.print(x - 1, y - 1, 'Player Soul:', color)
-
-    offset = 20
-    console.print(x - 1 + offset, y - 1, 'New Soul:', color)
+    offset = 25
+    row = 0
+    col = 0
+    console.print(x - 1, y - 1, 'New Player Soul:', color)
+    console.print(x - 1 + offset, y - 1, 'Incoming Soul:', color)
 
     i = 0
     for key in titles:
-        console.print(x, y + i, f"{titles[key]:8} {player_soul[key]:3}", color)
-        console.print(x + offset, y + i, f"{titles[key]:8} {new_soul[key]:3}", color)
+        console.print(x, y + i, f"{titles[key]:8} {player_soul[key]:3} ({new_soul.soul[key]:+3})", color)
+        console.print(x + offset + row, y + col, f"{titles[key]:8} {new_soul.soul[key]:+3}", color)
         i += 1
+        row += 13
+        if i == 3:
+            col = 1
+            row = 0

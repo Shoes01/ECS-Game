@@ -1,11 +1,7 @@
 import cProfile
-import time
 import tcod as libtcod
 
 from _data import con, eqp, log, map
-from processors.debug import DebugProcessor
-from processors.input import InputProcessor
-from processors.render import RenderProcessor
 from game import GameWorld
 
 def main():

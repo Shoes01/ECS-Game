@@ -222,7 +222,7 @@ class InputProcessor(esper.Processor):
         elif result:
             self.world.get_processor(SoulProcessor).queue.put({'rotate': result['move']})
         elif key_scancode == libtcod.event.SCANCODE_KP_ENTER or key_scancode == libtcod.event.SCANCODE_RETURN:
-            self.world.get_processor(SoulProcessor).queue.put({'confirm': True})
+            self.world.get_processor(SoulProcessor).queue.put({'ent': 1, 'confirm': True})
 
     def generic_move_keys(self, key_char, key_scancode):
         result = {}

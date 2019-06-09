@@ -5,8 +5,8 @@ from components.item.consumable import ConsumableComponent
 from components.name import NameComponent
 from components.stats import StatsComponent
 from menu import PopupMenu, PopupChoice
-from processors.energy import EnergyProcessor
-from processors.soul import SoulProcessor
+import processors.energy # Also to avoid cyclical import...
+import processors.soul # Avoid cyc error
 from processors.state import StateProcessor
 from queue import Queue
 
@@ -24,9 +24,13 @@ class ConsumableProcessor(esper.Processor):
             item = event.get('item')
             
             if consumed:
+                name = self.world.component_for_entity(consumed, NameComponent).name
+                success = True
+                turn = self.world.turn
+                self.world.messages.append({'consume': (name, success, turn)})
                 self.world.component_for_entity(ent, InventoryComponent).inventory.remove(consumed)
                 self.world.delete_entity(consumed)
-                self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'consume': True})
+                self.world.get_processor(processors.energy.EnergyProcessor).queue.put({'ent': ent, 'consume': True})
                 continue
 
             if not item:
@@ -47,15 +51,12 @@ class ConsumableProcessor(esper.Processor):
 
             else:
                 # Consume the item.
-                name = self.world.component_for_entity(item, NameComponent).name
-                turn = self.world.turn
-
                 if self.world.has_component(item, ConsumableComponent):
-                    success = True
-                    self.world.messages.append({'consume': (name, success, turn)})
-                    self.consume_item(ent, item, turn)
+                    self.consume_item(ent, item, self.world.turn)
                 else:
+                    name = self.world.component_for_entity(item, NameComponent).name
                     success = False
+                    turn = self.world.turn
                     self.world.messages.append({'consume': (name, success, turn)})
 
     def consume_item(self, ent, item, turn):
@@ -69,4 +70,4 @@ class ConsumableProcessor(esper.Processor):
                 self.queue.put({'consumed': item})
             
             elif key == 'soul':
-                self.world.get_processor(SoulProcessor).queue.put({'soul': value, 'jar': item})
+                self.world.get_processor(processors.soul.SoulProcessor).queue.put({'soul': value, 'jar': item})
