@@ -16,10 +16,14 @@ def render_stats(world):
     # Draw the player stats.
     player_stats = generate_stats(1, world)
 
-    console.print(0, 0, 'HP: {0}'.format(player_stats['hp']), color)
-    console.print(0, 1, 'ATK: {0}'.format(player_stats['attack']), color)
-    console.print(0, 2, 'TURN: {0}'.format(world.turn), color)
-    console.print(0, 3, 'FLOOR: {0}'.format(world.map.floor), color)
+    console.print(0, 0, 'HP: {:>3}'.format(player_stats['hp']), color)
+    console.print(8, 0, 'SPD: {:>2}'.format(player_stats['speed']), color)
+    console.print(0, 1, 'ATK: {:>2}'.format(player_stats['attack']), color)
+    console.print(8, 1, 'DEF: {:>2}'.format(player_stats['defense']), color)
+    console.print(0, 2, 'MAG: {:>2}'.format(player_stats['magic']), color)
+    console.print(8, 2, 'RES: {:>2}'.format(player_stats['resistance']), color)
+    console.print(0, 3, 'TRN: {:>2}'.format(world.turn), color)
+    console.print(8, 3, 'FLR: {:>2}'.format(world.map.floor), color)
 
     # Draw the item boxes.
     Q_color, W_color, E_color, A_color, S_color, D_color = color_invalid, color_invalid, color_invalid, color_invalid, color_invalid, color_invalid
@@ -46,12 +50,12 @@ def render_stats(world):
             D_item = world.component_for_entity(item, RenderComponent)
 
     y_offset = 4
-    draw_letter_box(0, 0 + y_offset, 4, 4, 'Q', console, Q_color, Q_item) # Slot: mainhand
-    draw_letter_box(4, 0 + y_offset, 4, 4, 'W', console, W_color, W_item) # Slot: head
-    draw_letter_box(8, 0 + y_offset, 4, 4, 'E', console, E_color, E_item) # Slot: accessory
-    draw_letter_box(0, 4 + y_offset, 4, 4, 'A', console, A_color, A_item) # Slot: offhand
-    draw_letter_box(4, 4 + y_offset, 4, 4, 'S', console, S_color, S_item) # Slot: torso
-    draw_letter_box(8, 4 + y_offset, 4, 4, 'D', console, D_color, D_item) # Slot: feet
+    draw_letter_box(2, 0 + y_offset, 4, 4, 'Q', console, Q_color, Q_item) # Slot: mainhand
+    draw_letter_box(6, 0 + y_offset, 4, 4, 'W', console, W_color, W_item) # Slot: head
+    draw_letter_box(10, 0 + y_offset, 4, 4, 'E', console, E_color, E_item) # Slot: accessory
+    draw_letter_box(2, 4 + y_offset, 4, 4, 'A', console, A_color, A_item) # Slot: offhand
+    draw_letter_box(6, 4 + y_offset, 4, 4, 'S', console, S_color, S_item) # Slot: torso
+    draw_letter_box(10, 4 + y_offset, 4, 4, 'D', console, D_color, D_item) # Slot: feet
 
 def draw_letter_box(x, y, w, h, char, console, color, item):
     # Draw the little box, and put the letter in it.

@@ -26,12 +26,12 @@ def render_character_sheet(world):
         }
     soul_stats = world.component_for_entity(1, SoulComponent).soul
     titles = {
-        'attack': 'Attack:',
-        'defense': 'Defense:',
-        'magic': 'Magic:',
-        'resistance': 'Resist:',
         'hp': 'Health:',
-        'speed': 'Speed:'
+        'attack': 'Attack:',
+        'magic': 'Magic:',
+        'speed': 'Speed:',
+        'defense': 'Defense:',
+        'resistance': 'Resist:'
         }
 
     # Draw sheet.

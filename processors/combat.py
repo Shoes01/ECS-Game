@@ -54,7 +54,7 @@ class CombatProcessor(esper.Processor):
                 if damage > 0:
                     self.world.component_for_entity(defender_ID, StatsComponent).hp -= damage
                 
-                if self.world.component_for_entity(defender_ID, StatsComponent).hp <= 0:
+                if def_stats['hp'] <= 0:
                     self.world.get_processor(DeathProcessor).queue.put({'ent': defender_ID})
                 elif not (skill or counter_attack or self.world.has_component(defender_ID, FurnitureComponent)):
                     # The defender may counter attack.
