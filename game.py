@@ -233,8 +233,6 @@ class GameWorld(esper.World):
                 self.add_component(ent, BrainComponent())
             
             elif key == 'consumable':
-                if value is False:
-                    value == None
                 self.add_component(ent, ConsumableComponent(effects=value))
 
             elif key == 'energy':

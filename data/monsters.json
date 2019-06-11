@@ -13,16 +13,6 @@
         "render": {"char": "&", "color": "mon_demon"},
         "stats": {"hp": 20, "attack": 8}
     },
-    "zombie":
-    {
-        "archtype": "monster",
-
-        "brain": true,
-        "name": {"name": "Zombie"},
-        "rarity": 0,
-        "render": {"char": "Z", "color": "mon_zombie"},
-        "stats": {"hp": 11, "attack": 5}
-    },
 
     "comment": "#################################### RACES ####################################",
     
@@ -65,5 +55,15 @@
         "render": {"char": "o", "color": "mon_orc"},
         "soul": {"eccentricity": 2, "max_rarity": 4},
         "stats": {"hp": 25, "attack": 8, "defense": 7, "magic": 3, "resistance": 10, "speed": 6}
+    },
+    "zombie":
+    {
+        "archtype": "monster",
+        "brain": true,
+        "name": {"name": "Zombie"},
+        "rarity": 0,
+        "render": {"char": "Z", "color": "mon_zombie"},
+        "soul": {"eccentricity": 0, "max_rarity": 1},
+        "stats": {"hp": 11, "attack": 5}
     }
 }
