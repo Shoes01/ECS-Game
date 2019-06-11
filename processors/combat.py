@@ -53,6 +53,8 @@ class CombatProcessor(esper.Processor):
                 
                 if damage > 0:
                     self.world.component_for_entity(defender_ID, StatsComponent).hp -= damage
+                else:
+                    damage = 0
                 
                 if def_stats['hp'] <= 0:
                     self.world.get_processor(DeathProcessor).queue.put({'ent': defender_ID})
