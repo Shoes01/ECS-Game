@@ -32,7 +32,7 @@ class SoulProcessor(esper.Processor):
             if rotate:
                 dx, dy = rotate
                 if dx:
-                    self.soul.np_soul = np.fliplr(self.soul.np_soul)
+                    self.soul.np_soul = np.roll(self.soul.np_soul, dx)
                 if dy:
                     self.soul.np_soul = np.flipud(self.soul.np_soul)
 
