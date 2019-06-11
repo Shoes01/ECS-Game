@@ -16,14 +16,14 @@ def render_stats(world):
     # Draw the player stats.
     player_stats = generate_stats(1, world)
 
-    console.print(0, 0, 'HP: {:>3}'.format(player_stats['hp']), color)
-    console.print(8, 0, 'SPD: {:>2}'.format(player_stats['speed']), color)
-    console.print(0, 1, 'ATK: {:>2}'.format(player_stats['attack']), color)
-    console.print(8, 1, 'DEF: {:>2}'.format(player_stats['defense']), color)
-    console.print(0, 2, 'MAG: {:>2}'.format(player_stats['magic']), color)
-    console.print(8, 2, 'RES: {:>2}'.format(player_stats['resistance']), color)
-    console.print(0, 3, 'TRN: {:>2}'.format(world.turn), color)
-    console.print(8, 3, 'FLR: {:>2}'.format(world.map.floor), color)
+    console.print(0, 0, 'HP:{:>4}'.format(player_stats['hp']), color)
+    console.print(8, 0, 'SPD:{:>3}'.format(player_stats['speed']), color)
+    console.print(0, 1, 'ATK:{:>3}'.format(player_stats['attack']), color)
+    console.print(8, 1, 'DEF:{:>3}'.format(player_stats['defense']), color)
+    console.print(0, 2, 'MAG:{:>3}'.format(player_stats['magic']), color)
+    console.print(8, 2, 'RES:{:>3}'.format(player_stats['resistance']), color)
+    console.print(0, 3, 'TRN:{:>3}'.format(world.turn), color)
+    console.print(8, 3, 'FLR:{:>3}'.format(world.map.floor), color)
 
     # Draw the item boxes.
     Q_color, W_color, E_color, A_color, S_color, D_color = color_invalid, color_invalid, color_invalid, color_invalid, color_invalid, color_invalid

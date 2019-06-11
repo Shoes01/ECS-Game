@@ -17,6 +17,7 @@ class SoulProcessor(esper.Processor):
         while not self.queue.empty():
             event = self.queue.get()
 
+            cancel = event.get('cancel')
             ent = event.get('ent')
             confirm = event.get('confirm')
             jar = event.get('jar')
@@ -40,5 +41,9 @@ class SoulProcessor(esper.Processor):
                 self.world.component_for_entity(ent, SoulComponent).np_soul += self.soul.np_soul
                 self.world.get_processor(processors.consumable.ConsumableProcessor).queue.put({'ent': ent, 'consumed': self.jar})
                 self.world.get_processor(StateProcessor).queue.put({'exit': True})
+                self.jar = None
+                self.soul = None
+
+            if cancel:
                 self.jar = None
                 self.soul = None

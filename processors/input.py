@@ -218,6 +218,7 @@ class InputProcessor(esper.Processor):
     def handle_soulstate_input(self, key_char, key_scancode):
         result = self.generic_move_keys(key_char, key_scancode)
         if key_scancode == libtcod.event.SCANCODE_ESCAPE:
+            self.world.get_processor(SoulProcessor).queue.put({'cancel': True})
             self.world.get_processor(StateProcessor).queue.put({'exit': True})
         elif result:
             self.world.get_processor(SoulProcessor).queue.put({'rotate': result['move']})

@@ -204,7 +204,7 @@ class GameWorld(esper.World):
                 PositionComponent(),
                 RenderComponent(char='@', color=ENTITY_COLORS['player']),
                 SoulComponent(eccentricity=5, max_rarity=10),
-                StatsComponent(hp=50, attack=10)
+                StatsComponent(hp=500, attack=10)
             )
         
         ent = super().create_entity()
@@ -233,6 +233,8 @@ class GameWorld(esper.World):
                 self.add_component(ent, BrainComponent())
             
             elif key == 'consumable':
+                if value is False:
+                    value == None
                 self.add_component(ent, ConsumableComponent(effects=value))
 
             elif key == 'energy':

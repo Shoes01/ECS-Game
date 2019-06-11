@@ -7,7 +7,7 @@
     {
         "archtype": "item",
 
-        "consumable": {"soul": ""},
+        "consumable": {"soul": false},
         "name": {"name": "Soul Jar"},
         "render": {"char": "!", "color": "con_jar"}
     }
