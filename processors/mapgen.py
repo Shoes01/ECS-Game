@@ -287,7 +287,6 @@ class MapgenProcessor(esper.Processor):
             fov_map.walkable[pos.x, pos.y] = not tile.blocks_path
             fov_map.transparent[pos.x, pos.y] = not tile.blocks_sight
         
-        self.world.get_processor(RenderProcessor).queue.put({'recompute_fov': True})
-        self.world.get_processor(RenderProcessor).queue.put({'redraw': True})
+        self.world.get_processor(RenderProcessor).queue.put({'recompute_fov': True, 'redraw': True})
         
         return fov_map

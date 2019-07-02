@@ -1,14 +1,18 @@
 import esper
 import tcod as libtcod
 
-from _data import DoubleLineBox, UI_COLORS, COLOR_THEME
+from _data import DoubleLineBox, UI_COLORS
 from processors.sub.character_sheet import render_character_sheet
 from processors.sub.entities import render_entities
+from processors.sub.game_over import render_game_over
+from processors.sub.main_menu import render_main_menu
 from processors.sub.message_log import render_message_log
 from processors.sub.popup_menu import render_popup_menu
+from processors.sub.skill_display import render_skill_display
 from processors.sub.soul_sheet import render_soul_sheet
 from processors.sub.stats import render_stats
 from processors.sub.tooltips import render_tooltips
+from processors.sub.victory import render_victory_screen
 from queue import Queue
 
 class RenderProcessor(esper.Processor):
@@ -19,19 +23,17 @@ class RenderProcessor(esper.Processor):
         self.queue.put({'redraw': True})
     
     def process(self):
-        self.render_border()
-        
         _recompute_fov = False
         _redraw = False
 
         while not self.queue.empty():
             event = self.queue.get()
 
-            if event.get('recompute_fov'):
-                _recompute_fov = True
-            elif event.get('redraw'):
-                _redraw = True
-            elif event.get('item'):
+            _recompute_fov = event.get('recompute_fov')
+            _redraw = event.get('redraw')
+            _soul = event.get('soul')
+
+            if event.get('item'):
                 self.item = event['item']
             elif event.get('item') is False:
                 self.item = None
@@ -39,29 +41,13 @@ class RenderProcessor(esper.Processor):
         if not _redraw:
             return 0
 
-        # Draw pretty much all game elements.
-        render_stats(self.world)
-        render_entities(self.world, _recompute_fov)
-        render_popup_menu(self.world)
-        render_message_log(self.world, self.item)
-        render_tooltips(self.world)
-        render_character_sheet(self.world)
-        render_soul_sheet(self.world)
+        # Draw the borders.
+        self.render_border()
 
-        # Draw the gameover overlay.
-        if self.world.state == 'GameOver':
-            libtcod.console_set_color_control(libtcod.COLCTRL_1, COLOR_THEME['BrightRed'], COLOR_THEME['Red'])
-            self.world.consoles['map'][0].print(3, 3, 'You have %cDIED%c! Press ESC to return to the Main Menu.' % (libtcod.COLCTRL_1, libtcod.COLCTRL_STOP), UI_COLORS['text_mainmenu'], bg_blend=libtcod.BKGND_NONE)
-        
-        # Draw the main menu.
-        elif self.world.state == 'MainMenu':
-            _string = 'Welcome to the Main Menu.\n\nPress ENTER to begin.\nPress L to load the last save.\n\nPress ESC to quit.'
-            self.world.consoles['map'][0].print(3, 3, _string, UI_COLORS['text_mainmenu'])
-
-        # Draw the victory screen
-        elif self.world.state == 'VictoryScreen':
-            _string = 'You have won! Press ESC to return to the Main Menu.'
-            self.world.consoles['map'][0].print(3, 3, _string, UI_COLORS['text_mainmenu'])
+        # Draw each console.
+        self.draw_stats(console=self.world.consoles['stats'], state=self.world.state, world=self.world)
+        self.draw_log(console=self.world.consoles['log'], item=self.item, state=self.world.state, world=self.world)
+        self.draw_map(console=self.world.consoles['map'], recompute_fov=_recompute_fov, state=self.world.state, soul=_soul, world=self.world)
 
         # Blit the consoles.
         for key, value in self.world.consoles.items():
@@ -75,6 +61,39 @@ class RenderProcessor(esper.Processor):
         # Clear the consoles.
         for key, value in self.world.consoles.items():
             value[0].clear()
+        
+
+    def draw_stats(self, console, state, world):
+        if state != 'MainMenu':
+            render_stats(console, world)
+    
+    def draw_log(self, console, item, state, world):
+        if state == 'SkillTargeting':
+            render_skill_display(console, item, world)
+        elif state != 'MainMenu':
+            render_message_log(console, world)
+
+    def draw_map(self, console, recompute_fov, state, soul, world):
+        # Splash screen.
+        if state == 'MainMenu':
+            render_main_menu(console)
+        
+        # Main game content.
+        if state != 'MainMenu' and state != 'PopupMenu':
+            render_entities(console, recompute_fov, world)
+            render_tooltips(console, world)
+        
+        # Various menus.
+        if state == 'ViewCharacterSheet':
+            render_character_sheet(console, world)
+        elif state == 'PopupMenu':
+            render_popup_menu(console, world)
+        elif state == 'SoulState' and soul:
+            render_soul_sheet(console, soul, world)
+        elif state == 'GameOver':
+            render_game_over(console)
+        elif state == 'VictoryScreen':
+            render_victory_screen(console)
 
     def render_border(self):
         if self.world.state == 'MainMenu':

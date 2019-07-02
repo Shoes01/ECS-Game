@@ -5,8 +5,8 @@ class ItemSkillComponent():
         ' Skill data. '
         self.cooldown = cooldown
         self.cooldown_remaining = 0
-        self.cost_energy = cost_energy
-        self.cost_soul = cost_soul
+        self.cost_energy = cost_energy # Type: int
+        self.cost_soul = cost_soul # Type: dict{'stat': int}
         self.description = description
         self.name = name
         self.damage_type = damage_type

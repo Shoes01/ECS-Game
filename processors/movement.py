@@ -36,10 +36,11 @@ class MovementProcessor(esper.Processor):
 
             if len(occupying_entity) == 1:
                 success = False
+                # TODO: Bump attacks are always physical at the moment.
                 self.world.get_processor(CombatProcessor).queue.put({'ent': ent, 'defender_IDs': occupying_entity})
             
             if self.world.has_component(ent, PlayerComponent):
-                self.world.get_processor(RenderProcessor).queue.put({'recompute_fov': True})
+                self.world.get_processor(RenderProcessor).queue.put({'recompute_fov': True, 'redraw': True})
                 self.world.get_processor(DijkstraProcessor).queue.put({'update_dijkstra': True})
 
                 # Player may run into walls, whereas AI uses the dijkstra map to navigate.

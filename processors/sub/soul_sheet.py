@@ -3,15 +3,11 @@ import numpy as np
 from _data import UI_COLORS
 from _helper_functions import as_integer
 from components.soul import SoulComponent
-import processors.soul # Avoid cyclical import
 
-def render_soul_sheet(world):
-    if world.state is not 'SoulState':
-        return 0
-    
-    console, _, _, w, h = world.consoles['map']
+def render_soul_sheet(console_object, soul, world):
+    console, _, _, w, h = console_object
     color = UI_COLORS['text']
-    new_soul = world.get_processor(processors.soul.SoulProcessor).soul
+    new_soul = soul
     player_soul = world.component_for_entity(1, SoulComponent).soul
     titles = {
         'hp': 'Health:',

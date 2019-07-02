@@ -25,6 +25,9 @@ class CombatProcessor(esper.Processor):
 
             att_ren = self.world.component_for_entity(attacker_ID, RenderComponent)
             att_stats = generate_stats(attacker_ID, self.world)
+            damage_type = 'physical'
+            if skill:
+                damage_type = skill.damage_type
 
             for defender_ID in defender_IDs:
                 if not self.world.has_component(defender_ID, ActorComponent):
@@ -37,19 +40,13 @@ class CombatProcessor(esper.Processor):
 
                 double_attack = att_stats['speed'] - 5 > def_stats['speed']
 
-                if skill:
-                    damage_type = skill # Eventually the skill tuple will contain more information...
-                    if damage_type == 'physical':
-                        damage = att_stats['attack'] - def_stats['defense']
-                    elif damage_type == 'magical':
-                        damage = att_stats['magic'] - def_stats['resistance']
-                else:
-                    # Hitting a monster with the item will always deal physical damage.
-                    # Future exceptions: wands could use charges to zap.
+                if damage_type == 'physical':
                     damage = att_stats['attack'] - def_stats['defense']
-
-                    if double_attack:
-                        damage += damage # Deal double damage
+                elif damage_type == 'magical':
+                    damage = att_stats['magic'] - def_stats['resistance']
+                
+                if double_attack and not skill:
+                    damage += damage # Deal double damage
                 
                 if damage > 0:
                     self.world.component_for_entity(defender_ID, StatsComponent).hp -= damage

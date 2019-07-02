@@ -5,8 +5,8 @@ from components.item.consumable import ConsumableComponent
 from components.name import NameComponent
 from components.stats import StatsComponent
 from menu import PopupMenu, PopupChoice
-import processors.energy # Also to avoid cyclical import...
-import processors.soul # Avoid cyc error
+from processors.energy import EnergyProcessor
+from processors.soul import SoulProcessor
 from processors.state import StateProcessor
 from queue import Queue
 
@@ -30,7 +30,7 @@ class ConsumableProcessor(esper.Processor):
                 self.world.messages.append({'consume': (name, success, turn)})
                 self.world.component_for_entity(ent, InventoryComponent).inventory.remove(consumed)
                 self.world.delete_entity(consumed)
-                self.world.get_processor(processors.energy.EnergyProcessor).queue.put({'ent': ent, 'consume': True})
+                self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'consume': True})
                 continue
 
             if not item:
@@ -70,4 +70,4 @@ class ConsumableProcessor(esper.Processor):
                 self.queue.put({'consumed': item})
             
             elif key == 'soul':
-                self.world.get_processor(processors.soul.SoulProcessor).queue.put({'soul': value, 'jar': item})
+                self.world.get_processor(SoulProcessor).queue.put({'soul': value, 'jar': item})

@@ -44,7 +44,7 @@ class SkillProcessor(esper.Processor):
                     results = self.get_tiles(ent)
                     self.highlight_tiles(results['tiles'])
                     self.world.get_processor(StateProcessor).queue.put({'skill_targeting': True})
-                    self.world.get_processor(RenderProcessor).queue.put({'item': self._item})
+                    self.world.get_processor(RenderProcessor).queue.put({'item': self._item, 'redraw': True})
 
             elif move:
                 (dx, dy) = move
@@ -67,12 +67,11 @@ class SkillProcessor(esper.Processor):
                 self._item = None
                 self._direction = None
                 self.world.get_processor(StateProcessor).queue.put({'exit': True})
-                self.world.get_processor(RenderProcessor).queue.put({'item': False})
+                self.world.get_processor(RenderProcessor).queue.put({'item': False, 'redraw': True})
 
     def find_item(self, ent, slot):
         eqp = self.world.component_for_entity(ent, EquipmentComponent)
         has_item = False
-        legal_item = False
         name = None
         on_cooldown = False
         turn = self.world.turn
@@ -230,14 +229,13 @@ class SkillProcessor(esper.Processor):
     
         # Fire the skill!
         if results['targets']:            
-            _damage_type = skill_comp.damage_type
-            self.world.get_processor(CombatProcessor).queue.put({'ent': ent, 'defender_IDs': results['targets'], 'skill': _damage_type})
+            self.world.get_processor(CombatProcessor).queue.put({'ent': ent, 'defender_IDs': results['targets'], 'skill': skill_comp})
         elif results['destination']:
             tile_pos = self.world.component_for_entity(results['destination'], PositionComponent)
             ent_pos = self.world.component_for_entity(ent, PositionComponent)
             dx = tile_pos.x - ent_pos.x
             dy = tile_pos.y - ent_pos.y
-            self.world.get_processor(MovementProcessor).queue.put({'ent': ent, 'move': (dx, dy), 'skill': True})
+            self.world.get_processor(MovementProcessor).queue.put({'ent': ent, 'move': (dx, dy), 'skill': skill_comp})
             self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'skill': skill_comp.cost_energy})
         
         self.world.messages.append({'skill': (error, name, turn)})

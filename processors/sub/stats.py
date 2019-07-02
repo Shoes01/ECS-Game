@@ -5,11 +5,8 @@ from components.item.skill import ItemSkillComponent
 from components.item.slot import SlotComponent
 from components.render import RenderComponent
 
-def render_stats(world):
-    if world.state == 'MainMenu':
-        return 0
-        
-    console, x, y, w, h = world.consoles['stats']
+def render_stats(console_object, world):
+    console = console_object[0]
     
     color = UI_COLORS['text']
     color_invalid = UI_COLORS['text_invalid']
@@ -43,7 +40,7 @@ def render_stats(world):
         boxes[slot] = item
 
     # Render the item boxes.
-    x, y = 2, 0
+    x, y = 4, 0
     y_offset = 4
     i = 0
     j = 0
@@ -57,8 +54,10 @@ def render_stats(world):
             render_comp = world.component_for_entity(item, RenderComponent)
             if world.has_component(item, ItemSkillComponent):
                 cooldown = world.component_for_entity(item, ItemSkillComponent).cooldown_remaining
+                if cooldown:
+                    char_color = UI_COLORS['cooldown']
         
-        draw_letter_box(2 + i, 0 + y_offset + j, 4, 4, box_char[slot], console, char_color, render_comp, cooldown)
+        draw_letter_box(x + i, y + y_offset + j, 4, 4, box_char[slot], console, char_color, render_comp, cooldown)
 
         i += 4
         if i == 12:
@@ -86,4 +85,4 @@ def draw_letter_box(x, y, w, h, char, console, color, item, cooldown):
     if item:
         console.print(x + 2, y + 1, item.char, item.color)
         if cooldown:
-            console.print(x + 2, y + 2, str(cooldown), UI_COLORS['cooldown'])
+            console.print(x + 2, y + 2, str(cooldown), color)

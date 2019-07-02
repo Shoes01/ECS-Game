@@ -55,7 +55,7 @@
     "headbutt":{
         "cooldown": 3,
         "cost_energy": 1,
-        "cost_soul": {"health": 1},
+        "cost_soul": {"hp": 1},
         "description": "Use your head for something.",
         "damage_type": "physical",
         "east":

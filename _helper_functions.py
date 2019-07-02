@@ -26,6 +26,8 @@ def as_decimal(number, signed=False):
 
     if string == '0':
         string = '0.0'
+    elif len(string) == 1:
+        string = "0." + string
     else:
         string = string[:-1] + '.' + string[-1]
 
