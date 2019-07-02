@@ -1,6 +1,6 @@
 import esper
 
-from _helper_functions import generate_stats
+from _helper_functions import as_integer, generate_stats
 from components.actor.actor import ActorComponent
 from components.render import RenderComponent
 from components.stats import StatsComponent
@@ -38,10 +38,10 @@ class CombatProcessor(esper.Processor):
                 double_attack = att_stats['speed'] - 5 > def_stats['speed']
 
                 if skill:
-                    nature = skill # Eventually the skill tuple will contain more information...
-                    if nature == 'physical':
+                    damage_type = skill # Eventually the skill tuple will contain more information...
+                    if damage_type == 'physical':
                         damage = att_stats['attack'] - def_stats['defense']
-                    elif nature == 'magical':
+                    elif damage_type == 'magical':
                         damage = att_stats['magic'] - def_stats['resistance']
                 else:
                     # Hitting a monster with the item will always deal physical damage.
@@ -63,4 +63,4 @@ class CombatProcessor(esper.Processor):
                     self.world.get_processor(EnergyProcessor).queue.put({'ent': attacker_ID, 'bump_attack': True})
                     self.queue.put({'ent': defender_ID, 'defender_IDs': [attacker_ID], 'counter_attack': True})
 
-                self.world.messages.append({'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, damage, counter_attack, double_attack, self.world.turn)})
+                self.world.messages.append({'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, as_integer(damage), counter_attack, double_attack, self.world.turn)})

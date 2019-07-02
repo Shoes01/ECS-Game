@@ -150,17 +150,21 @@ def render_message_log(world, item):
                 console.print(0, 0 + dy, '(Turn %s) You are not wearing your %s!' % (turn, name), LOG_COLORS['failure'])
 
         elif _skill:
-            has_item, legal_item, legal_target, legal_tile, name, turn = _skill
+            error, name, turn = _skill
 
-            if not has_item:
+            if error == 'on_cooldown':
+                console.print(0, 0 + dy, "(Turn %s) The %s's skill is on cooldown!" % (turn, name), LOG_COLORS['failure'])
+            elif error == 'no_item':
                 console.print(0, 0 + dy, '(Turn %s) No valid item found.' % (turn), LOG_COLORS['failure'])
-            elif not legal_item:
+            elif error == 'no_legal_item':
                 console.print(0, 0 + dy, '(Turn %s) The %s has no skill.' % (turn, name), LOG_COLORS['failure'])
-            elif not legal_tile:
+            elif error == 'no_legal_tile':
                 console.print(0, 0 + dy, '(Turn %s) There is something in your way.' % (turn), LOG_COLORS['failure'])
-            elif not legal_target:
+            elif error == 'no_legal_target':
                 console.print(0, 0 + dy, '(Turn %s) No valid target found.' % (turn), LOG_COLORS['failure'])
-            elif legal_item and legal_target and legal_tile:
+            elif error == 'no_currency':
+                console.print(0, 0 + dy, '(Turn %s) You do not have enough points to use %s!' % (turn, name), LOG_COLORS['failure'])
+            else:
                 console.print(0, 0 + dy, '(Turn %s) You use your %s skill!' % (turn, name), LOG_COLORS['success'])
 
         elif _wear:

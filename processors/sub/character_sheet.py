@@ -1,8 +1,8 @@
 from _data import UI_COLORS
-from _helper_functions import generate_stats
+from _helper_functions import as_decimal, as_integer, generate_stats
 from components.actor.equipment import EquipmentComponent
 from components.item.skill import ItemSkillComponent
-from components.item.slot import SlotComponent
+from components.item.slot import SlotComponent 
 from components.name import NameComponent
 from components.soul import SoulComponent
 from components.stats import StatsComponent
@@ -42,7 +42,7 @@ def render_character_sheet(world):
     console.print(x - 1, y - 1, 'Base Stats:', color)
     i = 0
     for key in titles:
-        console.print(x, y + i, f"{titles[key]:8} {player_base_stats[key]:3}", color)
+        console.print(x, y + i, f"{titles[key]:8} {as_decimal(player_base_stats[key]):>5}", color)
         i += 1
 
     # Print soul stats.
@@ -50,7 +50,7 @@ def render_character_sheet(world):
     console.print(x - 1, y - 1, 'Soul Stats:', color)
     i = 0
     for key in titles:
-        console.print(x, y + i, f"{titles[key]:8} {soul_stats[key]:3}", color)
+        console.print(x, y + i, f"{titles[key]:8} {as_integer(soul_stats[key]):>3}", color)
         i += 1
 
     # Print total stats.
@@ -58,7 +58,10 @@ def render_character_sheet(world):
     console.print(x - 1, y - 1, 'Total Stats:', color)    
     i = 0
     for key in titles:
-        console.print(x, y + i, f"{titles[key]:8} {player_stats[key]:3} ({player_base_stats[key]:3} + {soul_stats[key]:3})", color)
+        console.print(
+            x, y + i, 
+            f"{titles[key]:8} {as_decimal(player_stats[key]):>5} ({as_decimal(player_base_stats[key]):>5} + {as_integer(soul_stats[key]):>3})", 
+            color)
         i += 1
 
     # Displays item slots and their items

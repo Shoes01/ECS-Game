@@ -1,6 +1,7 @@
 import esper
 
 from _data import ENTITY_COLORS
+from _helper_functions import generate_stats
 from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
 from components.item.skill import ItemSkillComponent
@@ -8,8 +9,10 @@ from components.item.slot import SlotComponent
 from components.name import NameComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
+from components.stats import StatsComponent
 from components.tile import TileComponent
 from processors.combat import CombatProcessor
+from processors.cooldown import CooldownProcessor
 from processors.energy import EnergyProcessor
 from processors.movement import MovementProcessor
 from processors.render import RenderProcessor
@@ -71,23 +74,31 @@ class SkillProcessor(esper.Processor):
         has_item = False
         legal_item = False
         name = None
+        on_cooldown = False
         turn = self.world.turn
 
         for item in eqp.equipment:
             if slot == self.world.component_for_entity(item, SlotComponent).slot:
+                name = self.world.component_for_entity(item, NameComponent)._name
                 if self.world.has_component(item, ItemSkillComponent):
-                    return item
+                    if self.world.component_for_entity(item, ItemSkillComponent).cooldown_remaining == 0:
+                        return item
+                    else:
+                        on_cooldown = True
                 else:
                     has_item = True
-                    legal_item = False
-                    name = self.world.component_for_entity(item, NameComponent)._name
+                    legal_item = False                    
             else:
                 has_item = False
-        
-        if has_item:
-            self.world.messages.append({'skill': (has_item, legal_item, False, False, name, turn)})
+                
+        if on_cooldown:
+            error = 'on_cooldown'
+        elif has_item:
+            error = 'no_legal_item'
         else:
-            self.world.messages.append({'skill': (has_item, legal_item, False, False, name, turn)})
+            error = 'no_item'
+
+        self.world.messages.append({'skill': (error, name, turn)})
 
     def get_direction_name(self, direction):
         x, y = direction
@@ -187,30 +198,49 @@ class SkillProcessor(esper.Processor):
             self.world.component_for_entity(tile, RenderComponent).highlight_color = color
 
     def do_skill(self, ent, direction, item, results):
+        error = 'no_error'
         name = self.world.component_for_entity(item, NameComponent)._name
         turn = self.world.turn
 
+        # These are conditions under which the skill does not fire.
         if not results['legal_target']:
-            self.world.messages.append({'skill': (True, True, True, False, name, turn)}) # has_item, legal_item, legal_target, legal_tile, name, turn
+            error = 'no_legal_target'
+            self.world.messages.append({'skill': (error, name, turn)})
             return 0
         elif not results['targets'] and not results['destination']:
-            self.world.messages.append({'skill': (True, True, False, True, name, turn)})
+            error = 'no_legal_tile'
+            self.world.messages.append({'skill': (error, name, turn)})
             return 0
+
+        # Check to see if the costs can be paid.
+        skill_comp = self.world.component_for_entity(item, ItemSkillComponent)
+        ent_stats = generate_stats(ent, self.world)
+        for stat, cost in skill_comp.cost_soul.items():
+            if ent_stats[stat] <= 0:
+                error = 'no_currency'
+                self.world.messages.append({'skill': (error, name, turn)})
+                return 0
+        
+        # Pay the costs.
+        self.world.get_processor(CooldownProcessor).queue.put({'register': item})
+        self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'skill': skill_comp.cost_energy})
+        ent_stats_comp = self.world.component_for_entity(ent, StatsComponent)
+        for stat, cost in skill_comp.cost_soul.items():
+            ent_stats_comp.__dict__[stat] -= cost
     
-        if results['targets']:
-            skill_component = self.world.component_for_entity(item, ItemSkillComponent)
-            _skill = skill_component.nature
-            self.world.get_processor(CombatProcessor).queue.put({'ent': ent, 'defender_IDs': results['targets'], 'skill': _skill})
-            self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'skill': True})
+        # Fire the skill!
+        if results['targets']:            
+            _damage_type = skill_comp.damage_type
+            self.world.get_processor(CombatProcessor).queue.put({'ent': ent, 'defender_IDs': results['targets'], 'skill': _damage_type})
         elif results['destination']:
             tile_pos = self.world.component_for_entity(results['destination'], PositionComponent)
             ent_pos = self.world.component_for_entity(ent, PositionComponent)
             dx = tile_pos.x - ent_pos.x
             dy = tile_pos.y - ent_pos.y
             self.world.get_processor(MovementProcessor).queue.put({'ent': ent, 'move': (dx, dy), 'skill': True})
-            self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'skill': True})
+            self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'skill': skill_comp.cost_energy})
         
-        self.world.messages.append({'skill': (True, True, True, True, name, turn)})
+        self.world.messages.append({'skill': (error, name, turn)})
 
     def unhighlight_tiles(self, tiles):
         for tile, _ in tiles.items():

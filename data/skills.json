@@ -7,9 +7,11 @@
     ],
 
     "lunge":{
-        "cost": 20,
+        "cooldown": 5,
+        "cost_energy": 2,
+        "cost_soul": {"magic": 2},
         "description": "Lunge forward.",
-        "nature": "physical",
+        "damage_type": "physical",
         "east":
         [
             [0, 0, 0, 0, 0],
@@ -28,9 +30,11 @@
         ]
     },
     "cleave":{
-        "cost": 20,
+        "cooldown": 4,
+        "cost_energy": 2,
+        "cost_soul": {"magic": 4},
         "description": "A swinging swipe.",
-        "nature": "physical",
+        "damage_type": "physical",
         "east":
         [
             [0, 0, 0, 0, 0],
@@ -49,9 +53,11 @@
         ]
     },
     "headbutt":{
-        "cost": 10,
+        "cooldown": 3,
+        "cost_energy": 1,
+        "cost_soul": {"health": 1},
         "description": "Use your head for something.",
-        "nature": "physical",
+        "damage_type": "physical",
         "east":
         [
             [0, 0, 0, 0, 0],
@@ -70,7 +76,9 @@
         ]
     },
     "sprint":{
-        "cost": 10,
+        "cooldown": 2,
+        "cost_energy": 1,
+        "cost_soul": {"speed": 2},
         "description": "Sprint to a safer location.",
         "east":
         [

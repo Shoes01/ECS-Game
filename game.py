@@ -36,6 +36,7 @@ from components.tile import TileComponent
 from processors.ai_input import AiInputProcessor
 from processors.combat import CombatProcessor
 from processors.consumable import ConsumableProcessor
+from processors.cooldown import CooldownProcessor
 from processors.debug import DebugProcessor
 from processors.death import DeathProcessor
 from processors.descend import DescendProcessor
@@ -71,6 +72,7 @@ class GameWorld(esper.World):
         self.running = True
         self.state = 'MainMenu'
         self.ticker = 0
+        self.turn = 0
         self.toggle_debug_mode = False
         self._json_data = self.load_data()
 
@@ -81,10 +83,6 @@ class GameWorld(esper.World):
         self.consoles = None
         self.cursor = Cursor()
         self.map = Map()
-    
-    @property
-    def turn(self):
-        return self.ticker # // 10
 
     def build_world(self):
         ' Upkeep. '
@@ -113,6 +111,7 @@ class GameWorld(esper.World):
         self.add_processor(DijkstraProcessor(), 2)
         self.add_processor(EnergyProcessor(), 2)
         ' Endstep. '
+        self.add_processor(CooldownProcessor(), 2)
         self.add_processor(StateProcessor(), 1)
         self.add_processor(FinalProcessor(), 0)
 
@@ -160,6 +159,7 @@ class GameWorld(esper.World):
             self.messages = data_file['log']
             self.state = data_file['state']
             self.ticker = data_file['ticker']
+            self.turn = data_file['turn']
             self._components = data_file['components']
             self._entities = data_file['entities']
             self._next_entity_id = data_file['next_entity_id']
@@ -186,6 +186,7 @@ class GameWorld(esper.World):
             data_file['log'] = self.messages
             data_file['state'] = self.state
             data_file['ticker'] = self.ticker
+            data_file['turn'] = self.turn
             data_file['components'] = self._components
             data_file['entities'] = self._entities
             data_file['next_entity_id'] = self._next_entity_id
@@ -269,12 +270,14 @@ class GameWorld(esper.World):
 
             elif key == 'skill':
                 name = value
-                cost = self._json_data.get(name).get('cost')
+                cooldown = self._json_data.get(name).get('cooldown')
+                cost_energy = self._json_data.get(name).get('cost_energy')
+                cost_soul = self._json_data.get(name).get('cost_soul')
                 description = self._json_data.get(name).get('description')
-                nature = self._json_data.get(name).get('nature')
+                damage_type = self._json_data.get(name).get('damage_type')
                 east = self._json_data.get(name).get('east')
                 north_east = self._json_data.get(name).get('north_east')
-                self.add_component(ent, ItemSkillComponent(cost=cost, name=name, nature=nature, description=description, east=east, north_east=north_east))
+                self.add_component(ent, ItemSkillComponent(cooldown=cooldown, cost_energy=cost_energy, cost_soul=cost_soul, name=name, damage_type=damage_type, description=description, east=east, north_east=north_east))
 
             elif key == 'slot':
                 slot = value.get('slot')

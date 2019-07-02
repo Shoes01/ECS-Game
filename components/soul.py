@@ -7,6 +7,8 @@ class SoulComponent:
     The stats are decided in this way:
     [[  HP, ATK, MAG],
      [ SPD, DEF, RES]]
+
+    Values get * 10'd in order to use pseudo decimals.
     """
     def __init__(self, eccentricity, max_rarity):
         self.eccentricity = eccentricity
@@ -29,7 +31,7 @@ class SoulComponent:
     def generate_soul(self):
         attempts = 0
         eccentricity = self.eccentricity
-        rarity = random.randint(-2, self.max_rarity) # -2 is the floor for max_rarity: it represents Zombie
+        rarity = random.randint(-2, self.max_rarity) * 10 # -2 is the floor for max_rarity: it represents Zombie
         soul_attempt = np.zeros((2, 3), dtype=int, order='F')
 
         if eccentricity * 6 < rarity:
@@ -39,7 +41,7 @@ class SoulComponent:
         while attempts < 400:
             with np.nditer(soul_attempt, op_flags=['readwrite']) as it:
                 for x in it:
-                    x[...] = random.randint(-eccentricity, eccentricity)
+                    x[...] = random.randint(-eccentricity, eccentricity) * 10
             
             if soul_attempt.sum() == rarity:
                 return soul_attempt

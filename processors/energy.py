@@ -1,7 +1,9 @@
 import esper
 
+from _data import TICKS_PER_TURN
 from components.actor.energy import EnergyComponent
 from components.actor.player import PlayerComponent
+from processors.cooldown import CooldownProcessor
 from processors.render import RenderProcessor
 from queue import Queue
 
@@ -42,16 +44,21 @@ class EnergyProcessor(esper.Processor):
             elif _remove:
                 self.world.component_for_entity(ent, EnergyComponent).energy += 1
             elif _skill:
-                self.world.component_for_entity(ent, EnergyComponent).energy += 1
+                self.world.component_for_entity(ent, EnergyComponent).energy += _skill
             elif _wait:
                 self.world.component_for_entity(ent, EnergyComponent).energy += 1
             elif _wear:
                 self.world.component_for_entity(ent, EnergyComponent).energy += 1
         
+        # Prevent the ticker from ticking if the player is sitting at 0 energy (aka, hasn't acted yet).
         if self.world.component_for_entity(1, EnergyComponent).energy == 0:
             return 0
 
         self.world.ticker += 1
+
+        if self.world.ticker % TICKS_PER_TURN == 0:
+            self.world.turn += 1
+            self.world.get_processor(CooldownProcessor).queue.put({'tick': True})
 
         for ent, (eng) in self.world.get_component(EnergyComponent):
             if eng.energy > 0:

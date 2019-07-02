@@ -1,6 +1,7 @@
 from _data import SingleLineBox, UI_COLORS
-from _helper_functions import generate_stats
+from _helper_functions import as_decimal, generate_stats
 from components.actor.equipment import EquipmentComponent
+from components.item.skill import ItemSkillComponent
 from components.item.slot import SlotComponent
 from components.render import RenderComponent
 
@@ -15,49 +16,56 @@ def render_stats(world):
     
     # Draw the player stats.
     player_stats = generate_stats(1, world)
+    stats = {'hp': 'HP', 'speed': 'SPD', 'attack': 'ATK', 'defense': 'DEF', 'magic': 'MAG', 'resistance': 'RES'}
+    x_offset, y_offset = 0, 0
 
-    console.print(0, 0, 'HP:{:>4}'.format(player_stats['hp']), color)
-    console.print(8, 0, 'SPD:{:>3}'.format(player_stats['speed']), color)
-    console.print(0, 1, 'ATK:{:>3}'.format(player_stats['attack']), color)
-    console.print(8, 1, 'DEF:{:>3}'.format(player_stats['defense']), color)
-    console.print(0, 2, 'MAG:{:>3}'.format(player_stats['magic']), color)
-    console.print(8, 2, 'RES:{:>3}'.format(player_stats['resistance']), color)
-    console.print(0, 3, 'TRN:{:>3}'.format(world.turn), color)
-    console.print(8, 3, 'FLR:{:>3}'.format(world.map.floor), color)
+    for stat, name in stats.items():
+        if name == 'HP':
+            console.print(x_offset, y_offset, f"{name}:{as_decimal(player_stats[stat]):>6}", color)    
+        else:
+            console.print(x_offset, y_offset, f"{name}:{as_decimal(player_stats[stat]):>5}", color)
+
+        x_offset += 10
+        if x_offset == 20:
+            x_offset = 0
+            y_offset += 1
+
+    console.print( 0, 3, 'TRN:{:>5}'.format(world.turn), color)
+    console.print(10, 3, 'FLR:{:>5}'.format(world.map.floor), color)
 
     # Draw the item boxes.
-    Q_color, W_color, E_color, A_color, S_color, D_color = color_invalid, color_invalid, color_invalid, color_invalid, color_invalid, color_invalid
-    Q_item, W_item, E_item, A_item, S_item, D_item = None, None, None, None, None, None
+    boxes = {'mainhand': None ,'head': None, 'accessory': None, 'offhand': None, 'torso': None, 'feet': None}
+    box_char = {'mainhand': 'Q' ,'head': 'W', 'accessory': 'E', 'offhand': 'A', 'torso': 'S', 'feet': 'D'}
+
+    # Figure out which items are in which slots.
     for item in world.component_for_entity(1, EquipmentComponent).equipment:
         slot = world.component_for_entity(item, SlotComponent).slot
-        if slot == 'mainhand':
-            Q_color = color
-            Q_item = world.component_for_entity(item, RenderComponent)
-        elif slot == 'head':
-            W_color = color
-            W_item = world.component_for_entity(item, RenderComponent)
-        elif slot == 'accessory':
-            E_color = color
-            E_item = world.component_for_entity(item, RenderComponent)
-        elif slot == 'offhand':
-            A_color = color
-            A_item = world.component_for_entity(item, RenderComponent)
-        elif slot == 'torso':
-            S_color = color
-            S_item = world.component_for_entity(item, RenderComponent)
-        elif slot == 'feet':
-            D_color = color
-            D_item = world.component_for_entity(item, RenderComponent)
+        boxes[slot] = item
 
+    # Render the item boxes.
+    x, y = 2, 0
     y_offset = 4
-    draw_letter_box(2, 0 + y_offset, 4, 4, 'Q', console, Q_color, Q_item) # Slot: mainhand
-    draw_letter_box(6, 0 + y_offset, 4, 4, 'W', console, W_color, W_item) # Slot: head
-    draw_letter_box(10, 0 + y_offset, 4, 4, 'E', console, E_color, E_item) # Slot: accessory
-    draw_letter_box(2, 4 + y_offset, 4, 4, 'A', console, A_color, A_item) # Slot: offhand
-    draw_letter_box(6, 4 + y_offset, 4, 4, 'S', console, S_color, S_item) # Slot: torso
-    draw_letter_box(10, 4 + y_offset, 4, 4, 'D', console, D_color, D_item) # Slot: feet
+    i = 0
+    j = 0
+    for slot, item in boxes.items():
+        char_color = color_invalid
+        render_comp = None
+        cooldown = None
+        
+        if item:
+            char_color = color
+            render_comp = world.component_for_entity(item, RenderComponent)
+            if world.has_component(item, ItemSkillComponent):
+                cooldown = world.component_for_entity(item, ItemSkillComponent).cooldown_remaining
+        
+        draw_letter_box(2 + i, 0 + y_offset + j, 4, 4, box_char[slot], console, char_color, render_comp, cooldown)
 
-def draw_letter_box(x, y, w, h, char, console, color, item):
+        i += 4
+        if i == 12:
+            i = 0
+            j = 4
+
+def draw_letter_box(x, y, w, h, char, console, color, item, cooldown):
     # Draw the little box, and put the letter in it.
     box = SingleLineBox()
     
@@ -77,3 +85,5 @@ def draw_letter_box(x, y, w, h, char, console, color, item):
     console.print(x + 1, y + 1, char, color)
     if item:
         console.print(x + 2, y + 1, item.char, item.color)
+        if cooldown:
+            console.print(x + 2, y + 2, str(cooldown), UI_COLORS['cooldown'])

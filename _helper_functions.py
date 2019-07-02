@@ -20,3 +20,32 @@ def generate_stats(ent, world):
         ent_stats.update(ent_soul)
 
     return dict(ent_stats)
+
+def as_decimal(number, signed=False):
+    string = str(number)
+
+    if string == '0':
+        string = '0.0'
+    else:
+        string = string[:-1] + '.' + string[-1]
+
+    if signed:
+        if number >= 0:
+            string = '+' + string
+    
+    return string
+
+def as_integer(number, signed=False):
+    string = str(number)
+
+    if string != '0':
+        string = string[:-1]
+    elif string[-1] != '0':
+        print('HOLD UP: This digit should be 0, not {}'.format(string[-1]))
+        
+    if signed:
+        if number >= 0:
+            string = '+' + string
+    
+    return string
+

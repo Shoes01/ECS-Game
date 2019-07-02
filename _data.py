@@ -3,6 +3,7 @@ from collections import namedtuple
 ### GAME MAP DATA
 
 FINAL_FLOOR = 2
+TICKS_PER_TURN = 1
 
 ### CONSOLE DIMENSION DATA
 
@@ -12,7 +13,7 @@ border = 1
 
 CON_W = 80
 CON_H = 60
-EQP_W = 16
+EQP_W = 20
 EQP_H = 12
 
 """
@@ -21,9 +22,9 @@ con
 +-----------+
 |map        |
 |           |
-+---+-------+
-|eqp|log    |
-+---+-------+
++----+------+
+|eqp |log   |
++----+------+
 
 """
 
@@ -141,6 +142,7 @@ LOG_COLORS = {
 UI_COLORS = {
     'border_main': COLOR_THEME['BrightWhite'],
     'border_secondary': COLOR_THEME['White'],
+    'cooldown': COLOR_THEME['Red'],
     'cursor': COLOR_THEME['Yellow'],
     'bg': COLOR_THEME['Black'],
     'fg': COLOR_THEME['BrightWhite'],

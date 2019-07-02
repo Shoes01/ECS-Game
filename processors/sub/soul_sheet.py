@@ -1,6 +1,7 @@
 import numpy as np
 
 from _data import UI_COLORS
+from _helper_functions import as_integer
 from components.soul import SoulComponent
 import processors.soul # Avoid cyclical import
 
@@ -26,7 +27,7 @@ def render_soul_sheet(world):
 
     # Print player soul and new soul.
     x, y = 3, 5
-    offset = 25
+    offset = 30
     row = 0
     col = 0
     console.print(x - 1, y - 1, 'New Player Soul:', color)
@@ -34,8 +35,8 @@ def render_soul_sheet(world):
 
     i = 0
     for key in titles:
-        console.print(x, y + i, f"{titles[key]:8} {player_soul[key]:3} ({new_soul.soul[key]:+3})", color)
-        console.print(x + offset + row, y + col, f"{titles[key]:8} {new_soul.soul[key]:+3}", color)
+        console.print(x, y + i, f"{titles[key]:8} {as_integer(player_soul[key]):>3} ({as_integer(new_soul.soul[key], signed=True):>3})", color)
+        console.print(x + offset + row, y + col, f"{titles[key]:8} {as_integer(new_soul.soul[key], signed=True):>3}", color)
         i += 1
         row += 13
         if i == 3:
