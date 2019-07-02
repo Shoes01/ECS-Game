@@ -8,8 +8,6 @@ from components.name import NameComponent
 
 def render_message_log(console_object, world):        
     console, x, y, w, h = console_object
-
-    
     
     # Draw the regular message log.
     console, x, y, w, h = world.consoles['log']

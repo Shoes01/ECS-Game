@@ -5,6 +5,7 @@ import shelve
 
 from _data import ENTITY_COLORS
 from cursor import Cursor
+from load_tileset import load_tileset
 from map import Map
 from typing import Type
 
@@ -72,6 +73,7 @@ class GameWorld(esper.World):
         self.running = True
         self.state = 'MainMenu'
         self.ticker = 0
+        self.tiles = load_tileset()
         self.turn = 0
         self.toggle_debug_mode = False
         self._json_data = self.load_data()
@@ -203,7 +205,7 @@ class GameWorld(esper.World):
                 PersistComponent(),
                 PlayerComponent(),
                 PositionComponent(),
-                RenderComponent(char='@', color=ENTITY_COLORS['player']),
+                RenderComponent(bg_color=None, char='@', codepoint=126, color=ENTITY_COLORS['player'], explored_color=None),
                 SoulComponent(eccentricity=5, max_rarity=10),
                 StatsComponent(hp=500, attack=10)
             )
@@ -263,10 +265,12 @@ class GameWorld(esper.World):
                 self.add_component(ent, RarityComponent(rarity=rarity))
 
             elif key == 'render':
+                bg_color = value.get('bg_color')
                 char = value.get('char')
+                codepoint = value.get('codepoint')
                 color = value.get('color')
                 explored_color = value.get('explored_color')
-                self.add_component(ent, RenderComponent(char=char, color=ENTITY_COLORS[color], explored_color=ENTITY_COLORS.get(explored_color)))
+                self.add_component(ent, RenderComponent(bg_color=ENTITY_COLORS.get(bg_color), char=char, codepoint=codepoint, color=ENTITY_COLORS[color], explored_color=ENTITY_COLORS.get(explored_color)))
 
             elif key == 'skill':
                 name = value

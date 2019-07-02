@@ -11,8 +11,8 @@ Rectangle = namedtuple('Rectangle', ['x', 'y', 'w', 'h'])
 
 border = 1
 
-CON_W = 80
-CON_H = 60
+CON_W = 60
+CON_H = 40
 EQP_W = 20
 EQP_H = 12
 
@@ -105,7 +105,8 @@ ENTITY_COLORS = {
     'chest': COLOR_THEME['Yellow'],
     'con_jar': COLOR_THEME['BrightCyan'],
     'corpse': COLOR_THEME['BrightRed'],
-    'floor': COLOR_THEME['White'],
+    'floor': COLOR_THEME['BrightGreen'],
+    'floor_bg': COLOR_THEME['Green'],
     'floor_explored': COLOR_THEME['BrightBlack'],
     'mon_demon': COLOR_THEME['Red'],
     'mon_goblin': COLOR_THEME['Yellow'],
@@ -124,6 +125,7 @@ ENTITY_COLORS = {
     'stairs': COLOR_THEME['White'],
     'stairs_explored': COLOR_THEME['BrightBlack'],
     'wall': COLOR_THEME['White'],
+    'wall_bg': COLOR_THEME['Black'],
     'wall_explored': COLOR_THEME['BrightBlack'],
     'weapon': COLOR_THEME['Blue']
 }

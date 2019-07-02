@@ -6,7 +6,7 @@ from game import GameWorld
 
 def main():
     # Prepare console.
-    libtcod.console_set_custom_font('rexpaint_cp437_10x10.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_CP437)
+    libtcod.console_set_custom_font('16x16-sb-ascii.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_CP437)
     consoles = {}
     consoles['con'] = (libtcod.console_init_root(con.w, con.h, title='ECS Game', order='F', renderer=libtcod.RENDERER_SDL2), con.x, con.y, con.w, con.h)
     consoles['stats'] = (libtcod.console.Console(eqp.w, eqp.h, order='F'), eqp.x, eqp.y, eqp.w, eqp.h)
@@ -20,7 +20,7 @@ def main():
     while world.running:
         # Do literally everything.
         world.process()
-    
+        
     print('\n\n    Goodbye.\n')
 
 if __name__ == '__main__':
