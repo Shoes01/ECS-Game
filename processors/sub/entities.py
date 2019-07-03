@@ -78,7 +78,7 @@ def render_entities(console_object, recompute_fov, world):
         console.print(cursor.x, cursor.y, cursor.char, cursor.color)
 
 def print_tile_special(console, pos, ren, _entity_directory, world):
-    x, y = pos.x*2, pos.y*2
+    x, y = pos.x*MULTIPLIER, pos.y*MULTIPLIER
     fg = ren.color + (255,)
     bg = ren.bg_color + (255,)
     multiplier = MULTIPLIER
@@ -102,7 +102,7 @@ def print_tile_special(console, pos, ren, _entity_directory, world):
                 iter += 1
 
 def print_tile(console, pos, ren, _entity_directory):
-    x, y = pos.x*2, pos.y*2
+    x, y = pos.x*MULTIPLIER, pos.y*MULTIPLIER
     fg = ren.color + (255,)
     bg = ren.bg_color + (255,)
     multiplier = MULTIPLIER
