@@ -4,8 +4,7 @@ import numpy as np
 
 def load_tileset():    
     # Prep tilesheet.
-    w, h = 16, 16
-    iterator = 0
+    w, h = 16, 16 # w and h of a tile from the sheets.
     t = tcod.tileset.Tileset(w, h)
     cp437 = np.array(
         [
@@ -44,34 +43,40 @@ def load_tileset():
         ], order='F'
     )
 
+    # Prepare font sheet.
     im = Image.open('16x16-sb-ascii.png').convert('RGBA')
     nim = np.array(im)[:, :, 0] # Remove the rgba component.
-    
-    dim = 16
-    for x in range(0, dim):
-        for y in range(0, dim):
-            x_0 = x*w
-            x_1 = (x+1)*w
-            y_0 = y*h
-            y_1 = (y+1)*h
-            t.set_tile(cp437[iterator], nim[x_0:x_1, y_0:y_1])
-            iterator += 1
+    tx, ty = nim.shape
 
+    # Slice up font sheet.
+    iterator = 0
+    for x in range(0, tx):
+        if x % 16 == 0:
+            for y in range(0, ty):
+                if y % 16 == 0:
+                    x_0 = x
+                    x_1 = x + w
+                    y_0 = y
+                    y_1 = y + h
+                    t.set_tile(cp437[iterator], nim[x_0:x_1, y_0:y_1])
+                    iterator += 1
+
+    # Prepare tile sheet.
     im = Image.open('ken_monochrome.png').convert('RGBA')
     nim = np.array(im)[:, :, 0] # Remove the rgba component.
     tx, ty = nim.shape
+    
+    # Slice up tile sheet.
     codepoint = ord(u'\ue000') # This is the beginning of the Unicode Private Use Area. It is 57344.
-
     for x in range(0, tx):
         if x % (w+1) == 0:
             for y in range(0, ty):
                 if y % (h+1) == 0:
                     x_0 = x
-                    x_1 = x+w
+                    x_1 = x + w
                     y_0 = y
-                    y_1 = y+h
+                    y_1 = y + h
                     t.set_tile(codepoint, nim[x_0:x_1, y_0:y_1])
                     codepoint += 1
             
     tcod.tileset.set_default(t)
-    return t
