@@ -10,9 +10,10 @@ from time import sleep
 
 # Prepare the console.
 tcod.console_set_custom_font('16x16-sb-ascii.png', tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_CP437)
-console = tcod.console_init_root(70, 40, title='Tileset Explorer', order='F', renderer=tcod.RENDERER_OPENGL2, vsync=True)
+console = tcod.console_init_root(70, 40, title='Tileset Explorer', order='F', renderer=tcod.RENDERER_SDL2, vsync=True)
 
 # Prepare constants.
+multiplier = 3
 COLOR_THEME = {
     "Black": (36,36,38),
     "Blue": (0,129,255),
@@ -42,8 +43,6 @@ state = "codepoint" # States are "codepoint", "rgb", "hsv".
 color_list = []
 for k, value in COLOR_THEME.items():
     color_list.append(k)
-
-multiplier = 8
 
 # Helper functions.
 def prepare_font(t, w, h):
@@ -102,16 +101,18 @@ def prepare_tilesheet(t, w, h):
     # This image is twice as big as usual. 
     # # It is 1086x1086. It is a 32x32 tilesheet, but each tile is split into four, so it's actually a 64x64 tilesheet.
     t_w, t_h = 16 * multiplier, 16 * multiplier # 16x multiplier
-    im = None
-    if multiplier == 2:
-        im = Image.open('big_ken_mono.png').convert('RGBA')
-    if multiplier == 4:
-        im = Image.open('4x_ken_m.png').convert('RGBA')
-    if multiplier == 8:
-        im = Image.open('8x_ken_m.png').convert('RGBA')
+    im = np.repeat(
+        np.repeat(
+            Image.open('ken_monochrome.png').convert('RGBA'), # The image
+            multiplier, # Resize it along axis 0
+            axis=0
+        ), 
+        multiplier, # Resize it along axis 1
+        axis=1
+    )
     nim = np.array(im)[:, :, 0] # Remove the rgba component.
     tx, ty = nim.shape
-    codepoint = ord(u'\uf000') # This is the beginning of the Unicode Private Use Area. It is 57344.
+    codepoint = ord(u'\U000F0000') # This is the beginning of the Unicode Private Use Area. It is 57344.
 
     print(f"Shape: {tx} by {ty}")
 
@@ -139,7 +140,9 @@ def place_tile(x, y, codepoint, fg, bg): # Multiplier squared # Might be able to
     iter = 0
     for yy in range(0, multiplier):
         for xx in range(0, multiplier):
-            console.tiles["ch"][x + xx, y + yy] = 57344 + codepoint*multiplier*multiplier + iter
+            adjusted_codepoint = ord(u'\U000F0000') + codepoint*multiplier*multiplier + iter
+            print(f"Adjusted codepoint: {adjusted_codepoint}.")
+            console.tiles["ch"][x + xx, y + yy] = adjusted_codepoint
             console.tiles["fg"][x + xx, y + yy] = fg
             console.tiles["bg"][x + xx, y + yy] = bg
             iter += 1
@@ -176,6 +179,7 @@ while running:
     
     # Print things.
     console.print(0, 0, f"Welcome.")
+    console.print(0, 1, f"Drawing codepoint {codepoint}.")
 
     place_tile(x=0, y=3, codepoint=codepoint, fg=(255, 255, 255, 255), bg=(0, 0, 0, 255))
     codepoint += 1
