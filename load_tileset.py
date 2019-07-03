@@ -62,21 +62,38 @@ def load_tileset():
                     iterator += 1
 
     # Prepare tile sheet.
-    im = Image.open('ken_monochrome.png').convert('RGBA')
+    multiplier = 2
+    im = np.repeat(
+        np.repeat(
+            Image.open('ken_monochrome.png').convert('RGBA'), # The image
+            multiplier, # Resize it along axis 0
+            axis=0
+        ), 
+        multiplier, # Resize it along axis 1
+        axis=1
+    )
     nim = np.array(im)[:, :, 0] # Remove the rgba component.
     tx, ty = nim.shape
     
     # Slice up tile sheet.
-    codepoint = ord(u'\ue000') # This is the beginning of the Unicode Private Use Area. It is 57344.
+    codepoint = ord(u'\U000F0000') # This is the beginning of the Unicode Supplementary Private Use Area-A.
+    
+    big_array = []
+
     for x in range(0, tx):
-        if x % (w+1) == 0:
+        if x % ((w+1)*multiplier) == 0:
             for y in range(0, ty):
-                if y % (h+1) == 0:
-                    x_0 = x
-                    x_1 = x + w
-                    y_0 = y
-                    y_1 = y + h
-                    t.set_tile(codepoint, nim[x_0:x_1, y_0:y_1])
-                    codepoint += 1
+                if y % ((h+1)*multiplier) == 0:
+                    x_0, x_1 = x, x + w*multiplier
+                    y_0, y_1 = y, y + h*multiplier
+                    big_array.append(nim[x_0:x_1, y_0:y_1])
+
+    for tile in big_array: # Multiplier squared # Might be able to automate with two for loops.
+        for x in range(0, multiplier):
+            for y in range(0, multiplier):
+                x_0, x_1 = 16 * x, 16 * (x + 1) # What does the 16 here mean?
+                y_0, y_1 = 16 * y, 16 * (y + 1)
+                t.set_tile(codepoint, tile[x_0:x_1, y_0:y_1])
+                codepoint += 1
             
     tcod.tileset.set_default(t)
