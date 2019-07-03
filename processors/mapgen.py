@@ -38,7 +38,7 @@ class MapgenProcessor(esper.Processor):
             game_map = self.world.map
             if new_dungeon:
                 game_map.floor = 0
-            else:
+            elif new_map:
                 game_map.floor += 1
 
             # Create new map.
