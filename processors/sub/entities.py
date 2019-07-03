@@ -1,4 +1,4 @@
-from _data import ENTITY_COLORS
+from _data import ENTITY_COLORS, MULTIPLIER
 from components.actor.actor import ActorComponent
 from components.actor.corpse import CorpseComponent
 from components.item.item import ItemComponent
@@ -48,37 +48,15 @@ def render_entities(console_object, recompute_fov, world):
 
     # Print tiles to the console.
     for (pos, ren) in _sorted_list.get('tile') or []:
-        if world.state is not 'SkillTargeting':
-            ren.highlight_color = None
-
-        if ren.visible:
-            if ren.highlight_color:
-                console.tiles["fg"][pos.x, pos.y] = ren.color + (255,)
-                console.tiles["bg"][pos.x, pos.y] = ren.highlight_color + (255,)
-                console.tiles["ch"][pos.x, pos.y] = ren.codepoint
-            else:
-                console.tiles["fg"][pos.x, pos.y] = ren.color + (255,)
-                console.tiles["bg"][pos.x, pos.y] = ren.bg_color + (255,)
-                console.tiles["ch"][pos.x, pos.y] = ren.codepoint
-        
-        elif ren.explored:
-            console.tiles["fg"][pos.x, pos.y] = ren.explored_color + (255,)
-            console.tiles["bg"][pos.x, pos.y] = (0, 0, 0, 0)
-            console.tiles["ch"][pos.x, pos.y] = ren.codepoint
+        print_tile_special(console, pos, ren, _entity_directory, world)
 
     # Print corpses.
     for (pos, ren) in _sorted_list.get('corpse') or []:
-        if ren.visible:
-            console.print(pos.x, pos.y, ren.char, ren.color)
+        print_tile(console, pos, ren, _entity_directory)
 
     # Print items.
     for (pos, ren) in _sorted_list.get('item') or []:
-        if ren.visible:
-            if (pos.x, pos.y) not in _entity_directory:
-                _entity_directory.append((pos.x, pos.y))
-                console.print(pos.x, pos.y, ren.char, ren.color)
-            else:
-                console.print(pos.x, pos.y, ren.char, ren.color, ENTITY_COLORS['overlap_bg'])
+        print_tile(console, pos, ren, _entity_directory)
 
     # Print stairs.
     for (pos, ren) in _sorted_list.get('stairs') or []:
@@ -92,26 +70,53 @@ def render_entities(console_object, recompute_fov, world):
     player_pos = world.component_for_entity(1, PositionComponent)
     player_ren = world.component_for_entity(1, RenderComponent)
     if not world.has_component(1, CorpseComponent):
-        if (player_pos.x, player_pos.y) not in _entity_directory:
-            console.tiles["fg"][player_pos.x, player_pos.y] = player_ren.color + (255,)
-            console.tiles["ch"][player_pos.x, player_pos.y] = player_ren.codepoint
-        else:
-            console.tiles["fg"][player_pos.x, player_pos.y] = player_ren.color + (255,)
-            console.tiles["bg"][player_pos.x, player_pos.y] = ENTITY_COLORS['overlap_bg'] + (255,)
-            console.tiles["ch"][player_pos.x, player_pos.y] = player_ren.codepoint
+        print_tile(console, player_pos, player_ren, _entity_directory)
     
     # Print cursor.
     cursor = world.cursor
     if world.state == 'Look':
         console.print(cursor.x, cursor.y, cursor.char, cursor.color)
 
+def print_tile_special(console, pos, ren, _entity_directory, world):
+    x, y = pos.x*2, pos.y*2
+    fg = ren.color + (255,)
+    bg = ren.bg_color + (255,)
+    multiplier = MULTIPLIER
+    
+    if world.state is not 'SkillTargeting':
+        ren.highlight_color = None
+    
+    if ren.visible or ren.explored:
+        if ren.explored and not ren.visible:
+            bg = (0, 0, 0, 0)
+        
+        if ren.highlight_color:
+            bg = ren.highlight_color + (255,)
+        
+        iter = 0
+        for yy in range(0, multiplier):
+            for xx in range(0, multiplier):
+                console.tiles["ch"][x + xx, y + yy] = ord(u'\U000F0000') + ren.codepoint*multiplier*multiplier + iter
+                console.tiles["fg"][x + xx, y + yy] = fg
+                console.tiles["bg"][x + xx, y + yy] = bg
+                iter += 1
+
 def print_tile(console, pos, ren, _entity_directory):
-    if ren.visible:
-        if (pos.x, pos.y) not in _entity_directory:
-            _entity_directory.append((pos.x, pos.y))
-            console.tiles["fg"][pos.x, pos.y] = ren.color + (255,)
-            console.tiles["ch"][pos.x, pos.y] = ren.codepoint
-        else:
-            console.tiles["fg"][pos.x, pos.y] = ren.color + (255,)
-            console.tiles["bg"][pos.x, pos.y] = ENTITY_COLORS['overlap_bg'] + (255,)
-            console.tiles["ch"][pos.x, pos.y] = ren.codepoint
+    x, y = pos.x*2, pos.y*2
+    fg = ren.color + (255,)
+    bg = ren.bg_color + (255,)
+    multiplier = MULTIPLIER
+    
+    if (pos.x, pos.y) not in _entity_directory:
+        _entity_directory.append((pos.x, pos.y))
+    else:
+        bg = ENTITY_COLORS['overlap_bg'] + (255,)
+
+    if ren.visible:        
+        iter = 0
+        for yy in range(0, multiplier):
+            for xx in range(0, multiplier):
+                console.tiles["ch"][x + xx, y + yy] = ord(u'\U000F0000') + ren.codepoint*multiplier*multiplier + iter
+                console.tiles["fg"][x + xx, y + yy] = fg
+                console.tiles["bg"][x + xx, y + yy] = bg
+                iter += 1

@@ -3,6 +3,7 @@ from collections import namedtuple
 ### GAME MAP DATA
 
 FINAL_FLOOR = 2
+MULTIPLIER = 2
 TICKS_PER_TURN = 1
 
 ### CONSOLE DIMENSION DATA

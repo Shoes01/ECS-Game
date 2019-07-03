@@ -2,6 +2,8 @@ import tcod.tileset
 from PIL import Image
 import numpy as np
 
+from _data import MULTIPLIER
+
 def load_tileset():    
     # Prep tilesheet.
     w, h = 16, 16 # w and h of a tile from the sheets.
@@ -62,7 +64,7 @@ def load_tileset():
                     iterator += 1
 
     # Prepare tile sheet.
-    multiplier = 2
+    multiplier = MULTIPLIER
     im = np.repeat(
         np.repeat(
             Image.open('ken_monochrome.png').convert('RGBA'), # The image
