@@ -2,8 +2,9 @@ import esper
 import json
 import os
 import shelve
+import tcod as libtcod
 
-from _data import ENTITY_COLORS
+from _data import ENTITY_COLORS, con, eqp, log, map
 from cursor import Cursor
 from load_tileset import load_tileset
 from map import Map
@@ -73,7 +74,6 @@ class GameWorld(esper.World):
         self.running = True
         self.state = 'MainMenu'
         self.ticker = 0
-        self.tiles = load_tileset()
         self.turn = 0
         self.toggle_debug_mode = False
         self._json_data = self.load_data()
@@ -82,9 +82,18 @@ class GameWorld(esper.World):
         self.item_table, self.monster_table = self.load_tables()
 
         ' Objects. '
-        self.consoles = None
+        self.consoles = {}
         self.cursor = Cursor()
         self.map = Map()
+
+        # Prepare tilset.
+        load_tileset()
+
+        # Prepare console.
+        self.consoles['con'] = libtcod.console_init_root(con.w, con.h, title='ECS Game', order='F', renderer=libtcod.RENDERER_SDL2, vsync=True), con.x, con.y, con.w, con.h
+        self.consoles['stats'] = libtcod.console.Console(eqp.w, eqp.h, order='F'), eqp.x, eqp.y, eqp.w, eqp.h
+        self.consoles['log'] = libtcod.console.Console(log.w, log.h, order='F'), log.x, log.y, log.w, log.h
+        self.consoles['map'] = libtcod.console.Console(map.w, map.h, order='F'), map.x, map.y, map.w, map.h
 
     def build_world(self):
         ' Upkeep. '
