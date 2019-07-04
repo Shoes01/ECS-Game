@@ -12,8 +12,8 @@ Rectangle = namedtuple('Rectangle', ['x', 'y', 'w', 'h'])
 
 border = 1
 
-CON_W = 60
-CON_H = 40
+CON_W = 120
+CON_H = 80
 EQP_W = 20
 EQP_H = 12
 

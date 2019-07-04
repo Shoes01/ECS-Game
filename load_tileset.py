@@ -6,7 +6,7 @@ from _data import MULTIPLIER
 
 def load_tileset():    
     # Prep tilesheet.
-    w, h = 16, 16 # w and h of a tile from the sheets.
+    w, h = 8, 8 # w and h of a tile from the sheets.
     t = tcod.tileset.Tileset(w, h)
     cp437 = np.array(
         [
@@ -46,55 +46,54 @@ def load_tileset():
     )
 
     # Prepare font sheet.
-    im = Image.open('16x16-sb-ascii.png').convert('RGBA')
-    nim = np.array(im)[:, :, 0] # Remove the rgba component.
+    # im = Image.open('16x16-sb-ascii.png').convert('RGBA')
+    im = Image.open('Zaratustra-msx.png').convert('RGBA')
+    nim = np.array(im)[:, :, 3] # Grab the alpha component.
     tx, ty = nim.shape
 
     # Slice up font sheet.
     iterator = 0
     for x in range(0, tx):
-        if x % 16 == 0:
+        if x % w == 0:
             for y in range(0, ty):
-                if y % 16 == 0:
-                    x_0 = x
-                    x_1 = x + w
-                    y_0 = y
-                    y_1 = y + h
+                if y % h == 0:
+                    x_0, x_1 = x, x + w
+                    y_0, y_1 = y, y + h
                     t.set_tile(cp437[iterator], nim[x_0:x_1, y_0:y_1])
                     iterator += 1
 
     # Prepare tile sheet.
-    multiplier = MULTIPLIER
+    multiplier = 2 # The tileset is already "doubled" due to the half-size of the font.
+
     im = np.repeat(
         np.repeat(
-            Image.open('ken_monochrome.png').convert('RGBA'), # The image
+            Image.open('ken_monochrome.png').convert('RGBA'),
             multiplier, # Resize it along axis 0
             axis=0
         ), 
         multiplier, # Resize it along axis 1
         axis=1
     )
+
     nim = np.array(im)[:, :, 0] # Remove the rgba component.
     tx, ty = nim.shape
-    
-    # Slice up tile sheet.
-    codepoint = ord(u'\U000F0000') # This is the beginning of the Unicode Supplementary Private Use Area-A.
-    
-    big_array = []
+
+    big_array = [] # Contains all the full tiles of the tileset, which will be cut up later.
 
     for x in range(0, tx):
-        if x % ((w+1)*multiplier) == 0:
+        if x % (17 * multiplier) == 0: # The normal sized tilesheet has a pixel seperator at 17.
             for y in range(0, ty):
-                if y % ((h+1)*multiplier) == 0:
-                    x_0, x_1 = x, x + w*multiplier
-                    y_0, y_1 = y, y + h*multiplier
+                if y % (17 * multiplier) == 0:
+                    x_0, x_1 = x, x + 16 * multiplier
+                    y_0, y_1 = y, y + 16 * multiplier
                     big_array.append(nim[x_0:x_1, y_0:y_1])
 
-    for tile in big_array: # Multiplier squared # Might be able to automate with two for loops.
-        for x in range(0, multiplier):
-            for y in range(0, multiplier):
-                x_0, x_1 = 16 * x, 16 * (x + 1) # What does the 16 here mean?
-                y_0, y_1 = 16 * y, 16 * (y + 1)
+    codepoint = ord('\U000F0000')
+    for tile in big_array:
+        for x in range(0, multiplier * 2): # Doubled again, due to half sized font.
+            for y in range(0, multiplier * 2):
+                x_0, x_1 = 8 * x, 8 * (x + 1)
+                y_0, y_1 = 8 * y, 8 * (y + 1)
                 t.set_tile(codepoint, tile[x_0:x_1, y_0:y_1])
                 codepoint += 1
             
