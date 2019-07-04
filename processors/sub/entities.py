@@ -92,13 +92,14 @@ def print_tile_special(console, pos, ren, _entity_directory, world):
         
         if ren.highlight_color:
             bg = ren.highlight_color + (255,)
+
+        console.tiles["fg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = fg
+        console.tiles["bg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = bg
         
         iter = 0
         for yy in range(0, multiplier):
             for xx in range(0, multiplier):
                 console.tiles["ch"][x + xx, y + yy] = ord(u'\U000F0000') + ren.codepoint*multiplier*multiplier + iter
-                console.tiles["fg"][x + xx, y + yy] = fg
-                console.tiles["bg"][x + xx, y + yy] = bg
                 iter += 1
 
 def print_tile(console, pos, ren, _entity_directory):
@@ -113,10 +114,11 @@ def print_tile(console, pos, ren, _entity_directory):
         bg = ENTITY_COLORS['overlap_bg'] + (255,)
 
     if ren.visible:        
+        console.tiles["fg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = fg
+        console.tiles["bg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = bg
+    
         iter = 0
         for yy in range(0, multiplier):
             for xx in range(0, multiplier):
                 console.tiles["ch"][x + xx, y + yy] = ord(u'\U000F0000') + ren.codepoint*multiplier*multiplier + iter
-                console.tiles["fg"][x + xx, y + yy] = fg
-                console.tiles["bg"][x + xx, y + yy] = bg
                 iter += 1
