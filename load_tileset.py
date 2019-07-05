@@ -46,7 +46,6 @@ def load_tileset():
     )
 
     # Prepare font sheet.
-    # im = Image.open('16x16-sb-ascii.png').convert('RGBA')
     im = Image.open('Zaratustra-msx.png').convert('RGBA')
     nim = np.array(im)[:, :, 3] # Grab the alpha component.
     tx, ty = nim.shape
@@ -63,11 +62,11 @@ def load_tileset():
                     iterator += 1
 
     # Prepare tile sheet.
-    multiplier = 2 # The tileset is already "doubled" due to the half-size of the font.
+    multiplier = MULTIPLIER * w // 16 # If is needed in case the font and sprites are different sizes.
 
     im = np.repeat(
         np.repeat(
-            Image.open('ken_monochrome.png').convert('RGBA'),
+            Image.open('ken_monochrome.png').convert('RGBA'), # Each sprite is 16x16, with an additional spacer pixel.
             multiplier, # Resize it along axis 0
             axis=0
         ), 
@@ -75,7 +74,7 @@ def load_tileset():
         axis=1
     )
 
-    nim = np.array(im)[:, :, 0] # Remove the rgba component.
+    nim = np.array(im)[:, :, 0] # Only look at the R component.
     tx, ty = nim.shape
 
     big_array = [] # Contains all the full tiles of the tileset, which will be cut up later.
@@ -90,10 +89,10 @@ def load_tileset():
 
     codepoint = ord('\U000F0000')
     for tile in big_array:
-        for x in range(0, multiplier * 2): # Doubled again, due to half sized font.
-            for y in range(0, multiplier * 2):
-                x_0, x_1 = 8 * x, 8 * (x + 1)
-                y_0, y_1 = 8 * y, 8 * (y + 1)
+        for x in range(0, MULTIPLIER):
+            for y in range(0, MULTIPLIER):
+                x_0, x_1 = w * x, w * (x + 1)
+                y_0, y_1 = h * y, h * (y + 1)
                 t.set_tile(codepoint, tile[x_0:x_1, y_0:y_1])
                 codepoint += 1
             
