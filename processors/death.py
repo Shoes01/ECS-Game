@@ -1,6 +1,6 @@
 import esper
 
-from _data import ENTITY_COLORS
+from _data import ENTITY_COLORS, SPRITES
 from components.actor.actor import ActorComponent
 from components.actor.boss import BossComponent
 from components.actor.brain import BrainComponent
@@ -42,8 +42,9 @@ class DeathProcessor(esper.Processor):
             inventory = inv.inventory
             name.name = 'corspe of ' + name.name
             ren.char = '%'
+            ren.codepoint = SPRITES['corpse']
             ren.color = ENTITY_COLORS['corpse']
-
+            
             # Drop the items the entity is carrying.
             for item in inventory:
                 self.world.add_component(item, PositionComponent(x=pos.x, y=pos.y))
