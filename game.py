@@ -4,7 +4,7 @@ import os
 import shelve
 import tcod as libtcod
 
-from _data import ENTITY_COLORS, con, eqp, log, map
+from _data import ENTITY_COLORS, con, eqp, log, map, SPRITES
 from cursor import Cursor
 from load_tileset import load_tileset
 from map import Map
@@ -143,7 +143,7 @@ class GameWorld(esper.World):
 
         with open("data/consumables.json", "r") as read_file:
             data = json.load(read_file)
-        with open("data/items.json", "r") as read_file:
+        with open("data/equipment.json", "r") as read_file:
             data.update(json.load(read_file))
         with open("data/monsters.json", "r") as read_file:
             data.update(json.load(read_file))
@@ -214,7 +214,7 @@ class GameWorld(esper.World):
                 PersistComponent(),
                 PlayerComponent(),
                 PositionComponent(),
-                RenderComponent(bg_color=None, char='@', codepoint=126, color=ENTITY_COLORS['player'], explored_color=None),
+                RenderComponent(bg_color=None, char='@', codepoint=SPRITES['player'], color=ENTITY_COLORS['player'], explored_color=None),
                 SoulComponent(eccentricity=5, max_rarity=10),
                 StatsComponent(hp=500, attack=10)
             )
@@ -279,7 +279,7 @@ class GameWorld(esper.World):
                 codepoint = value.get('codepoint')
                 color = value.get('color')
                 explored_color = value.get('explored_color')
-                self.add_component(ent, RenderComponent(bg_color=ENTITY_COLORS.get(bg_color), char=char, codepoint=codepoint, color=ENTITY_COLORS[color], explored_color=ENTITY_COLORS.get(explored_color)))
+                self.add_component(ent, RenderComponent(bg_color=ENTITY_COLORS.get(bg_color), char=char, codepoint=SPRITES[codepoint], color=ENTITY_COLORS[color], explored_color=ENTITY_COLORS.get(explored_color)))
 
             elif key == 'skill':
                 name = value

@@ -57,7 +57,10 @@ log = Rectangle(
     h=EQP_H
 )
 
-### COLOR DATA
+##################
+### COLOR DATA ###
+##################
+
 """
 # FrontEndDelight Theme
 COLOR_THEME = {
@@ -154,7 +157,44 @@ UI_COLORS = {
     'text_mainmenu': COLOR_THEME['White']
 }
 
-### BORDER DATA
+###################
+### SPRITE DATA ###
+###################
+
+SPRITES = {
+    'con_soul_jar': 818,
+    'eqp_boots': 744,
+    'eqp_dagger': 896,
+    'eqp_hammer': 933,
+    'eqp_hammer_war': 966,
+    'eqp_helmet': 705,
+    'eqp_shield': 837,
+    'eqp_sword': 898,
+    'eqp_sword_great': 964,
+    'eqp_sword_long': 928,
+    'floor_stone': 51,
+    'mon_demon': 191,
+    'mon_goblin': 89,
+    'mon_kobold': 314,
+    'mon_orc': 91,
+    'mon_rat': 287,
+    'mon_zombie': 25,
+    'other_chest': 388,
+    'player': 126,
+    'stairs': 195,
+    'wall_stone_topleft': 18,
+    'wall_stone_top': 19,
+    'wall_stone_topright': 20,
+    'wall_stone_left': 50,
+    'wall_stone_right': 52,
+    'wall_stone_bottomleft':82,
+    'wall_stone_bottom': 83,
+    'wall_stone_bottomright': 84
+}
+
+###################
+### BORDER DATA ###
+###################
 
 class DoubleLineBox():
     horizontal = u'\u2550' # ═

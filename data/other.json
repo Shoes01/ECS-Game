@@ -7,7 +7,7 @@
         "name": {"name": "Chest"},
         "position": true,
         "rarity": 3,
-        "render": {"char": "(", "color": "chest"},
+        "render": {"char": "(", "color": "chest", "codepoint": "other_chest"},
         "stats": {"hp": 10}
     }
 }
