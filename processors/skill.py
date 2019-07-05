@@ -122,7 +122,7 @@ class SkillProcessor(esper.Processor):
 
         destination = None # ID
         targets = [] # [ID]
-        tiles = {} # {ID: color}
+        tiles = {} # {ID: color_fg}
         legal_target = True
         
 
@@ -193,8 +193,8 @@ class SkillProcessor(esper.Processor):
         return results
 
     def highlight_tiles(self, tiles):
-        for tile, color in tiles.items():
-            self.world.component_for_entity(tile, RenderComponent).highlight_color = color
+        for tile, color_fg in tiles.items():
+            self.world.component_for_entity(tile, RenderComponent).highlight_color = color_fg
 
     def do_skill(self, ent, direction, item, results):
         error = 'no_error'

@@ -45,9 +45,9 @@ def render_message_log(console_object, world):
         _wear = message.get('wear')
 
         if _ai_awake:
-            char, color, turn = _ai_awake
+            char, color_fg, turn = _ai_awake
             
-            libtcod.console_set_color_control(libtcod.COLCTRL_1, color, libtcod.black)
+            libtcod.console_set_color_control(libtcod.COLCTRL_1, color_fg, libtcod.black)
             console.print(0, 0 + dy, '(Turn %s) %c%s%c wakes up!' % (turn, libtcod.COLCTRL_1, char, libtcod.COLCTRL_STOP), LOG_COLORS['warning'])
 
         elif _combat:
@@ -75,9 +75,9 @@ def render_message_log(console_object, world):
                 console.print(0, 0 + dy, '(Turn %s) You cannot consume your %s!' % (turn, name), LOG_COLORS['failure'])
 
         elif _death:
-            char, color, turn, is_furniture = _death
+            char, color_fg, turn, is_furniture = _death
 
-            libtcod.console_set_color_control(libtcod.COLCTRL_1, color, libtcod.black)
+            libtcod.console_set_color_control(libtcod.COLCTRL_1, color_fg, libtcod.black)
             if is_furniture:
                 console.print(0, 0 + dy, '(Turn %s) The %c%s%c is destroyed!' % (turn, libtcod.COLCTRL_1, char, libtcod.COLCTRL_STOP), LOG_COLORS['success'])
             else:

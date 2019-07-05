@@ -1,4 +1,4 @@
-import colorsys
+import color_fgsys
 import tcod
 import tcod.event
 import tcod.tileset
@@ -36,9 +36,9 @@ running = True
 fg_column = True
 pos = 0 # H S V position.
 state = "codepoint" # States are "codepoint", "rgb", "hsv".
-color_list = []
+color_fg_list = []
 for k, value in COLOR_THEME.items():
-    color_list.append(k)
+    color_fg_list.append(k)
 
 # Helper functions.
 def prepare_font(t, w, h):
@@ -176,15 +176,15 @@ def handle_input(bg_pos, codepoint, fg_column, fg_pos, running, state, bg_h_pos,
             fg_pos += direction
             
             if fg_pos < 0:
-                fg_pos = len(color_list) - 1
-            elif fg_pos > len(color_list) - 1:
+                fg_pos = len(color_fg_list) - 1
+            elif fg_pos > len(color_fg_list) - 1:
                 fg_pos = 0
         else:
             bg_pos += direction
 
             if bg_pos < 0:
-                bg_pos = len(color_list) - 1
-            elif bg_pos > len(color_list) - 1:
+                bg_pos = len(color_fg_list) - 1
+            elif bg_pos > len(color_fg_list) - 1:
                 bg_pos = 0
 
     # Handle hsv input.
@@ -247,13 +247,13 @@ def handle_input(bg_pos, codepoint, fg_column, fg_pos, running, state, bg_h_pos,
 
 def print_codepoint():
     console.print(19, 2, f"Codepoint: {codepoint:>4}")
-    for row in range(0, len(color_list)):
-        for col in range(0, len(color_list)):
+    for row in range(0, len(color_fg_list)):
+        for col in range(0, len(color_fg_list)):
             x = 19 + row
             y = 3 + col
             console.tiles["ch"][x, y] = 57344 + codepoint
-            console.tiles["fg"][x, y] = COLOR_THEME[color_list[row]] + (255,)
-            console.tiles["bg"][x, y] = COLOR_THEME[color_list[col]] + (255,)
+            console.tiles["fg"][x, y] = COLOR_THEME[color_fg_list[row]] + (255,)
+            console.tiles["bg"][x, y] = COLOR_THEME[color_fg_list[col]] + (255,)
     
     x0 = 37
     y0 = 3
@@ -273,24 +273,24 @@ def print_codepoint():
 
 def print_rgb():
     fg_color = (255, 255, 255)
-    bg_color = (255, 255, 255)
+    color_bg = (255, 255, 255)
     
     if not fg_column:
         fg_color = (155, 155, 155)
     else:
-        bg_color = (155, 155, 155)
+        color_bg = (155, 155, 155)
     
     console.print(19, 2, f" fg ", fg_color)
-    console.print(23, 2, f" bg ", bg_color)
+    console.print(23, 2, f" bg ", color_bg)
     x, y = 19, 3
-    for row in range(0, len(color_list)):
+    for row in range(0, len(color_fg_list)):
         fg_tick = "  "
         bg_tick = "  "
         if fg_pos == row:
             fg_tick = "--"
         if bg_pos == row:
             bg_tick = "--"
-        console.print(x, y + row, f"[{fg_tick}][{bg_tick}]", bg=COLOR_THEME[color_list[row]])
+        console.print(x, y + row, f"[{fg_tick}][{bg_tick}]", bg=COLOR_THEME[color_fg_list[row]])
 
     x0 = 37
     y0 = 3
@@ -301,24 +301,24 @@ def print_rgb():
             x = x0 + row
             y = y0 + col
             console.tiles["ch"][x, y] = 57344 + cp
-            console.tiles["fg"][x, y] = COLOR_THEME[color_list[fg_pos]] + (255,)
-            console.tiles["bg"][x, y] = COLOR_THEME[color_list[bg_pos]] + (255,)
+            console.tiles["fg"][x, y] = COLOR_THEME[color_fg_list[fg_pos]] + (255,)
+            console.tiles["bg"][x, y] = COLOR_THEME[color_fg_list[bg_pos]] + (255,)
             cp += 1
 
 def print_hsv():
-    br, bg, bb = colorsys.hsv_to_rgb(bg_h_pos/100, bg_s_pos/100, bg_v_pos/100)
-    fr, fg, fb = colorsys.hsv_to_rgb(fg_h_pos/100, fg_s_pos/100, fg_v_pos/100)
+    br, bg, bb = color_fgsys.hsv_to_rgb(bg_h_pos/100, bg_s_pos/100, bg_v_pos/100)
+    fr, fg, fb = color_fgsys.hsv_to_rgb(fg_h_pos/100, fg_s_pos/100, fg_v_pos/100)
     
     fg_color = (255, 255, 255)
-    bg_color = (255, 255, 255)
+    color_bg = (255, 255, 255)
 
     if not fg_column:
         fg_color = (155, 155, 155)
     else:
-        bg_color = (155, 155, 155)
+        color_bg = (155, 155, 155)
 
-    console.print(19, 1, f"FG HSV color: ({fg_h_pos:>3}, {fg_s_pos:>3}, {fg_v_pos:>3})", fg_color)
-    console.print(19, 2, f"BG HSV color: ({bg_h_pos:>3}, {bg_s_pos:>3}, {bg_v_pos:>3})", bg_color)
+    console.print(19, 1, f"FG HSV color_fg: ({fg_h_pos:>3}, {fg_s_pos:>3}, {fg_v_pos:>3})", fg_color)
+    console.print(19, 2, f"BG HSV color_fg: ({bg_h_pos:>3}, {bg_s_pos:>3}, {bg_v_pos:>3})", color_bg)
 
     x0 = 37
     y0 = 3

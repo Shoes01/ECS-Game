@@ -214,7 +214,7 @@ class GameWorld(esper.World):
                 PersistComponent(),
                 PlayerComponent(),
                 PositionComponent(),
-                RenderComponent(bg_color=None, char='@', codepoint=SPRITES['player'], color=ENTITY_COLORS['player'], explored_color=None),
+                RenderComponent(color_bg=None, char='@', codepoint=SPRITES['player'], color_fg=ENTITY_COLORS['player'], color_explored=None),
                 SoulComponent(eccentricity=5, max_rarity=10),
                 StatsComponent(hp=500, attack=10)
             )
@@ -274,12 +274,12 @@ class GameWorld(esper.World):
                 self.add_component(ent, RarityComponent(rarity=rarity))
 
             elif key == 'render':
-                bg_color = value.get('bg_color')
+                color_bg = value.get('color_bg')
                 char = value.get('char')
                 codepoint = value.get('codepoint')
-                color = value.get('color')
-                explored_color = value.get('explored_color')
-                self.add_component(ent, RenderComponent(bg_color=ENTITY_COLORS.get(bg_color), char=char, codepoint=SPRITES[codepoint], color=ENTITY_COLORS[color], explored_color=ENTITY_COLORS.get(explored_color)))
+                color_fg = value.get('color_fg')
+                color_explored = value.get('color_explored')
+                self.add_component(ent, RenderComponent(color_bg=ENTITY_COLORS.get(color_bg), char=char, codepoint=SPRITES[codepoint], color_fg=ENTITY_COLORS[color_fg], color_explored=ENTITY_COLORS.get(color_explored)))
 
             elif key == 'skill':
                 name = value

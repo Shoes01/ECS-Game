@@ -1,4 +1,4 @@
-import colorsys
+import color_fgsys
 import tcod
 import tcod.event
 import tcod.tileset
@@ -40,9 +40,9 @@ running = True
 fg_column = True
 pos = 0 # H S V position.
 state = "codepoint" # States are "codepoint", "rgb", "hsv".
-color_list = []
+color_fg_list = []
 for k, value in COLOR_THEME.items():
-    color_list.append(k)
+    color_fg_list.append(k)
 
 # Helper functions.
 def prepare_font(t, w, h):

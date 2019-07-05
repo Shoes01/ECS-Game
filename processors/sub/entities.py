@@ -75,12 +75,12 @@ def render_entities(console_object, recompute_fov, world):
     # Print cursor.
     cursor = world.cursor
     if world.state == 'Look':
-        console.print(cursor.x, cursor.y, cursor.char, cursor.color)
+        console.print(cursor.x, cursor.y, cursor.char, cursor.color_fg)
 
 def print_tile_special(console, pos, ren, _entity_directory, world):
     x, y = pos.x*MULTIPLIER, pos.y*MULTIPLIER
-    fg = ren.color + (255,)
-    bg = ren.bg_color + (255,)
+    fg = ren.color_fg + (255,)
+    bg = ren.color_bg + (255,)
     multiplier = MULTIPLIER
     
     if world.state is not 'SkillTargeting':
@@ -88,7 +88,7 @@ def print_tile_special(console, pos, ren, _entity_directory, world):
     
     if ren.visible or ren.explored:
         if ren.explored and not ren.visible:
-            bg = ren.explored_color + (255,)
+            bg = ren.color_explored + (255,)
         
         if ren.highlight_color:
             bg = ren.highlight_color + (255,)
@@ -104,8 +104,8 @@ def print_tile_special(console, pos, ren, _entity_directory, world):
 
 def print_tile(console, pos, ren, _entity_directory):
     x, y = pos.x*MULTIPLIER, pos.y*MULTIPLIER
-    fg = ren.color + (255,)
-    bg = ren.bg_color + (255,)
+    fg = ren.color_fg + (255,)
+    bg = ren.color_bg + (255,)
     multiplier = MULTIPLIER
     
     if (pos.x, pos.y) not in _entity_directory:

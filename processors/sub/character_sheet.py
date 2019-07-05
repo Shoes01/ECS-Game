@@ -9,7 +9,7 @@ from components.stats import StatsComponent
 
 def render_character_sheet(console_object, world):
     console, _, _, w, h = console_object
-    color = UI_COLORS['text']
+    color_fg = UI_COLORS['text']
     player_base_stats = world.component_for_entity(1, StatsComponent).__dict__
     player_stats = generate_stats(1, world)
     slots = {
@@ -37,29 +37,29 @@ def render_character_sheet(console_object, world):
 
     # Print base stats.
     x, y = 3, 5
-    console.print(x - 1, y - 1, 'Base Stats:', color)
+    console.print(x - 1, y - 1, 'Base Stats:', color_fg)
     i = 0
     for key in titles:
-        console.print(x, y + i, f"{titles[key]:8} {as_decimal(player_base_stats[key]):>5}", color)
+        console.print(x, y + i, f"{titles[key]:8} {as_decimal(player_base_stats[key]):>5}", color_fg)
         i += 1
 
     # Print soul stats.
     x, y = 20, 5
-    console.print(x - 1, y - 1, 'Soul Stats:', color)
+    console.print(x - 1, y - 1, 'Soul Stats:', color_fg)
     i = 0
     for key in titles:
-        console.print(x, y + i, f"{titles[key]:8} {as_integer(soul_stats[key]):>3}", color)
+        console.print(x, y + i, f"{titles[key]:8} {as_integer(soul_stats[key]):>3}", color_fg)
         i += 1
 
     # Print total stats.
     x, y = 3, 14
-    console.print(x - 1, y - 1, 'Total Stats:', color)    
+    console.print(x - 1, y - 1, 'Total Stats:', color_fg)    
     i = 0
     for key in titles:
         console.print(
             x, y + i, 
             f"{titles[key]:8} {as_decimal(player_stats[key]):>5} ({as_decimal(player_base_stats[key]):>5} + {as_integer(soul_stats[key]):>3})", 
-            color)
+            color_fg)
         i += 1
 
     # Displays item slots and their items
@@ -67,7 +67,7 @@ def render_character_sheet(console_object, world):
     ###   Skill: Lunge
     ###   Description: This is where the skill description goes.
     x, y = 40, 5
-    console.print(x - 1, y - 1, 'Equipped Items:', color)
+    console.print(x - 1, y - 1, 'Equipped Items:', color_fg)
     i = 0
     for key in slots:
         item_name, item_skill, item_bonus, item_skill_description = None, None, None, None
@@ -80,13 +80,13 @@ def render_character_sheet(console_object, world):
         text_3 = f"  Bonus: {item_bonus}"
         text_4 = f"  Description: {item_skill_description}"
                 
-        console.print(x, y + i, text_1, color)
+        console.print(x, y + i, text_1, color_fg)
         i += 1
-        console.print(x, y + i, text_2, color)
+        console.print(x, y + i, text_2, color_fg)
         i += 1
-        console.print(x, y + i, text_3, color)
+        console.print(x, y + i, text_3, color_fg)
         i += 1
-        console.print_box(x, y + i, 40, 2, text_4, color)
+        console.print_box(x, y + i, 40, 2, text_4, color_fg)
         i += 3
 
 def generate_equipped_items(titles, world):

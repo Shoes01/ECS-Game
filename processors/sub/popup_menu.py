@@ -13,12 +13,12 @@ def render_popup_menu(console_object, world):
     # Render choices
     dy = 2
     for choice in menu.contents:        
-        color = UI_COLORS['text']
+        color_fg = UI_COLORS['text']
         if not choice.valid:
-            color = UI_COLORS['text_invalid']
+            color_fg = UI_COLORS['text_invalid']
 
         string = '(' + choice.key + ') ' + choice.name
-        console.print(menu.x + 2, menu.y + dy, string, color)
+        console.print(menu.x + 2, menu.y + dy, string, color_fg)
         dy += 1
     
     if menu.include_esc:

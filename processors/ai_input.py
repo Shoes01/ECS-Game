@@ -29,7 +29,7 @@ class AiInputProcessor(esper.Processor):
         if brain.brain == 'zombie':
             if brain.awake is False and self.world.map.fov_map.fov[pos.x, pos.y]:
                 brain.awake = True
-                message = {'ai_awake': (ren.char, ren.color, self.world.turn)}
+                message = {'ai_awake': (ren.char, ren.color_fg, self.world.turn)}
                 self.world.messages.append(message)
                 return {'move': False, 'processor': MovementProcessor}
 

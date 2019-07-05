@@ -60,4 +60,4 @@ class CombatProcessor(esper.Processor):
                     self.world.get_processor(EnergyProcessor).queue.put({'ent': attacker_ID, 'bump_attack': True})
                     self.queue.put({'ent': defender_ID, 'defender_IDs': [attacker_ID], 'counter_attack': True})
 
-                self.world.messages.append({'combat': (att_ren.char, att_ren.color, def_ren.char, def_ren.color, as_integer(damage), counter_attack, double_attack, self.world.turn)})
+                self.world.messages.append({'combat': (att_ren.char, att_ren.color_fg, def_ren.char, def_ren.color_fg, as_integer(damage), counter_attack, double_attack, self.world.turn)})

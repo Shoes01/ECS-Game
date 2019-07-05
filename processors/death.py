@@ -37,13 +37,13 @@ class DeathProcessor(esper.Processor):
                 return 0
 
             is_furniture = self.world.has_component(ent, FurnitureComponent)
-            self.world.messages.append({'death': (ren.char, ren.color, self.world.turn, is_furniture)})
+            self.world.messages.append({'death': (ren.char, ren.color_fg, self.world.turn, is_furniture)})
             
             inventory = inv.inventory
             name.name = 'corspe of ' + name.name
             ren.char = '%'
             ren.codepoint = SPRITES['corpse']
-            ren.color = ENTITY_COLORS['corpse']
+            ren.color_fg = ENTITY_COLORS['corpse']
             
             # Drop the items the entity is carrying.
             for item in inventory:

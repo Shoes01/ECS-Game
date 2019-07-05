@@ -2,19 +2,19 @@
     "floor":
     {
         "position": true,
-        "render": {"char": ".", "color": "floor", "explored_color": "floor_explored", "bg_color": "floor_bg", "codepoint": "floor_stone"},
+        "render": {"char": ".", "color_fg": "floor", "color_explored": "floor_explored", "color_bg": "floor_bg", "codepoint": "floor_stone"},
         "tile": {"blocks_path": false, "blocks_sight": false}
     },
     "wall":
     {
         "position": true,
-        "render": {"char": "#", "color": "wall", "explored_color": "wall_explored", "bg_color": "wall_bg", "codepoint": "wall_stone"},
+        "render": {"char": "#", "color_fg": "wall", "color_explored": "wall_explored", "color_bg": "wall_bg", "codepoint": "wall_stone"},
         "tile": {"blocks_path": true, "blocks_sight": true}
     },
     "stairs":
     {
         "position": true,
-        "render": {"char": ">", "color": "stairs", "explored_color": "stairs_explored", "bg_color": "stairs_bg", "codepoint": "stairs"},
+        "render": {"char": ">", "color_fg": "stairs", "color_explored": "stairs_explored", "color_bg": "stairs_bg", "codepoint": "stairs"},
         "stairs": true,
         "tile": {"blocks_path": false, "blocks_sight": false}
     }
