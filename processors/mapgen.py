@@ -3,7 +3,7 @@ import numpy as np
 import random
 import tcod as libtcod
 
-from _data import FINAL_FLOOR
+from _data import FINAL_FLOOR, SPRITES
 from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
@@ -138,11 +138,21 @@ class MapgenProcessor(esper.Processor):
                 new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                 new_ent_pos.x = x
                 new_ent_pos.y = y
+                # Add some floor decorations.
+                new_ent_ren = self.world.component_for_entity(new_ent, RenderComponent)
+                decorations = ('blank',)*9 + ('floor_stone',)
+                new_ent_ren.codepoint = SPRITES[random.choice(decorations)]
+
             if value == 1:
                 new_ent = self.world.create_entity('wall')
                 new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                 new_ent_pos.x = x
                 new_ent_pos.y = y
+                # Make the walls look pretty.
+                if random.randint(0, 100) > 90:
+                    new_ent_ren = self.world.component_for_entity(new_ent, RenderComponent)
+                    decorations = ('wall_stone_var_1', 'wall_stone_var_2', 'wall_stone_var_3')
+                    new_ent_ren.codepoint = SPRITES[random.choice(decorations)]
 
     def place_player(self):
         player_pos = self.world.component_for_entity(1, PositionComponent)

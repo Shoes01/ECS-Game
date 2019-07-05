@@ -109,9 +109,9 @@ ENTITY_COLORS = {
     'chest': COLOR_THEME['Yellow'],
     'con_jar': COLOR_THEME['BrightCyan'],
     'corpse': COLOR_THEME['BrightRed'],
-    'floor': COLOR_THEME['BrightGreen'],
-    'floor_bg': COLOR_THEME['Green'],
-    'floor_explored': COLOR_THEME['BrightBlack'],
+    'floor': COLOR_THEME['BrightWhite'],
+    'floor_bg': COLOR_THEME['BrightBlack'],
+    'floor_explored': COLOR_THEME['Background'],
     'mon_demon': COLOR_THEME['Red'],
     'mon_goblin': COLOR_THEME['Yellow'],
     'mon_orc': COLOR_THEME['Cyan'],
@@ -127,10 +127,11 @@ ENTITY_COLORS = {
     'skill_4': COLOR_THEME['Magenta'],
     'skill_blocked': COLOR_THEME['BrightRed'],
     'stairs': COLOR_THEME['White'],
-    'stairs_explored': COLOR_THEME['BrightBlack'],
+    'stairs_bg': COLOR_THEME['BrightBlack'],
+    'stairs_explored': COLOR_THEME['Background'],
     'wall': COLOR_THEME['White'],
-    'wall_bg': COLOR_THEME['Black'],
-    'wall_explored': COLOR_THEME['BrightBlack'],
+    'wall_bg': COLOR_THEME['BrightBlack'],
+    'wall_explored': COLOR_THEME['Background'],
     'weapon': COLOR_THEME['Blue']
 }
 
@@ -162,6 +163,7 @@ UI_COLORS = {
 ###################
 
 SPRITES = {
+    'blank': 0,
     'corpse': 480,
     'player': 126,
     # Entities defined in consumables.json
@@ -188,12 +190,16 @@ SPRITES = {
     # Entities defined in tiles.json
     'floor_stone': 51,
     'stairs': 195,
+    'wall_stone': 554,
+    'wall_stone_var_1': 555,
+    'wall_stone_var_2': 556, 
+    'wall_stone_var_3': 557,
     'wall_stone_topleft': 18,
     'wall_stone_top': 19,
     'wall_stone_topright': 20,
     'wall_stone_left': 50,
     'wall_stone_right': 52,
-    'wall_stone_bottomleft':82,
+    'wall_stone_bottomleft': 82,
     'wall_stone_bottom': 83,
     'wall_stone_bottomright': 84
 }

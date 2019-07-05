@@ -88,7 +88,7 @@ def print_tile_special(console, pos, ren, _entity_directory, world):
     
     if ren.visible or ren.explored:
         if ren.explored and not ren.visible:
-            bg = (0, 0, 0, 0)
+            bg = ren.explored_color + (255,)
         
         if ren.highlight_color:
             bg = ren.highlight_color + (255,)
