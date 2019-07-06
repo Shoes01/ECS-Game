@@ -49,7 +49,7 @@ def render_entities(console_object, recompute_fov, world):
 
     # Print tiles to the console.
     for (pos, ren) in _sorted_list.get('tile') or []:
-        print_tile(console, pos, ren, _entity_directory, world, render_bg=True)
+        print_tile(console, pos, ren, _entity_directory, world, floor=True)
 
     # Print corpses.
     for (pos, ren) in _sorted_list.get('corpse') or []:
@@ -78,13 +78,13 @@ def render_entities(console_object, recompute_fov, world):
     if world.state == 'Look':
         console.print(cursor.x, cursor.y, cursor.char, cursor.color_fg)
 
-def print_tile(console, pos, ren, _entity_directory, world, render_bg=False):
+def print_tile(console, pos, ren, _entity_directory, world, floor=False):
     x, y = pos.x*MULTIPLIER, pos.y*MULTIPLIER
     fg = ren.color_fg + (255,)
     bg = ren.color_bg + (0,)
     multiplier = MULTIPLIER
     
-    if render_bg:
+    if floor:
         bg = ren.color_bg + (255,)
 
     if world.state is not 'SkillTargeting':
@@ -97,11 +97,11 @@ def print_tile(console, pos, ren, _entity_directory, world, render_bg=False):
         if ren.highlight_color:
             bg = ren.highlight_color + (255,)
 
-        if (x, y) in _entity_directory:
-            bg = ENTITY_COLORS['overlap_bg'] + (255,)
-        else:
-            _entity_directory.append((x, y))
-
+        if not floor:
+            if (x, y) in _entity_directory:
+                bg = ENTITY_COLORS['overlap_bg'] + (255,)
+            else:
+                _entity_directory.append((x, y))
 
         console.tiles["fg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = fg
         console.tiles["bg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = bg
@@ -111,3 +111,10 @@ def print_tile(console, pos, ren, _entity_directory, world, render_bg=False):
             for xx in range(0, multiplier):
                 console.tiles["ch"][x + xx, y + yy] = ord(u'\U000F0000') + ren.codepoint*multiplier*multiplier + iter
                 iter += 1
+
+####### SOLUTION
+# 1) Draw the bg tiles
+# 2) Draw the sprites, top to bottom
+# ?? What happens with overlapping entities?
+#### The "first" entity printed needs to know if it is using an overlapping bg color...
+#### Build the list of overlapping entities?
