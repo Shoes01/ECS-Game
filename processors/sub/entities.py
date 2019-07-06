@@ -97,6 +97,12 @@ def print_tile(console, pos, ren, _entity_directory, world, render_bg=False):
         if ren.highlight_color:
             bg = ren.highlight_color + (255,)
 
+        if (x, y) in _entity_directory:
+            bg = ENTITY_COLORS['overlap_bg'] + (255,)
+        else:
+            _entity_directory.append((x, y))
+
+
         console.tiles["fg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = fg
         console.tiles["bg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = bg
         

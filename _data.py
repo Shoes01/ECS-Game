@@ -118,7 +118,7 @@ ENTITY_COLORS = {
     'mon_rat': COLOR_THEME['BrightBlack'],
     'mon_kobold': COLOR_THEME['Blue'],
     'mon_zombie': COLOR_THEME['Green'],
-    'overlap_bg': COLOR_THEME['BrightBlack'],
+    'overlap_bg': COLOR_THEME['Yellow'],
     'player': COLOR_THEME['BrightMagenta'],
     'potion_heal': COLOR_THEME['Red'],
     'skill_1': COLOR_THEME['BrightBlue'],
