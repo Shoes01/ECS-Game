@@ -28,8 +28,9 @@ def render_entities(console_object, recompute_fov, world):
     for ent, (pos, ren) in world.get_components(PositionComponent, RenderComponent):
         # Prerender the entity
         if world.map.fov_map.fov[pos.x, pos.y]:
-            ren.explored = True
             ren.visible = True
+            if world.has_component(ent, TileComponent):
+                ren.explored = True
         else:
             ren.visible = False
         
@@ -48,41 +49,44 @@ def render_entities(console_object, recompute_fov, world):
 
     # Print tiles to the console.
     for (pos, ren) in _sorted_list.get('tile') or []:
-        print_tile_special(console, pos, ren, _entity_directory, world)
+        print_tile(console, pos, ren, _entity_directory, world, render_bg=True)
 
     # Print corpses.
     for (pos, ren) in _sorted_list.get('corpse') or []:
-        print_tile(console, pos, ren, _entity_directory)
+        print_tile(console, pos, ren, _entity_directory, world)
 
     # Print items.
     for (pos, ren) in _sorted_list.get('item') or []:
-        print_tile(console, pos, ren, _entity_directory)
+        print_tile(console, pos, ren, _entity_directory, world)
 
     # Print stairs.
     for (pos, ren) in _sorted_list.get('stairs') or []:
-        print_tile(console, pos, ren, _entity_directory)
+        print_tile(console, pos, ren, _entity_directory, world)
 
     # Print entities.
     for (pos, ren) in _sorted_list.get('actor') or []:
-        print_tile(console, pos, ren, _entity_directory)
+        print_tile(console, pos, ren, _entity_directory, world)
     
     # Print the player (again), on top of everything else.
     player_pos = world.component_for_entity(1, PositionComponent)
     player_ren = world.component_for_entity(1, RenderComponent)
     if not world.has_component(1, CorpseComponent):
-        print_tile(console, player_pos, player_ren, _entity_directory)
+        print_tile(console, player_pos, player_ren, _entity_directory, world)
     
     # Print cursor.
     cursor = world.cursor
     if world.state == 'Look':
         console.print(cursor.x, cursor.y, cursor.char, cursor.color_fg)
 
-def print_tile_special(console, pos, ren, _entity_directory, world):
+def print_tile(console, pos, ren, _entity_directory, world, render_bg=False):
     x, y = pos.x*MULTIPLIER, pos.y*MULTIPLIER
     fg = ren.color_fg + (255,)
-    bg = ren.color_bg + (255,)
+    bg = ren.color_bg + (0,)
     multiplier = MULTIPLIER
     
+    if render_bg:
+        bg = ren.color_bg + (255,)
+
     if world.state is not 'SkillTargeting':
         ren.highlight_color = None
     
@@ -96,27 +100,6 @@ def print_tile_special(console, pos, ren, _entity_directory, world):
         console.tiles["fg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = fg
         console.tiles["bg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = bg
         
-        iter = 0
-        for yy in range(0, multiplier):
-            for xx in range(0, multiplier):
-                console.tiles["ch"][x + xx, y + yy] = ord(u'\U000F0000') + ren.codepoint*multiplier*multiplier + iter
-                iter += 1
-
-def print_tile(console, pos, ren, _entity_directory):
-    x, y = pos.x*MULTIPLIER, pos.y*MULTIPLIER
-    fg = ren.color_fg + (255,)
-    bg = ren.color_bg + (255,)
-    multiplier = MULTIPLIER
-    
-    if (pos.x, pos.y) not in _entity_directory:
-        _entity_directory.append((pos.x, pos.y))
-    else:
-        bg = ENTITY_COLORS['overlap_bg'] + (255,)
-
-    if ren.visible:        
-        console.tiles["fg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = fg
-        console.tiles["bg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = bg
-    
         iter = 0
         for yy in range(0, multiplier):
             for xx in range(0, multiplier):
