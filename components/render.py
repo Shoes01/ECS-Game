@@ -1,6 +1,8 @@
+from _data import ENTITY_COLORS
+
 class RenderComponent():
     def __init__(self, color_bg, char, codepoint, color_fg, color_explored, explored=False, visible=False):
-        self.color_bg = (0, 0, 0) if color_bg is None else color_bg
+        self.color_bg = ENTITY_COLORS['floor_bg'] if color_bg is None else color_bg
         self.char = "#" if char is None else char
         self.codepoint = 923 if codepoint is None else codepoint
         self.color_fg = (255, 255, 255) if color_fg is None else color_fg

@@ -53,7 +53,7 @@ def render_entities(console_object, recompute_fov, world):
 
     # Print corpses.
     for (pos, ren) in _sorted_list.get('corpse') or []:
-        print_tile(console, pos, ren, _entity_directory, world)
+        print_tile(console, pos, ren, _entity_directory, world, corpse=True)
 
     # Print items.
     for (pos, ren) in _sorted_list.get('item') or []:
@@ -78,10 +78,10 @@ def render_entities(console_object, recompute_fov, world):
     if world.state == 'Look':
         console.print(cursor.x, cursor.y, cursor.char, cursor.color_fg)
 
-def print_tile(console, pos, ren, _entity_directory, world, floor=False):
+def print_tile(console, pos, ren, _entity_directory, world, corpse=False, floor=False):
     x, y = pos.x*MULTIPLIER, pos.y*MULTIPLIER
     fg = ren.color_fg + (255,)
-    bg = ren.color_bg + (0,)
+    bg = ren.color_bg + (255,)
     multiplier = MULTIPLIER
     
     if floor:
@@ -100,7 +100,7 @@ def print_tile(console, pos, ren, _entity_directory, world, floor=False):
         if not floor:
             if (x, y) in _entity_directory:
                 bg = ENTITY_COLORS['overlap_bg'] + (255,)
-            else:
+            elif not corpse:
                 _entity_directory.append((x, y))
 
         console.tiles["fg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = fg
@@ -114,7 +114,7 @@ def print_tile(console, pos, ren, _entity_directory, world, floor=False):
 
 ####### SOLUTION
 # 1) Draw the bg tiles
-# 2) Draw the sprites, top to bottom
+# 2) Draw the sprites, top to bottom -- drawing the bottom sprites will alpha 0 just wipes the tile?
 # ?? What happens with overlapping entities?
 #### The "first" entity printed needs to know if it is using an overlapping bg color...
 #### Build the list of overlapping entities?

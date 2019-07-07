@@ -1,4 +1,4 @@
-import color_fgsys
+import colorsys
 import tcod
 import tcod.event
 import tcod.tileset
@@ -306,8 +306,8 @@ def print_rgb():
             cp += 1
 
 def print_hsv():
-    br, bg, bb = color_fgsys.hsv_to_rgb(bg_h_pos/100, bg_s_pos/100, bg_v_pos/100)
-    fr, fg, fb = color_fgsys.hsv_to_rgb(fg_h_pos/100, fg_s_pos/100, fg_v_pos/100)
+    br, bg, bb = colorsys.hsv_to_rgb(bg_h_pos/100, bg_s_pos/100, bg_v_pos/100)
+    fr, fg, fb = colorsys.hsv_to_rgb(fg_h_pos/100, fg_s_pos/100, fg_v_pos/100)
     
     fg_color = (255, 255, 255)
     color_bg = (255, 255, 255)
