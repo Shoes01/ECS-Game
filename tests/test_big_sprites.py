@@ -1,4 +1,4 @@
-import color_fgsys
+import colorsys
 import tcod
 import tcod.event
 import tcod.tileset
