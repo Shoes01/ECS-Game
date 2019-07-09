@@ -112,6 +112,8 @@ ENTITY_COLORS = {
     'floor': COLOR_THEME['BrightWhite'],
     'floor_bg': COLOR_THEME['BrightBlack'],
     'floor_explored': COLOR_THEME['Background'],
+    'loot_plural_fg': COLOR_THEME['Yellow'],
+    'loot_plural_bg': COLOR_THEME['BrightYellow'],
     'mon_demon': COLOR_THEME['Red'],
     'mon_goblin': COLOR_THEME['Yellow'],
     'mon_orc': COLOR_THEME['Cyan'],
@@ -201,7 +203,9 @@ SPRITES = {
     'wall_stone_right': 52,
     'wall_stone_bottomleft': 82,
     'wall_stone_bottom': 83,
-    'wall_stone_bottomright': 84
+    'wall_stone_bottomright': 84,
+    # None json defined entities
+    'loot_plural': 200
 }
 
 ###################

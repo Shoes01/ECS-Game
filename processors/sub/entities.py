@@ -1,4 +1,4 @@
-from _data import ENTITY_COLORS, MULTIPLIER
+from _data import ENTITY_COLORS, MULTIPLIER, SPRITES
 from components.actor.actor import ActorComponent
 from components.actor.corpse import CorpseComponent
 from components.item.item import ItemComponent
@@ -12,7 +12,7 @@ def render_entities(console_object, recompute_fov, world):
         pos_player = world.component_for_entity(1, PositionComponent)
         world.map.fov_map.compute_fov(x=pos_player.x, y=pos_player.y, radius=10, light_walls=True, algorithm=0)
 
-    _entity_directory = []
+    _entity_directory = {}
     _ducpliates = []
     _sorted_list = {
         'tile': [],
@@ -57,7 +57,7 @@ def render_entities(console_object, recompute_fov, world):
 
     # Print items.
     for (pos, ren) in _sorted_list.get('item') or []:
-        print_tile(console, pos, ren, _entity_directory, world)
+        print_tile(console, pos, ren, _entity_directory, world, items=True)
 
     # Print stairs.
     for (pos, ren) in _sorted_list.get('stairs') or []:
@@ -78,15 +78,13 @@ def render_entities(console_object, recompute_fov, world):
     if world.state == 'Look':
         console.print(cursor.x, cursor.y, cursor.char, cursor.color_fg)
 
-def print_tile(console, pos, ren, _entity_directory, world, corpse=False, floor=False):
+def print_tile(console, pos, ren, _entity_directory, world, corpse=False, floor=False, items=False):
     x, y = pos.x*MULTIPLIER, pos.y*MULTIPLIER
+    codepoint = ren.codepoint
     fg = ren.color_fg + (255,)
     bg = ren.color_bg + (255,)
     multiplier = MULTIPLIER
     
-    if floor:
-        bg = ren.color_bg + (255,)
-
     if world.state is not 'SkillTargeting':
         ren.highlight_color = None
     
@@ -94,14 +92,19 @@ def print_tile(console, pos, ren, _entity_directory, world, corpse=False, floor=
         if ren.explored and not ren.visible:
             bg = ren.color_explored + (255,)
         
-        if ren.highlight_color:
+        if floor and ren.highlight_color:
             bg = ren.highlight_color + (255,)
 
         if not floor:
             if (x, y) in _entity_directory:
-                bg = ENTITY_COLORS['overlap_bg'] + (255,)
+                new_bg = _entity_directory[(x, y)]
+                if new_bg is not fg:
+                    bg = new_bg
+                if items:
+                    fg = ENTITY_COLORS['loot_plural_fg'] + (255,)
+                    codepoint = SPRITES['loot_plural']
             elif not corpse:
-                _entity_directory.append((x, y))
+                _entity_directory[(x, y)] = fg
 
         console.tiles["fg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = fg
         console.tiles["bg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = bg
@@ -109,12 +112,5 @@ def print_tile(console, pos, ren, _entity_directory, world, corpse=False, floor=
         iter = 0
         for yy in range(0, multiplier):
             for xx in range(0, multiplier):
-                console.tiles["ch"][x + xx, y + yy] = ord(u'\U000F0000') + ren.codepoint*multiplier*multiplier + iter
+                console.tiles["ch"][x + xx, y + yy] = ord(u'\U000F0000') + codepoint*multiplier*multiplier + iter
                 iter += 1
-
-####### SOLUTION
-# 1) Draw the bg tiles
-# 2) Draw the sprites, top to bottom -- drawing the bottom sprites will alpha 0 just wipes the tile?
-# ?? What happens with overlapping entities?
-#### The "first" entity printed needs to know if it is using an overlapping bg color...
-#### Build the list of overlapping entities?
