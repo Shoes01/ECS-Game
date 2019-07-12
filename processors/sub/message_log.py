@@ -6,7 +6,7 @@ from components.item.skill import ItemSkillComponent
 from components.item.slot import SlotComponent
 from components.name import NameComponent
 
-def render_message_log(console_object, world):        
+def render_message_log(console_object, new_turn, world):        
     console, x, y, w, h = console_object
     
     # Draw the regular message log.
@@ -24,6 +24,13 @@ def render_message_log(console_object, world):
         offset = None
     else:
         offset = -world.messages_offset
+    
+    if new_turn:
+        try:
+            world.messages.remove({'whitespace': True})
+        except:
+            pass
+        world.messages.append({'whitespace': True})
 
     dy = h - 1
     offset_messages = world.messages[:offset]
@@ -43,6 +50,7 @@ def render_message_log(console_object, world):
         _remove = message.get('remove')
         _skill = message.get('skill')
         _wear = message.get('wear')
+        _whitespace = message.get('whitespace')
 
         if _ai_awake:
             char, color_fg, turn = _ai_awake
@@ -160,6 +168,10 @@ def render_message_log(console_object, world):
                 console.print(0, 0 + dy, '(Turn %s) You replace your %s item with your %s.' % (turn, slot, name), LOG_COLORS['success'])
             else:
                 console.print(0, 0 + dy, '(Turn %s) You cannot equip a %s!' % (turn, name), LOG_COLORS['failure'])
+
+        elif _whitespace:
+            # Do nothing. The dy still iterates.
+            pass
 
         dy -= 1
         if dy < 0:

@@ -25,18 +25,27 @@ class RenderProcessor(esper.Processor):
     def process(self):
         _recompute_fov = False
         _redraw = False
+        _new_turn = False
+        _soul = None
         
         while not self.queue.empty():
+            # This queue is different from the Processor queues.
+            # Every event is read and remembered, and then all done on the same tick.
+            # That's why there is a if/else chain here.
             event = self.queue.get()
-
-            _recompute_fov = event.get('recompute_fov')
-            _redraw = event.get('redraw')
-            _soul = event.get('soul')
 
             if event.get('item'):
                 self.item = event['item']
             elif event.get('item') is False:
                 self.item = None
+            elif event.get('new_turn'):
+                _new_turn = event.get('new_turn')
+            elif event.get('recompute_fov'):
+                _recompute_fov = event.get('recompute_fov')
+            elif event.get('redraw'):
+                _redraw = event.get('redraw')
+            elif event.get('soul'):
+                _soul = event.get('soul')
 
         if not _redraw:
             return 0
@@ -46,7 +55,7 @@ class RenderProcessor(esper.Processor):
 
         # Draw each console.
         self.draw_stats(console=self.world.consoles['stats'], state=self.world.state, world=self.world)
-        self.draw_log(console=self.world.consoles['log'], item=self.item, state=self.world.state, world=self.world)
+        self.draw_log(console=self.world.consoles['log'], item=self.item, new_turn=_new_turn, state=self.world.state, world=self.world)
         self.draw_map(console=self.world.consoles['map'], recompute_fov=_recompute_fov, state=self.world.state, soul=_soul, world=self.world)
 
         # Blit the consoles.
@@ -67,11 +76,11 @@ class RenderProcessor(esper.Processor):
         if state != 'MainMenu':
             render_stats(console, world)
     
-    def draw_log(self, console, item, state, world):
+    def draw_log(self, console, item, new_turn, state, world):
         if state == 'SkillTargeting':
             render_skill_display(console, item, world)
         elif state != 'MainMenu':
-            render_message_log(console, world)
+            render_message_log(console, new_turn, world)
 
     def draw_map(self, console, recompute_fov, state, soul, world):
         # Splash screen.

@@ -59,6 +59,7 @@ class EnergyProcessor(esper.Processor):
         if self.world.ticker % TICKS_PER_TURN == 0:
             self.world.turn += 1
             self.world.get_processor(CooldownProcessor).queue.put({'tick': True})
+            self.world.get_processor(RenderProcessor).queue.put({'new_turn': True, 'redraw': True})
 
         for ent, (eng) in self.world.get_component(EnergyComponent):
             if eng.energy > 0:
