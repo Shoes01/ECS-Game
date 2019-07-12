@@ -13,6 +13,8 @@ class DiscoveryProcessor(esper.Processor):
             event = self.queue.get()
 
             if event.get('message'):
-                message_type, message_contents = event['message']
+                message_contents = list((event.get('turn') + 1,))
+                message_type, message_contents_partial = event['message']
+                message_contents.extend(message_contents_partial)
                 self.world.messages.append({message_type: message_contents})
                 self.world.get_processor(RenderProcessor).queue.put({'redraw': True})
