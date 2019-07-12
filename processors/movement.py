@@ -8,6 +8,7 @@ from components.position import PositionComponent
 from components.tile import TileComponent
 from processors.combat import CombatProcessor
 from processors.dijkstra import DijkstraProcessor
+from processors.discovery import DiscoveryProcessor
 from processors.energy import EnergyProcessor
 from processors.render import RenderProcessor
 from queue import Queue
@@ -53,9 +54,9 @@ class MovementProcessor(esper.Processor):
                 if items:
                     if len(items) == 1:
                         name = self.world.component_for_entity(items.pop(), NameComponent).name
-                        self.world.messages.append({'move_items': (self.world.turn, name, 0)})
+                        self.world.get_processor(DiscoveryProcessor).queue.put({'message': ('move_items', (self.world.turn+1, name, 0))})
                     else:
-                        self.world.messages.append({'move_items': (self.world.turn, None, len(items))})
+                        self.world.get_processor(DiscoveryProcessor).queue.put({'message': ('move_items', (self.world.turn+1, None, len(items)))})
 
             if success:
                 pos.x += dx

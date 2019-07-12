@@ -43,6 +43,7 @@ from processors.debug import DebugProcessor
 from processors.death import DeathProcessor
 from processors.descend import DescendProcessor
 from processors.dijkstra import DijkstraProcessor
+from processors.discovery import DiscoveryProcessor
 from processors.drop import DropProcessor
 from processors.energy import EnergyProcessor
 from processors.event import EventProcessor
@@ -105,6 +106,7 @@ class GameWorld(esper.World):
         self.add_processor(AiInputProcessor(), 30)
         self.add_processor(InputProcessor(), 30)
         ' Update. '
+        self.add_processor(DiscoveryProcessor(), 21)
         self.add_processor(EventProcessor(), 20)    
         self.add_processor(InventoryProcessor(), 15)
         self.add_processor(SkillProcessor(), 15)
