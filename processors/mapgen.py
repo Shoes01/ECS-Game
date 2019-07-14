@@ -16,6 +16,7 @@ from components.render import RenderComponent
 from components.stairs import StairsComponent
 from components.tile import TileComponent
 from processors.dijkstra import DijkstraProcessor
+from processors.fov import FOVProcessor
 from processors.render import RenderProcessor
 from queue import Queue
 
@@ -48,7 +49,7 @@ class MapgenProcessor(esper.Processor):
             game_map.directory = self.create_directory(game_map.height, game_map.tiles, game_map.width)
 
             # Create fov map.
-            game_map.fov_map = self.create_fov_map(game_map.height, game_map.width)
+            self.world.get_processor(FOVProcessor).queue.put({'fov_build': True})
 
     def create_map(self, floor, h, w):
         tiles = np.ones([w, h], dtype=int, order='F')
@@ -290,13 +291,3 @@ class MapgenProcessor(esper.Processor):
         
         return directory
 
-    def create_fov_map(self, h, w):
-        fov_map = libtcod.map.Map(w, h, order='F')
-
-        for ent, (pos, tile) in self.world.get_components(PositionComponent, TileComponent):
-            fov_map.walkable[pos.x, pos.y] = not tile.blocks_path
-            fov_map.transparent[pos.x, pos.y] = not tile.blocks_sight
-        
-        self.world.get_processor(RenderProcessor).queue.put({'recompute_fov': True, 'redraw': True})
-        
-        return fov_map

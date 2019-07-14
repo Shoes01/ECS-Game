@@ -7,11 +7,7 @@ from components.render import RenderComponent
 from components.stairs import StairsComponent
 from components.tile import TileComponent
 
-def render_entities(console_object, recompute_fov, world):
-    if recompute_fov:
-        pos_player = world.component_for_entity(1, PositionComponent)
-        world.map.fov_map.compute_fov(x=pos_player.x, y=pos_player.y, radius=10, light_walls=True, algorithm=0)
-
+def render_entities(console_object, world):
     _entity_directory = {}
     _ducpliates = []
     _sorted_list = {

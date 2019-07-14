@@ -10,7 +10,7 @@ from processors.combat import CombatProcessor
 from processors.dijkstra import DijkstraProcessor
 from processors.discovery import DiscoveryProcessor
 from processors.energy import EnergyProcessor
-from processors.render import RenderProcessor
+from processors.fov import FOVProcessor
 from queue import Queue
 
 class MovementProcessor(esper.Processor):
@@ -41,7 +41,7 @@ class MovementProcessor(esper.Processor):
                 self.world.get_processor(CombatProcessor).queue.put({'ent': ent, 'defender_IDs': occupying_entity})
             
             if self.world.has_component(ent, PlayerComponent):
-                self.world.get_processor(RenderProcessor).queue.put({'recompute_fov': True, 'redraw': True})
+                self.world.get_processor(FOVProcessor).queue.put({'fov_recompute': True})
                 self.world.get_processor(DijkstraProcessor).queue.put({'update_dijkstra': True})
 
                 # Player may run into walls, whereas AI uses the dijkstra map to navigate.

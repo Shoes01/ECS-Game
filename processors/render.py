@@ -20,10 +20,10 @@ class RenderProcessor(esper.Processor):
         super().__init__()
         self.item = None
         self.queue = Queue()
+        
         self.queue.put({'redraw': True})
     
     def process(self):
-        _recompute_fov = False
         _redraw = False
         _new_turn = False
         _soul = None
@@ -40,8 +40,6 @@ class RenderProcessor(esper.Processor):
                 self.item = None
             elif event.get('new_turn'):
                 _new_turn = event.get('new_turn')
-            elif event.get('recompute_fov'):
-                _recompute_fov = event.get('recompute_fov')
             elif event.get('redraw'):
                 _redraw = event.get('redraw')
             elif event.get('soul'):
@@ -56,7 +54,7 @@ class RenderProcessor(esper.Processor):
         # Draw each console.
         self.draw_stats(console=self.world.consoles['stats'], state=self.world.state, world=self.world)
         self.draw_log(console=self.world.consoles['log'], item=self.item, new_turn=_new_turn, state=self.world.state, world=self.world)
-        self.draw_map(console=self.world.consoles['map'], recompute_fov=_recompute_fov, state=self.world.state, soul=_soul, world=self.world)
+        self.draw_map(console=self.world.consoles['map'], state=self.world.state, soul=_soul, world=self.world)
 
         # Blit the consoles.
         for key, value in self.world.consoles.items():
@@ -82,14 +80,14 @@ class RenderProcessor(esper.Processor):
         elif state != 'MainMenu':
             render_message_log(console, new_turn, world)
 
-    def draw_map(self, console, recompute_fov, state, soul, world):
+    def draw_map(self, console, state, soul, world):
         # Splash screen.
         if state == 'MainMenu':
             render_main_menu(console)
         
         # Main game content.
         if state != 'MainMenu' and state != 'PopupMenu':
-            render_entities(console, recompute_fov, world)
+            render_entities(console, world)
             render_tooltips(console, world)
         
         # Various menus.

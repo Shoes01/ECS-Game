@@ -48,6 +48,7 @@ from processors.drop import DropProcessor
 from processors.energy import EnergyProcessor
 from processors.event import EventProcessor
 from processors.final import FinalProcessor
+from processors.fov import FOVProcessor
 from processors.initial import InitialProcessor
 from processors.input import InputProcessor
 from processors.inventory import InventoryProcessor
@@ -125,6 +126,7 @@ class GameWorld(esper.World):
         self.add_processor(EnergyProcessor(), 3)
         ' Endstep. '
         self.add_processor(CooldownProcessor(), 2)
+        self.add_processor(FOVProcessor(), 1)
         self.add_processor(StateProcessor(), 1)
         self.add_processor(FinalProcessor(), 0)
 
