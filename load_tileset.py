@@ -5,8 +5,8 @@ import numpy as np
 from _data import MULTIPLIER
 
 def load_tileset():    
-    # Prep tilesheet.
-    w, h = 8, 8 # w and h of a tile from the sheets.
+    ### Prep tilesheet.
+    w, h = 8, 8 # width and height of the font.
     t = tcod.tileset.Tileset(w, h)
     cp437 = np.array(
         [
@@ -45,12 +45,12 @@ def load_tileset():
         ], order='F'
     )
 
-    # Prepare font sheet.
+    ### Prepare font sheet.
     im = Image.open('Zaratustra-msx.png').convert('RGBA')
     nim = np.array(im)[:, :, 3] # Grab the alpha component.
     tx, ty = nim.shape
 
-    # Slice up font sheet.
+    ### Slice up font sheet.
     iterator = 0
     for x in range(0, tx):
         if x % w == 0:
@@ -61,12 +61,13 @@ def load_tileset():
                     t.set_tile(cp437[iterator], nim[x_0:x_1, y_0:y_1])
                     iterator += 1
 
-    # Prepare tile sheet.
-    multiplier = MULTIPLIER * w // 16 # If is needed in case the font and sprites are different sizes.
+    ### Prepare sprite sheet.
+    t_w, t_h = 16, 16 # Width and height of the sprites.
+    multiplier = MULTIPLIER * w // t_w # This is needed in case the font and sprites are different sizes.
 
     im = np.repeat(
         np.repeat(
-            Image.open('ken_monochrome.png').convert('RGBA'), # Each sprite is 16x16, with an additional spacer pixel.
+            Image.open('ken_monochrome.png').convert('RGBA'),
             multiplier, # Resize it along axis 0
             axis=0
         ), 
@@ -74,17 +75,17 @@ def load_tileset():
         axis=1
     )
 
-    nim = np.array(im)[:, :, 0] # Only look at the R component.
+    nim = np.array(im)[:, :, 0] # Grab the R component.
     tx, ty = nim.shape
 
-    big_array = [] # Contains all the full tiles of the tileset, which will be cut up later.
+    big_array = [] # Contains all the full sprites of the spritesheet, which will be cut up later.
 
     for x in range(0, tx):
-        if x % (17 * multiplier) == 0: # The normal sized tilesheet has a pixel seperator at 17.
+        if x % ((t_w + 1) * multiplier) == 0: # The +1 is needed, as the ken_monochrome.png spritesheet has a pixel wide seperator between each tile.
             for y in range(0, ty):
-                if y % (17 * multiplier) == 0:
-                    x_0, x_1 = x, x + 16 * multiplier
-                    y_0, y_1 = y, y + 16 * multiplier
+                if y % ((t_h + 1) * multiplier) == 0:
+                    x_0, x_1 = x, x + t_w * multiplier
+                    y_0, y_1 = y, y + t_h * multiplier
                     big_array.append(nim[x_0:x_1, y_0:y_1])
 
     codepoint = ord('\U000F0000')
