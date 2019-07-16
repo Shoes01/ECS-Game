@@ -15,6 +15,7 @@ from components.rarity import RarityComponent
 from components.render import RenderComponent
 from components.stairs import StairsComponent
 from components.tile import TileComponent
+from processors.camera import CameraProcessor
 from processors.dijkstra import DijkstraProcessor
 from processors.fov import FOVProcessor
 from processors.render import RenderProcessor
@@ -162,6 +163,8 @@ class MapgenProcessor(esper.Processor):
 
         player_pos.x = random.randint(room.x + 1, room.x + room.w - 2)
         player_pos.y = random.randint(room.y + 1, room.y + room.h - 2)
+
+        self.world.get_processor(CameraProcessor).queue.put({'center_camera_on': (player_pos.x, player_pos.y)})
 
         ### DEBUG 
         """

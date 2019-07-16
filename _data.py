@@ -5,6 +5,7 @@ from collections import namedtuple
 FINAL_FLOOR = 2
 MULTIPLIER = 4
 TICKS_PER_TURN = 1
+FOV_RADIUS = 5
 
 ### CONSOLE DIMENSION DATA
 

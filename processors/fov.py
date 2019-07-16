@@ -1,6 +1,7 @@
 import esper
 import tcod as libtcod
 
+from _data import FOV_RADIUS
 from components.position import PositionComponent
 from components.tile import TileComponent
 from processors.render import RenderProcessor
@@ -34,5 +35,5 @@ class FOVProcessor(esper.Processor):
             if _fov_recompute:
                 # Recompute fov map.
                 pos_player = self.world.component_for_entity(1, PositionComponent)
-                self.world.map.fov_map.compute_fov(x=pos_player.x, y=pos_player.y, radius=10, light_walls=True, algorithm=0)
+                self.world.map.fov_map.compute_fov(x=pos_player.x, y=pos_player.y, radius=FOV_RADIUS, light_walls=True, algorithm=0)
                 self.world.get_processor(RenderProcessor).queue.put({'redraw': True})

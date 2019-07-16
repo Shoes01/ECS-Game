@@ -6,6 +6,7 @@ from components.item.item import ItemComponent
 from components.name import NameComponent
 from components.position import PositionComponent
 from components.tile import TileComponent
+from processors.camera import CameraProcessor
 from processors.combat import CombatProcessor
 from processors.dijkstra import DijkstraProcessor
 from processors.discovery import DiscoveryProcessor
@@ -34,13 +35,14 @@ class MovementProcessor(esper.Processor):
             pos = self.world.component_for_entity(ent, PositionComponent)
             occupying_entity = self.world.get_entities_at(pos.x + dx, pos.y + dy, ActorComponent)
             success = True
+            player = self.world.has_component(ent, PlayerComponent)
 
             if len(occupying_entity) == 1:
                 success = False
                 # TODO: Bump attacks are always physical at the moment.
                 self.world.get_processor(CombatProcessor).queue.put({'ent': ent, 'defender_IDs': occupying_entity})
             
-            if self.world.has_component(ent, PlayerComponent):
+            if player:
                 self.world.get_processor(FOVProcessor).queue.put({'fov_recompute': True})
                 self.world.get_processor(DijkstraProcessor).queue.put({'update_dijkstra': True})
 
@@ -61,6 +63,9 @@ class MovementProcessor(esper.Processor):
             if success:
                 pos.x += dx
                 pos.y += dy
+                
+                if player:
+                    self.world.get_processor(CameraProcessor).queue.put({'update_camera': (dx, dy)})
                 
                 if not skill:
                     self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'move': True})

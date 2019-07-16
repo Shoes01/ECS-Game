@@ -4,7 +4,8 @@ import os
 import shelve
 import tcod as libtcod
 
-from _data import ENTITY_COLORS, con, eqp, log, map, SPRITES
+from _data import ENTITY_COLORS, con, eqp, log, map, SPRITES, MULTIPLIER
+from camera import Camera
 from cursor import Cursor
 from load_tileset import load_tileset
 from map import Map
@@ -36,6 +37,7 @@ from components.tile import TileComponent
 
 ' Processors. '
 from processors.ai_input import AiInputProcessor
+from processors.camera import CameraProcessor
 from processors.combat import CombatProcessor
 from processors.consumable import ConsumableProcessor
 from processors.cooldown import CooldownProcessor
@@ -84,9 +86,10 @@ class GameWorld(esper.World):
         self.item_table, self.monster_table = self.load_tables()
 
         ' Objects. '
+        self.camera = Camera(x=0, y=0, w=map.w // MULTIPLIER, h=map.h // MULTIPLIER, leash=3) # TODO: The map values from _data might need to be renamed...
         self.consoles = {}
         self.cursor = Cursor()
-        self.map = Map()
+        self.map = Map(w=50, h=50)
 
         # Prepare tilset.
         load_tileset()
@@ -101,6 +104,7 @@ class GameWorld(esper.World):
         ' Upkeep. '
         self.add_processor(InitialProcessor(), 999)
         ' Render. '
+        self.add_processor(CameraProcessor(), 41)
         self.add_processor(RenderProcessor(), 40)
         self.add_processor(DebugProcessor(), 39)
         ' Input. '

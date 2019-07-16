@@ -75,7 +75,13 @@ def render_entities(console_object, world):
         console.print(cursor.x, cursor.y, cursor.char, cursor.color_fg)
 
 def print_tile(console, pos, ren, _entity_directory, world, corpse=False, floor=False, items=False):
-    x, y = pos.x*MULTIPLIER, pos.y*MULTIPLIER
+    # Check to see that the tile is in the camera view.
+    cam_x, cam_y, cam_w, cam_h = world.camera.x, world.camera.y, world.camera.width, world.camera.height
+    if not (cam_x <= pos.x < cam_x + cam_w) or not (cam_y <= pos.y < cam_y + cam_h):
+        return 0
+
+    # Print tile.
+    x, y = (pos.x - cam_x)*MULTIPLIER, (pos.y - cam_y)*MULTIPLIER
     codepoint = ren.codepoint
     fg = ren.color_fg + (255,)
     bg = ren.color_bg + (255,)
