@@ -46,6 +46,7 @@ class InputProcessor(esper.Processor):
 
         if mouse:
             self.world.get_processor(EventProcessor).queue.put({'mouse_pos': (mouse.tile.x, mouse.tile.y)})
+            self.world.get_processor(RenderProcessor).queue.put({'redraw': True})
 
         if key or mouse_click:
             self.world.get_processor(DebugProcessor).queue.put({'redraw': True})

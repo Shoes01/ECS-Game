@@ -88,7 +88,7 @@ class RenderProcessor(esper.Processor):
         # Main game content.
         if state != 'MainMenu' and state != 'PopupMenu':
             render_entities(console, world)
-            render_tooltips(console, world)
+            render_tooltips((self.world.camera.x, self.world.camera.y), console, world)
         
         # Various menus.
         if state == 'ViewCharacterSheet':

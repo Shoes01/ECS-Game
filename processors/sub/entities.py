@@ -72,7 +72,21 @@ def render_entities(console_object, world):
     # Print cursor.
     cursor = world.cursor
     if world.state == 'Look':
-        console.print(cursor.x, cursor.y, cursor.char, cursor.color_fg)
+        print_cursor(cursor.color_fg, console, cursor.x, cursor.y, world)
+
+def print_cursor(color, console, x, y, world):
+    cam_x, cam_y = world.camera.x, world.camera.y
+    x, y = (x - cam_x)*MULTIPLIER, (y - cam_y)*MULTIPLIER
+    codepoint = 790
+
+    console.tiles["fg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = color + (255,)
+    console.tiles["bg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = color + (0,)
+
+    iter = 0
+    for yy in range(0, MULTIPLIER):
+        for xx in range(0, MULTIPLIER):
+            console.tiles["ch"][x + xx, y + yy] = ord(u'\U000F0000') + codepoint*MULTIPLIER*MULTIPLIER + iter
+            iter += 1
 
 def print_tile(console, pos, ren, _entity_directory, world, corpse=False, floor=False, items=False):
     # Check to see that the tile is in the camera view.
@@ -85,7 +99,6 @@ def print_tile(console, pos, ren, _entity_directory, world, corpse=False, floor=
     codepoint = ren.codepoint
     fg = ren.color_fg + (255,)
     bg = ren.color_bg + (255,)
-    multiplier = MULTIPLIER
     
     if world.state is not 'SkillTargeting':
         ren.highlight_color = None
@@ -112,7 +125,7 @@ def print_tile(console, pos, ren, _entity_directory, world, corpse=False, floor=
         console.tiles["bg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = bg
         
         iter = 0
-        for yy in range(0, multiplier):
-            for xx in range(0, multiplier):
-                console.tiles["ch"][x + xx, y + yy] = ord(u'\U000F0000') + codepoint*multiplier*multiplier + iter
+        for yy in range(0, MULTIPLIER):
+            for xx in range(0, MULTIPLIER):
+                console.tiles["ch"][x + xx, y + yy] = ord(u'\U000F0000') + codepoint*MULTIPLIER*MULTIPLIER + iter
                 iter += 1

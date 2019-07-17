@@ -1,11 +1,11 @@
-from _data import UI_COLORS
+from _data import MULTIPLIER, UI_COLORS
 from components.actor.actor import ActorComponent
 from components.item.item import ItemComponent
 from components.name import NameComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
 
-def render_tooltips(console_object, world):
+def render_tooltips(camera_pos, console_object, world):
     console, _, _, _, h = console_object
     cursor = world.cursor
     x, y = None, None
@@ -14,8 +14,8 @@ def render_tooltips(console_object, world):
         x, y = cursor.x, cursor.y
     elif world.mouse_pos:
         x, y = world.mouse_pos
-        x -= 1
-        y -= 1
+        x = (x-1) // MULTIPLIER + camera_pos[0]
+        y = (y-1) // MULTIPLIER + camera_pos[1]
     else:
         return 0
 
