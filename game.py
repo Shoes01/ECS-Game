@@ -174,6 +174,7 @@ class GameWorld(esper.World):
             return 0
 
         with shelve.open('savegame', 'r') as data_file:
+            self.camera = data_file['camera']
             self.map = data_file['map']
             self.messages = data_file['log']
             self.state = data_file['state']
@@ -201,6 +202,7 @@ class GameWorld(esper.World):
 
     def save_game(self):
         with shelve.open('savegame', 'n') as data_file:
+            data_file['camera'] = self.camera
             data_file['map'] = self.map
             data_file['log'] = self.messages
             data_file['state'] = self.state
