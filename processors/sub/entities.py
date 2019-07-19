@@ -15,7 +15,8 @@ def render_entities(console_object, world):
         'corpse': [],
         'item': [],
         'stairs': [],
-        'actor': []
+        'actor': [],
+        'highlighted': []
     }
 
     console, x, y, w, h = console_object
@@ -35,6 +36,8 @@ def render_entities(console_object, world):
         if world.has_component(ent, StairsComponent):
             _sorted_list['stairs'].append((pos, ren))
         elif world.has_component(ent, TileComponent):
+            if world.state is 'SkillTargeting' and ren.highlight_color:
+                _sorted_list['highlighted'].append((pos, ren))
             _sorted_list['tile'].append((pos, ren))
         elif world.has_component(ent, CorpseComponent):
             _sorted_list['corpse'].append((pos, ren))
@@ -69,6 +72,10 @@ def render_entities(console_object, world):
     if not world.has_component(1, CorpseComponent):
         print_tile(console, player_pos, player_ren, _entity_directory, world)
     
+    # Print the highlight cursors.
+    for (pos, ren) in _sorted_list.get('highlighted') or []:
+        print_cursor(ren.highlight_color, console, pos.x, pos.y, world)
+
     # Print cursor.
     cursor = world.cursor
     if world.state == 'Look':
@@ -77,7 +84,7 @@ def render_entities(console_object, world):
 def print_cursor(color, console, x, y, world):
     cam_x, cam_y = world.camera.x, world.camera.y
     x, y = (x - cam_x)*MULTIPLIER, (y - cam_y)*MULTIPLIER
-    codepoint = 790
+    codepoint = 790 # Reticle sprite.
 
     console.tiles["fg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = color + (255,)
     console.tiles["bg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = color + (0,)
@@ -108,7 +115,9 @@ def print_tile(console, pos, ren, _entity_directory, world, corpse=False, floor=
             bg = ren.color_explored + (255,)
         
         if floor and ren.highlight_color:
-            bg = ren.highlight_color + (255,)
+            fg = ren.highlight_color + (255,)
+            bg = (0, 0, 0, 0)
+            codepoint = 790
 
         if not floor:
             if (x, y) in _entity_directory:
