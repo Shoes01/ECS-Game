@@ -214,11 +214,17 @@ class SkillProcessor(esper.Processor):
         # Check to see if the costs can be paid.
         skill_comp = self.world.component_for_entity(item, ItemSkillComponent)
         ent_stats = generate_stats(ent, self.world)
+        insufficient_stats = []
         for stat, cost in skill_comp.cost_soul.items():
-            if ent_stats[stat] <= 0:
-                error = 'no_currency'
-                self.world.messages.append({'skill': (error, name, turn)})
-                return 0
+            if ent_stats[stat] < cost:
+                insufficient_stats.append(stat)
+        if insufficient_stats:
+            error_message = ''
+            for stat in insufficient_stats:
+                error_message = error_message + str(stat) + ', '
+            error_message = error_message[:-2]
+            self.world.messages.append({'skill': (error_message, name, turn)})
+            return 0
         
         # Pay the costs.
         self.world.get_processor(CooldownProcessor).queue.put({'register': item})

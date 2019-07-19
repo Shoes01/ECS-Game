@@ -154,10 +154,10 @@ def render_message_log(console_object, new_turn, world):
                 console.print(0, 0 + dy, '(Turn %s) There is something in your way.' % (turn), LOG_COLORS['failure'])
             elif error == 'no_legal_target':
                 console.print(0, 0 + dy, '(Turn %s) No valid target found.' % (turn), LOG_COLORS['failure'])
-            elif error == 'no_currency':
-                console.print(0, 0 + dy, '(Turn %s) You do not have enough points to use %s!' % (turn, name), LOG_COLORS['failure'])
-            else:
+            elif error == 'no_error':
                 console.print(0, 0 + dy, '(Turn %s) You use your %s skill!' % (turn, name), LOG_COLORS['success'])
+            else:
+                console.print(0, 0 + dy, '(Turn %s) You do not have enough %s points to use %s!' % (turn, error, name), LOG_COLORS['failure'])
 
         elif _wear:
             name, slot, success, turn = _wear
