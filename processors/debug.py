@@ -39,6 +39,7 @@ class DebugProcessor(esper.Processor):
 
         # Show dijkstra map, but only when the map needs to be redraw.
         if _redraw:
+            # TODO: Fix the positioning of the dijkstra values
             for (x, y), value in np.ndenumerate(dijkstra_map):
                 if value == 999:
                     map_obj[0].print(x, y, '#', libtcod.pink)
@@ -46,7 +47,8 @@ class DebugProcessor(esper.Processor):
                     map_obj[0].print(x, y, baseN(value, 35), libtcod.pink)
             
         # Display mouse information.
-        if mouse_pos:
+        if mouse_pos and False:
+            # TODO: when this works, the game crashes
             m_x, m_y = mouse_pos
             _string = 'Console coordinate: {:>8}'.format(str((m_x, m_y)))
             con_obj[0].print(log_obj[1], log_obj[2], _string, libtcod.white, bg_blend=libtcod.BKGND_NONE)
