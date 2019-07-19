@@ -3,9 +3,11 @@ from collections import namedtuple
 ### GAME MAP DATA
 
 FINAL_FLOOR = 2
+FONTSHEET = 'Zaratustra-msx.png'
+FONTSIZE = 8
+FOV_RADIUS = 5
 MULTIPLIER = 4
 TICKS_PER_TURN = 1
-FOV_RADIUS = 5
 
 ### CONSOLE DIMENSION DATA
 

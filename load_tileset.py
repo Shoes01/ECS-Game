@@ -2,11 +2,11 @@ import tcod.tileset
 from PIL import Image
 import numpy as np
 
-from _data import MULTIPLIER
+from _data import FONTSHEET, FONTSIZE, MULTIPLIER
 
 def load_tileset():    
     ### Prep tilesheet.
-    w, h = 8, 8 # width and height of the font.
+    w, h = (FONTSIZE,)*2 # Width and height of the font.
     t = tcod.tileset.Tileset(w, h)
     cp437 = np.array(
         [
@@ -46,7 +46,7 @@ def load_tileset():
     )
 
     ### Prepare font sheet.
-    im = Image.open('Zaratustra-msx.png').convert('RGBA')
+    im = Image.open(FONTSHEET).convert('RGBA')
     nim = np.array(im)[:, :, 3] # Grab the alpha component.
     tx, ty = nim.shape
 
