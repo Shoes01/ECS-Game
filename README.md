@@ -3,7 +3,11 @@ A roguelike written in Python adhering to ECS, to the best of my abilities!
 
 __Dependencies__
 
-You need Python 3.7.0, Numpy 1.16.1 and tcod 10.0.0 to play.
+You need the following to play:
+  Numpy 1.16.1
+  PIL 6.0.0
+  Python 3.7.0
+  tcod 11.0.2
 
 __How to play__
 
@@ -13,11 +17,13 @@ __Controls__
 
 The numpad controls or mouse for movement.
 
+'q', 'w', 'e', 'a, 's', 'd': use equipped item, if possible
+
 'g': grab items
 
-'d': drop items
+shift + 'd': drop items
 
-'e': eat items
+shift + 'e': eat items
 
 'w': wear items
 
@@ -27,4 +33,6 @@ The numpad controls or mouse for movement.
 
 'x': look around
 
-'ESC': quit
+'<' or '>': use stairs
+
+'ESC': quit / open menu
