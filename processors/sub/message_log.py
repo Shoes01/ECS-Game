@@ -160,12 +160,18 @@ def render_message_log(console_object, new_turn, world):
                 console.print(0, 0 + dy, '(Turn %s) You do not have enough %s points to use %s!' % (turn, error, name), LOG_COLORS['failure'])
 
         elif _wear:
-            name, slot, success, turn = _wear
+            job = _wear.get('job')
+            name = _wear.get('name')
+            slot = _wear.get('slot')
+            success = _wear.get('success')
+            turn = _wear.get('turn')
 
             if success is True:
                 console.print(0, 0 + dy, '(Turn %s) You equip your %s to your %s.' % (turn, name, slot), LOG_COLORS['success'])
             elif success == 'slot_filled':
                 console.print(0, 0 + dy, '(Turn %s) You replace your %s item with your %s.' % (turn, slot, name), LOG_COLORS['success'])
+            elif success == 'wrong_job':
+                console.print(0, 0 + dy, '(Turn %s) You need to be a %s to equip your %s.' % (turn, job, name), LOG_COLORS['success'])
             else:
                 console.print(0, 0 + dy, '(Turn %s) You cannot equip a %s!' % (turn, name), LOG_COLORS['failure'])
 

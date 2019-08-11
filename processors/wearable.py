@@ -2,6 +2,8 @@ import esper
 
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
+from components.actor.job import JobComponent
+from components.item.jobreq import JobReqComponent
 from components.item.slot import SlotComponent
 from components.item.wearable import WearableComponent
 from components.name import NameComponent
@@ -55,26 +57,36 @@ class WearableProcessor(esper.Processor):
                         slot_filled_item = worn_item
                         break
 
+                # Prepare message log data.
+                message_data = {
+                    'name': name_component.name,
+                    'slot': self.world.component_for_entity(item, SlotComponent).slot,
+                    'turn': turn
+                }
+
                 if item in eqp.equipment:
                     # Already worn, so remove it.
                     self.world.get_processor(RemovableProcessor).queue.put({'ent': ent, 'item': item})
                 elif slot_filled:
                     # An item is already in the slot we want; swap the two items.
-                    slot = self.world.component_for_entity(item, SlotComponent).slot
-                    success = 'slot_filled'
-                    self.world.messages.append({'wear': (name_component.name, slot, success, turn)})
+                    message_data['success'] = 'slot_filled'
+                    self.world.messages.append({'wear': message_data})
                     eqp.equipment.append(item)
                     name_component.name += ' (worn)'
                     self.world.get_processor(RemovableProcessor).queue.put({'ent': ent, 'item': slot_filled_item})
+                elif self.world.component_for_entity(item, JobReqComponent).job_req != self.world.component_for_entity(ent, JobComponent).job:
+                    # Not the corrent job to wear the item.
+                    message_data['success'] = 'wrong_job'
+                    message_data['job'] = self.world.component_for_entity(item, JobReqComponent).job_req
+                    self.world.messages.append({'wear': message_data})
                 elif self.world.has_component(item, WearableComponent):
                     # Wear the item!
-                    slot = self.world.component_for_entity(item, SlotComponent).slot
-                    success = True
-                    self.world.messages.append({'wear': (name_component.name, slot, success, turn)})
+                    message_data['success'] = True
+                    self.world.messages.append({'wear': message_data})
                     eqp.equipment.append(item)
                     name_component.name += ' (worn)'
                     self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'item': True})
                 else:
                     # This is not a wearable item.
-                    success = False
-                    self.world.messages.append({'wear': (name_component.name, None, success, turn)})
+                    message_data['success'] = False
+                    self.world.messages.append({'wear': message_data})

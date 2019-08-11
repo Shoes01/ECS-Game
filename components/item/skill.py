@@ -1,15 +1,15 @@
 import numpy as np
 
 class ItemSkillComponent():
-    def __init__(self, cooldown, cost_energy, cost_soul, name, damage_type, description, east, north_east):
+    def __init__(self, cooldown, cost_energy, cost_soul, damage_type, description, name, east, north_east):
         ' Skill data. '
         self.cooldown = cooldown
         self.cooldown_remaining = 0
         self.cost_energy = cost_energy # Type: int
         self.cost_soul = cost_soul # Type: dict{'stat': int}
+        self.damage_type = damage_type
         self.description = description
         self.name = name
-        self.damage_type = damage_type
 
         ' Skill directions. '
         self.east = np.array(east)

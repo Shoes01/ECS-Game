@@ -8,6 +8,7 @@
     {
         "archtype": "item",
 
+        "job requirement": {"job": "soldier"},
         "name": {"name": "Sword"},
         "rarity": 0,
         "render": {"char": ")", "color_fg": "weapon", "codepoint": "eqp_sword"},
@@ -20,6 +21,7 @@
     {
         "archtype": "item",
 
+        "job requirement": {"job": "soldier"},
         "name": {"name": "Helmet"},
         "rarity": 0,
         "render": {"char": "]", "color_fg": "armor", "codepoint": "eqp_helmet"},
@@ -32,6 +34,7 @@
     {
         "archtype": "item",
 
+        "job requirement": {"job": "soldier"},
         "name": {"name": "Boots"},
         "rarity": 0,
         "render": {"char": "]", "color_fg": "armor", "codepoint": "eqp_boots"},
@@ -44,6 +47,7 @@
     {
         "archtype": "item",
 
+        "job requirement": {"job": "paladin"},
         "name": {"name": "Shield"},
         "rarity": 0,
         "render": {"char": "]", "color_fg": "armor", "codepoint": "eqp_shield"},
@@ -58,6 +62,7 @@
     {
         "archtype": "item",
 
+        "job requirement": {"job": "soldier"},
         "name": {"name": "Hammer"},
         "rarity": 1,
         "render": {"char": ")", "color_fg": "weapon", "codepoint": "eqp_hammer"},
@@ -73,6 +78,7 @@
     {
         "archtype": "item",
 
+        "job requirement": {"job": "soldier"},
         "name": {"name": "Long Sword"},
         "rarity": 2,
         "render": {"char": ")", "color_fg": "weapon", "codepoint": "eqp_sword_long"},
@@ -87,6 +93,7 @@
     {
         "archtype": "item",
 
+        "job requirement": {"job": "soldier"},
         "name": {"name": "Great Sword"},
         "rarity": 3,
         "render": {"char": ")", "color_fg": "weapon", "codepoint": "eqp_sword_great"},
@@ -101,6 +108,7 @@
     {
         "archtype": "item",
 
+        "job requirement": {"job": "soldier"},
         "name": {"name": "War Hammer"},
         "rarity": 4,
         "render": {"char": ")", "color_fg": "weapon", "codepoint": "eqp_hammer_war"},
@@ -115,6 +123,7 @@
     {
         "archtype": "item",
 
+        "job requirement": {"job": "thief"},
         "name": {"name": "Dagger"},
         "rarity": 5,
         "render": {"char": ")", "color_fg": "weapon", "codepoint": "eqp_dagger"},

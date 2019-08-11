@@ -1,6 +1,8 @@
 from collections import namedtuple
 
-### GAME MAP DATA
+#####################
+### GAME MAP DATA ###
+#####################
 
 FINAL_FLOOR = 2
 FONTSHEET = 'Zaratustra-msx.png'
@@ -9,7 +11,14 @@ FOV_RADIUS = 5
 MULTIPLIER = 4
 TICKS_PER_TURN = 1
 
-### CONSOLE DIMENSION DATA
+# Jobs can only be filled by certain races. TODO: This may not actually be necessary?
+JOB_PARENTS = {
+    'solder': ('human',)
+}
+
+##############################
+### CONSOLE DIMENSION DATA ###
+##############################
 
 Rectangle = namedtuple('Rectangle', ['x', 'y', 'w', 'h'])
 

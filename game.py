@@ -18,9 +18,12 @@ from components.actor.brain import BrainComponent
 from components.actor.energy import EnergyComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
+from components.actor.job import JobComponent
 from components.actor.player import PlayerComponent
+from components.actor.race import RaceComponent
 from components.item.consumable import ConsumableComponent
 from components.item.item import ItemComponent
+from components.item.jobreq import JobReqComponent
 from components.item.skill import ItemSkillComponent
 from components.item.slot import SlotComponent
 from components.item.wearable import WearableComponent
@@ -220,9 +223,11 @@ class GameWorld(esper.World):
                 EnergyComponent(energy=0),
                 EquipmentComponent(),
                 InventoryComponent(),
+                JobComponent(job='soldier'),
                 NameComponent(name='Player'),
                 PersistComponent(),
                 PlayerComponent(),
+                RaceComponent(race='human'),
                 PositionComponent(),
                 RenderComponent(color_bg=None, char='@', codepoint=SPRITES['player'], color_fg=ENTITY_COLORS['player'], color_explored=None),
                 SoulComponent(eccentricity=5, max_rarity=10),
@@ -271,6 +276,10 @@ class GameWorld(esper.World):
             
             elif key == 'inventory':
                 self.add_component(ent, InventoryComponent())
+
+            elif key == 'job requirement':
+                job = value.get('job')
+                self.add_component(ent, JobReqComponent(job_req=job))
             
             elif key == 'name':
                 name = value.get('name')
@@ -296,11 +305,11 @@ class GameWorld(esper.World):
                 cooldown = self._json_data.get(name).get('cooldown')
                 cost_energy = self._json_data.get(name).get('cost_energy')
                 cost_soul = self._json_data.get(name).get('cost_soul')
-                description = self._json_data.get(name).get('description')
                 damage_type = self._json_data.get(name).get('damage_type')
+                description = self._json_data.get(name).get('description')
                 east = self._json_data.get(name).get('east')
                 north_east = self._json_data.get(name).get('north_east')
-                self.add_component(ent, ItemSkillComponent(cooldown=cooldown, cost_energy=cost_energy, cost_soul=cost_soul, name=name, damage_type=damage_type, description=description, east=east, north_east=north_east))
+                self.add_component(ent, ItemSkillComponent(cooldown=cooldown, cost_energy=cost_energy, cost_soul=cost_soul, damage_type=damage_type, description=description, name=name, east=east, north_east=north_east))
 
             elif key == 'slot':
                 slot = value.get('slot')
