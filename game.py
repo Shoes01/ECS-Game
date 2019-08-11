@@ -18,6 +18,7 @@ from components.actor.brain import BrainComponent
 from components.actor.energy import EnergyComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
+from components.actor.skill_directory import SkillDirectoryComponent
 from components.actor.job import JobComponent
 from components.actor.player import PlayerComponent
 from components.actor.race import RaceComponent
@@ -63,6 +64,7 @@ from processors.pickup import PickupProcessor
 from processors.removable import RemovableProcessor
 from processors.render import RenderProcessor
 from processors.skill import SkillProcessor
+from processors.skill_directory import SkillDirectoryProcessor
 from processors.soul import SoulProcessor
 from processors.state import StateProcessor
 from processors.wearable import WearableProcessor
@@ -132,6 +134,7 @@ class GameWorld(esper.World):
         self.add_processor(DijkstraProcessor(), 3)
         self.add_processor(EnergyProcessor(), 3)
         ' Endstep. '
+        self.add_processor(SkillDirectoryProcessor(), 2)
         self.add_processor(CooldownProcessor(), 2)
         self.add_processor(FOVProcessor(), 1)
         self.add_processor(StateProcessor(), 1)
@@ -230,6 +233,7 @@ class GameWorld(esper.World):
                 RaceComponent(race='human'),
                 PositionComponent(),
                 RenderComponent(color_bg=None, char='@', codepoint=SPRITES['player'], color_fg=ENTITY_COLORS['player'], color_explored=None),
+                SkillDirectoryComponent(),
                 SoulComponent(eccentricity=5, max_rarity=10),
                 StatsComponent(hp=500, attack=10)
             )
@@ -244,6 +248,7 @@ class GameWorld(esper.World):
                     self.add_component(ent, EnergyComponent())
                     self.add_component(ent, EquipmentComponent())
                     self.add_component(ent, InventoryComponent())
+                    self.add_component(ent, SkillDirectoryComponent())
                     self.add_component(ent, PositionComponent())
                 elif value == 'item':
                     self.add_component(ent, ItemComponent())
@@ -302,6 +307,7 @@ class GameWorld(esper.World):
 
             elif key == 'skill':
                 name = value
+                ap_max = self._json_data.get(name).get('ap_max')
                 cooldown = self._json_data.get(name).get('cooldown')
                 cost_energy = self._json_data.get(name).get('cost_energy')
                 cost_soul = self._json_data.get(name).get('cost_soul')
@@ -309,7 +315,7 @@ class GameWorld(esper.World):
                 description = self._json_data.get(name).get('description')
                 east = self._json_data.get(name).get('east')
                 north_east = self._json_data.get(name).get('north_east')
-                self.add_component(ent, ItemSkillComponent(cooldown=cooldown, cost_energy=cost_energy, cost_soul=cost_soul, damage_type=damage_type, description=description, name=name, east=east, north_east=north_east))
+                self.add_component(ent, ItemSkillComponent(ap_max=ap_max, cooldown=cooldown, cost_energy=cost_energy, cost_soul=cost_soul, damage_type=damage_type, description=description, name=name, east=east, north_east=north_east))
 
             elif key == 'slot':
                 slot = value.get('slot')

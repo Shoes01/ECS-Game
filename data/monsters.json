@@ -1,5 +1,5 @@
 {
-    "comment": "The 'monster' archtype bestows a lot of blank components: Actor, Energy, Equipment, Inventory, Position.",
+    "comment": "The 'monster' archtype bestows a lot of blank components: Actor, Energy, Equipment, Inventory, Skill Directory, Position.",
 
     "demon":
     {

@@ -7,6 +7,7 @@
     ],
 
     "lunge":{
+        "ap_max": 100,
         "cooldown": 5,
         "cost_energy": 2,
         "cost_soul": {"magic": 2},
@@ -30,6 +31,7 @@
         ]
     },
     "cleave":{
+        "ap_max": 100,
         "cooldown": 4,
         "cost_energy": 2,
         "cost_soul": {"magic": 4},
@@ -53,6 +55,7 @@
         ]
     },
     "headbutt":{
+        "ap_max": 100,
         "cooldown": 3,
         "cost_energy": 1,
         "cost_soul": {"hp": 1},
@@ -76,6 +79,7 @@
         ]
     },
     "sprint":{
+        "ap_max": 100,
         "cooldown": 2,
         "cost_energy": 1,
         "cost_soul": {"speed": 2},

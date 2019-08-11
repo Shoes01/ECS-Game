@@ -1,8 +1,9 @@
 import numpy as np
 
 class ItemSkillComponent():
-    def __init__(self, cooldown, cost_energy, cost_soul, damage_type, description, name, east, north_east):
+    def __init__(self, ap_max, cooldown, cost_energy, cost_soul, damage_type, description, name, east, north_east):
         ' Skill data. '
+        self.ap_max= ap_max
         self.cooldown = cooldown
         self.cooldown_remaining = 0
         self.cost_energy = cost_energy # Type: int

@@ -7,6 +7,7 @@ from components.stats import StatsComponent
 from components.furniture import FurnitureComponent
 from processors.death import DeathProcessor
 from processors.energy import EnergyProcessor
+from processors.skill_directory import SkillDirectoryProcessor
 from queue import Queue
 
 class CombatProcessor(esper.Processor):
@@ -55,9 +56,10 @@ class CombatProcessor(esper.Processor):
                 
                 if def_stats['hp'] <= 0:
                     self.world.get_processor(DeathProcessor).queue.put({'ent': defender_ID})
+                    self.world.get_processor(SkillDirectoryProcessor).queue.put({'ent': attacker_ID, 'skill': skill, 'ap_gain': 10})
                 elif not (skill or counter_attack or self.world.has_component(defender_ID, FurnitureComponent)):
-                    # The defender may counter attack.
                     self.world.get_processor(EnergyProcessor).queue.put({'ent': attacker_ID, 'bump_attack': True})
+                    # The defender may counter attack.
                     self.queue.put({'ent': defender_ID, 'defender_IDs': [attacker_ID], 'counter_attack': True})
 
                 self.world.messages.append({'combat': (att_ren.char, att_ren.color_fg, def_ren.char, def_ren.color_fg, as_integer(damage), counter_attack, double_attack, self.world.turn)})

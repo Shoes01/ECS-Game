@@ -1,6 +1,7 @@
 from _data import UI_COLORS
 from _helper_functions import as_decimal, as_integer, generate_stats
 from components.actor.equipment import EquipmentComponent
+from components.actor.skill_directory import SkillDirectoryComponent
 from components.item.skill import ItemSkillComponent
 from components.item.slot import SlotComponent 
 from components.name import NameComponent
@@ -20,6 +21,7 @@ def render_character_sheet(console_object, world):
         'feet': 'Feet:',
         'accessory': 'Accessory:'
         }
+    skill_directory = world.component_for_entity(1, SkillDirectoryComponent).skill_directory
     soul_stats = world.component_for_entity(1, SoulComponent).soul
     titles = {
         'hp': 'Health:',
@@ -88,6 +90,14 @@ def render_character_sheet(console_object, world):
         i += 1
         console.print_box(x, y + i, 40, 2, text_4, color_fg)
         i += 3
+    
+    # Display skill directory.
+    x, y = 65, 5
+    console.print(x - 1, y - 1, 'Skill Directory:', color_fg)
+    i = 0
+    for skill, ap in skill_directory.items():
+        console.print(x, y + 1, f"{skill.capitalize()}: {ap[0]}/{ap[1]}")
+        i += 1
 
 def generate_equipped_items(titles, world):
     equipment = world.component_for_entity(1, EquipmentComponent).equipment

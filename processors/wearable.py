@@ -10,6 +10,7 @@ from components.name import NameComponent
 from menu import PopupMenu, PopupChoice
 from processors.energy import EnergyProcessor
 from processors.removable import RemovableProcessor
+from processors.skill_directory import SkillDirectoryProcessor
 from processors.state import StateProcessor
 from queue import Queue
 
@@ -73,11 +74,12 @@ class WearableProcessor(esper.Processor):
                     self.world.messages.append({'wear': message_data})
                     eqp.equipment.append(item)
                     name_component.name += ' (worn)'
+                    message_data['job'] = self.world.component_for_entity(item, JobReqComponent).job_req.capitalize()
                     self.world.get_processor(RemovableProcessor).queue.put({'ent': ent, 'item': slot_filled_item})
                 elif self.world.component_for_entity(item, JobReqComponent).job_req != self.world.component_for_entity(ent, JobComponent).job:
-                    # Not the corrent job to wear the item.
+                    # Not the correct job to wear the item.
                     message_data['success'] = 'wrong_job'
-                    message_data['job'] = self.world.component_for_entity(item, JobReqComponent).job_req
+                    message_data['job'] = self.world.component_for_entity(item, JobReqComponent).job_req.capitalize()
                     self.world.messages.append({'wear': message_data})
                 elif self.world.has_component(item, WearableComponent):
                     # Wear the item!
@@ -86,6 +88,7 @@ class WearableProcessor(esper.Processor):
                     eqp.equipment.append(item)
                     name_component.name += ' (worn)'
                     self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'item': True})
+                    self.world.get_processor(SkillDirectoryProcessor).queue.put({'ent': ent, 'item': item, 'new_skill': True})
                 else:
                     # This is not a wearable item.
                     message_data['success'] = False

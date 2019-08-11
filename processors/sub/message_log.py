@@ -171,7 +171,7 @@ def render_message_log(console_object, new_turn, world):
             elif success == 'slot_filled':
                 console.print(0, 0 + dy, '(Turn %s) You replace your %s item with your %s.' % (turn, slot, name), LOG_COLORS['success'])
             elif success == 'wrong_job':
-                console.print(0, 0 + dy, '(Turn %s) You need to be a %s to equip your %s.' % (turn, job, name), LOG_COLORS['success'])
+                console.print(0, 0 + dy, '(Turn %s) You need to be a %s to equip your %s.' % (turn, job, name), LOG_COLORS['failure'])
             else:
                 console.print(0, 0 + dy, '(Turn %s) You cannot equip a %s!' % (turn, name), LOG_COLORS['failure'])
 
