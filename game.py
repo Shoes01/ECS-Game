@@ -226,7 +226,7 @@ class GameWorld(esper.World):
                 EnergyComponent(energy=0),
                 EquipmentComponent(),
                 InventoryComponent(),
-                JobComponent(job='soldier'),
+                JobComponent(job='soldier', upkeep={'magic': 10, 'resistance': 10}),
                 NameComponent(name='Player'),
                 PersistComponent(),
                 PlayerComponent(),

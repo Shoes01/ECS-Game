@@ -1,6 +1,7 @@
 from _data import UI_COLORS
 from _helper_functions import as_decimal, as_integer, generate_stats
 from components.actor.equipment import EquipmentComponent
+from components.actor.job import JobComponent
 from components.actor.skill_directory import SkillDirectoryComponent
 from components.item.skill import ItemSkillComponent
 from components.item.slot import SlotComponent 
@@ -31,6 +32,7 @@ def render_character_sheet(console_object, world):
         'defense': 'Defense:',
         'resistance': 'Resist:'
         }
+    upkeep_stats = world.component_for_entity(1, JobComponent).upkeep
 
     equipped_items = generate_equipped_items(titles, world)
 
@@ -53,6 +55,14 @@ def render_character_sheet(console_object, world):
         console.print(x, y + i, f"{titles[key]:8} {as_integer(soul_stats[key]):>3}", color_fg)
         i += 1
 
+    # Print job upkeep.
+    x, y = 37, 5
+    console.print(x - 1, y - 1, 'Job Upkeep:', color_fg)
+    i = 0
+    for key in titles:
+        console.print(x, y + i, f"{titles[key]:8} {as_integer(upkeep_stats[key]):>3}", color_fg)
+        i += 1
+
     # Print total stats.
     x, y = 3, 14
     console.print(x - 1, y - 1, 'Total Stats:', color_fg)    
@@ -60,7 +70,7 @@ def render_character_sheet(console_object, world):
     for key in titles:
         console.print(
             x, y + i, 
-            f"{titles[key]:8} {as_decimal(player_stats[key]):>5} ({as_decimal(player_base_stats[key]):>5} + {as_integer(soul_stats[key]):>3})", 
+            f"{titles[key]:8} {as_decimal(player_stats[key]):>5} ({as_decimal(player_base_stats[key]):>5} + {as_integer(soul_stats[key]):>3} + + {as_integer(upkeep_stats[key]):>3})", 
             color_fg)
         i += 1
 
@@ -68,7 +78,7 @@ def render_character_sheet(console_object, world):
     ### Mainhand: Sword
     ###   Skill: Lunge
     ###   Description: This is where the skill description goes.
-    x, y = 40, 5
+    x, y = 57, 5
     console.print(x - 1, y - 1, 'Equipped Items:', color_fg)
     i = 0
     for key in slots:
@@ -92,11 +102,11 @@ def render_character_sheet(console_object, world):
         i += 3
     
     # Display skill directory.
-    x, y = 65, 5
+    x, y = 77, 5
     console.print(x - 1, y - 1, 'Skill Directory:', color_fg)
     i = 0
     for skill, ap in skill_directory.items():
-        console.print(x, y + 1, f"{skill.capitalize()}: {ap[0]}/{ap[1]}")
+        console.print(x, y + i, f"{skill.capitalize()}: {ap[0]}/{ap[1]}")
         i += 1
 
 def generate_equipped_items(titles, world):
