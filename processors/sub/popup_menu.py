@@ -17,9 +17,12 @@ def render_popup_menu(console_object, world):
         if not choice.valid:
             color_fg = UI_COLORS['text_invalid']
 
-        string = '(' + choice.key + ') ' + choice.name
+        string = '(' + choice.key + ') ' + choice.name.capitalize()
         console.print(menu.x + 2, menu.y + dy, string, color_fg)
         dy += 1
+        if choice.description:
+            console.print(menu.x + 2, menu.y + dy, "    " + choice.description, color_fg)
+            dy += 1
     
     if menu.include_esc:
         console.print(menu.x + 2, menu.y + menu.h - 2, '(ESC) Close menu', UI_COLORS['text'])

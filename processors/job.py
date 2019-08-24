@@ -24,10 +24,12 @@ class JobProcessor(esper.Processor):
                 menu = PopupMenu(title='Which job would you like to adopt?')
 
                 for _, job in JOBS.items():
+                    _description = job.description
                     _name = job.name
                     _key = job.name[0]
                     _result = {'ent': ent, 'job': job}
                     _processor = JobProcessor
+                    _upkeep = job.upkeep
 
                     # /// Check the validity of the job change. ///
                     _validity = True
@@ -39,15 +41,15 @@ class JobProcessor(esper.Processor):
                     # Upkeep validity.
                     ### The player may not switch to a job if it can't pay the upkeep. 
                     ### However, other stats unrelated to the job may be negative.
-                    ### Note: job.upkeep does not include the * -10.
+                    ### Note: _upkeep does not include the * -10.
                     bare_stats = generate_stats(ent, self.world, include_upkeep=False)
-                    for key, value in job.upkeep.items():
+                    for key, value in _upkeep.items():
                         if bare_stats[key] - value * 10 < 0:
                             _validity = False
 
                     # /////////////////////////////////////////////
                     
-                    menu.contents.append(PopupChoice(name=_name, key=_key, result=_result, processor=_processor, valid=_validity))
+                    menu.contents.append(PopupChoice(name=_name, key=_key, result=_result, processor=_processor, valid=_validity, description=_description, upkeep=_upkeep))
             
                 self.world.get_processor(StateProcessor).queue.put({'popup': menu})
 
