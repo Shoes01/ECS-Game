@@ -7,12 +7,17 @@ class Job:
 JOBS = {
     'soldier': Job(
         name='soldier', 
-        upkeep={'magic': 10, 'resistance': 10}, 
+        upkeep={}, 
         races=('human',)
     ),
     'warrior': Job(
         name='warrior',
-        upkeep={'magic': 5, 'speed': 10},
+        upkeep={'magic': 1, 'speed': 2},
         races=('human',)
+    ),
+    'beserker': Job(
+        name='beserker',
+        upkeep={'speed': 1, 'hp': 1},
+        races=('orc',)
     )
 }

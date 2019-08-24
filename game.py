@@ -228,7 +228,7 @@ class GameWorld(esper.World):
                 EnergyComponent(energy=0),
                 EquipmentComponent(),
                 InventoryComponent(),
-                JobComponent(job='soldier', upkeep={'magic': 10, 'resistance': 10}),
+                JobComponent(job='soldier', upkeep={}), # TODO: This doesn't talk to JOBS found in _jobs.py ...
                 NameComponent(name='Player'),
                 PersistComponent(),
                 PlayerComponent(),

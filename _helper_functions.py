@@ -4,7 +4,7 @@ from components.actor.job import JobComponent
 from components.soul import SoulComponent
 from components.stats import StatsComponent
 
-def generate_stats(ent, world):    
+def generate_stats(ent, world, include_upkeep=True):    
     ent_stats = Counter(world.component_for_entity(ent, StatsComponent).__dict__)
     
     if ent is not 1: # This is maybe temporary...
@@ -17,8 +17,9 @@ def generate_stats(ent, world):
                 item_stats = Counter(world.component_for_entity(item_id, StatsComponent).__dict__)
                 ent_stats.update(item_stats)
 
-    # Stat changes based on class.
-    ent_stats.update(Counter(world.component_for_entity(ent, JobComponent).upkeep))
+    # Stat changes based on job.
+    if include_upkeep:
+        ent_stats.update(Counter(world.component_for_entity(ent, JobComponent).upkeep))
         
     # Stat changes based on soul.
     if world.has_component(ent, SoulComponent):
