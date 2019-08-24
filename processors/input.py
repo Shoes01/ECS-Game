@@ -15,6 +15,7 @@ from processors.drop import DropProcessor
 from processors.energy import EnergyProcessor
 from processors.event import EventProcessor
 from processors.inventory import InventoryProcessor
+from processors.job import JobProcessor
 from processors.mapgen import MapgenProcessor
 from processors.movement import MovementProcessor
 from processors.pickup import PickupProcessor
@@ -168,7 +169,7 @@ class InputProcessor(esper.Processor):
         # These keys can only be read if the player has move priority.
         elif self.world.component_for_entity(1, EnergyComponent).energy == 0:
             # Movement keys.
-            result = self.generic_move_keys(key_char, key_scancode)
+            result = self.generic_move_keys(key_char, key_scancode, key=key)
             if result:
                 self.world.get_processor(MovementProcessor).queue.put(result)
             
@@ -185,6 +186,8 @@ class InputProcessor(esper.Processor):
                 self.world.get_processor(WearableProcessor).queue.put({'ent': 1})
             elif key_char == '>' or key_char == '<':
                 self.world.get_processor(DescendProcessor).queue.put({'ent': 1})
+            elif key_char == 'j' and key.mod & libtcod.event.KMOD_SHIFT:
+                self.world.get_processor(JobProcessor).queue.put({'ent': 1})
 
             # Skill keys.
             elif key_char == 'q':
@@ -226,8 +229,12 @@ class InputProcessor(esper.Processor):
         elif key_scancode == libtcod.event.SCANCODE_KP_ENTER or key_scancode == libtcod.event.SCANCODE_RETURN:
             self.world.get_processor(SoulProcessor).queue.put({'ent': 1, 'confirm': True})
 
-    def generic_move_keys(self, key_char, key_scancode):
+    def generic_move_keys(self, key_char, key_scancode, key=None):
         result = {}
+
+        if key and key.mod & libtcod.event.KMOD_SHIFT:
+            return result
+        
         if   key_char == 'k' or key_scancode == libtcod.event.SCANCODE_KP_8 or key_scancode == libtcod.event.SCANCODE_UP:
             result = {'ent': 1, 'move': (0, -1)}
         elif key_char == 'j' or key_scancode == libtcod.event.SCANCODE_KP_2 or key_scancode == libtcod.event.SCANCODE_DOWN:

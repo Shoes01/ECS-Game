@@ -58,6 +58,7 @@ from processors.fov import FOVProcessor
 from processors.initial import InitialProcessor
 from processors.input import InputProcessor
 from processors.inventory import InventoryProcessor
+from processors.job import JobProcessor
 from processors.mapgen import MapgenProcessor
 from processors.movement import MovementProcessor
 from processors.pickup import PickupProcessor
@@ -126,6 +127,7 @@ class GameWorld(esper.World):
         self.add_processor(MovementProcessor(), 10)
         self.add_processor(WearableProcessor(), 10)
         self.add_processor(DropProcessor(), 10)
+        self.add_processor(JobProcessor(), 10)
         self.add_processor(CombatProcessor(), 6)
         self.add_processor(SoulProcessor(), 6)
         self.add_processor(RemovableProcessor(), 6)

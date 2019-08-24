@@ -70,7 +70,7 @@ def render_character_sheet(console_object, world):
     for key in titles:
         console.print(
             x, y + i, 
-            f"{titles[key]:8} {as_decimal(player_stats[key]):>5} ({as_decimal(player_base_stats[key]):>5} + {as_integer(soul_stats[key]):>3} + + {as_integer(upkeep_stats[key]):>3})", 
+            f"{titles[key]:8} {as_decimal(player_stats[key]):>5} ({as_decimal(player_base_stats[key]):>5} + {as_integer(soul_stats[key]):>3} + {as_integer(upkeep_stats[key]):>3})", 
             color_fg)
         i += 1
 

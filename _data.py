@@ -11,11 +11,6 @@ FOV_RADIUS = 5
 MULTIPLIER = 4
 TICKS_PER_TURN = 1
 
-# Jobs can only be filled by certain races. TODO: This may not actually be necessary?
-JOB_PARENTS = {
-    'solder': ('human',)
-}
-
 ##############################
 ### CONSOLE DIMENSION DATA ###
 ##############################
