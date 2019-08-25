@@ -35,10 +35,22 @@ class SkillDirectoryProcessor(esper.Processor):
                     skill = None if not self.world.has_component(item, ItemSkillComponent) else self.world.component_for_entity(item, ItemSkillComponent) 
                     
                     if skill is not None:
+                        newly_maxed = False
+                        already_maxed = False
+
                         ap_current, ap_max = sd_comp.skill_directory[skill.name]
+                        
+                        if ap_current == ap_max:
+                            already_maxed = True
+                        
                         ap_current += ap_gain
 
-                        if ap_current > ap_max:
+                        if ap_current >= ap_max:
                             ap_current = ap_max
+                            newly_maxed = True
 
                         sd_comp.skill_directory[skill.name] = (ap_current, ap_max)
+
+                        if newly_maxed and not already_maxed:
+                            message_data = {'name': skill.name}
+                            self.world.messages.append({'skill_mastered': message_data})

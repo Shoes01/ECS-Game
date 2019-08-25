@@ -49,6 +49,7 @@ def render_message_log(console_object, new_turn, world):
         _pickup = message.get('pickup')
         _remove = message.get('remove')
         _skill = message.get('skill')
+        _skill_mastered = message.get('skill_mastered')
         _wear = message.get('wear')
         _whitespace = message.get('whitespace')
 
@@ -158,6 +159,11 @@ def render_message_log(console_object, new_turn, world):
                 console.print(0, 0 + dy, '(Turn %s) You use your %s skill!' % (turn, name), LOG_COLORS['success'])
             else:
                 console.print(0, 0 + dy, '(Turn %s) You do not have enough %s points to use %s!' % (turn, error, name), LOG_COLORS['failure'])
+
+        elif _skill_mastered:
+            name = _skill_mastered.get('name')
+
+            console.print(0, 0 + dy, f'You have mastered {name}!', LOG_COLORS['success'])
 
         elif _wear:
             job = _wear.get('job')
