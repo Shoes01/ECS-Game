@@ -36,13 +36,13 @@ class RenderProcessor(esper.Processor):
 
             if event.get('item'):
                 self.item = event['item']
-            elif event.get('item') is False:
+            if event.get('item') is False:
                 self.item = None
-            elif event.get('new_turn'):
+            if event.get('new_turn'):
                 _new_turn = event.get('new_turn')
-            elif event.get('redraw'):
+            if event.get('redraw'):
                 _redraw = event.get('redraw')
-            elif event.get('soul'):
+            if event.get('soul'):
                 _soul = event.get('soul')
 
         if not _redraw:
