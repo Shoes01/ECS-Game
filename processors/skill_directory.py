@@ -34,7 +34,7 @@ class SkillDirectoryProcessor(esper.Processor):
                 for item in eqp_comp.equipment:
                     skill = None if not self.world.has_component(item, ItemSkillComponent) else self.world.component_for_entity(item, ItemSkillComponent) 
                     
-                    if skill is None:
+                    if skill is not None:
                         ap_current, ap_max = sd_comp.skill_directory[skill.name]
                         ap_current += ap_gain
 
