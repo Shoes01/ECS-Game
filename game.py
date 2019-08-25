@@ -89,7 +89,7 @@ class GameWorld(esper.World):
         self._json_data = self.load_data()
 
         ' Tables. '
-        self.item_table, self.monster_table = self.load_tables()
+        self.item_table, self.job_skill_table, self.monster_table = self.load_tables()
 
         ' Objects. '
         self.camera = Camera(x=0, y=0, w=map.w // MULTIPLIER, h=map.h // MULTIPLIER, leash=3) # TODO: The map values from _data might need to be renamed...
@@ -195,18 +195,28 @@ class GameWorld(esper.World):
     def load_tables(self):
         item_table = [[] for i in range(8)] # There are 8 levels of rarity, starting at 0
         monster_table = [[] for i in range(8)]
+        job_skill_table = {}
         
         for ent, components in self._json_data.items():
             if ent == 'comment': continue
             rarity = components.get('rarity')
             archtype = components.get('archtype')
             if rarity is not None:
+                job, skill = None, None
                 if archtype == 'monster':
                     monster_table[rarity].append(ent)
                 elif archtype == 'item':
                     item_table[rarity].append(ent)
+                    job = components.get('job requirement').get('job')
+                    skill = components.get('skill')
+                if job and skill:
+                    if job in job_skill_table:
+                        job_skill_table[job].append(skill)
+                    else:
+                        job_skill_table[job] = [skill,]
+                    
         
-        return item_table, monster_table
+        return item_table, job_skill_table, monster_table
 
     def save_game(self):
         with shelve.open('savegame', 'n') as data_file:
