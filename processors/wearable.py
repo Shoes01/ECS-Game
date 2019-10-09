@@ -67,29 +67,31 @@ class WearableProcessor(esper.Processor):
 
                 if item in eqp.equipment:
                     # Already worn, so remove it.
+                    message_data = {} # Clear the message data, as the RemovableProcessor will do its own thing.
                     self.world.get_processor(RemovableProcessor).queue.put({'ent': ent, 'item': item})
                 elif slot_filled:
                     # An item is already in the slot we want; swap the two items.
+                    # Wear the item!
+                    wear_item(ent, eqp, item, name_component, self.world)
                     message_data['success'] = 'slot_filled'
-                    self.world.messages.append({'wear': message_data})
-                    eqp.equipment.append(item)
-                    name_component.name += ' (worn)'
-                    message_data['job'] = self.world.component_for_entity(item, JobReqComponent).job_req.capitalize()
+                    # Remove the other item.
                     self.world.get_processor(RemovableProcessor).queue.put({'ent': ent, 'item': slot_filled_item})
                 elif self.world.component_for_entity(item, JobReqComponent).job_req != self.world.component_for_entity(ent, JobComponent).job:
                     # Not the correct job to wear the item.
                     message_data['success'] = 'wrong_job'
                     message_data['job'] = self.world.component_for_entity(item, JobReqComponent).job_req.capitalize()
-                    self.world.messages.append({'wear': message_data})
                 elif self.world.has_component(item, WearableComponent):
                     # Wear the item!
+                    wear_item(ent, eqp, item, name_component, self.world)
                     message_data['success'] = True
-                    self.world.messages.append({'wear': message_data})
-                    eqp.equipment.append(item)
-                    name_component.name += ' (worn)'
-                    self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'item': True})
-                    self.world.get_processor(SkillDirectoryProcessor).queue.put({'ent': ent, 'item': item, 'new_skill': True})
                 else:
                     # This is not a wearable item.
                     message_data['success'] = False
-                    self.world.messages.append({'wear': message_data})
+                
+                self.world.messages.append({'wear': message_data})
+
+def wear_item(ent, eqp, item, name_component, world):
+    name_component.name += ' (worn)'
+    eqp.equipment.append(item)
+    world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'item': True})
+    world.get_processor(SkillDirectoryProcessor).queue.put({'ent': ent, 'item': item, 'new_skill': True})

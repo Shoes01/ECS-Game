@@ -105,9 +105,11 @@ def render_character_sheet(console_object, world):
     x, y = 77, 5
     console.print(x - 1, y - 1, 'Skill Directory:', color_fg)
     i = 0
-    for skill, ap in skill_directory.items():
-        console.print(x, y + i, f"{skill.capitalize()}: {ap[0]}/{ap[1]}")
-        i += 1
+    for job, skill_info in skill_directory.items():
+        if skill_info:
+            for skill_name, ap in skill_info.items():
+                console.print(x, y + i, f"{skill_name.capitalize()}: {ap[0]}/{ap[1]}")
+                i += 1
 
 def generate_equipped_items(titles, world):
     equipment = world.component_for_entity(1, EquipmentComponent).equipment

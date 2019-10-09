@@ -44,6 +44,7 @@ def render_message_log(console_object, new_turn, world):
         _game_loaded = message.get('game_loaded')
         _game_saved = message.get('game_saved')
         _heal = message.get('heal')
+        _job_switch = message.get('job_switch')
         _max_hp = message.get('max_hp')
         _move_items = message.get('move_items')
         _pickup = message.get('pickup')
@@ -113,6 +114,22 @@ def render_message_log(console_object, new_turn, world):
 
             console.print(0, 0 + dy, '(Turn %s) You heal for %s point(s).' % (turn, value), LOG_COLORS['success'])
         
+        elif _job_switch:
+            wrong_race = _job_switch.get('wrong_race')
+            not_enough_stats = _job_switch.get('not_enough_stats')
+            not_enough_skills = _job_switch.get('not_enough_skills')
+            switch_class = _job_switch.get('switch_class')
+
+            if wrong_race:
+                console.print(0, 0 + dy, f'You fail to switch classes, due to race.', LOG_COLORS['failure'])
+            elif not_enough_stats:
+                console.print(0, 0 + dy, f'You fail to switch classes, due to stats.', LOG_COLORS['failure'])
+            elif not_enough_skills:
+                console.print(0, 0 + dy, f'You fail to switch classes, due to skills.', LOG_COLORS['failure'])
+            elif switch_class:
+                console.print(0, 0 + dy, f'You are now a {switch_class}. Way to go.', LOG_COLORS['success'])
+
+
         elif _max_hp:
             value, turn = _max_hp
 
