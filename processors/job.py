@@ -5,6 +5,7 @@ from _jobs import JOBS, Job
 from components.actor.job import JobComponent
 from components.actor.race import RaceComponent
 from components.actor.skill_directory import SkillDirectoryComponent
+from processors.removable import RemovableProcessor
 from processors.skill_directory import SkillDirectoryProcessor 
 from processors.state import StateProcessor
 from menu import PopupMenu, PopupChoice
@@ -57,6 +58,8 @@ class JobProcessor(esper.Processor):
                     ent_job.update_upkeep(job.upkeep)
                     ent_job.job = job.name
                     self.world.get_processor(SkillDirectoryProcessor).queue.put({'new_job': job.name, 'ent': ent})
+                    # TODO: I need to "job check" the equipped items.
+                    self.world.get_processor(RemovableProcessor).queue.put({'new_job': job.name, 'ent': ent})
                 
                 self.world.messages.append({'job_switch': message_data})
 

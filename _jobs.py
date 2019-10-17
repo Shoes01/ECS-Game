@@ -22,9 +22,9 @@ JOBS = {
         skills={},
         upkeep={'magic': 1, 'speed': 2}
     ),
-    'beserker': Job(
+    'berserker': Job(
         description='Classic orc.',
-        name='beserker',
+        name='berserker',
         races=('orc',),
         skills={},
         upkeep={'speed': 1, 'hp': 1}
