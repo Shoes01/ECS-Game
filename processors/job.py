@@ -58,7 +58,6 @@ class JobProcessor(esper.Processor):
                     ent_job.update_upkeep(job.upkeep)
                     ent_job.job = job.name
                     self.world.get_processor(SkillDirectoryProcessor).queue.put({'new_job': job.name, 'ent': ent})
-                    # TODO: I need to "job check" the equipped items.
                     self.world.get_processor(RemovableProcessor).queue.put({'new_job': job.name, 'ent': ent})
                 
                 self.world.messages.append({'job_switch': message_data})

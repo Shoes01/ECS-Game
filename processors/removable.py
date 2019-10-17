@@ -17,6 +17,7 @@ class RemovableProcessor(esper.Processor):
             event = self.queue.get()
 
             ent = event['ent']
+            free = event.get('free')
             item = event.get('item')
             job = event.get('new_job')
 
@@ -30,12 +31,12 @@ class RemovableProcessor(esper.Processor):
                 if item in eqp.equipment:
                     success = True
                     eqp.equipment.remove(item)                
-                    name_component.name = name_component._name                    
-                    self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'remove': True})                
+                    name_component.name = name_component._name
+                    if free is not True:
+                        self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'remove': True})                
                 self.world.messages.append({'remove': (name_component.name, success, turn)})
             elif job:
                 # The player switched jobs; go through the equipped items to see if the player is still the correct job.
                 for item in eqp.equipment:
                     if job is not self.world.component_for_entity(item, JobReqComponent).job_req:
-                        self.queue.put({'ent': ent, 'item': item})
-                        # self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'remove': True}) # This would lead to frustration, I think.
+                        self.queue.put({'ent': ent, 'item': item, 'free': True})
