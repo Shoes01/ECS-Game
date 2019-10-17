@@ -34,7 +34,7 @@ class SkillDirectoryProcessor(esper.Processor):
                 skill = self.world.component_for_entity(item, ItemSkillComponent)
                 
                 if job in sd_comp.skill_directory.keys():
-                    if skill not in sd_comp.skill_directory[job].keys():
+                    if skill.name not in sd_comp.skill_directory[job].keys():
                         sd_comp.skill_directory[job][skill.name] = (0, skill.ap_max)
                 else:
                     print("ERROR: This item is trying to add a skill to a job that doesn't exist!")
