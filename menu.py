@@ -1,15 +1,32 @@
 from _data import map
 
+class PopupChoiceCondition():
+    ' This is a single condition to a popup menu choice. '
+    def __init__(self, description, valid=True):
+        self.description = description
+        self.valid = valid
+
 class PopupChoice():
     ' This is a single entry into the popup menu. '
-    def __init__(self, name, key, result, processor, valid=True, description=None, upkeep=None):
-        self.description = "" if description is None else description
+    def __init__(self, name, key, result, processor, valid=True, description="", upkeep=None, conditions=[]):
+        self.conditions = conditions # type: list of PopupChoiceConditions
+        self.description = description
         self.name = name     # The name of the choice.
         self.key = key       # The key to select this choice.
         self.processor = processor # The processor that the results will be fed into.
         self.result = result # type: dict
-        # self.upkeep = {} if upkeep is None else upkeep
-        self.valid = valid   # If this is False, then the option is greyed out (at the moment, it can still be selected).
+        self._valid = valid   # If this is False, then the option is greyed out (at the moment, it can still be selected).
+
+    @property
+    def valid(self):
+        if len(self.conditions) == 0:
+            return True if self._valid else False
+        else:
+            for condition in self.conditions:
+                if condition.valid is False:
+                    return False
+            else:
+                return True
         
 class PopupMenu():
     ' This contains the input and render information for a popup menu. '
@@ -29,4 +46,4 @@ class PopupMenu():
         # Subtitle
         # Definition panel (in the case of items)
         # Category bool: if set to true, the renderer will sort items by their type. (items don't have a type yet)
-        # Equipped bool: if set to true, the equipped items will be listed on the side?zz
+        # Equipped bool: if set to true, the equipped items will be listed on the side?
