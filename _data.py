@@ -163,6 +163,7 @@ UI_COLORS = {
     'bg': COLOR_THEME['Black'],
     'fg': COLOR_THEME['BrightWhite'],
     'text': COLOR_THEME['BrightWhite'],
+    'text_condition_unmet': COLOR_THEME['Red'],
     'text_invalid': COLOR_THEME['White'],
     'text_mainmenu': COLOR_THEME['White']
 }

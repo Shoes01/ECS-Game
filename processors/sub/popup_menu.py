@@ -23,6 +23,13 @@ def render_popup_menu(console_object, world):
         if choice.description:
             console.print(menu.x + 2, menu.y + dy, "    " + choice.description, color_fg)
             dy += 1
+        
+        for condition in choice.conditions:
+            color = color_fg
+            if not condition.valid:
+                color = UI_COLORS['text_condition_unmet']
+            console.print(menu.x + 2, menu.y + dy, "    " + condition.description, color)
+            dy += 1
     
     if menu.include_esc:
         console.print(menu.x + 2, menu.y + menu.h - 2, '(ESC) Close menu', UI_COLORS['text'])

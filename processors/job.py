@@ -8,7 +8,7 @@ from components.actor.skill_directory import SkillDirectoryComponent
 from processors.removable import RemovableProcessor
 from processors.skill_directory import SkillDirectoryProcessor 
 from processors.state import StateProcessor
-from menu import PopupMenu, PopupChoice
+from menu import PopupMenu, PopupChoice, PopupChoiceCondition
 from queue import Queue
 
 class JobProcessor(esper.Processor):
@@ -32,8 +32,7 @@ class JobProcessor(esper.Processor):
                     _key = job.name[0]
                     _result = {'ent': ent, 'job': job}
                     _processor = JobProcessor
-                    _upkeep = job.upkeep
-                    _validity, _ = check_validity(ent, job, self.world)
+                    _validity, _, _conditions = check_validity(ent, job, self.world)
                     
                     menu.contents.append(
                         PopupChoice(
@@ -42,15 +41,15 @@ class JobProcessor(esper.Processor):
                             result=_result, 
                             processor=_processor, 
                             valid=_validity, 
-                            description=_description, 
-                            upkeep=_upkeep
+                            description=_description,
+                            conditions=_conditions
                         )
                     )
             
                 self.world.get_processor(StateProcessor).queue.put({'popup': menu})
 
             else:
-                valid, message_data = check_validity(ent, job, self.world)
+                valid, message_data, _ = check_validity(ent, job, self.world)
                 
                 if valid:
                     # Switch jobs!
@@ -63,25 +62,33 @@ class JobProcessor(esper.Processor):
                 self.world.messages.append({'job_switch': message_data})
 
 def check_validity(ent, job, world):
+    conditions = []
     validity = True
     message_data = {}
 
     # Race validity.
+    condition = PopupChoiceCondition(description=f"Your race needs to be one from {job.races}.")
     if world.component_for_entity(ent, RaceComponent).race not in job.races:
         validity = False
-        message_data['wrong_race'] = True
-    
+        condition.valid = False
+        message_data['wrong_race'] = True        
+    conditions.append(condition)
+
     # Upkeep validity.
     ### The player may not switch to a job if it can't pay the upkeep. 
     ### However, other stats unrelated to the job may be negative.
     ### Note: _upkeep does not include the * -10.
+    condition = PopupChoiceCondition(description=f"Your stats need to be at least {job.upkeep}.")
     bare_stats = generate_stats(ent, world, include_upkeep=False)
     for key, value in job.upkeep.items():
         if bare_stats[key] - value * 10 < 0:
             validity = False
+            condition.valid = False
             message_data['not_enough_stats'] = True
+    conditions.append(condition)
     
     # Skill validity.
+    condition = PopupChoiceCondition(description=f"You need to have mastered at least skills like {job.skills}.")
     sd_comp = world.component_for_entity(ent, SkillDirectoryComponent)
     for required_job, required_number in job.skills.items():
         # Determine how many skills from the given job have been mastered.
@@ -93,9 +100,11 @@ def check_validity(ent, job, world):
             
         if mastery_number < required_number: 
             validity = False
+            condition.valid = False
             message_data['not_enough_skills'] = True
+    conditions.append(condition)
 
     if validity:
         message_data['switch_class'] = job.name
 
-    return validity, message_data
+    return validity, message_data, conditions
