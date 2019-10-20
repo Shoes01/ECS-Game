@@ -248,7 +248,7 @@ class GameWorld(esper.World):
                 RaceComponent(race='human'),
                 PositionComponent(),
                 RenderComponent(color_bg=None, char='@', codepoint=SPRITES['player'], color_fg=ENTITY_COLORS['player'], color_explored=None),
-                SkillDirectoryComponent(job='soldier'),
+                SkillDirectoryComponent(),
                 SoulComponent(eccentricity=5, max_rarity=10),
                 StatsComponent(hp=500, attack=10)
             )

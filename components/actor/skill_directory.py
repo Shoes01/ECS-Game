@@ -1,6 +1,6 @@
 class SkillDirectoryComponent:
-    def __init__(self, job='unemployed'):
-        self.skill_directory = {job: {}} # This should be done elsewhere...
+    def __init__(self):
+        self.skill_directory = {{}}
 
         """
         Usage Example:
