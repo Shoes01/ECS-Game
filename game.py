@@ -207,13 +207,16 @@ class GameWorld(esper.World):
                     monster_table[rarity].append(ent)
                 elif archtype == 'item':
                     item_table[rarity].append(ent)
-                    job = components.get('job requirement').get('job')
+                    job = components.get('job requirement').get('job') # This might be a list of strings, or a single string
                     skill = components.get('skill')
                 if job and skill:
-                    if job in job_skill_table:
-                        job_skill_table[job].append(skill)
-                    else:
-                        job_skill_table[job] = [skill,]
+                    if type(job) is not list:
+                        job = [job,]
+                    for single_job in job:
+                        if single_job in job_skill_table:
+                            job_skill_table[single_job].append(skill)
+                        else:
+                            job_skill_table[single_job] = [skill,]
                     
         
         return item_table, job_skill_table, monster_table
@@ -260,8 +263,10 @@ class GameWorld(esper.World):
                     self.add_component(ent, EnergyComponent())
                     self.add_component(ent, EquipmentComponent())
                     self.add_component(ent, InventoryComponent())
+                    self.add_component(ent, JobComponent(job='unemployed_monster', upkeep={}))
                     self.add_component(ent, SkillDirectoryComponent())
                     self.add_component(ent, PositionComponent())
+                    self.add_component(ent, RaceComponent(race='common_monster'))
                 elif value == 'item':
                     self.add_component(ent, ItemComponent())
                     self.add_component(ent, PositionComponent())

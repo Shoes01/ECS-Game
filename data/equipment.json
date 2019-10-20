@@ -8,7 +8,7 @@
     {
         "archtype": "item",
 
-        "job requirement": {"job": "soldier"},
+        "job requirement": {"job": ["soldier", "rogue"]},
         "name": {"name": "Sword"},
         "rarity": 0,
         "render": {"char": ")", "color_fg": "weapon", "codepoint": "eqp_sword"},
@@ -21,7 +21,7 @@
     {
         "archtype": "item",
 
-        "job requirement": {"job": "soldier"},
+        "job requirement": {"job": ["soldier", "rogue"]},
         "name": {"name": "Helmet"},
         "rarity": 0,
         "render": {"char": "]", "color_fg": "armor", "codepoint": "eqp_helmet"},
@@ -34,7 +34,7 @@
     {
         "archtype": "item",
 
-        "job requirement": {"job": "soldier"},
+        "job requirement": {"job": ["soldier", "rogue"]},
         "name": {"name": "Boots"},
         "rarity": 0,
         "render": {"char": "]", "color_fg": "armor", "codepoint": "eqp_boots"},
@@ -47,7 +47,7 @@
     {
         "archtype": "item",
 
-        "job requirement": {"job": "paladin"},
+        "job requirement": {"job": ["paladin", "rogue"]},
         "name": {"name": "Shield"},
         "rarity": 0,
         "render": {"char": "]", "color_fg": "armor", "codepoint": "eqp_shield"},

@@ -129,7 +129,6 @@ def render_message_log(console_object, new_turn, world):
             elif switch_class:
                 console.print(0, 0 + dy, f'You are now a {switch_class}. Way to go.', LOG_COLORS['success'])
 
-
         elif _max_hp:
             value, turn = _max_hp
 

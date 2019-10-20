@@ -3,6 +3,7 @@ import esper
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
 from components.actor.job import JobComponent
+from components.item.skill import ItemSkillComponent
 from components.item.jobreq import JobReqComponent
 from components.item.slot import SlotComponent
 from components.item.wearable import WearableComponent
@@ -76,10 +77,10 @@ class WearableProcessor(esper.Processor):
                     message_data['success'] = 'slot_filled'
                     # Remove the other item.
                     self.world.get_processor(RemovableProcessor).queue.put({'ent': ent, 'item': slot_filled_item})
-                elif self.world.component_for_entity(item, JobReqComponent).job_req != self.world.component_for_entity(ent, JobComponent).job:
+                elif self.world.component_for_entity(ent, JobComponent).job not in self.world.component_for_entity(item, JobReqComponent).job_req:
                     # Not the correct job to wear the item.
                     message_data['success'] = 'wrong_job'
-                    message_data['job'] = self.world.component_for_entity(item, JobReqComponent).job_req.capitalize()
+                    message_data['job'] = self.world.component_for_entity(item, JobReqComponent).job_req
                 elif self.world.has_component(item, WearableComponent):
                     # Wear the item!
                     wear_item(ent, eqp, item, name_component, self.world)
@@ -94,4 +95,5 @@ def wear_item(ent, eqp, item, name_component, world):
     name_component.name += ' (worn)'
     eqp.equipment.append(item)
     world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'item': True})
-    world.get_processor(SkillDirectoryProcessor).queue.put({'ent': ent, 'item': item, 'new_skill': True})
+    if world.has_component(item, ItemSkillComponent):
+        world.get_processor(SkillDirectoryProcessor).queue.put({'ent': ent, 'item': item, 'new_skill': True})

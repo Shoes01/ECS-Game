@@ -38,5 +38,5 @@ class RemovableProcessor(esper.Processor):
             elif job:
                 # The player switched jobs; go through the equipped items to see if the player is still the correct job.
                 for item in eqp.equipment:
-                    if job is not self.world.component_for_entity(item, JobReqComponent).job_req:
+                    if job not in self.world.component_for_entity(item, JobReqComponent).job_req:
                         self.queue.put({'ent': ent, 'item': item, 'free': True})

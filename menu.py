@@ -8,9 +8,9 @@ class PopupChoiceCondition():
 
 class PopupChoice():
     ' This is a single entry into the popup menu. '
-    def __init__(self, name, key, result, processor, valid=True, description="", upkeep=None, conditions=[]):
-        self.conditions = conditions # type: list of PopupChoiceConditions
-        self.description = description
+    def __init__(self, name, key, result, processor, valid=True, description=None, conditions=None):
+        self.conditions = [] if conditions is None else conditions # type: list of PopupChoiceConditions
+        self.description = "" if description is None else description
         self.name = name     # The name of the choice.
         self.key = key       # The key to select this choice.
         self.processor = processor # The processor that the results will be fed into.
