@@ -8,7 +8,7 @@
         "archtype": "item",
 
         "consumable": null,
-        "name": {"name": "Soul Jar"},
+        "name": "Soul Jar",
         "render": {"char": "!", "color_fg": "con_jar", "codepoint": "con_soul_jar"}
     }
 }

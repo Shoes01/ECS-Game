@@ -3,7 +3,7 @@ from _helper_functions import as_decimal, as_integer, generate_stats
 from components.actor.equipment import EquipmentComponent
 from components.actor.job import JobComponent
 from components.actor.skill_directory import SkillDirectoryComponent
-from components.item.skill import ItemSkillComponent
+from components.item.skills import SkillsComponent
 from components.item.slot import SlotComponent 
 from components.name import NameComponent
 from components.soul import SoulComponent
@@ -118,13 +118,20 @@ def generate_equipped_items(titles, world):
     for item in equipment:
         slot = world.component_for_entity(item, SlotComponent).slot
         name = world.component_for_entity(item, NameComponent)._name
-        skill_comp = None if not world.has_component(item, ItemSkillComponent) else world.component_for_entity(item, ItemSkillComponent)
-        skill = "None"
-        description = ""
-        if skill_comp:
-            skill = skill_comp.name
-            description = skill_comp.description
+        skill_comp = None
+        
+        for temp_skill in world.component_for_entity(item, SkillsComponent).skills:
+            if temp_skill.active:
+                skill_comp = temp_skill
+
         bonus = f""
+        description = ""
+        skill = "None"
+        
+        if skill_comp:
+            description = skill_comp.description
+            skill = skill_comp.name
+        
         for stat, value in world.component_for_entity(item, StatsComponent).__dict__.items():
             if value:
                 bonus += f"{titles[stat][:-1]} {as_integer(value, signed=True)}, "

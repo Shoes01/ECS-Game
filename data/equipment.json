@@ -8,127 +8,24 @@
     {
         "archtype": "item",
 
-        "job requirement": {"job": ["soldier", "rogue"]},
-        "name": {"name": "Sword"},
+        "name": "Sword",
         "rarity": 0,
         "render": {"char": ")", "color_fg": "weapon", "codepoint": "eqp_sword"},
-        "skill": "lunge",
+        "skill": ["lunge", "cleave"],
         "slot": {"slot": "mainhand"},
         "stats": {"attack": 5},
         "wearable": true
     },
-    "helmet":
-    {
-        "archtype": "item",
-
-        "job requirement": {"job": ["soldier", "rogue"]},
-        "name": {"name": "Helmet"},
-        "rarity": 0,
-        "render": {"char": "]", "color_fg": "armor", "codepoint": "eqp_helmet"},
-        "skill": "headbutt",
-        "slot": {"slot": "head"},
-        "stats": {"defense": 5},
-        "wearable": true
-    },
-    "boots":
-    {
-        "archtype": "item",
-
-        "job requirement": {"job": ["soldier", "rogue"]},
-        "name": {"name": "Boots"},
-        "rarity": 0,
-        "render": {"char": "]", "color_fg": "armor", "codepoint": "eqp_boots"},
-        "skill": "sprint",
-        "slot": {"slot": "feet"},
-        "stats": {"speed": 10},
-        "wearable": true
-    },
-    "shield":
-    {
-        "archtype": "item",
-
-        "job requirement": {"job": ["paladin", "rogue"]},
-        "name": {"name": "Shield"},
-        "rarity": 0,
-        "render": {"char": "]", "color_fg": "armor", "codepoint": "eqp_shield"},
-        "slot": {"slot": "offhand"},
-        "stats": {"defense": 10},
-        "wearable": true
-    },
-
-    "comment": "########################## RARITY ONE ITEMS ##########################",
-
     "hammer":
     {
         "archtype": "item",
 
-        "job requirement": {"job": "soldier"},
-        "name": {"name": "Hammer"},
-        "rarity": 1,
-        "render": {"char": ")", "color_fg": "weapon", "codepoint": "eqp_hammer"},
-        "skill": "cleave",
+        "name": "Hammer",
+        "rarity": 0,
+        "render": {"char": ")", "color_fg": "weapon", "codepoint": "eqp_sword"},
+        "skill": ["headbutt", "sprint"],
         "slot": {"slot": "mainhand"},
-        "stats": {"attack": 7},
-        "wearable": true
-    },
-
-    "comment": "########################## RARITY TWO ITEMS ##########################",
-
-    "long_sword":
-    {
-        "archtype": "item",
-
-        "job requirement": {"job": "soldier"},
-        "name": {"name": "Long Sword"},
-        "rarity": 2,
-        "render": {"char": ")", "color_fg": "weapon", "codepoint": "eqp_sword_long"},
-        "slot": {"slot": "mainhand"},
-        "stats": {"attack": 10},
-        "wearable": true
-    },
-
-    "comment": "########################## RARITY THREE ITEMS ##########################",
-
-    "great_sword":
-    {
-        "archtype": "item",
-
-        "job requirement": {"job": "soldier"},
-        "name": {"name": "Great Sword"},
-        "rarity": 3,
-        "render": {"char": ")", "color_fg": "weapon", "codepoint": "eqp_sword_great"},
-        "slot": {"slot": "mainhand"},
-        "stats": {"attack": 15},
-        "wearable": true
-    },
-
-    "comment": "########################## RARITY FOUR ITEMS ##########################",
-
-    "war_hammer":
-    {
-        "archtype": "item",
-
-        "job requirement": {"job": "soldier"},
-        "name": {"name": "War Hammer"},
-        "rarity": 4,
-        "render": {"char": ")", "color_fg": "weapon", "codepoint": "eqp_hammer_war"},
-        "slot": {"slot": "mainhand"},
-        "stats": {"attack": 22},
-        "wearable": true
-    },
-
-    "comment": "########################## RARITY FIVE ITEMS ##########################",
-
-    "dagger":
-    {
-        "archtype": "item",
-
-        "job requirement": {"job": "thief"},
-        "name": {"name": "Dagger"},
-        "rarity": 5,
-        "render": {"char": ")", "color_fg": "weapon", "codepoint": "eqp_dagger"},
-        "slot": {"slot": "offhand"},
-        "stats": {"attack": 15},
+        "stats": {"attack": 5},
         "wearable": true
     }
 }

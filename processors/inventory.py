@@ -38,7 +38,7 @@ class InventoryProcessor(esper.Processor):
                 _key = chr(n)
                 
                 # Prepare the result of the menu: the submenu!
-                submenu = PopupMenu(title=_name)
+                submenu = PopupMenu(title=_name, include_description={'item': item})
                 _result = {'ent': ent, 'item': item}
                 
                 # Consume

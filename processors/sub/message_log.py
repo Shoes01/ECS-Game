@@ -2,7 +2,6 @@ import tcod as libtcod
 
 from _data import LOG_COLORS
 from components.actor.equipment import EquipmentComponent
-from components.item.skill import ItemSkillComponent
 from components.item.slot import SlotComponent
 from components.name import NameComponent
 
@@ -182,11 +181,19 @@ def render_message_log(console_object, new_turn, world):
             console.print(0, 0 + dy, f'You have mastered {name}!', LOG_COLORS['success'])
 
         elif _wear:
-            job = _wear.get('job')
+            job_list = _wear.get('job')
             name = _wear.get('name')
             slot = _wear.get('slot')
             success = _wear.get('success')
             turn = _wear.get('turn')
+
+            # Go through the list of jobs, and turn it into a more human readable string.
+            job = ""
+            if job_list:
+                job_list = list(dict.fromkeys(job_list)) # This removes duplicate entries from the list.
+                for j in job_list:
+                    job += j + ", "
+                job = job[:-2]
 
             if success is True:
                 console.print(0, 0 + dy, '(Turn %s) You equip your %s to your %s.' % (turn, name, slot), LOG_COLORS['success'])

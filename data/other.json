@@ -4,7 +4,7 @@
         "actor": true,
         "furniture": true,
         "inventory": true,
-        "name": {"name": "Chest"},
+        "name": "Chest",
         "position": true,
         "rarity": 3,
         "render": {"char": "(", "color_fg": "chest", "codepoint": "other_chest"},

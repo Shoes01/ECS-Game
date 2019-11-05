@@ -3,7 +3,10 @@ import esper
 from components.actor.equipment import EquipmentComponent
 from components.item.jobreq import JobReqComponent
 from components.name import NameComponent
+from components.item.skills import SkillsComponent
 from processors.energy import EnergyProcessor
+from processors.skill import SkillProcessor
+
 from queue import Queue
 
 class RemovableProcessor(esper.Processor):
@@ -35,6 +38,11 @@ class RemovableProcessor(esper.Processor):
                     if free is not True:
                         self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'remove': True})                
                 self.world.messages.append({'remove': (name_component.name, success, turn)})
+
+                # Go through the skills of the item and deactivate those that don't meet the job_requirement.
+                for skill in self.world.component_for_entity(item, SkillsComponent).skills:
+                    skill.active = False
+
             elif job:
                 # The player switched jobs; go through the equipped items to see if the player is still the correct job.
                 for item in eqp.equipment:

@@ -8,7 +8,7 @@
         "boss": true,
         "brain": true,
         "loadout": "random",
-        "name": {"name": "Demon"},
+        "name": "Demon",
         "rarity": 7,
         "render": {"char": "&", "color_fg": "mon_demon", "codepoint": "mon_demon"},
         "stats": {"hp": 20, "attack": 8}
@@ -20,7 +20,7 @@
     {
         "archtype": "monster",
         "brain": true,
-        "name": {"name": "Rat"},
+        "name": "Rat",
         "rarity": 0,
         "render": {"char": "r", "color_fg": "mon_rat", "codepoint": "mon_rat"},
         "soul": {"eccentricity": 0, "max_rarity": 1},
@@ -30,7 +30,7 @@
     {
         "archtype": "monster",
         "brain": true,
-        "name": {"name": "Kobold"},
+        "name": "Kobold",
         "rarity": 0,
         "render": {"char": "k", "color_fg": "mon_kobold", "codepoint": "mon_kobold"},
         "soul": {"eccentricity": 10, "max_rarity": 2},
@@ -40,7 +40,7 @@
     {
         "archtype": "monster",
         "brain": true,
-        "name": {"name": "Goblin"},
+        "name": "Goblin",
         "rarity": 0,
         "render": {"char": "g", "color_fg": "mon_goblin", "codepoint": "mon_goblin"},
         "soul": {"eccentricity": 5, "max_rarity": 2},
@@ -50,7 +50,7 @@
     {
         "archtype": "monster",
         "brain": true,
-        "name": {"name": "Orc"},
+        "name": "Orc",
         "rarity": 0,
         "render": {"char": "o", "color_fg": "mon_orc", "codepoint": "mon_orc"},
         "soul": {"eccentricity": 2, "max_rarity": 4},
@@ -60,7 +60,7 @@
     {
         "archtype": "monster",
         "brain": true,
-        "name": {"name": "Zombie"},
+        "name": "Zombie",
         "rarity": 0,
         "render": {"char": "Z", "color_fg": "mon_zombie", "codepoint": "mon_zombie"},
         "soul": {"eccentricity": 0, "max_rarity": 1},

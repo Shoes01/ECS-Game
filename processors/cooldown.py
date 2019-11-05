@@ -1,6 +1,6 @@
 import esper
 
-from components.item.skill import ItemSkillComponent
+from components.item.skills import SkillsComponent
 from queue import Queue
 
 class CooldownProcessor(esper.Processor):
@@ -18,8 +18,9 @@ class CooldownProcessor(esper.Processor):
             tick = event.get('tick')
 
             if register_item:
-                skill_comp = self.world.component_for_entity(register_item, ItemSkillComponent)
-                skill_comp.cooldown_remaining = skill_comp.cooldown
+                for skill in self.world.component_for_entity(register_item, SkillsComponent).skills:
+                    if skill.active:
+                        skill.cooldown_remaining = skill.cooldown
                 self.registered_items.append(register_item)
             
             if remove_item:
@@ -27,9 +28,9 @@ class CooldownProcessor(esper.Processor):
 
             if tick:
                 for item in self.registered_items:
-                    skill_comp = self.world.component_for_entity(item, ItemSkillComponent)
+                    for skill in self.world.component_for_entity(register_item, SkillsComponent).skills:
+                        if skill.active:
+                            skill.cooldown_remaining -= 1
                     
-                    skill_comp.cooldown_remaining -= 1
-
-                    if skill_comp.cooldown_remaining <= 0:
-                        self.queue.put({'remove': item})
+                        if skill.cooldown_remaining <= 0:
+                            self.queue.put({'remove': item})

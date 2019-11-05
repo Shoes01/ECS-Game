@@ -1,6 +1,6 @@
 class SkillDirectoryComponent:
     def __init__(self):
-        self.skill_directory = {{}}
+        self.skill_directory = {}
 
         """
         Usage Example:

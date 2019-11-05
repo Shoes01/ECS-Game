@@ -4,7 +4,8 @@ from _data import ENTITY_COLORS
 from _helper_functions import generate_stats
 from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
-from components.item.skill import ItemSkillComponent
+from components.actor.job import JobComponent
+from components.item.skills import SkillsComponent
 from components.item.slot import SlotComponent
 from components.name import NameComponent
 from components.position import PositionComponent
@@ -32,10 +33,10 @@ class SkillProcessor(esper.Processor):
 
             ent = event['ent']
 
-            slot = event.get('skill_prepare')
-            move = event.get('skill_move')
-            confirm = event.get('skill_confirm')
             clear = event.get('skill_clear')
+            confirm = event.get('skill_confirm')
+            move = event.get('skill_move')
+            slot = event.get('skill_prepare')
 
             if slot:
                 self._item = self.find_item(ent, slot)
@@ -79,11 +80,12 @@ class SkillProcessor(esper.Processor):
         for item in eqp.equipment:
             if slot == self.world.component_for_entity(item, SlotComponent).slot:
                 name = self.world.component_for_entity(item, NameComponent)._name
-                if self.world.has_component(item, ItemSkillComponent):
-                    if self.world.component_for_entity(item, ItemSkillComponent).cooldown_remaining == 0:
-                        return item
-                    else:
-                        on_cooldown = True
+                for skill in self.world.component_for_entity(item, SkillsComponent).skills:
+                    if skill.active:
+                        if skill.cooldown_remaining == 0:
+                            return item
+                        else:
+                            on_cooldown = True
                 else:
                     has_item = True
                     legal_item = False                    
@@ -116,7 +118,12 @@ class SkillProcessor(esper.Processor):
         return direction
 
     def get_tiles(self, ent):
-        array_of_effect = self.world.component_for_entity(self._item, ItemSkillComponent).__dict__[self.get_direction_name(self._direction)]
+        skill_comp = None
+        for skill in self.world.component_for_entity(self._item, SkillsComponent).skills:
+            if skill.active:
+                skill_comp = skill
+                
+        array_of_effect = skill_comp.__dict__[self.get_direction_name(self._direction)]
         pos = self.world.component_for_entity(ent, PositionComponent)
         xc, yc = pos.x, pos.y
 
@@ -212,7 +219,11 @@ class SkillProcessor(esper.Processor):
             return 0
 
         # Check to see if the costs can be paid.
-        skill_comp = self.world.component_for_entity(item, ItemSkillComponent)
+        skill_comp = None
+        for skill in self.world.component_for_entity(self._item, SkillsComponent).skills:
+            if skill.active:
+                skill_comp = skill
+
         ent_stats = generate_stats(ent, self.world)
         insufficient_stats = []
         for stat, cost in skill_comp.cost_soul.items():
@@ -227,7 +238,7 @@ class SkillProcessor(esper.Processor):
             return 0
         
         # Pay the costs.
-        self.world.get_processor(CooldownProcessor).queue.put({'register': item})
+        self.world.get_processor(CooldownProcessor).queue.put({'register_item': item, 'register_skill_component': skill_comp})
         self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'skill': skill_comp.cost_energy})
         ent_stats_comp = self.world.component_for_entity(ent, StatsComponent)
         for stat, cost in skill_comp.cost_soul.items():

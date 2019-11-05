@@ -1,7 +1,7 @@
 from _data import SingleLineBox, UI_COLORS
 from _helper_functions import as_decimal, generate_stats
 from components.actor.equipment import EquipmentComponent
-from components.item.skill import ItemSkillComponent
+from components.item.skills import SkillsComponent
 from components.item.slot import SlotComponent
 from components.render import RenderComponent
 
@@ -52,10 +52,10 @@ def render_stats(console_object, world):
         if item:
             char_color = color_fg
             render_comp = world.component_for_entity(item, RenderComponent)
-            if world.has_component(item, ItemSkillComponent):
-                cooldown = world.component_for_entity(item, ItemSkillComponent).cooldown_remaining
-                if cooldown:
+            for skill in world.component_for_entity(item, SkillsComponent).skills:
+                if skill.active and skill.cooldown_remaining > 0:
                     char_color = UI_COLORS['cooldown']
+                    cooldown = skill.cooldown_remaining
         
         draw_letter_box(x + i, y + y_offset + j, 4, 4, box_char[slot], console, char_color, render_comp, cooldown)
 

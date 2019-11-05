@@ -30,7 +30,7 @@ class PopupChoice():
         
 class PopupMenu():
     ' This contains the input and render information for a popup menu. '
-    def __init__(self, title, contents=None, include_esc=True, x=10, y=5, w=map.w-20, h=map.h-10, auto_close=True):
+    def __init__(self, title, contents=None, include_esc=True, x=10, y=5, w=map.w-20, h=map.h-10, auto_close=True, include_description=None):
         self.title = title
         self.contents = [] # type: list of PopupChoices
         
@@ -40,10 +40,10 @@ class PopupMenu():
         self.h = h
         
         self.auto_close = auto_close # If True, all menus will be closed upon selecting a choice.
+        self.include_description = include_description # If not None, it will include all the ingredients necessary to form a description.
         self.include_esc = include_esc # If True, a choice to close the menu will be printed at the bottom of the menu.
-
+        
         ### Additional information that could be added later:
         # Subtitle
-        # Definition panel (in the case of items)
         # Category bool: if set to true, the renderer will sort items by their type. (items don't have a type yet)
         # Equipped bool: if set to true, the equipped items will be listed on the side?

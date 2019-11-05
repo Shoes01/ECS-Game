@@ -3,15 +3,16 @@ import esper
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
 from components.actor.job import JobComponent
-from components.item.skill import ItemSkillComponent
 from components.item.jobreq import JobReqComponent
+from components.item.skills import SkillsComponent
 from components.item.slot import SlotComponent
 from components.item.wearable import WearableComponent
 from components.name import NameComponent
 from menu import PopupMenu, PopupChoice
 from processors.energy import EnergyProcessor
 from processors.removable import RemovableProcessor
-from processors.skill_directory import SkillDirectoryProcessor
+from processors.skill import SkillProcessor
+from processors.skill_progression import SkillProgressionProcessor
 from processors.state import StateProcessor
 from queue import Queue
 
@@ -95,5 +96,12 @@ def wear_item(ent, eqp, item, name_component, world):
     name_component.name += ' (worn)'
     eqp.equipment.append(item)
     world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'item': True})
-    if world.has_component(item, ItemSkillComponent):
-        world.get_processor(SkillDirectoryProcessor).queue.put({'ent': ent, 'item': item, 'new_skill': True})
+    world.get_processor(SkillProgressionProcessor).queue.put({'ent': ent, 'item': item, 'new_skill': True})
+    
+    # Go through the skills of the item and deactivate those that don't meet the job_requirement.
+    job = world.component_for_entity(ent, JobComponent).job
+    for skill in world.component_for_entity(item, SkillsComponent).skills:
+        if job in skill.job_req:
+            skill.active = True
+        else:
+            skill.active = False

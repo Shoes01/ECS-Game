@@ -13,6 +13,7 @@
         "cost_soul": {"magic": 2},
         "description": "Lunge forward.",
         "damage_type": "physical",
+        "job_requirement": ["soldier"],
         "east":
         [
             [0, 0, 0, 0, 0],
@@ -37,6 +38,7 @@
         "cost_soul": {"magic": 4},
         "description": "A swinging swipe.",
         "damage_type": "physical",
+        "job_requirement": ["warrior"],
         "east":
         [
             [0, 0, 0, 0, 0],
@@ -61,6 +63,7 @@
         "cost_soul": {"hp": 1},
         "description": "Use your head for something.",
         "damage_type": "physical",
+        "job_requirement": ["warrior"],
         "east":
         [
             [0, 0, 0, 0, 0],
@@ -84,6 +87,7 @@
         "cost_energy": 1,
         "cost_soul": {"speed": 2},
         "description": "Sprint to a safer location.",
+        "job_requirement": ["rogue"],
         "east":
         [
             [0, 0, 0, 0, 0],

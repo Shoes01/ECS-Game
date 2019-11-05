@@ -25,7 +25,7 @@ from components.actor.race import RaceComponent
 from components.item.consumable import ConsumableComponent
 from components.item.item import ItemComponent
 from components.item.jobreq import JobReqComponent
-from components.item.skill import ItemSkillComponent
+from components.item.skills import SkillsComponent, SkillComponent
 from components.item.slot import SlotComponent
 from components.item.wearable import WearableComponent
 from components.furniture import FurnitureComponent
@@ -65,7 +65,7 @@ from processors.pickup import PickupProcessor
 from processors.removable import RemovableProcessor
 from processors.render import RenderProcessor
 from processors.skill import SkillProcessor
-from processors.skill_directory import SkillDirectoryProcessor
+from processors.skill_progression import SkillProgressionProcessor
 from processors.soul import SoulProcessor
 from processors.state import StateProcessor
 from processors.wearable import WearableProcessor
@@ -136,7 +136,7 @@ class GameWorld(esper.World):
         self.add_processor(DijkstraProcessor(), 3)
         self.add_processor(EnergyProcessor(), 3)
         ' Endstep. '
-        self.add_processor(SkillDirectoryProcessor(), 2)
+        self.add_processor(SkillProgressionProcessor(), 2)
         self.add_processor(CooldownProcessor(), 2)
         self.add_processor(FOVProcessor(), 1)
         self.add_processor(StateProcessor(), 1)
@@ -207,11 +207,9 @@ class GameWorld(esper.World):
                     monster_table[rarity].append(ent)
                 elif archtype == 'item':
                     item_table[rarity].append(ent)
-                    job = components.get('job requirement').get('job') # This might be a list of strings, or a single string
+                    job = components.get('job_requirement')
                     skill = components.get('skill')
                 if job and skill:
-                    if type(job) is not list:
-                        job = [job,]
                     for single_job in job:
                         if single_job in job_skill_table:
                             job_skill_table[single_job].append(skill)
@@ -263,13 +261,14 @@ class GameWorld(esper.World):
                     self.add_component(ent, EnergyComponent())
                     self.add_component(ent, EquipmentComponent())
                     self.add_component(ent, InventoryComponent())
-                    self.add_component(ent, JobComponent(job='unemployed_monster', upkeep={}))
+                    self.add_component(ent, JobComponent(job='unemployed_monster', upkeep={})) # This is placeholder.
                     self.add_component(ent, SkillDirectoryComponent())
                     self.add_component(ent, PositionComponent())
-                    self.add_component(ent, RaceComponent(race='common_monster'))
+                    self.add_component(ent, RaceComponent(race='common_monster')) # This is placeholder.
                 elif value == 'item':
                     self.add_component(ent, ItemComponent())
                     self.add_component(ent, PositionComponent())
+                    self.add_component(ent, SkillsComponent())
             
             # Now just look for each and every component possible...
             elif key == 'actor':
@@ -282,7 +281,8 @@ class GameWorld(esper.World):
                 self.add_component(ent, BrainComponent())
             
             elif key == 'consumable':
-                self.add_component(ent, ConsumableComponent(effects=value))
+                effects = value
+                self.add_component(ent, ConsumableComponent(effects=effects))
 
             elif key == 'energy':
                 self.add_component(ent, EnergyComponent())
@@ -299,12 +299,16 @@ class GameWorld(esper.World):
             elif key == 'inventory':
                 self.add_component(ent, InventoryComponent())
 
-            elif key == 'job requirement':
-                job = value.get('job')
-                self.add_component(ent, JobReqComponent(job_req=job))
+            elif key == 'job_requirement':
+                job = value
+                
+                if self.has_component(ent, JobReqComponent):
+                    self.component_for_entity(ent, JobReqComponent).job_req.extend(job)
+                else:
+                    self.add_component(ent, JobReqComponent(job_req=job))
             
             elif key == 'name':
-                name = value.get('name')
+                name = value
                 self.add_component(ent, NameComponent(name=name))
             
             elif key == 'position':
@@ -323,16 +327,37 @@ class GameWorld(esper.World):
                 self.add_component(ent, RenderComponent(color_bg=ENTITY_COLORS.get(color_bg), char=char, codepoint=SPRITES[codepoint], color_fg=ENTITY_COLORS[color_fg], color_explored=ENTITY_COLORS.get(color_explored)))
 
             elif key == 'skill':
-                name = value
-                ap_max = self._json_data.get(name).get('ap_max')
-                cooldown = self._json_data.get(name).get('cooldown')
-                cost_energy = self._json_data.get(name).get('cost_energy')
-                cost_soul = self._json_data.get(name).get('cost_soul')
-                damage_type = self._json_data.get(name).get('damage_type')
-                description = self._json_data.get(name).get('description')
-                east = self._json_data.get(name).get('east')
-                north_east = self._json_data.get(name).get('north_east')
-                self.add_component(ent, ItemSkillComponent(ap_max=ap_max, cooldown=cooldown, cost_energy=cost_energy, cost_soul=cost_soul, damage_type=damage_type, description=description, name=name, east=east, north_east=north_east))
+                names = value
+                if type(names) is not list: 
+                    names = [names,]
+                
+                for name in names:
+                    ap_max = self._json_data.get(name).get('ap_max')
+                    cooldown = self._json_data.get(name).get('cooldown')
+                    cost_energy = self._json_data.get(name).get('cost_energy')
+                    cost_soul = self._json_data.get(name).get('cost_soul')
+                    damage_type = self._json_data.get(name).get('damage_type')
+                    description = self._json_data.get(name).get('description')
+                    east = self._json_data.get(name).get('east')
+                    if self._json_data.get(name).get('job_requirement') is None: print(f"Item {name} has no job_requirement.")
+                    job_req = self._json_data.get(name).get('job_requirement')
+                    north_east = self._json_data.get(name).get('north_east')
+
+                    skill_component = SkillComponent(ap_max=ap_max, cooldown=cooldown, cost_energy=cost_energy, cost_soul=cost_soul, damage_type=damage_type, description=description, job_req=job_req, name=name, east=east, north_east=north_east)
+
+                    # TODO: Am I always sure this component has been created? I should maybe set up a queue of actions to be taken after the initial run through is done...
+                    self.component_for_entity(ent, SkillsComponent).skills.append(skill_component)
+                    
+                    # TODO: At this point, should the job of the skill be added to the job_req of the item? 
+                    if self.has_component(ent, ItemComponent):
+                        if self.has_component(ent, JobReqComponent):
+                            ent_job_req = self.component_for_entity(ent, JobReqComponent).job_req
+                            if ent_job_req:
+                                self.component_for_entity(ent, JobReqComponent).job_req.extend(job_req)
+                            else:
+                                self.component_for_entity(ent, JobReqComponent).job_req = job_req
+                        else:
+                            self.add_component(ent, JobReqComponent(job_req=job_req))
 
             elif key == 'slot':
                 slot = value.get('slot')

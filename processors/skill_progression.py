@@ -3,10 +3,10 @@ import esper
 from components.actor.equipment import EquipmentComponent
 from components.actor.job import JobComponent
 from components.actor.skill_directory import SkillDirectoryComponent
-from components.item.skill import ItemSkillComponent
+from components.item.skills import SkillsComponent
 from queue import Queue
 
-class SkillDirectoryProcessor(esper.Processor):
+class SkillProgressionProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
         self.queue = Queue()
@@ -24,6 +24,10 @@ class SkillDirectoryProcessor(esper.Processor):
             job = self.world.component_for_entity(ent, JobComponent).job
             sd_comp = self.world.component_for_entity(ent, SkillDirectoryComponent)                
 
+            # First time check of the skill directory.
+            if len(sd_comp.skill_directory) == 0:
+                sd_comp.skill_directory[job] = {}
+
             # Add an entry to the ent's skill directory.
             if new_job:
                 if new_job not in sd_comp.skill_directory.keys():
@@ -31,21 +35,32 @@ class SkillDirectoryProcessor(esper.Processor):
 
             elif item and new_skill:
                 # Add this item's skill to the directory, if it is not already present.
-                skill = self.world.component_for_entity(item, ItemSkillComponent)
+                skill = None
+                for s in self.world.component_for_entity(item, SkillsComponent).skills:
+                    if s.active:
+                        skill = s
+                        break
                 
-                if job in sd_comp.skill_directory.keys():
+                if skill and job in skill.job_req and job in sd_comp.skill_directory.keys():
                     if skill.name not in sd_comp.skill_directory[job].keys():
                         sd_comp.skill_directory[job][skill.name] = (0, skill.ap_max)
-                else:
-                    print("ERROR: This item is trying to add a skill to a job that doesn't exist!")
+                    else:
+                        print("ERROR: This item is trying to add a skill to a job that doesn't exist!")
 
             elif ap_gain:
                 # Go through each item that is equipped, and add AP to its skill.
                 eqp_comp = self.world.component_for_entity(ent, EquipmentComponent)
                 for other_item in eqp_comp.equipment:
                     newly_maxed = False
+                    other_skill = None 
 
-                    other_skill = None if not self.world.component_for_entity(other_item, ItemSkillComponent) else self.world.component_for_entity(other_item, ItemSkillComponent).name
+                    # Get the skill, if there is one.
+                    for s in self.world.component_for_entity(other_item, SkillsComponent).skills:
+                        if s.active:
+                            other_skill = s.name
+                            break
+                    else:
+                        continue
 
                     ap_current, ap_max = sd_comp.skill_directory[job][other_skill]
                                         
