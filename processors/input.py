@@ -7,6 +7,8 @@ from components.actor.actor import ActorComponent
 from components.actor.energy import EnergyComponent
 from components.actor.player import PlayerComponent
 from components.position import PositionComponent
+from fsm import Game, GameOver, Look, MainMenu, SkillTargeting, SoulState, VictoryScreen, ViewCharacterSheet, ViewLog
+from fsm import PopupMenu as PopupMenuState
 from menu import PopupMenu, PopupChoice
 from processors.consumable import ConsumableProcessor
 from processors.debug import DebugProcessor
@@ -64,25 +66,25 @@ class InputProcessor(esper.Processor):
         if key_char == 'd' and key.mod & libtcod.event.KMOD_CTRL:
             self.world.get_processor(EventProcessor).queue.put({'toggle_debug': True})
 
-        if self.world.state == 'PopupMenu':
+        if self.world.state == PopupMenuState:
             self.handle_popupmenu_input(key_char, key_scancode)
-        elif self.world.state == 'MainMenu':
+        elif self.world.state == MainMenu:
             self.handle_mainmenu_input(key_char, key_scancode)
-        elif self.world.state == 'ViewLog':
+        elif self.world.state == ViewLog:
             self.handle_viewlog_input(key_char, key_scancode)
-        elif self.world.state == 'Look':
+        elif self.world.state == Look:
             self.handle_look_input(key_char, key_scancode)
-        elif self.world.state == 'GameOver':
+        elif self.world.state == GameOver:
             self.handle_gameouver_input(key_char, key_scancode)
-        elif self.world.state == 'VictoryScreen':
+        elif self.world.state == VictoryScreen:
             self.handle_victoryscreen_input(key_char, key_scancode)
-        elif self.world.state == 'Game':
+        elif self.world.state == Game:
             self.handle_game_input(key, key_char, key_scancode, mouse_click)
-        elif self.world.state == 'SkillTargeting':
+        elif self.world.state == SkillTargeting:
             self.handle_skilltargeting_input(key_char, key_scancode)
-        elif self.world.state == 'ViewCharacterSheet':
+        elif self.world.state == ViewCharacterSheet:
             self.handle_viewcharactersheet_input(key_char, key_scancode)
-        elif self.world.state == 'SoulState':
+        elif self.world.state == SoulState:
             self.handle_soulstate_input(key_char, key_scancode)
         
     def handle_popupmenu_input(self, key_char, key_scancode):
@@ -103,7 +105,7 @@ class InputProcessor(esper.Processor):
             self.world.get_processor(StateProcessor).queue.put({'exit': True})
         elif key_scancode == libtcod.event.SCANCODE_KP_ENTER or key_scancode == libtcod.event.SCANCODE_RETURN:
             self.world.get_processor(MapgenProcessor).queue.put({'generate_dungeon': True})
-            self.world.get_processor(StateProcessor).queue.put({'generate_map': True})
+            self.world.get_processor(StateProcessor).queue.put({'new_game': True})
         elif key_char == 'l':
             self.world.get_processor(StateProcessor).queue.put({'load_game': True})
 

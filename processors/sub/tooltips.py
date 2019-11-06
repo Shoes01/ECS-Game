@@ -4,13 +4,14 @@ from components.item.item import ItemComponent
 from components.name import NameComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
+from fsm import Look
 
 def render_tooltips(camera_pos, console_object, world):
     console, _, _, _, h = console_object
     cursor = world.cursor
     x, y = None, None
     
-    if world.state == 'Look':
+    if world.state == Look:
         x, y = cursor.x, cursor.y
     elif world.mouse_pos:
         x, y = world.mouse_pos

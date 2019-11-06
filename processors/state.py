@@ -1,6 +1,6 @@
 import esper
 
-from fsm import GameStateMachine
+from fsm import GameStateMachine, PopupMenu
 from queue import Queue
 
 class StateProcessor(esper.Processor):
@@ -11,4 +11,6 @@ class StateProcessor(esper.Processor):
 
     def process(self):
         while not self.queue.empty():
-            self.world.state = self.state_machine.on_event(self.queue.get()).__str__()
+            if self.world.state is not PopupMenu:
+                self.world.previous_state = self.world.state
+            self.world.state = self.state_machine.on_event(self.queue.get())

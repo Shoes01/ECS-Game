@@ -4,13 +4,14 @@ from _data import LOG_COLORS
 from components.actor.equipment import EquipmentComponent
 from components.item.slot import SlotComponent
 from components.name import NameComponent
+from fsm import ViewLog
 
 def render_message_log(console_object, new_turn, world):        
     console, x, y, w, h = console_object
     
     # Draw the regular message log.
     console, x, y, w, h = world.consoles['log']
-    if world.state == 'ViewLog':
+    if world.state == ViewLog:
         console, x, y, w, h = world.consoles['map']
     
     max_offset = len(world.messages) - h

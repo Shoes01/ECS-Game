@@ -9,7 +9,7 @@ class GameStateMachine:
         state_class = self.state.on_event(event)
         self.state = state_class(self.state_processor)
 
-        return self.state
+        return state_class
 
 class State:
     def __init__(self, state_processor):
@@ -26,12 +26,19 @@ class MainMenu(State):
         if event.get('exit'):
             self.state_processor.world.running = False
             return MainMenu
-        elif event.get('generate_map'):
-            return Game
+        elif event.get('new_game'):
+            #return NewGame
+            return Game # TODO: This is until I test the states are working correctly.
         elif event.get('load_game'):
             self.state_processor.world.load_game()
             return Game
         return MainMenu
+
+class NewGame(State):
+    def on_event(self, event):
+        if event.get('start_game'):
+            return Game
+        return NewGame
 
 class Game(State):
     def on_event(self, event):
@@ -81,13 +88,13 @@ class PopupMenu(State):
         if event.get('exit'):
             while self.state_processor.world.popup_menus:
                 self.state_processor.world.popup_menus.pop()
-            return Game
+            return Game # TODO: This is until I test the states are working correctly.
         elif event.get('pop'):
             self.state_processor.world.popup_menus.pop()
             if self.state_processor.world.popup_menus:
                 return PopupMenu
             else:
-                return Game
+                return Game # TODO: This is until I test the states are working correctly.
         elif event.get('popup'):
             self.state_processor.world.popup_menus.append(event['popup'])
             return PopupMenu

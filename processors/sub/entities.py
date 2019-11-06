@@ -6,6 +6,7 @@ from components.position import PositionComponent
 from components.render import RenderComponent
 from components.stairs import StairsComponent
 from components.tile import TileComponent
+from fsm import Look, SkillTargeting
 
 def render_entities(console_object, world):
     _entity_directory = {}
@@ -36,7 +37,7 @@ def render_entities(console_object, world):
         if world.has_component(ent, StairsComponent):
             _sorted_list['stairs'].append((pos, ren))
         elif world.has_component(ent, TileComponent):
-            if world.state is 'SkillTargeting' and ren.highlight_color:
+            if world.state is SkillTargeting and ren.highlight_color:
                 _sorted_list['highlighted'].append((pos, ren))
             _sorted_list['tile'].append((pos, ren))
         elif world.has_component(ent, CorpseComponent):
@@ -78,7 +79,7 @@ def render_entities(console_object, world):
 
     # Print cursor.
     cursor = world.cursor
-    if world.state == 'Look':
+    if world.state == Look:
         print_cursor(cursor.color_fg, console, cursor.x, cursor.y, world)
 
 def print_cursor(color, console, x, y, world):
@@ -107,7 +108,7 @@ def print_tile(console, pos, ren, _entity_directory, world, corpse=False, floor=
     fg = ren.color_fg + (255,)
     bg = ren.color_bg + (255,)
     
-    if world.state is not 'SkillTargeting':
+    if world.state is not SkillTargeting:
         ren.highlight_color = None
     
     if ren.visible or ren.explored:

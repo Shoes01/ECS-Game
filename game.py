@@ -8,6 +8,7 @@ from _data import ENTITY_COLORS, con, eqp, log, map, SPRITES, MULTIPLIER
 from camera import Camera
 from cursor import Cursor
 from load_tileset import load_tileset
+from fsm import MainMenu
 from map import Map
 from typing import Type
 
@@ -81,8 +82,9 @@ class GameWorld(esper.World):
         self.messages_offset = 0
         self.mouse_pos = None
         self.popup_menus = []
+        self.previous_state = MainMenu
         self.running = True
-        self.state = 'MainMenu'
+        self.state = MainMenu
         self.ticker = 0
         self.turn = 0
         self.toggle_debug_mode = False

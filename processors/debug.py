@@ -6,6 +6,7 @@ from components.actor.actor import ActorComponent
 from components.furniture import FurnitureComponent
 from components.item.item import ItemComponent
 from components.tile import TileComponent
+from fsm import Game
 from queue import Queue
 
 class DebugProcessor(esper.Processor):
@@ -14,7 +15,7 @@ class DebugProcessor(esper.Processor):
         self.queue = Queue()
     
     def process(self):
-        if not (self.world.toggle_debug_mode and self.world.state == 'Game'):
+        if not (self.world.toggle_debug_mode and self.world.state == Game):
             return 0
         
         dijkstra_map = self.world.map.dijkstra_map
