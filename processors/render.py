@@ -2,7 +2,7 @@ import esper
 import tcod as libtcod
 
 from _data import DoubleLineBox, UI_COLORS
-from fsm import GameOver, MainMenu, PopupMenu, SkillTargeting, SoulState, VictoryScreen, ViewCharacterSheet
+from fsm import GameOver, MainMenu, NewGame, PopupMenu, SkillTargeting, SoulState, VictoryScreen, ViewCharacterSheet
 from processors.sub.character_sheet import render_character_sheet
 from processors.sub.entities import render_entities
 from processors.sub.game_over import render_game_over
@@ -72,13 +72,13 @@ class RenderProcessor(esper.Processor):
         
 
     def draw_stats(self, console, state, world):
-        if state != MainMenu:
+        if state != MainMenu and state != NewGame:
             render_stats(console, world)
     
     def draw_log(self, console, item, new_turn, state, world):
         if state == SkillTargeting:
             render_skill_display(console, item, world)
-        elif state != MainMenu:
+        elif state != MainMenu and state != NewGame:
             render_message_log(console, new_turn, world)
 
     def draw_map(self, console, state, soul, world):
@@ -87,7 +87,7 @@ class RenderProcessor(esper.Processor):
             render_main_menu(console)
         
         # Main game content.
-        if state != MainMenu and state != PopupMenu:
+        if state != MainMenu and state != PopupMenu and state != NewGame:
             render_entities(console, world)
             render_tooltips((self.world.camera.x, self.world.camera.y), console, world)
         

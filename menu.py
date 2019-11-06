@@ -13,7 +13,7 @@ class PopupChoice():
         self.description = "" if description is None else description
         self.name = name     # The name of the choice.
         self.key = key       # The key to select this choice.
-        self.processor = processor # The processor that the results will be fed into.
+        self.processor = processor # The processor that the result will be fed into.
         self.result = result # type: dict
         self._valid = valid   # If this is False, then the option is greyed out (at the moment, it can still be selected).
 

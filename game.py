@@ -62,6 +62,7 @@ from processors.inventory import InventoryProcessor
 from processors.job import JobProcessor
 from processors.mapgen import MapgenProcessor
 from processors.movement import MovementProcessor
+from processors.new_game import NewGameProcessor
 from processors.pickup import PickupProcessor
 from processors.removable import RemovableProcessor
 from processors.render import RenderProcessor
@@ -74,6 +75,7 @@ from processors.wearable import WearableProcessor
 class GameWorld(esper.World):
     def __init__(self):
         super().__init__()
+        
         self.build_world()
         
         ' Data. '
@@ -119,6 +121,7 @@ class GameWorld(esper.World):
         self.add_processor(AiInputProcessor(), 30)
         self.add_processor(InputProcessor(), 30)
         ' Update. '
+        self.add_processor(NewGameProcessor(), 25)
         self.add_processor(DiscoveryProcessor(), 21)
         self.add_processor(EventProcessor(), 20)    
         self.add_processor(InventoryProcessor(), 15)

@@ -24,19 +24,19 @@ class State:
 class MainMenu(State):
     def on_event(self, event):
         if event.get('exit'):
-            self.state_processor.world.running = False
             return MainMenu
-        elif event.get('new_game'):
-            #return NewGame
-            return Game # TODO: This is until I test the states are working correctly.
         elif event.get('load_game'):
-            self.state_processor.world.load_game()
             return Game
+        elif event.get('new_game'):
+            return NewGame
         return MainMenu
 
 class NewGame(State):
     def on_event(self, event):
-        if event.get('start_game'):
+        if event.get('popup'):
+            self.state_processor.world.popup_menus.append(event['popup'])
+            return PopupMenu
+        elif event.get('start_game'):
             return Game
         return NewGame
 
@@ -73,7 +73,6 @@ class ViewCharacterSheet(State):
 class GameOver(State):
     def on_event(self, event):
         if event.get('exit'):
-            self.state_processor.world.get_processor(FinalProcessor).queue.put({'reset_game': True})
             return MainMenu
         return GameOver
 
@@ -115,7 +114,6 @@ class SoulState(State):
 class VictoryScreen(State):
     def on_event(self, event):
         if event.get('exit'):
-            self.state_processor.world.get_processor(FinalProcessor).queue.put({'reset_game': True})
             return MainMenu
         return VictoryScreen
 

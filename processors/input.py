@@ -16,10 +16,12 @@ from processors.descend import DescendProcessor
 from processors.drop import DropProcessor
 from processors.energy import EnergyProcessor
 from processors.event import EventProcessor
+from processors.final import FinalProcessor
 from processors.inventory import InventoryProcessor
 from processors.job import JobProcessor
 from processors.mapgen import MapgenProcessor
 from processors.movement import MovementProcessor
+from processors.new_game import NewGameProcessor
 from processors.pickup import PickupProcessor
 from processors.removable import RemovableProcessor
 from processors.skill import SkillProcessor
@@ -75,7 +77,7 @@ class InputProcessor(esper.Processor):
         elif self.world.state == Look:
             self.handle_look_input(key_char, key_scancode)
         elif self.world.state == GameOver:
-            self.handle_gameouver_input(key_char, key_scancode)
+            self.handle_gameover_input(key_char, key_scancode)
         elif self.world.state == VictoryScreen:
             self.handle_victoryscreen_input(key_char, key_scancode)
         elif self.world.state == Game:
@@ -102,11 +104,14 @@ class InputProcessor(esper.Processor):
 
     def handle_mainmenu_input(self, key_char, key_scancode):
         if key_scancode == libtcod.event.SCANCODE_ESCAPE:
+            self.world.running = False
             self.world.get_processor(StateProcessor).queue.put({'exit': True})
         elif key_scancode == libtcod.event.SCANCODE_KP_ENTER or key_scancode == libtcod.event.SCANCODE_RETURN:
             self.world.get_processor(MapgenProcessor).queue.put({'generate_dungeon': True})
+            self.world.get_processor(NewGameProcessor).queue.put({'new_game': True})
             self.world.get_processor(StateProcessor).queue.put({'new_game': True})
         elif key_char == 'l':
+            self.world.load_game()
             self.world.get_processor(StateProcessor).queue.put({'load_game': True})
 
     def handle_viewlog_input(self, key_char, key_scancode):
@@ -124,12 +129,14 @@ class InputProcessor(esper.Processor):
         elif key_scancode == libtcod.event.SCANCODE_ESCAPE:
             self.world.get_processor(StateProcessor).queue.put({'exit': True})
 
-    def handle_gameouver_input(self, key_char, key_scancode):
+    def handle_gameover_input(self, key_char, key_scancode):
         if key_scancode == libtcod.event.SCANCODE_ESCAPE:
+            self.world.get_processor(FinalProcessor).queue.put({'reset_game': True})
             self.world.get_processor(StateProcessor).queue.put({'exit': True})
 
     def handle_victoryscreen_input(self, key_char, key_scancode):
         if key_scancode == libtcod.event.SCANCODE_ESCAPE:
+            self.world.get_processor(FinalProcessor).queue.put({'reset_game': True})
             self.world.get_processor(StateProcessor).queue.put({'exit': True})
 
     def handle_skilltargeting_input(self, key_char, key_scancode):
