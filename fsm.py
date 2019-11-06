@@ -88,13 +88,13 @@ class PopupMenu(State):
         if event.get('exit'):
             while self.state_processor.world.popup_menus:
                 self.state_processor.world.popup_menus.pop()
-            return Game # TODO: This is until I test the states are working correctly.
+            return self.state_processor.world.previous_state
         elif event.get('pop'):
             self.state_processor.world.popup_menus.pop()
             if self.state_processor.world.popup_menus:
                 return PopupMenu
             else:
-                return Game # TODO: This is until I test the states are working correctly.
+                return self.state_processor.world.previous_state
         elif event.get('popup'):
             self.state_processor.world.popup_menus.append(event['popup'])
             return PopupMenu
