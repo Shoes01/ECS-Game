@@ -3,7 +3,7 @@ import esper
 from components.actor.job import JobComponent
 from components.actor.race import RaceComponent
 from processors.state import StateProcessor
-from menu import PopupMenu, PopupChoice
+from menu import PopupMenu, PopupChoice, PopupChoiceResult
 from queue import Queue
 
 class NewGameProcessor(esper.Processor):
@@ -32,16 +32,18 @@ class NewGameProcessor(esper.Processor):
                 _key = 's'
                 _result = {'select_race': 'human', 'select_job': 'soldier'}
                 _description = 'A regular soldier.'
+                _results = (PopupChoiceResult(result=_result, processor=_processor),)
 
-                menu_human_jobs.contents.append(PopupChoice(name=_name, key=_key,  processor=_processor, result=_result, description=_description))
+                menu_human_jobs.contents.append(PopupChoice(name=_name, key=_key, results=_results, description=_description))
 
                 ## Thief
                 _name = 'Thief'
                 _key = 't'
                 _result = {'select_race': 'human', 'select_job': 'thief'}
                 _description = 'A regular thief.'
+                _results = (PopupChoiceResult(result=_result, processor=_processor),)
 
-                menu_human_jobs.contents.append(PopupChoice(name=_name, key=_key,  processor=_processor, result=_result, description=_description))
+                menu_human_jobs.contents.append(PopupChoice(name=_name, key=_key, results=_results, description=_description))
 
                 ###### Elf Jobs! ##########################
                 menu_elf_jobs = PopupMenu(title='Choose a Job.', include_esc=False, auto_close=True)
@@ -51,8 +53,9 @@ class NewGameProcessor(esper.Processor):
                 _key = 'r'
                 _result = {'select_race': 'elf', 'select_job': 'rogue'}
                 _description = 'A dashing rogue.'
+                _results = (PopupChoiceResult(result=_result, processor=_processor),)
 
-                menu_elf_jobs.contents.append(PopupChoice(name=_name, key=_key,  processor=_processor, result=_result, description=_description))                
+                menu_elf_jobs.contents.append(PopupChoice(name=_name, key=_key, results=_results, description=_description))                
 
                 #########
                 # RACES #
@@ -65,15 +68,17 @@ class NewGameProcessor(esper.Processor):
                 _key = 'h'
                 _result = {'popup': menu_human_jobs}
                 _description = 'A regular human being.'
+                _results = (PopupChoiceResult(result=_result, processor=_processor),)
 
-                menu_race.contents.append(PopupChoice(name=_name, key=_key,  processor=_processor, result=_result, description=_description))
+                menu_race.contents.append(PopupChoice(name=_name, key=_key, results=_results, description=_description))
                 # Elf!
                 _name = 'Elf'
                 _key = 'e'
                 _result = {'popup': menu_elf_jobs}
                 _description = 'A regular elf being.'
+                _results = (PopupChoiceResult(result=_result, processor=_processor),)
 
-                menu_race.contents.append(PopupChoice(name=_name, key=_key,  processor=_processor, result=_result, description=_description))
+                menu_race.contents.append(PopupChoice(name=_name, key=_key, results=_results, description=_description))
 
                 self.world.get_processor(StateProcessor).queue.put({'popup': menu_race})
             

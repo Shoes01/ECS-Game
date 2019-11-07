@@ -5,7 +5,7 @@ from components.item.item import ItemComponent
 from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
-from menu import PopupMenu, PopupChoice
+from menu import PopupMenu, PopupChoice, PopupChoiceResult
 from processors.energy import EnergyProcessor
 from processors.state import StateProcessor
 from queue import Queue
@@ -47,8 +47,8 @@ class PickupProcessor(esper.Processor):
                     for item in matched_items:
                         _name = self.world.component_for_entity(item, NameComponent).name
                         _key = chr(n)
-                        _result = {'ent': ent, 'item': item}
-                        menu.contents.append(PopupChoice(name=_name, key=_key, result=_result, processor=PickupProcessor))
+                        _results = (PopupChoiceResult(result={'ent': ent, 'item': item}, processor=PickupProcessor),)
+                        menu.contents.append(PopupChoice(name=_name, key=_key, results=_results))
                         n += 1
 
                     self.world.get_processor(StateProcessor).queue.put({'popup': menu})

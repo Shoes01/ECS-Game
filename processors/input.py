@@ -9,7 +9,7 @@ from components.actor.player import PlayerComponent
 from components.position import PositionComponent
 from fsm import Game, GameOver, Look, MainMenu, SkillTargeting, SoulState, VictoryScreen, ViewCharacterSheet, ViewLog
 from fsm import PopupMenu as PopupMenuState
-from menu import PopupMenu, PopupChoice
+from menu import PopupMenu, PopupChoice, PopupChoiceResult
 from processors.consumable import ConsumableProcessor
 from processors.debug import DebugProcessor
 from processors.descend import DescendProcessor
@@ -94,7 +94,8 @@ class InputProcessor(esper.Processor):
         
         for choice in menu.contents:
             if key_char == choice.key:
-                self.world.get_processor(choice.processor).queue.put(choice.result)
+                for result in choice.results:
+                    self.world.get_processor(result.processor).queue.put(result.result) 
                 
                 if menu.auto_close:
                     self.world.get_processor(StateProcessor).queue.put({'exit': True})
@@ -163,9 +164,9 @@ class InputProcessor(esper.Processor):
     def handle_game_input(self, key, key_char, key_scancode, mouse_click):
         if key_scancode == libtcod.event.SCANCODE_ESCAPE:
             menu = PopupMenu(title='What would you like to do?')
-            menu.contents.append(PopupChoice(name='Load game', key='l', result={'load_game': True}, processor=EventProcessor))
-            menu.contents.append(PopupChoice(name='Quit', key='q', result={'exit': True}, processor=StateProcessor))
-            menu.contents.append(PopupChoice(name='Save game', key='s', result={'save_game': True}, processor=EventProcessor))
+            menu.contents.append(PopupChoice(name='Load game', key='l', results=(PopupChoiceResult(result={'load_game': True}, processor=EventProcessor),)))
+            menu.contents.append(PopupChoice(name='Quit', key='q', results=(PopupChoiceResult(result={'exit': True}, processor=StateProcessor),)))
+            menu.contents.append(PopupChoice(name='Save game', key='s', results=(PopupChoiceResult(result={'save_game': True}, processor=EventProcessor),)))
             self.world.get_processor(StateProcessor).queue.put({'popup': menu})
         elif key_char == 'm':
             self.world.get_processor(StateProcessor).queue.put({'view_log': True})

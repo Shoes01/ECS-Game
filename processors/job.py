@@ -8,7 +8,7 @@ from components.actor.skill_directory import SkillDirectoryComponent
 from processors.removable import RemovableProcessor
 from processors.skill_progression import SkillProgressionProcessor 
 from processors.state import StateProcessor
-from menu import PopupMenu, PopupChoice, PopupChoiceCondition
+from menu import PopupMenu, PopupChoice, PopupChoiceCondition, PopupChoiceResult
 from queue import Queue
 
 class JobProcessor(esper.Processor):
@@ -38,8 +38,12 @@ class JobProcessor(esper.Processor):
                         PopupChoice(
                             name=_name, 
                             key=_key, 
-                            result=_result, 
-                            processor=_processor, 
+                            results=(
+                                PopupChoiceResult(
+                                    result=_result, 
+                                    processor=_processor
+                                ),
+                            ),
                             valid=_validity, 
                             description=_description,
                             conditions=_conditions

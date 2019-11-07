@@ -5,7 +5,7 @@ from components.actor.inventory import InventoryComponent
 from components.name import NameComponent
 from components.persist import PersistComponent
 from components.position import PositionComponent
-from menu import PopupMenu, PopupChoice
+from menu import PopupMenu, PopupChoice, PopupChoiceResult
 from processors.energy import EnergyProcessor
 from processors.state import StateProcessor
 from processors.wearable import WearableProcessor
@@ -35,13 +35,13 @@ class DropProcessor(esper.Processor):
                 for item in inv.inventory:
                     _name = self.world.component_for_entity(item, NameComponent).name
                     _key = chr(n)
-                    _result = {'ent': ent, 'item': item}
                     _processor = None
                     if item in eqp.equipment:
                         _processor = WearableProcessor
                     else:
                         _processor = DropProcessor
-                    menu.contents.append(PopupChoice(name=_name, key=_key, result=_result, processor=_processor))
+                    _results = ( PopupChoiceResult(result={'ent': ent, 'item': item}, processor=_processor),)
+                    menu.contents.append(PopupChoice(name=_name, key=_key, results=_results))
                     n += 1
                 
                 self.world.get_processor(StateProcessor).queue.put({'popup': menu})

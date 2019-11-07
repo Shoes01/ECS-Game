@@ -4,7 +4,7 @@ from components.actor.inventory import InventoryComponent
 from components.item.consumable import ConsumableComponent
 from components.name import NameComponent
 from components.stats import StatsComponent
-from menu import PopupMenu, PopupChoice
+from menu import PopupMenu, PopupChoice, PopupChoiceResult
 from processors.energy import EnergyProcessor
 from processors.soul import SoulProcessor
 from processors.state import StateProcessor
@@ -43,8 +43,8 @@ class ConsumableProcessor(esper.Processor):
                         continue
                     _name = self.world.component_for_entity(item, NameComponent).name
                     _key = chr(n)
-                    _result = {'ent': ent, 'item': item}
-                    menu.contents.append(PopupChoice(name=_name, key=_key, result=_result, processor=ConsumableProcessor))
+                    _results = (PopupChoiceResult(result={'ent': ent, 'item': item}, processor=ConsumableProcessor),)
+                    menu.contents.append(PopupChoice(name=_name, key=_key, results=_results))
                     n += 1
                 
                 self.world.get_processor(StateProcessor).queue.put({'popup': menu})

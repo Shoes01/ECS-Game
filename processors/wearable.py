@@ -8,7 +8,7 @@ from components.item.skills import SkillsComponent
 from components.item.slot import SlotComponent
 from components.item.wearable import WearableComponent
 from components.name import NameComponent
-from menu import PopupMenu, PopupChoice
+from menu import PopupMenu, PopupChoice, PopupChoiceResult
 from processors.energy import EnergyProcessor
 from processors.removable import RemovableProcessor
 from processors.skill import SkillProcessor
@@ -40,8 +40,8 @@ class WearableProcessor(esper.Processor):
                         continue
                     _name = self.world.component_for_entity(item, NameComponent).name
                     _key = chr(n)
-                    _result = {'ent': ent, 'item': item}
-                    menu.contents.append(PopupChoice(name=_name, key=_key, result=_result, processor=WearableProcessor))
+                    _results = (PopupChoiceResult(result={'ent': ent, 'item': item}, processor=WearableProcessor),)
+                    menu.contents.append(PopupChoice(name=_name, key=_key, results=_results))
                     n += 1
                 
                 self.world.get_processor(StateProcessor).queue.put({'popup': menu})
