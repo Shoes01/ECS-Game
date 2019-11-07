@@ -17,21 +17,32 @@ def render_popup_menu(console_object, world):
     dy = 2
     for choice in menu.contents:        
         color_fg = UI_COLORS['text']
+        text_name = choice.name.capitalize()
+        text_description = choice.description
+
         if not choice.valid:
             color_fg = UI_COLORS['text_invalid']
+            if menu.reveal_all is False: 
+                text_name = '???'
+                text_description = '???'
 
-        string = '(' + choice.key + ') ' + choice.name.capitalize()
+        string = '(' + choice.key + ') ' + text_name
         console.print(menu.x + 2, menu.y + dy, string, color_fg)
         dy += 1
+
         if choice.description:
-            console.print(menu.x + 2, menu.y + dy, "    " + choice.description, color_fg)
+            console.print(menu.x + 2, menu.y + dy, "    " + text_description, color_fg)
             dy += 1
         
         for condition in choice.conditions:
             color = color_fg
+            text = condition.description
             if not condition.valid:
                 color = UI_COLORS['text_condition_unmet']
-            console.print(menu.x + 2, menu.y + dy, "    " + condition.description, color)
+                if menu.reveal_all is False: 
+                    text = '???'
+
+            console.print(menu.x + 2, menu.y + dy, "    " + text, color)
             dy += 1
     
     if menu.include_esc:

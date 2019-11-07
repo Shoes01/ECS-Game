@@ -24,7 +24,7 @@ class JobProcessor(esper.Processor):
             job = event.get('job')
 
             if not job:
-                menu = PopupMenu(title='Which job would you like to adopt?')
+                menu = PopupMenu(title='Which job would you like to adopt?', reveal_all=False)
 
                 for _, job in JOBS.items():
                     _description = job.description
@@ -71,7 +71,7 @@ def check_validity(ent, job, world):
     if world.component_for_entity(ent, RaceComponent).race not in job.races:
         validity = False
         condition.valid = False
-        message_data['wrong_race'] = True        
+        message_data['wrong_race'] = True
     conditions.append(condition)
 
     # Upkeep validity.
