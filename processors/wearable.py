@@ -49,24 +49,24 @@ class WearableProcessor(esper.Processor):
             else:
                 # Wear the item.
                 name_component = self.world.component_for_entity(item, NameComponent)
-                turn = self.world.turn
-                slot_filled_item = None
                 
-                # Check to see that the entity is not already wearing an item in the slot.
-                slot_filled = False
-                for worn_item in eqp.equipment:
-                    if self.world.component_for_entity(worn_item, SlotComponent).slot == self.world.component_for_entity(item, SlotComponent).slot:
-                        slot_filled = True
-                        slot_filled_item = worn_item
-                        break
-
                 # Prepare message log data.
                 message_data = {
                     'name': name_component.name,
-                    'slot': self.world.component_for_entity(item, SlotComponent).slot,
-                    'turn': turn
+                    'turn': self.world.turn
                 }
 
+                # Check to see that the entity is not already wearing an item in the slot.
+                slot_filled = False
+                slot_filled_item = None
+                if self.world.has_component(item, SlotComponent):
+                    message_data['slot'] = self.world.component_for_entity(item, SlotComponent).slot
+                    for worn_item in eqp.equipment:
+                        if self.world.component_for_entity(worn_item, SlotComponent).slot == self.world.component_for_entity(item, SlotComponent).slot:
+                            slot_filled = True
+                            slot_filled_item = worn_item
+                            break
+                            
                 if item in eqp.equipment:
                     # Already worn, so remove it.
                     message_data = {} # Clear the message data, as the RemovableProcessor will do its own thing.
