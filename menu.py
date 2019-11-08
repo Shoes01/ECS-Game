@@ -25,7 +25,7 @@ class PopupChoice():
     @property
     def valid(self):
         if len(self.conditions) == 0:
-            return True if self._valid else False
+            return self._valid
         else:
             for condition in self.conditions:
                 if condition.valid is False:
