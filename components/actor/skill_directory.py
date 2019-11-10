@@ -1,19 +1,8 @@
+import attr
+
+from typing import Dict, Tuple
+
+@attr.s(slots=True)
 class SkillDirectoryComponent:
-    def __init__(self):
-        self.skill_directory = {}
-
-        """
-        Usage Example:
-        
-        self.skill_directory = {
-            'soldier': {
-                'bash': (85, 100),
-                'slash': (100, 100),
-                'skill_name': (current_ap, max_ap)
-            },
-            'job_name': {
-
-            }
-        }
-
-        """
+    ' Component that holds all the information regarding skills mastered. '
+    skill_directory: Dict[str, Dict[str, Tuple[int, int]]] = attr.ib(factory=dict)

@@ -1,4 +1,5 @@
 class JobComponent:
+    __slots__ = 'job', 'upkeep'
     def __init__(self, job, upkeep):
         # TODO: Streamline this with  the new _job.py file.
         self.job = job

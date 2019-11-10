@@ -1,3 +1,8 @@
-class EquipmentComponent():
-    def __init__(self, equipment=None):
-        self.equipment = [] if equipment is None else equipment
+import attr
+
+from typing import List
+
+@attr.s(slots=True)
+class EquipmentComponent:
+    ' Component holds a list of entity IDs representing equipped items. '
+    equipment: List[int] = attr.ib(factory=list)

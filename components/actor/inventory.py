@@ -1,6 +1,8 @@
-class InventoryComponent():
-    def __init__(self, inventory=None):
-        if inventory:
-            self.inventory = inventory # Store only the IDs of the item entities.
-        else:
-            self.inventory = []
+import attr
+
+from typing import List
+
+@attr.s(slots=True)
+class InventoryComponent:
+    ' Component holds a list of entity IDs representing held items. '
+    inventory: List[int] = attr.ib(factory=list)
