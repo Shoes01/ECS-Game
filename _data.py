@@ -248,3 +248,61 @@ class SingleLineBox():
     not_up = u'\u252c' # ┬
     not_down = u'\u2534' # ┴
     intersection = u'\u253c' # ┼
+
+#############
+### ENUMS ###
+#############
+import attr
+from enum import Enum
+from typing import List, Dict
+
+# Races
+class RACES(Enum):
+    HUMAN = 'human'
+    ELF = 'elf'
+    KOBOLD = 'kobold'
+    ORC = 'orc'
+    GOBLIN = 'goblin'
+
+# AIs
+class AI(Enum):
+    ZOMBIE = 'zombie'
+
+# Jobs
+@attr.s(slots=True)
+class Job:
+    description: str
+    name: str
+    races: List[str] # ['race',]
+    skills: Dict[str, int] # {'job': count}
+    upkeep: Dict[str, int] # {'stat': penalty value}
+
+class JOBS(Enum):
+    SOLDIER = Job(
+        description="Baby's first job.",
+        name='soldier', 
+        races=('human',),
+        skills={},
+        upkeep={}
+    )
+    WARRIOR = Job(
+        description='Has access to more devastating skills.', # Not rly.
+        name='warrior',
+        races=('human',),
+        skills={},
+        upkeep={'magic': 1, 'speed': 2}
+    )
+    BERSERKER = Job(
+        description='Classic orc.',
+        name='berserker',
+        races=('orc',),
+        skills={},
+        upkeep={'speed': 1, 'hp': 1}
+    )
+    ROGUE = Job(
+        description='A job for seasoned fighters.',
+        name='rogue',
+        races=('human', 'goblin'),
+        skills={'soldier': 1},
+        upkeep={'speed': 1, 'hp': 15}
+    )

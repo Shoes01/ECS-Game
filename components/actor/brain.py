@@ -1,7 +1,9 @@
 import attr
 
+from _data import AI
+
 @attr.s(slots=True)
 class BrainComponent:
     ' Component that provides the AI to the entity. '
-    brain: str = attr.ib(default='zombie') # TODO: Eventually change from using strings to using actual AI classes, like I did with States.
+    brain: AI = attr.ib(default=AI.ZOMBIE)
     awake: bool = attr.ib(default=False)

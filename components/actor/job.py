@@ -1,6 +1,9 @@
+from _data import JOBS
+
 class JobComponent:
+    ' Component that stores the job of the entity, and its upkeep cost. '
     __slots__ = 'job', 'upkeep'
-    def __init__(self, job, upkeep):
+    def __init__(self, job=JOBS.SOLDIER, upkeep):
         # TODO: Streamline this with  the new _job.py file.
         self.job = job
         self.upkeep = {
