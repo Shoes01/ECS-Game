@@ -1,7 +1,7 @@
 import attr
 
-@attr.s(slots=True)
+@attr.s(slots=True, auto_attribs=True)
 class EnergyComponent:
     ' Component that provides entities with energy used for taking turns. '
-    energy : int = attr.ib(default=1)
+    energy : int = 1
     

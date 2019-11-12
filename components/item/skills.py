@@ -28,6 +28,6 @@ class SkillComponent:
 
 import attr
 
-@attr.s(slots=True)
+@attr.s(slots=True, auto_attribs=True)
 class SkillsComponent:
-    skills: list = attr.ib(factory=list) # list of SkillComponents.
+    skills: list = attr.Factory(list) # list of SkillComponents.

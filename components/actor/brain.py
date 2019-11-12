@@ -2,8 +2,8 @@ import attr
 
 from _data import AI
 
-@attr.s(slots=True)
+@attr.s(slots=True, auto_attribs=True)
 class BrainComponent:
     ' Component that provides the AI to the entity. '
-    brain: AI = attr.ib(default=AI.ZOMBIE)
-    awake: bool = attr.ib(default=False)
+    brain: AI = AI.ZOMBIE
+    awake: bool = False
