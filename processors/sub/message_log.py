@@ -1,9 +1,6 @@
 import tcod as libtcod
 
 from _data import LOG_COLORS
-from components.actor.equipment import EquipmentComponent
-from components.item.slot import SlotComponent
-from components.name import NameComponent
 from fsm import ViewLog
 
 def render_message_log(console_object, new_turn, world):        

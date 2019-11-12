@@ -1,6 +1,6 @@
 import numpy as np
 
-class SkillComponent():
+class SkillComponent:
     def __init__(self, ap_max, cooldown, cost_energy, cost_soul, damage_type, description, job_req, name, east, north_east):
         ' Skill flags. '
         self.active = False

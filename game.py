@@ -4,7 +4,7 @@ import os
 import shelve
 import tcod as libtcod
 
-from _data import ENTITY_COLORS, con, eqp, log, map, SPRITES, MULTIPLIER, RACES, JOBS, AI
+from _data import ENTITY_COLORS, con, eqp, log, map, SPRITES, MULTIPLIER, RACES, JOBS, AI, SLOTS
 from camera import Camera
 from cursor import Cursor
 from load_tileset import load_tileset
@@ -365,8 +365,12 @@ class GameWorld(esper.World):
                             self.add_component(ent, JobReqComponent(job_req=job_req))
 
             elif key == 'slot':
-                slot = value.get('slot')
-                self.add_component(ent, SlotComponent(slot=slot))
+                for _, slot in SLOTS.__members__.items():
+                    if slot.value == value.get('slot'):
+                        self.add_component(ent, SlotComponent(slot=slot))
+                        break
+                else:
+                    print(f"The item with entity ID {ent} has attempted to crate a SlotComponent with slot {value}.")
             
             elif key == 'soul':
                 eccentricity = value.get('eccentricity')

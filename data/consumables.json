@@ -7,7 +7,7 @@
     {
         "archtype": "item",
 
-        "consumable": null,
+        "consumable": {"soul": "This will be decided upon the death of the entity. See death.py."},
         "name": "Soul Jar",
         "render": {"char": "!", "color_fg": "con_jar", "codepoint": "con_soul_jar"}
     }

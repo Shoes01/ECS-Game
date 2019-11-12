@@ -57,7 +57,7 @@ class DeathProcessor(esper.Processor):
                 soul_jar = self.world.create_entity('soul_jar')
                 soul = self.world.component_for_entity(ent, SoulComponent)
                 soul_jar_con = self.world.component_for_entity(soul_jar, ConsumableComponent)
-                soul_jar_con.effects['soul'] = soul
+                soul_jar_con.effects['soul'] = soul # BUG: At some point, this dict gets turned into a None.
                 soul_jar_pos = self.world.component_for_entity(soul_jar, PositionComponent)
                 soul_jar_pos.x = pos.x
                 soul_jar_pos.y = pos.y
