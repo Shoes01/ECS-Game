@@ -1,4 +1,8 @@
+import attr
+
+from _data import SLOTS
+
+@attr.s(slots=True)
 class SlotComponent():
-    def __init__(self, slot=None):
-        self.slot = slot
-        # Valid slots are: Head, Torso, Mainhand, Offhand, Feet, Accessory
+    ' Component that represents to which slot the item is equipped. '
+    slot: SLOTS

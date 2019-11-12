@@ -26,6 +26,8 @@ class SkillComponent():
         self.south_west = np.rot90(self.north_west)
         self.south_east = np.rot90(self.south_west)
 
+import attr
+
+@attr.s(slots=True)
 class SkillsComponent:
-    def __init__(self):
-        self.skills = [] # type: a list of skills
+    skills: list = attr.ib(factory=list) # list of SkillComponents.

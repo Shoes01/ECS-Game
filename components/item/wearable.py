@@ -1,4 +1,3 @@
-' Tags an item as equipped. '
-
-class WearableComponent():
-    pass
+class WearableComponent:
+    ' Tags an item as equipped. '
+    __slots__ = ()

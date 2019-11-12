@@ -256,6 +256,15 @@ import attr
 from enum import Enum
 from typing import List, Dict
 
+# Slots
+class SLOTS(Enum):
+    HEAD = 'head'
+    TORSO = 'torso'
+    MAINHAND = 'mainhand'
+    OFFHAND = 'offhand'
+    FEET = 'feet'
+    ACCESSORY = 'accessory'
+
 # Races
 class RACES(Enum):
     MONSTER = 'monster'

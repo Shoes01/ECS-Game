@@ -1,4 +1,3 @@
-' Tags the entity as an item. '
-
-class ItemComponent():
-    pass
+class ItemComponent:
+    ' Tags the entity as an item. '
+    __slots__ = ()

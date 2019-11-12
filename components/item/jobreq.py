@@ -1,4 +1,6 @@
+import attr
+
+@attr.s(slots=True)
 class JobReqComponent:
-    def __init__(self, job_req):
-        # This needs to be a list.
-        self.job_req = job_req if type(job_req) == list else [job_req,]
+    ' Component represents a list of jobs that the using entity must belong to. '
+    job_req: list = attr.ib(factory=list)
