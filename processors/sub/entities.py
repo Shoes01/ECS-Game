@@ -98,7 +98,7 @@ def print_cursor(color, console, x, y, world):
 
 def print_tile(console, pos, ren, _entity_directory, world, corpse=False, floor=False, items=False):
     # Check to see that the tile is in the camera view.
-    cam_x, cam_y, cam_w, cam_h = world.camera.x, world.camera.y, world.camera.width, world.camera.height
+    cam_x, cam_y, cam_w, cam_h = world.camera.x, world.camera.y, world.camera.w, world.camera.h
     if not (cam_x <= pos.x < cam_x + cam_w) or not (cam_y <= pos.y < cam_y + cam_h):
         return 0
 

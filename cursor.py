@@ -1,9 +1,12 @@
+import attr
+
 from _data import UI_COLORS
 
-class Cursor():
-    def __init__(self):
-        self.active = False
-        self.char = 'X'
-        self.color_fg = UI_COLORS['cursor']
-        self.x = 0
-        self.y = 0
+@attr.s(slots=True, auto_attribs=True)
+class Cursor:
+    ' Contains information relevant to the cursor that the user may summon. '
+    active: bool = False
+    char: str = 'X'
+    color_fg: tuple = UI_COLORS['cursor']
+    x: int = 0
+    y: int = 0

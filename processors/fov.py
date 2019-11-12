@@ -21,7 +21,7 @@ class FOVProcessor(esper.Processor):
 
             if _fov_build:
                 # Create fov map.
-                fov_map = libtcod.map.Map(width=self.world.map.width, height=self.world.map.height, order='F')
+                fov_map = libtcod.map.Map(width=self.world.map.w, height=self.world.map.h, order='F')
 
                 for _, (pos, tile) in self.world.get_components(PositionComponent, TileComponent):
                     fov_map.walkable[pos.x, pos.y] = not tile.blocks_path

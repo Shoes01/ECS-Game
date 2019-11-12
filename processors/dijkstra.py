@@ -18,7 +18,7 @@ class DijkstraProcessor(esper.Processor):
             game_map = self.world.map
             player_pos = self.world.component_for_entity(1, PositionComponent)
 
-            dijkstra_map = np.ones((game_map.width, game_map.height), dtype=int, order='F') * 999
+            dijkstra_map = np.ones((game_map.w, game_map.h), dtype=int, order='F') * 999
             
             # Build dijkstra map.
             directory = game_map.directory

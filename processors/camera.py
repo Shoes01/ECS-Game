@@ -23,14 +23,14 @@ class CameraProcessor(esper.Processor):
                 self.move_camera(dx, dy)
     
     def snap_camera(self, center_x, center_y):
-        self.world.camera.x = center_x - self.world.camera.width // 2
-        self.world.camera.y = center_y - self.world.camera.height // 2
+        self.world.camera.x = center_x - self.world.camera.w // 2
+        self.world.camera.y = center_y - self.world.camera.h // 2
         
     def move_camera(self, dx, dy):
         leash = self.world.camera.leash
         player_pos = self.world.component_for_entity(1, PositionComponent)
         player_x, player_y = player_pos.x, player_pos.y
-        w, h = self.world.camera.width, self.world.camera.height
+        w, h = self.world.camera.w, self.world.camera.h
         x, y = self.world.camera.x, self.world.camera.y
         
         center_x, center_y = x + w // 2, y + h // 2

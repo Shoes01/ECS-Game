@@ -44,10 +44,10 @@ class MapgenProcessor(esper.Processor):
                 game_map.floor += 1
 
             # Create new map.
-            game_map.tiles = self.create_map(game_map.floor, game_map.height, game_map.width)
+            game_map.tiles = self.create_map(game_map.floor, game_map.h, game_map.w)
             
             # Create directory of map.
-            game_map.directory = self.create_directory(game_map.height, game_map.tiles, game_map.width)
+            game_map.directory = self.create_directory(game_map.h, game_map.tiles, game_map.w)
 
             # Create fov map.
             self.world.get_processor(FOVProcessor).queue.put({'fov_build': True})
