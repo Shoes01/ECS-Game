@@ -4,7 +4,7 @@ import os
 import shelve
 import tcod as libtcod
 
-from _data import ENTITY_COLORS, con, eqp, log, map, SPRITES, MULTIPLIER
+from _data import ENTITY_COLORS, con, eqp, log, map, SPRITES, MULTIPLIER, RACES, JOBS, AI
 from camera import Camera
 from cursor import Cursor
 from load_tileset import load_tileset
@@ -244,11 +244,11 @@ class GameWorld(esper.World):
                 EnergyComponent(energy=0),
                 EquipmentComponent(),
                 InventoryComponent(),
-                JobComponent(job='soldier', upkeep={}), # TODO: This doesn't talk to JOBS found in _jobs.py ...
+                JobComponent(job=JOBS.SOLDIER, upkeep={}),
                 NameComponent(name='Player'),
                 PersistComponent(),
                 PlayerComponent(),
-                RaceComponent(race='human'),
+                RaceComponent(race=RACES.HUMAN),
                 PositionComponent(),
                 RenderComponent(color_bg=None, char='@', codepoint=SPRITES['player'], color_fg=ENTITY_COLORS['player'], color_explored=None),
                 SkillDirectoryComponent(),
@@ -266,10 +266,10 @@ class GameWorld(esper.World):
                     self.add_component(ent, EnergyComponent())
                     self.add_component(ent, EquipmentComponent())
                     self.add_component(ent, InventoryComponent())
-                    self.add_component(ent, JobComponent(job='unemployed_monster', upkeep={})) # This is placeholder.
+                    self.add_component(ent, JobComponent(job=JOBS.MONSTER, upkeep={}))
                     self.add_component(ent, SkillDirectoryComponent())
                     self.add_component(ent, PositionComponent())
-                    self.add_component(ent, RaceComponent(race='common_monster')) # This is placeholder.
+                    self.add_component(ent, RaceComponent(race=RACES.MONSTER))
                 elif value == 'item':
                     self.add_component(ent, ItemComponent())
                     self.add_component(ent, PositionComponent())

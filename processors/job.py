@@ -1,7 +1,7 @@
 import esper
 
+from _data import JOBS, Job
 from _helper_functions import generate_stats
-from _jobs import JOBS, Job
 from components.actor.job import JobComponent
 from components.actor.race import RaceComponent
 from components.actor.skill_directory import SkillDirectoryComponent
@@ -21,18 +21,19 @@ class JobProcessor(esper.Processor):
             event = self.queue.get()
 
             ent = event['ent']
-            job = event.get('job')
+            JOB = event.get('JOB')
 
-            if not job:
+            if not JOB:
                 menu = PopupMenu(title='Which job would you like to adopt?', reveal_all=False)
 
-                for _, job in JOBS.items():
+                for _, JOB in JOBS.__members__.items():
+                    job = JOB.value
                     _description = job.description
                     _name = job.name
                     _key = job.name[0]
-                    _result = {'ent': ent, 'job': job}
+                    _result = {'ent': ent, 'JOB': JOB}
                     _processor = JobProcessor
-                    _validity, _, _conditions = check_validity(ent, job, self.world)
+                    _validity, _, _conditions = check_validity(ent, JOB, self.world)
                     
                     menu.contents.append(
                         PopupChoice(
@@ -53,23 +54,23 @@ class JobProcessor(esper.Processor):
                 self.world.get_processor(StateProcessor).queue.put({'popup': menu})
 
             else:
-                valid, message_data, _ = check_validity(ent, job, self.world)
+                valid, message_data, _ = check_validity(ent, JOB, self.world)
                 
                 if valid:
                     # Switch jobs!
                     ent_job = self.world.component_for_entity(ent, JobComponent)
-                    ent_job.update_upkeep(job.upkeep)
-                    ent_job.job = job.name
-                    self.world.get_processor(SkillProgressionProcessor).queue.put({'new_job': job.name, 'ent': ent})
-                    self.world.get_processor(RemovableProcessor).queue.put({'new_job': job.name, 'ent': ent})
+                    ent_job.update_job(JOB)
+                    self.world.get_processor(SkillProgressionProcessor).queue.put({'new_job': JOB, 'ent': ent})
+                    self.world.get_processor(RemovableProcessor).queue.put({'new_job': JOB, 'ent': ent})
                 
                 self.world.messages.append({'job_switch': message_data})
 
-def check_validity(ent, job, world):
+def check_validity(ent, JOB, world):
     conditions = []
-    validity = True
+    job = JOB.value
     message_data = {}
-
+    validity = True
+    
     # Race validity.
     condition = PopupChoiceCondition(description=f"Your race needs to be one from {job.races}.")
     if world.component_for_entity(ent, RaceComponent).race not in job.races:

@@ -3,7 +3,7 @@ from _data import JOBS
 class JobComponent:
     ' Component that stores the job of the entity, and its upkeep cost. '
     __slots__ = 'job', 'upkeep'
-    def __init__(self, job=JOBS.SOLDIER, upkeep):
+    def __init__(self, job=JOBS.SOLDIER, upkeep=None):
         # TODO: Streamline this with  the new _job.py file.
         self.job = job
         self.upkeep = {
@@ -17,6 +17,10 @@ class JobComponent:
         
         self.update_upkeep(upkeep)
     
+    def update_job(self, JOB):
+        self.job = JOB
+        self.update_upkeep(JOB.value.upkeep)        
+
     def update_upkeep(self, upkeep):
         new_upkeep = {
             'hp': 0,

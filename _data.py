@@ -258,6 +258,7 @@ from typing import List, Dict
 
 # Races
 class RACES(Enum):
+    MONSTER = 'monster'
     HUMAN = 'human'
     ELF = 'elf'
     KOBOLD = 'kobold'
@@ -271,38 +272,54 @@ class AI(Enum):
 # Jobs
 @attr.s(slots=True)
 class Job:
-    description: str
-    name: str
-    races: List[str] # ['race',]
-    skills: Dict[str, int] # {'job': count}
-    upkeep: Dict[str, int] # {'stat': penalty value}
+    ' Data '
+    description: str = attr.ib()
+    name: str = attr.ib()
+    ' Requirements '
+    races: List[str] = attr.ib() # ['race',]
+    skills: Dict[str, int] = attr.ib() # {'job': count}
+    upkeep: Dict[str, int] = attr.ib() # {'stat': penalty value}
 
 class JOBS(Enum):
+    MONSTER  = Job(
+        description="Placeholder job for monsters.",
+        name='monster job',
+        races=(RACES.MONSTER,),
+        skills={},
+        upkeep={}
+    )
     SOLDIER = Job(
         description="Baby's first job.",
         name='soldier', 
-        races=('human',),
+        races=(RACES.HUMAN,),
         skills={},
         upkeep={}
     )
     WARRIOR = Job(
         description='Has access to more devastating skills.', # Not rly.
         name='warrior',
-        races=('human',),
+        races=(RACES.HUMAN,),
         skills={},
         upkeep={'magic': 1, 'speed': 2}
     )
     BERSERKER = Job(
         description='Classic orc.',
         name='berserker',
-        races=('orc',),
+        races=(RACES.ORC,),
         skills={},
         upkeep={'speed': 1, 'hp': 1}
     )
     ROGUE = Job(
         description='A job for seasoned fighters.',
         name='rogue',
-        races=('human', 'goblin'),
+        races=(RACES.HUMAN, RACES.GOBLIN, RACES.ELF),
         skills={'soldier': 1},
         upkeep={'speed': 1, 'hp': 15}
+    )
+    THIEF = Job(
+        description='A stealer.',
+        name='thief',
+        races=(RACES.HUMAN,),
+        skills={},
+        upkeep={}
     )

@@ -1,5 +1,7 @@
 import esper
 
+from _data import JOBS, RACES
+
 from components.actor.job import JobComponent
 from components.actor.race import RaceComponent
 from processors.state import StateProcessor
@@ -30,7 +32,7 @@ class NewGameProcessor(esper.Processor):
                 ## Soldier
                 _name = 'Soldier'
                 _key = 's'
-                _result = {'select_race': 'human', 'select_job': 'soldier'}
+                _result = {'select_race': RACES.HUMAN, 'select_job': JOBS.SOLDIER}
                 _description = 'A regular soldier.'
                 _results = (PopupChoiceResult(result=_result, processor=_processor),)
 
@@ -39,7 +41,7 @@ class NewGameProcessor(esper.Processor):
                 ## Thief
                 _name = 'Thief'
                 _key = 't'
-                _result = {'select_race': 'human', 'select_job': 'thief'}
+                _result = {'select_race': RACES.HUMAN, 'select_job': JOBS.THIEF}
                 _description = 'A regular thief.'
                 _results = (PopupChoiceResult(result=_result, processor=_processor),)
 
@@ -51,7 +53,7 @@ class NewGameProcessor(esper.Processor):
                 ## Rogue
                 _name = 'Rogue'
                 _key = 'r'
-                _result = {'select_race': 'elf', 'select_job': 'rogue'}
+                _result = {'select_race': RACES.ELF, 'select_job': JOBS.ROGUE}
                 _description = 'A dashing rogue.'
                 _results = (PopupChoiceResult(result=_result, processor=_processor),)
 

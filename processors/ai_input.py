@@ -1,6 +1,7 @@
 import esper
 import random
 
+from _data import AI
 from components.actor.actor import ActorComponent
 from components.actor.brain import BrainComponent
 from components.actor.energy import EnergyComponent
@@ -26,7 +27,7 @@ class AiInputProcessor(esper.Processor):
         self.world.get_processor(RenderProcessor).queue.put({'redraw': _redraw})
         
     def take_turn(self, brain, pos, ren):
-        if brain.brain == 'zombie':
+        if brain.brain == AI.ZOMBIE:
             if brain.awake is False and self.world.map.fov_map.fov[pos.x, pos.y]:
                 brain.awake = True
                 message = {'ai_awake': (ren.char, ren.color_fg, self.world.turn)}
