@@ -79,7 +79,7 @@ class SkillProcessor(esper.Processor):
 
         for item in eqp.equipment:
             if slot == self.world.component_for_entity(item, SlotComponent).slot:
-                name = self.world.component_for_entity(item, NameComponent)._name
+                name = self.world.component_for_entity(item, NameComponent).original_name
                 for skill in self.world.component_for_entity(item, SkillsComponent).skills:
                     if skill.active:
                         if skill.cooldown_remaining == 0:
@@ -205,7 +205,7 @@ class SkillProcessor(esper.Processor):
 
     def do_skill(self, ent, direction, item, results):
         error = 'no_error'
-        name = self.world.component_for_entity(item, NameComponent)._name
+        name = self.world.component_for_entity(item, NameComponent).original_name
         turn = self.world.turn
 
         # These are conditions under which the skill does not fire.

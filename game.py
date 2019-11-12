@@ -381,12 +381,12 @@ class GameWorld(esper.World):
                 self.add_component(ent, StairsComponent())
             
             elif key == 'stats':
-                hp = value.get('hp')
-                attack = value.get('attack')
-                defense = value.get('defense')
-                magic = value.get('magic')
-                resistance = value.get('resistance')
-                speed = value.get('speed')
+                hp = value.get('hp') if value.get('hp') else 0
+                attack = value.get('attack') if value.get('attack') else 0
+                defense = value.get('defense') if value.get('defense') else 0
+                magic = value.get('magic') if value.get('magic') else 0
+                resistance = value.get('resistance') if value.get('resistance') else 0
+                speed = value.get('speed') if value.get('speed') else 0
                 self.add_component(ent, StatsComponent(hp=hp, attack=attack, defense=defense, magic=magic, resistance=resistance, speed=speed))
 
             elif key == 'tile':

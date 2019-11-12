@@ -34,7 +34,7 @@ class RemovableProcessor(esper.Processor):
                 if item in eqp.equipment:
                     success = True
                     eqp.equipment.remove(item)                
-                    name_component.name = name_component._name
+                    name_component.name = name_component.original_name
                     if free is not True:
                         self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'remove': True})                
                 self.world.messages.append({'remove': (name_component.name, success, turn)})

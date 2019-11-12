@@ -1,3 +1,6 @@
-class RarityComponent():
-    def __init__(self, rarity):
-        self.rarity = rarity # type: int, 0 to 7
+import attr
+
+@attr.s(slots=True, auto_attribs=True)
+class RarityComponent:
+    ' Component that holds the rarity of the item. '
+    rarity: int

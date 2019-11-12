@@ -2,7 +2,8 @@ import colorsys
 
 from _data import ENTITY_COLORS
 
-class RenderComponent():
+class RenderComponent:
+    ' Component that holds the graphical information of the entity. '
     def __init__(self, color_bg, char, codepoint, color_fg, color_explored, explored=False, visible=False):
         self.char = "#" if char is None else char
         self.codepoint = 923 if codepoint is None else codepoint

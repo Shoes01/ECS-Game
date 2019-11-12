@@ -33,7 +33,7 @@ class DeathProcessor(esper.Processor):
             ren = self.world.component_for_entity(ent, RenderComponent)
 
             if self.world.has_component(ent, CorpseComponent):
-                print(f"Entity {name._name} has died an additional time. Position: {pos.x}, {pos.y}")
+                print(f"Entity {name.original_name} has died an additional time. Position: {pos.x}, {pos.y}")
                 return 0
 
             is_furniture = self.world.has_component(ent, FurnitureComponent)

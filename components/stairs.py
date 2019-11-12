@@ -1,4 +1,3 @@
-' Tags an entity as being stairs. '
-
-class StairsComponent():
-    pass
+class StairsComponent:
+    ' Tags an entity as being stairs. '
+    __slots__ = ()

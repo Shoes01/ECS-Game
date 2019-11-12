@@ -1,4 +1,7 @@
-class PositionComponent():
-    def __init__(self, x=0, y=0):
-        self.x = x
-        self.y = y
+import attr
+
+@attr.s(slots=True, auto_attribs=True)
+class PositionComponent:
+    ' Component that holds the position of the entity. '
+    x: int = 0
+    y: int = 0
