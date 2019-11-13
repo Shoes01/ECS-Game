@@ -190,7 +190,7 @@ def render_message_log(console_object, new_turn, world):
             if job_list:
                 job_list = list(dict.fromkeys(job_list)) # This removes duplicate entries from the list.
                 for j in job_list:
-                    job += j + ", "
+                    job += j.value.name + ", "
                 job = job[:-2]
 
             if success is True:

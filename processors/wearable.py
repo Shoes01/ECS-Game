@@ -66,7 +66,7 @@ class WearableProcessor(esper.Processor):
                             slot_filled = True
                             slot_filled_item = worn_item
                             break
-                            
+                    
                 if item in eqp.equipment:
                     # Already worn, so remove it.
                     message_data = {} # Clear the message data, as the RemovableProcessor will do its own thing.
