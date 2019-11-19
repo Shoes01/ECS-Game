@@ -13,5 +13,5 @@ def main():
     print('\n\n    Goodbye.\n')
 
 if __name__ == '__main__':
-    # cProfile.run('main()') # This runs the profiler
+    # cProfile.run('main()', sort='time') # This runs the profiler
     main()
