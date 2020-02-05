@@ -290,7 +290,7 @@ class Job:
     upkeep: Dict[str, int] = attr.ib() # {'stat': penalty value}
 
 class JOBS(Enum):
-    MONSTER  = Job(
+    MONSTER = Job(
         description="Placeholder job for monsters.",
         name='monster job',
         races=(RACES.MONSTER,),
@@ -332,3 +332,17 @@ class JOBS(Enum):
         skills={},
         upkeep={}
     )
+# Rarities
+@attr.s(slots=True, auto_attribs=True)
+class Rarity:
+    eccentricity: int # The greater the eccentricity, the greater the variation in base stats.
+    name: str         # The name of this type of eccentricity.
+
+class RARITY(Enum):
+    AWFUL       = Rarity(eccentricity=-2, name="decayed")
+    POOR        = Rarity(eccentricity=-1, name="hypobolic")
+    COMMON      = Rarity(eccentricity= 0, name="circular")
+    UNCOMMON    = Rarity(eccentricity= 1, name="elliptic")
+    RARE        = Rarity(eccentricity= 3, name="parabolic")
+    MYTHIC      = Rarity(eccentricity= 5, name="superbolic")
+    GODLY       = Rarity(eccentricity= 9, name="hyperbolic")
