@@ -45,7 +45,6 @@ class JobProcessor(esper.Processor):
                                     processor=_processor
                                 ),
                             ),
-                            valid=_validity, 
                             description=_description,
                             conditions=_conditions
                         )
@@ -69,12 +68,10 @@ def check_validity(ent, JOB, world):
     conditions = []
     job = JOB.value
     message_data = {}
-    validity = True
     
     # Race validity.
     condition = PopupChoiceCondition(description=f"Your race needs to be one from {job.races}.")
     if world.component_for_entity(ent, RaceComponent).race not in job.races:
-        validity = False
         condition.valid = False
         message_data['wrong_race'] = True
     conditions.append(condition)
@@ -87,7 +84,6 @@ def check_validity(ent, JOB, world):
     bare_stats = generate_stats(ent, world, include_upkeep=False)
     for key, value in job.upkeep.items():
         if bare_stats[key] - value * 10 < 0:
-            validity = False
             condition.valid = False
             message_data['not_enough_stats'] = True
     conditions.append(condition)
@@ -104,12 +100,16 @@ def check_validity(ent, JOB, world):
                     mastery_number += 1
             
         if mastery_number < required_number: 
-            validity = False
             condition.valid = False
             message_data['not_enough_skills'] = True
     conditions.append(condition)
 
-    if validity:
+    valid = True
+    for condition in conditions:
+        if condition.valid == False:
+            valid = False
+            break
+    else:
         message_data['switch_class'] = job.name
 
-    return validity, message_data, conditions
+    return valid, message_data, conditions

@@ -7,8 +7,8 @@ from typing import Any, Dict, List
 @attr.s(slots=True, auto_attribs=True)
 class PopupChoiceCondition:
     ' This is a single condition to a popup menu choice. '
-    description: str
-    valid: bool
+    description: str = ""
+    valid: bool = True
 
 @attr.s(slots=True, auto_attribs=True, kw_only=True)
 class PopupChoiceResult():

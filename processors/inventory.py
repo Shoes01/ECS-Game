@@ -5,7 +5,7 @@ from components.actor.inventory import InventoryComponent
 from components.item.consumable import ConsumableComponent
 from components.item.wearable import WearableComponent
 from components.name import NameComponent
-from menu import PopupMenu, PopupChoice, PopupChoiceResult
+from menu import PopupMenu, PopupChoice, PopupChoiceResult, PopupChoiceCondition
 from processors.consumable import ConsumableProcessor
 from processors.drop import DropProcessor
 from processors.event import EventProcessor
@@ -47,7 +47,8 @@ class InventoryProcessor(esper.Processor):
                 if self.world.has_component(item, ConsumableComponent):
                     _validity = True
                 _results = (PopupChoiceResult(result=_result, processor=_processor),)
-                submenu.contents.append(PopupChoice(name='Consume', key='c', results=_results, valid=_validity))
+                _conditions = (PopupChoiceCondition(valid=_validity), )
+                submenu.contents.append(PopupChoice(name='Consume', key='c', results=_results, conditions=_conditions))
 
                 # Drop
                 _processor = DropProcessor
@@ -56,7 +57,8 @@ class InventoryProcessor(esper.Processor):
                     _processor = RemovableProcessor
                     _validity = False
                 _results = (PopupChoiceResult(result=_result, processor=_processor),)
-                submenu.contents.append(PopupChoice(name='Drop', key='d', results=_results, valid=_validity))
+                _conditions = (PopupChoiceCondition(valid=_validity), )
+                submenu.contents.append(PopupChoice(name='Drop', key='d', results=_results, conditions=_conditions))
 
                 # Remove
                 _processor = RemovableProcessor
@@ -64,7 +66,8 @@ class InventoryProcessor(esper.Processor):
                 if item in eqp.equipment:
                     _validity = True
                 _results = (PopupChoiceResult(result=_result, processor=_processor),)
-                submenu.contents.append(PopupChoice(name='Remove', key='r', results=_results, valid=_validity))
+                _conditions = (PopupChoiceCondition(valid=_validity), )
+                submenu.contents.append(PopupChoice(name='Remove', key='r', results=_results, conditions=_conditions))
 
                 # Wear
                 _processor = WearableProcessor
@@ -72,7 +75,8 @@ class InventoryProcessor(esper.Processor):
                 if self.world.has_component(item, WearableComponent) and item not in eqp.equipment:
                     _validity = True
                 _results = (PopupChoiceResult(result=_result, processor=_processor),)
-                submenu.contents.append(PopupChoice(name='Wear', key='w', results=_results, valid=_validity))
+                _conditions = (PopupChoiceCondition(valid=_validity), )
+                submenu.contents.append(PopupChoice(name='Wear', key='w', results=_results, conditions=_conditions))
                 
                 _menu_result = {'popup': submenu}
                 _results = (PopupChoiceResult(result=_menu_result, processor=StateProcessor),)
