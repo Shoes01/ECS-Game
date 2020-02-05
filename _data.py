@@ -279,15 +279,15 @@ class AI(Enum):
     ZOMBIE = 'zombie'
 
 # Jobs
-@attr.s(slots=True)
+@attr.s(slots=True, auto_attribs=True)
 class Job:
     ' Data '
-    description: str = attr.ib()
-    name: str = attr.ib()
+    description: str
+    name: str
     ' Requirements '
-    races: List[str] = attr.ib() # ['race',]
-    skills: Dict[str, int] = attr.ib() # {'job': count}
-    upkeep: Dict[str, int] = attr.ib() # {'stat': penalty value}
+    races: List[str]        # ['race',]
+    skills: Dict[str, int]  # {'job': count}
+    upkeep: Dict[str, int]  # {'stat': penalty value}
 
 class JOBS(Enum):
     MONSTER = Job(
@@ -343,6 +343,6 @@ class RARITY(Enum):
     POOR        = Rarity(eccentricity=-1, name="hypobolic")
     COMMON      = Rarity(eccentricity= 0, name="circular")
     UNCOMMON    = Rarity(eccentricity= 1, name="elliptic")
-    RARE        = Rarity(eccentricity= 3, name="parabolic")
-    MYTHIC      = Rarity(eccentricity= 5, name="superbolic")
-    GODLY       = Rarity(eccentricity= 9, name="hyperbolic")
+    EPIC        = Rarity(eccentricity= 3, name="parabolic")
+    RARE        = Rarity(eccentricity= 5, name="superbolic")
+    MYTHIC      = Rarity(eccentricity= 9, name="hyperbolic")
