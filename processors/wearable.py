@@ -78,7 +78,7 @@ class WearableProcessor(esper.Processor):
                     message_data['success'] = 'slot_filled'
                     # Remove the other item.
                     self.world.get_processor(RemovableProcessor).queue.put({'ent': ent, 'item': slot_filled_item})
-                elif self.world.component_for_entity(ent, JobComponent).job not in self.world.component_for_entity(item, JobReqComponent).job_req:
+                elif self.world.has_component(item, JobReqComponent) and self.world.component_for_entity(ent, JobComponent).job not in self.world.component_for_entity(item, JobReqComponent).job_req:
                     # Not the correct job to wear the item.
                     message_data['success'] = 'wrong_job'
                     message_data['job'] = self.world.component_for_entity(item, JobReqComponent).job_req
