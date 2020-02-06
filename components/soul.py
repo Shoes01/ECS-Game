@@ -11,8 +11,8 @@ class SoulComponent:
     Values get * 10'd in order to use pseudo decimals.
     """
     def __init__(self, eccentricity, max_rarity):
-        self.eccentricity = eccentricity
-        self.max_rarity = max_rarity
+        self.eccentricity = eccentricity # Provides variation to the soul.
+        self.max_rarity = max_rarity # "Rarer" entities have bigger values in their soul.
         
         self.np_soul = self.generate_soul()
 

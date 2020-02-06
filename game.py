@@ -4,7 +4,7 @@ import os
 import shelve
 import tcod as libtcod
 
-from _data import ENTITY_COLORS, con, eqp, log, map, SPRITES, MULTIPLIER, RACES, JOBS, AI, SLOTS
+from _data import con, eqp, log, map, AI, ENTITY_COLORS, JOBS, MULTIPLIER, RACES, RARITY, SLOTS, SPRITES
 from camera import Camera
 from cursor import Cursor
 from load_tileset import load_tileset
@@ -321,8 +321,12 @@ class GameWorld(esper.World):
                 self.add_component(ent, PositionComponent())
             
             elif key == 'rarity':
-                rarity = value
-                self.add_component(ent, RarityComponent(rarity=rarity))
+                for _, rarity in RARITY.__members__.items():
+                    if rarity.value.rank == value:
+                        self.add_component(ent, RarityComponent(rarity=rarity))
+                        break
+                else:
+                    print(f"The item with entity ID {ent} has failed to create a RarityComponent with rarity {value}.")
 
             elif key == 'render':
                 color_bg = value.get('color_bg')
@@ -369,7 +373,7 @@ class GameWorld(esper.World):
                         self.add_component(ent, SlotComponent(slot=slot))
                         break
                 else:
-                    print(f"The item with entity ID {ent} has attempted to crate a SlotComponent with slot {value}.")
+                    print(f"The item with entity ID {ent} has failed to create a SlotComponent with slot {value}.")
             
             elif key == 'soul':
                 eccentricity = value.get('eccentricity')

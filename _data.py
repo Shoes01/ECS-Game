@@ -337,12 +337,13 @@ class JOBS(Enum):
 class Rarity:
     eccentricity: int # The greater the eccentricity, the greater the variation in base stats.
     name: str         # The name of this type of eccentricity.
+    rank: int         # The rank of the rarity. 0 is lowest.
 
 class RARITY(Enum):
-    AWFUL       = Rarity(eccentricity=-2, name="decayed")
-    POOR        = Rarity(eccentricity=-1, name="hypobolic")
-    COMMON      = Rarity(eccentricity= 0, name="circular")
-    UNCOMMON    = Rarity(eccentricity= 1, name="elliptic")
-    EPIC        = Rarity(eccentricity= 3, name="parabolic")
-    RARE        = Rarity(eccentricity= 5, name="superbolic")
-    MYTHIC      = Rarity(eccentricity= 9, name="hyperbolic")
+    AWFUL       = Rarity(eccentricity=-2, name="decayed", rank=0)
+    POOR        = Rarity(eccentricity=-1, name="hypobolic", rank=1)
+    COMMON      = Rarity(eccentricity= 0, name="circular", rank=2)
+    UNCOMMON    = Rarity(eccentricity= 1, name="elliptic", rank=3)
+    EPIC        = Rarity(eccentricity= 3, name="parabolic", rank=4)
+    RARE        = Rarity(eccentricity= 5, name="superbolic", rank=5)
+    MYTHIC      = Rarity(eccentricity= 9, name="hyperbolic", rank=6)
