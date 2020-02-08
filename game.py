@@ -4,7 +4,7 @@ import os
 import shelve
 import tcod as libtcod
 
-from _data import con, eqp, log, map, AI, ENTITY_COLORS, JOBS, MULTIPLIER, RACES, RARITY, SLOTS, SPRITES
+from _data import con, eqp, log, map, AI, ENTITY_COLORS, JOBS, MULTIPLIER, RACES, RARITIES, SLOTS, SPRITES
 from camera import Camera
 from cursor import Cursor
 from load_tileset import load_tileset
@@ -306,8 +306,8 @@ class GameWorld(esper.World):
 
             elif key == 'job_requirement':
                 job_list = value
-                for _, job in JOBS.__members__.items():
-                    if job.value.name in job_list:
+                for _, job in JOBS.__dict__.items():
+                    if job.name in job_list:
                         if self.has_component(ent, JobReqComponent):
                             self.component_for_entity(ent, JobReqComponent).job_req.append(job)
                         else:
@@ -321,8 +321,8 @@ class GameWorld(esper.World):
                 self.add_component(ent, PositionComponent())
             
             elif key == 'rarity':
-                for _, rarity in RARITY.__members__.items():
-                    if rarity.value.rank == value:
+                for _, rarity in RARITIES.__dict__.items():
+                    if rarity.rank == value:
                         self.add_component(ent, RarityComponent(rarity=rarity))
                         break
                 else:
@@ -360,16 +360,16 @@ class GameWorld(esper.World):
                     
                     # TODO: At this point, should the job of the skill be added to the job_req of the item? 
                     if self.has_component(ent, ItemComponent):
-                        for _, job in JOBS.__members__.items():
-                            if job.value.name in job_req:
+                        for _, job in JOBS.__dict__.items():
+                            if job.name in job_req:
                                 if self.has_component(ent, JobReqComponent):
                                     self.component_for_entity(ent, JobReqComponent).job_req.append(job)
                                 else:
                                     self.add_component(ent, JobReqComponent(job_req=[job,]))
 
             elif key == 'slot':
-                for _, slot in SLOTS.__members__.items():
-                    if slot.value == value.get('slot'):
+                for _, slot in SLOTS.__dict__.items():
+                    if slot == value.get('slot'):
                         self.add_component(ent, SlotComponent(slot=slot))
                         break
                 else:

@@ -26,11 +26,11 @@ class SkillProgressionProcessor(esper.Processor):
 
             # First time check of the skill directory.
             if len(sd_comp.skill_directory) == 0:
-                sd_comp.skill_directory[job] = {}
+                sd_comp.skill_directory[job.name] = {}
 
             # Add an entry to the ent's skill directory.
             if new_job:
-                if new_job not in sd_comp.skill_directory.keys():
+                if new_job.name not in sd_comp.skill_directory.keys():
                     sd_comp.skill_directory[job] = {}
 
             elif item and new_skill:

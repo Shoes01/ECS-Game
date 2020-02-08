@@ -19,7 +19,7 @@ class JobComponent:
     
     def update_job(self, JOB):
         self.job = JOB
-        self.update_upkeep(JOB.value.upkeep)        
+        self.update_upkeep(JOB.upkeep)        
 
     def update_upkeep(self, upkeep):
         new_upkeep = {

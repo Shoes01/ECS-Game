@@ -188,9 +188,12 @@ def render_message_log(console_object, new_turn, world):
             # Go through the list of jobs, and turn it into a more human readable string.
             job = ""
             if job_list:
-                job_list = list(dict.fromkeys(job_list)) # This removes duplicate entries from the list.
-                for j in job_list:
-                    job += j.value.name + ", "
+                job_names = {}
+                for job_class in job_list:
+                    job_names[job_class.name] = ""
+                job_names = list(dict.fromkeys(job_names)) # This removes duplicate entries from the list.
+                for job_name in job_names:
+                    job += job_name + ", "
                 job = job[:-2]
 
             if success is True:

@@ -116,7 +116,7 @@ def generate_equipped_items(titles, world):
     equipped_items = {}
 
     for item in equipment:
-        slot = world.component_for_entity(item, SlotComponent).slot.value
+        slot = world.component_for_entity(item, SlotComponent).slot
         name = world.component_for_entity(item, NameComponent).original_name
         skill_comp = None
         

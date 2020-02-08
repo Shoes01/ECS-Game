@@ -1,8 +1,8 @@
 import attr
 
-from _data import RARITY
+from _data import RARITIES
 
 @attr.s(slots=True, auto_attribs=True)
 class RarityComponent:
     ' Component that holds the rarity of the item. '
-    rarity: RARITY
+    rarity: RARITIES

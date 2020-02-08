@@ -258,7 +258,7 @@ class MapgenProcessor(esper.Processor):
     def distribute_items(self, floor):
         # Move this section into the monster gen itself.
         for ent, (actor, inv, rar) in self.world.get_components(ActorComponent, InventoryComponent, RarityComponent):
-            rarity_rank = rar.rarity.value.rank
+            rarity_rank = rar.rarity.rank
             loot = self.generate_loot(floor, rarity_rank)
             if loot:
                 new_ent = self.world.create_entity(loot)

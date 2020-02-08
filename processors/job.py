@@ -26,8 +26,8 @@ class JobProcessor(esper.Processor):
             if not JOB:
                 menu = PopupMenu(title='Which job would you like to adopt?', reveal_all=False)
 
-                for _, JOB in JOBS.__members__.items():
-                    job = JOB.value
+                for _, JOB in JOBS.__dict__.items():
+                    job = JOB
                     _description = job.description
                     _name = job.name
                     _key = job.name[0]
@@ -66,7 +66,7 @@ class JobProcessor(esper.Processor):
 
 def check_validity(ent, JOB, world):
     conditions = []
-    job = JOB.value
+    job = JOB
     message_data = {}
     
     # Race validity.

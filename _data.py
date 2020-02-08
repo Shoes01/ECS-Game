@@ -249,34 +249,42 @@ class SingleLineBox():
     not_down = u'\u2534' # ┴
     intersection = u'\u253c' # ┼
 
-#############
-### ENUMS ###
-#############
+#################
+### CONSTANTS ###
+#################
 import attr
-from enum import Enum
 from typing import List, Dict
 
 # Slots
-class SLOTS(Enum):
-    HEAD = 'head'
-    TORSO = 'torso'
-    MAINHAND = 'mainhand'
-    OFFHAND = 'offhand'
-    FEET = 'feet'
-    ACCESSORY = 'accessory'
+@attr.s(auto_attribs=True)
+class Slots():
+    HEAD: str = 'head'
+    TORSO: str = 'torso'
+    MAINHAND: str = 'mainhand'
+    OFFHAND: str = 'offhand'
+    FEET: str = 'feet'
+    ACCESSORY: str = 'accessory'
+
+SLOTS = Slots()
 
 # Races
-class RACES(Enum):
-    MONSTER = 'monster'
-    HUMAN = 'human'
-    ELF = 'elf'
-    KOBOLD = 'kobold'
-    ORC = 'orc'
-    GOBLIN = 'goblin'
+@attr.s(auto_attribs=True)
+class Races():
+    MONSTER: str = 'monster'
+    HUMAN: str = 'human'
+    ELF: str = 'elf'
+    KOBOLD: str = 'kobold'
+    ORC: str = 'orc'
+    GOBLIN: str = 'goblin'
+
+RACES = Races()
 
 # AIs
-class AI(Enum):
-    ZOMBIE = 'zombie'
+@attr.s(auto_attribs=True)
+class AI_:
+    ZOMBIE: str = 'zombie'
+
+AI = AI_()
 
 # Jobs
 @attr.s(slots=True, auto_attribs=True)
@@ -289,49 +297,53 @@ class Job:
     skills: Dict[str, int]  # {'job': count}
     upkeep: Dict[str, int]  # {'stat': penalty value}
 
-class JOBS(Enum):
-    MONSTER = Job(
+@attr.s(auto_attribs=True)
+class Jobs:
+    MONSTER: Job = Job(
         description="Placeholder job for monsters.",
         name='monster job',
         races=(RACES.MONSTER,),
         skills={},
         upkeep={}
     )
-    SOLDIER = Job(
+    SOLDIER: Job = Job(
         description="Baby's first job.",
         name='soldier', 
         races=(RACES.HUMAN,),
         skills={},
         upkeep={}
     )
-    WARRIOR = Job(
+    WARRIOR: Job = Job(
         description='Has access to more devastating skills.', # Not rly.
         name='warrior',
         races=(RACES.HUMAN,),
         skills={},
         upkeep={'magic': 1, 'speed': 2}
     )
-    BERSERKER = Job(
+    BERSERKER: Job = Job(
         description='Classic orc.',
         name='berserker',
         races=(RACES.ORC,),
         skills={},
         upkeep={'speed': 1, 'hp': 1}
     )
-    ROGUE = Job(
+    ROGUE: Job = Job(
         description='A job for seasoned fighters.',
         name='rogue',
         races=(RACES.HUMAN, RACES.GOBLIN, RACES.ELF),
         skills={'soldier': 1},
         upkeep={'speed': 1, 'hp': 15}
     )
-    THIEF = Job(
+    THIEF: Job = Job(
         description='A stealer.',
         name='thief',
         races=(RACES.HUMAN,),
         skills={},
         upkeep={}
     )
+
+JOBS = Jobs()
+
 # Rarities
 @attr.s(slots=True, auto_attribs=True)
 class Rarity:
@@ -339,11 +351,14 @@ class Rarity:
     name: str         # The name of this type of eccentricity.
     rank: int         # The rank of the rarity. 0 is lowest.
 
-class RARITY(Enum):
-    AWFUL       = Rarity(eccentricity=-2, name="decayed", rank=0)
-    POOR        = Rarity(eccentricity=-1, name="hypobolic", rank=1)
-    COMMON      = Rarity(eccentricity= 0, name="circular", rank=2)
-    UNCOMMON    = Rarity(eccentricity= 1, name="elliptic", rank=3)
-    EPIC        = Rarity(eccentricity= 3, name="parabolic", rank=4)
-    RARE        = Rarity(eccentricity= 5, name="superbolic", rank=5)
-    MYTHIC      = Rarity(eccentricity= 9, name="hyperbolic", rank=6)
+@attr.s(auto_attribs=True)
+class Rarities:
+    AWFUL: Rarity       = Rarity(eccentricity=-2, name="decayed",    rank=0)
+    POOR: Rarity        = Rarity(eccentricity=-1, name="hypobolic",  rank=1)
+    COMMON: Rarity      = Rarity(eccentricity= 0, name="circular",   rank=2)
+    UNCOMMON: Rarity    = Rarity(eccentricity= 1, name="elliptic",   rank=3)
+    EPIC: Rarity        = Rarity(eccentricity= 3, name="parabolic",  rank=4)
+    RARE: Rarity        = Rarity(eccentricity= 5, name="superbolic", rank=5)
+    MYTHIC: Rarity      = Rarity(eccentricity= 9, name="hyperbolic", rank=6)
+
+RARITIES = Rarities()
