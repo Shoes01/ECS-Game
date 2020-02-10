@@ -252,7 +252,7 @@ class GameWorld(esper.World):
                 PositionComponent(),
                 RenderComponent(color_bg=None, char='@', codepoint=SPRITES['player'], color_fg=ENTITY_COLORS['player'], color_explored=None),
                 SkillDirectoryComponent(),
-                SoulComponent(eccentricity=5, max_rarity=10),
+                SoulComponent(eccentricity=5, max_rarity=10, new_game=True),
                 StatsComponent(hp=500, attack=10)
             )
         
