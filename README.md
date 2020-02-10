@@ -8,6 +8,7 @@ You need the following to play:
   PIL 6.0.0
   Python 3.7.0
   tcod 11.0.2
+  attrs 19.3.0
 
 __How to play__
 
@@ -24,6 +25,8 @@ The numpad controls or mouse for movement.
 shift + 'd': drop items
 
 shift + 'e': eat items
+
+shift + 'j': view jobs menu
 
 'w': wear items
 
