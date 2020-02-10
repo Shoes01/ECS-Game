@@ -32,7 +32,6 @@ class RenderProcessor(esper.Processor):
         while not self.queue.empty():
             # This queue is different from the Processor queues.
             # Every event is read and remembered, and then all done on the same tick.
-            # That's why there is a if/else chain here.
             event = self.queue.get()
 
             if event.get('item'):
@@ -53,9 +52,9 @@ class RenderProcessor(esper.Processor):
         self.render_border()
 
         # Draw each console.
+        self.draw_map(console=self.world.consoles['map'], state=self.world.state, soul=_soul, world=self.world)
         self.draw_stats(console=self.world.consoles['stats'], state=self.world.state, world=self.world)
         self.draw_log(console=self.world.consoles['log'], item=self.item, new_turn=_new_turn, state=self.world.state, world=self.world)
-        self.draw_map(console=self.world.consoles['map'], state=self.world.state, soul=_soul, world=self.world)
 
         # Blit the consoles.
         for key, value in self.world.consoles.items():
