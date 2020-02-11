@@ -166,6 +166,12 @@ class MapgenProcessor(esper.Processor):
 
         self.world.get_processor(CameraProcessor).queue.put({'center_camera_on': (player_pos.x, player_pos.y)})
 
+        # Spawn a starting item for the player.
+        starting_item = self.world.create_entity('sword')
+        starting_item_pos = self.world.component_for_entity(starting_item, PositionComponent)
+        starting_item_pos.x = random.randint(room.x + 1, room.x + room.w - 2)
+        starting_item_pos.y = random.randint(room.y + 1, room.y + room.h - 2)
+
         ### DEBUG 
         """
         new_ent = self.world.create_entity('stairs')
