@@ -75,7 +75,7 @@ class MapgenProcessor(esper.Processor):
         
         self.clear_entities()
         self.place_tiles(tiles)
-        self.place_player()
+        self.place_player(floor)
         self.place_stairs(floor)
         self.place_monsters(floor, tiles)
         self.place_loot(tiles)
@@ -156,7 +156,7 @@ class MapgenProcessor(esper.Processor):
                     decorations = ('wall_stone_var_1', 'wall_stone_var_2', 'wall_stone_var_3')
                     new_ent_ren.codepoint = SPRITES[random.choice(decorations)]
 
-    def place_player(self):
+    def place_player(self, floor):
         player_pos = self.world.component_for_entity(1, PositionComponent)
         room = self._leaf_rooms.pop(random.randint(0, len(self._leaf_rooms) - 1))
         self._rooms.remove(room)
@@ -167,10 +167,11 @@ class MapgenProcessor(esper.Processor):
         self.world.get_processor(CameraProcessor).queue.put({'center_camera_on': (player_pos.x, player_pos.y)})
 
         # Spawn a starting item for the player.
-        starting_item = self.world.create_entity('sword')
-        starting_item_pos = self.world.component_for_entity(starting_item, PositionComponent)
-        starting_item_pos.x = random.randint(room.x + 1, room.x + room.w - 2)
-        starting_item_pos.y = random.randint(room.y + 1, room.y + room.h - 2)
+        if floor == 0:
+            starting_item = self.world.create_entity('sword')
+            starting_item_pos = self.world.component_for_entity(starting_item, PositionComponent)
+            starting_item_pos.x = random.randint(room.x + 1, room.x + room.w - 2)
+            starting_item_pos.y = random.randint(room.y + 1, room.y + room.h - 2)
 
         ### DEBUG 
         """
