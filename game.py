@@ -67,6 +67,7 @@ from processors.pickup import PickupProcessor
 from processors.removable import RemovableProcessor
 from processors.render import RenderProcessor
 from processors.skill import SkillProcessor
+from processors.skill_menu import SkillMenuProcessor
 from processors.skill_progression import SkillProgressionProcessor
 from processors.soul import SoulProcessor
 from processors.state import StateProcessor
@@ -140,6 +141,7 @@ class GameWorld(esper.World):
         self.add_processor(MapgenProcessor(), 4)
         self.add_processor(DijkstraProcessor(), 3)
         self.add_processor(EnergyProcessor(), 3)
+        self.add_processor(SkillMenuProcessor(), 3)
         ' Endstep. '
         self.add_processor(SkillProgressionProcessor(), 2)
         self.add_processor(CooldownProcessor(), 2)

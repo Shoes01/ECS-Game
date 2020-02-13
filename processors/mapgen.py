@@ -234,9 +234,9 @@ class MapgenProcessor(esper.Processor):
 
     def gen_random_monster(self, floor):
         list_of_monsters = []
-        monster_table = self.world.monster_table
+        table_monster = self.world.table_monster
         for i in range(0, floor + 1):
-            list_ = monster_table[i]
+            list_ = table_monster[i]
             list_of_monsters.extend(list_)
         
         monster = random.choice(list_of_monsters)
@@ -275,11 +275,11 @@ class MapgenProcessor(esper.Processor):
                     self.world.component_for_entity(ent, EquipmentComponent).equipment.append(new_ent)
     
     def generate_loot(self, floor, ent_rarity):
-        item_table = self.world.item_table
-        for x in reversed(range(0, len(item_table))):
+        table_item = self.world.table_item
+        for x in reversed(range(0, len(table_item))):
             chance = random.randint(0, 100)
-            if item_table[x] and self.loot_algorithm(chance=chance, monster=ent_rarity, item=x, floor=floor):
-                return random.choice(item_table[x])
+            if table_item[x] and self.loot_algorithm(chance=chance, monster=ent_rarity, item=x, floor=floor):
+                return random.choice(table_item[x])
 
     def loot_algorithm(self, chance, monster, item, floor):
         net_rarity = (1 + (monster)*5 - (item - 3)*5 + (floor)*5)

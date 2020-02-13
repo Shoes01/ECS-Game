@@ -258,14 +258,32 @@ from typing import List, Dict
 # Slots
 @attr.s(auto_attribs=True)
 class Slots():
-    HEAD: str = 'head'
-    TORSO: str = 'torso'
-    MAINHAND: str = 'mainhand'
-    OFFHAND: str = 'offhand'
-    FEET: str = 'feet'
-    ACCESSORY: str = 'accessory'
+    HEAD: str = 'head'          # w
+    TORSO: str = 'torso'        # s
+    MAINHAND: str = 'mainhand'  # q
+    OFFHAND: str = 'offhand'    # a
+    FEET: str = 'feet'          # d
+    ACCESSORY: str = 'accessory' # e
 
 SLOTS = Slots()
+
+SLOTS_TO_KEY = {
+    SLOTS.HEAD: 'w',
+    SLOTS.TORSO: 's',
+    SLOTS.MAINHAND: 'q',
+    SLOTS.OFFHAND: 'a',
+    SLOTS.FEET: 'd',
+    SLOTS.ACCESSORY: 'e'
+}
+
+KEY_TO_SLOTS = {
+    'w': SLOTS.HEAD,
+    's': SLOTS.TORSO,
+    'q': SLOTS.MAINHAND,
+    'a': SLOTS.OFFHAND,
+    'd': SLOTS.FEET,
+    'e': SLOTS.ACCESSORY
+}
 
 # Races
 @attr.s(auto_attribs=True)

@@ -24,6 +24,7 @@ from processors.new_game import NewGameProcessor
 from processors.pickup import PickupProcessor
 from processors.removable import RemovableProcessor
 from processors.skill import SkillProcessor
+from processors.skill_menu import SkillMenuProcessor
 from processors.soul import SoulProcessor
 from processors.state import StateProcessor
 from processors.render import RenderProcessor
@@ -194,7 +195,11 @@ class InputProcessor(esper.Processor):
             elif key_char == 'j' and key.mod & libtcod.event.KMOD_SHIFT:
                 self.world.get_processor(JobProcessor).queue.put({'ent': 1})
 
-            # Skill keys.
+            # Skill menu keys.
+            elif key_char in ['q', 'w', 'e', 'a', 's', 'd'] and key.mod & libtcod.event.KMOD_SHIFT:
+                self.world.get_processor(SkillMenuProcessor).queue.put({'skill_menu': key_char, 'ent': 1})
+
+            # Skill keys. TODO: Convert this to look like above. Use the KEY_TO_SLOTS thing from _data.
             elif key_char == 'q':
                 self.world.get_processor(SkillProcessor).queue.put({'skill_prepare': 'mainhand', 'ent': 1})
             elif key_char == 'w':

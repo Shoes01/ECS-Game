@@ -8,11 +8,12 @@
     {
         "archtype": "item",
 
+        "job_requirement": ["soldier", "warrior"],
         "name": "Sword",
         "rarity": 0,
         "render": {"char": ")", "color_fg": "weapon", "codepoint": "eqp_sword"},
         "skill": ["lunge", "cleave"],
-        "slot": {"slot": "mainhand"},
+        "slot": "mainhand",
         "stats": {"attack": 5},
         "wearable": true
     },
@@ -20,11 +21,12 @@
     {
         "archtype": "item",
 
+        "job_requirement": ["soldier", "warrior"],
         "name": "Hammer",
         "rarity": 0,
         "render": {"char": ")", "color_fg": "weapon", "codepoint": "eqp_sword"},
         "skill": ["headbutt", "sprint"],
-        "slot": {"slot": "mainhand"},
+        "slot": "mainhand",
         "stats": {"attack": 5},
         "wearable": true
     }
