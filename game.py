@@ -93,7 +93,7 @@ class GameWorld(esper.World):
         self._json_data = self.load_data()
 
         ' Tables. '
-        self.item_table, self.job_skill_table, self.monster_table = self.load_tables()
+        self.table_item, self.table_job_skill, self.table_monster = self.load_tables()
 
         ' Objects. '
         self.camera = Camera(x=0, y=0, w=map.w // MULTIPLIER, h=map.h // MULTIPLIER, leash=3) # TODO: The map values from _data might need to be renamed...
@@ -198,31 +198,33 @@ class GameWorld(esper.World):
             self._next_entity_id = data_file['next_entity_id']
             
     def load_tables(self):
-        item_table = [[] for i in range(8)] # There are 8 levels of rarity, starting at 0
-        monster_table = [[] for i in range(8)]
-        job_skill_table = {}
+        table_item = [[] for i in range(8)] # There are 8 levels of rarity, starting at 0 ### err, 7 levels?
+        table_monster = [[] for i in range(8)]
+        table_job_skill = {}
         
         for ent, components in self._json_data.items():
             if ent == 'comment': continue
             rarity = components.get('rarity')
             archtype = components.get('archtype')
+            is_skill = components.get('cooldown') # I don't think anything else will ever have a cooldown...
             if rarity is not None:
                 job, skill = None, None
                 if archtype == 'monster':
-                    monster_table[rarity].append(ent)
+                    table_monster[rarity].append(ent)
                 elif archtype == 'item':
-                    item_table[rarity].append(ent)
-                    job = components.get('job_requirement')
-                    skill = components.get('skill')
-                if job and skill:
-                    for single_job in job:
-                        if single_job in job_skill_table:
-                            job_skill_table[single_job].append(skill)
-                        else:
-                            job_skill_table[single_job] = [skill,]
+                    table_item[rarity].append(ent)
+            elif is_skill:
+                job = components.get('job_requirement')
+                skill = ent
+
+                for single_job in job:
+                    if single_job in table_job_skill:
+                        table_job_skill[single_job].append(skill)
+                    else:
+                        table_job_skill[single_job] = [skill,]
                     
         
-        return item_table, job_skill_table, monster_table
+        return table_item, table_job_skill, table_monster
 
     def save_game(self):
         with shelve.open('savegame', 'n') as data_file:
