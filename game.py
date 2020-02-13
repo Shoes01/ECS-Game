@@ -93,7 +93,7 @@ class GameWorld(esper.World):
         self._json_data = self.load_data()
 
         ' Tables. '
-        self.table_item, self.table_job_skill, self.table_monster = self.load_tables()
+        self.table_item, self.table_job_skill, self.table_monster, self.table_slot_skill = self.load_tables()
 
         ' Objects. '
         self.camera = Camera(x=0, y=0, w=map.w // MULTIPLIER, h=map.h // MULTIPLIER, leash=3) # TODO: The map values from _data might need to be renamed...
@@ -201,6 +201,14 @@ class GameWorld(esper.World):
         table_item = [[] for i in range(8)] # There are 8 levels of rarity, starting at 0 ### err, 7 levels?
         table_monster = [[] for i in range(8)]
         table_job_skill = {}
+        table_slot_skill = {
+            SLOTS.MAINHAND: [],
+            SLOTS.OFFHAND: [],
+            SLOTS.TORSO: [],
+            SLOTS.FEET: [],
+            SLOTS.HEAD: [],
+            SLOTS.ACCESSORY: []
+        }
         
         for ent, components in self._json_data.items():
             if ent == 'comment': continue
@@ -208,11 +216,13 @@ class GameWorld(esper.World):
             archtype = components.get('archtype')
             is_skill = components.get('cooldown') # I don't think anything else will ever have a cooldown...
             if rarity is not None:
-                job, skill = None, None
                 if archtype == 'monster':
                     table_monster[rarity].append(ent)
                 elif archtype == 'item':
                     table_item[rarity].append(ent)
+                    if components.get('skill'):
+                        table_slot_skill[components['slot']].extend(components['skill'])
+                        
             elif is_skill:
                 job = components.get('job_requirement')
                 skill = ent
@@ -224,7 +234,7 @@ class GameWorld(esper.World):
                         table_job_skill[single_job] = [skill,]
                     
         
-        return table_item, table_job_skill, table_monster
+        return table_item, table_job_skill, table_monster, table_slot_skill
 
     def save_game(self):
         with shelve.open('savegame', 'n') as data_file:
@@ -371,7 +381,7 @@ class GameWorld(esper.World):
 
             elif key == 'slot':
                 for _, slot in SLOTS.__dict__.items():
-                    if slot == value.get('slot'):
+                    if slot == value:
                         self.add_component(ent, SlotComponent(slot=slot))
                         break
                 else:
