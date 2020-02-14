@@ -1,6 +1,6 @@
 import esper
 
-from _data import ENTITY_COLORS
+from _data import ENTITY_COLORS, KEY_TO_SLOTS
 from _helper_functions import generate_stats
 from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
@@ -36,9 +36,10 @@ class SkillProcessor(esper.Processor):
             clear = event.get('skill_clear')
             confirm = event.get('skill_confirm')
             move = event.get('skill_move')
-            slot = event.get('skill_prepare')
+            skill_letter = event.get('skill_prepare')           
 
-            if slot:
+            if skill_letter:
+                slot = KEY_TO_SLOTS[skill_letter]
                 self._item = self.find_item(ent, slot)
                 self._direction = (1, 0)
                 if self._item:
