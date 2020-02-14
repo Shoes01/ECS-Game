@@ -51,15 +51,14 @@ class SkillMenuProcessor(esper.Processor):
 
             menu = PopupMenu(title=f'Choose a {slot}-skill to equip.')
 
-            n = 97
+            
             for _list in (mastered_list, unmastered_list, bestowed_list):
                 for skill in _list:
                     _name = skill
-                    _key = chr(n)
+                    _key = skill[0]
                     _processor = self # Just for an initial test...
                     _results = ( PopupChoiceResult(result={'ent': ent}, processor=_processor),)
                     menu.contents.append(PopupChoice(name=_name, key=_key, results=_results))
-                    n += 1
 
             self.world.get_processor(StateProcessor).queue.put({'popup': menu})
 
