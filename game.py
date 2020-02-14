@@ -235,7 +235,7 @@ class GameWorld(esper.World):
                     else:
                         table_job_skill[single_job] = [skill,]
         
-        
+        # Check that skills of the same slot don't share a first letter. If so, this messes things up in the SKillMenuProcessor.
         for slot, skills in table_slot_skill.items():
             used_keys = []
             for skill in skills:
@@ -360,24 +360,25 @@ class GameWorld(esper.World):
 
             elif key == 'skill':
                 names = value
+
                 if type(names) is not list: 
                     names = [names,]
                 
                 for name in names:
-                    ap_max = self._json_data.get(name).get('ap_max')
-                    cooldown = self._json_data.get(name).get('cooldown')
-                    cost_energy = self._json_data.get(name).get('cost_energy')
-                    cost_soul = self._json_data.get(name).get('cost_soul')
-                    damage_type = self._json_data.get(name).get('damage_type')
-                    description = self._json_data.get(name).get('description')
-                    east = self._json_data.get(name).get('east')
-                    if self._json_data.get(name).get('job_requirement') is None: print(f"Item {name} has no job_requirement.")
-                    job_req = self._json_data.get(name).get('job_requirement')
-                    north_east = self._json_data.get(name).get('north_east')
+                    ap_max = self._json_data[name].get('ap_max')
+                    cooldown = self._json_data[name].get('cooldown')
+                    cost_energy = self._json_data[name].get('cost_energy')
+                    cost_soul = self._json_data[name].get('cost_soul')
+                    damage_type = self._json_data[name].get('damage_type')
+                    description = self._json_data[name].get('description')
+                    east = self._json_data[name].get('east')
+                    if self._json_data[name].get('job_requirement') is None: print(f"Item {name} has no job_requirement.")
+                    job_req = self._json_data[name].get('job_requirement')
+                    north_east = self._json_data[name].get('north_east')
 
                     skill_component = SkillComponent(ap_max=ap_max, cooldown=cooldown, cost_energy=cost_energy, cost_soul=cost_soul, damage_type=damage_type, description=description, job_req=job_req, name=name, east=east, north_east=north_east)
 
-                    # TODO: Am I always sure this component has been created? I should maybe set up a queue of actions to be taken after the initial run through is done...
+                    # If this causes a crash, it's because the entity doesn't have a SkillsComponent. Somehow.
                     self.component_for_entity(ent, SkillsComponent).skills.append(skill_component)
                     
                     # TODO: At this point, should the job of the skill be added to the job_req of the item? 
