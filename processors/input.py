@@ -199,7 +199,7 @@ class InputProcessor(esper.Processor):
             elif key_char in ['q', 'w', 'e', 'a', 's', 'd'] and key.mod & libtcod.event.KMOD_SHIFT:
                 self.world.get_processor(SkillMenuProcessor).queue.put({'skill_menu': key_char, 'ent': 1})
 
-            # Skill keys. TODO: Convert this to look like above. Use the KEY_TO_SLOTS thing from _data.
+            # Skill keys. TODO: Convert this to look like above. Use the KEY_TO_SLOTS in SkillProcessor to convert back to slot.
             elif key_char == 'q':
                 self.world.get_processor(SkillProcessor).queue.put({'skill_prepare': 'mainhand', 'ent': 1})
             elif key_char == 'w':
