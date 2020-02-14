@@ -234,7 +234,15 @@ class GameWorld(esper.World):
                         table_job_skill[single_job].append(skill)
                     else:
                         table_job_skill[single_job] = [skill,]
-                    
+        
+        
+        for slot, skills in table_slot_skill.items():
+            used_keys = []
+            for skill in skills:
+                if skill[0] not in used_keys:
+                    used_keys.append(skill[0])
+                else:
+                    print(f"WARNING: There are two skills in the slot {slot} that start with the letter {skill[0]}. {skill} is one of them.")
         
         return table_item, table_job_skill, table_monster, table_slot_skill
 
