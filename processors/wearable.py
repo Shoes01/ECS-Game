@@ -101,7 +101,7 @@ def wear_item(ent, eqp, item, name_component, world):
     # Go through the skills of the item and deactivate those that don't meet the job_requirement.
     job = world.component_for_entity(ent, JobComponent).job
     for skill in world.component_for_entity(item, SkillsComponent).skills:
-        if job in skill.job_req:
+        if job.name in skill.job_req:
             skill.active = True
         else:
             skill.active = False

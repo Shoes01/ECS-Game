@@ -31,7 +31,7 @@ class SkillProgressionProcessor(esper.Processor):
             # Add an entry to the ent's skill directory.
             if new_job:
                 if new_job.name not in sd_comp.skill_directory.keys():
-                    sd_comp.skill_directory[job] = {}
+                    sd_comp.skill_directory[job.name] = {}
 
             elif item and new_skill:
                 # Add this item's skill to the directory, if it is not already present.
@@ -41,9 +41,9 @@ class SkillProgressionProcessor(esper.Processor):
                         skill = s
                         break
                 
-                if skill and job in skill.job_req and job in sd_comp.skill_directory.keys():
-                    if skill.name not in sd_comp.skill_directory[job].keys():
-                        sd_comp.skill_directory[job][skill.name] = (0, skill.ap_max)
+                if skill and job.name in skill.job_req and job.name in sd_comp.skill_directory.keys():
+                    if skill.name not in sd_comp.skill_directory[job.name].keys():
+                        sd_comp.skill_directory[job.name][skill.name] = (0, skill.ap_max)
                     else:
                         print("ERROR: This item is trying to add a skill to a job that doesn't exist!")
 
@@ -62,7 +62,7 @@ class SkillProgressionProcessor(esper.Processor):
                     else:
                         continue
 
-                    ap_current, ap_max = sd_comp.skill_directory[job][other_skill]
+                    ap_current, ap_max = sd_comp.skill_directory[job.name][other_skill]
                                         
                     already_maxed = True if ap_current == ap_max else False
                     
@@ -72,7 +72,7 @@ class SkillProgressionProcessor(esper.Processor):
                         ap_current = ap_max
                         newly_maxed = True if not already_maxed else False
 
-                    sd_comp.skill_directory[job][other_skill] = (ap_current, ap_max)
+                    sd_comp.skill_directory[job.name][other_skill] = (ap_current, ap_max)
 
                     if newly_maxed:
                         message_data = {'name': other_skill}

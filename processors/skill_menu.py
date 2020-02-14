@@ -37,9 +37,9 @@ class SkillMenuProcessor(esper.Processor):
                 for name, AP in skill.items():
                     if name in entire_skill_list:
                         if AP[0] == AP[1]:
-                            mastered_list.append('name')
+                            mastered_list.append(name)
                         else:
-                            unmastered_list.append('name')
+                            unmastered_list.append(name)
             
             # Need to also add the skill that the currently equipped skill is bestowing.
             for item in equipped_items:
