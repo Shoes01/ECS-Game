@@ -20,45 +20,55 @@ class SkillMenuProcessor(esper.Processor):
             event = self.queue.get()
 
             ent = event['ent']
-            skill_letter = event['skill_menu']
+            skill_activate = event.get('skill_activate')
+            skill_letter = event.get('skill_menu')
+            skill_slot = event.get('skill_slot')
 
-            slot = KEY_TO_SLOTS[skill_letter]
-
-            entire_skill_list = self.world.table_slot_skill[slot] # This is the full list of possible skills for this slot.
             equipped_items = self.world.component_for_entity(ent, EquipmentComponent).equipment
-            skill_directory = self.world.component_for_entity(ent, SkillDirectoryComponent).skill_directory
 
-            mastered_list = []
-            unmastered_list = []
-            bestowed_list = [] # This should just be the one skill bestowed by the equipped item.
+            if skill_letter:
+                slot = KEY_TO_SLOTS[skill_letter]
 
-            # Populate mastered and unmastered lists.
-            for _job, skill in skill_directory.items():
-                for name, AP in skill.items():
-                    if name in entire_skill_list:
-                        if AP[0] == AP[1]:
-                            mastered_list.append(name)
-                        else:
-                            unmastered_list.append(name)
+                entire_skill_list = self.world.table_slot_skill[slot] # This is the full list of possible skills for this slot.
+                skill_directory = self.world.component_for_entity(ent, SkillDirectoryComponent).skill_directory
+
+                mastered_list = []
+                unmastered_list = []
+                bestowed_list = [] # This should just be the one skill bestowed by the equipped item.
+
+                # Populate mastered and unmastered lists.
+                for _job, skill in skill_directory.items():
+                    for name, AP in skill.items():
+                        if name in entire_skill_list:
+                            if AP[0] == AP[1]:
+                                mastered_list.append(name)
+                            else:
+                                unmastered_list.append(name)
+                
+                # "Populate" the bestowed skill list.
+                for item in equipped_items:
+                    if self.world.has_component(item, SkillsComponent) and self.world.component_for_entity(item, SlotComponent).slot == slot:
+                        skills = self.world.component_for_entity(item, SkillsComponent).skills
+                        for skill in skills:
+                            if self.world.component_for_entity(ent, JobComponent).job in skill.job_req:
+                                bestowed_list.append(skill.name)
+
+                menu = PopupMenu(title=f'Choose a {slot}-skill to equip.')
+                
+                for _list in (mastered_list, unmastered_list, bestowed_list):
+                    for skill in _list:
+                        _name = skill
+                        _key = skill[0]
+                        _processor = SkillMenuProcessor
+                        _results = ( PopupChoiceResult(result={'ent': ent, 'skill_activate': skill, 'skill_slot': slot}, processor=_processor),)
+                        menu.contents.append(PopupChoice(name=_name, key=_key, results=_results))
+
+                self.world.get_processor(StateProcessor).queue.put({'popup': menu})
             
-            # Need to also add the skill that the currently equipped skill is bestowing.
-            for item in equipped_items:
-                if self.world.has_component(item, SkillsComponent) and self.world.component_for_entity(item, SlotComponent).slot == slot:
-                    skills = self.world.component_for_entity(item, SkillsComponent).skills
-                    for skill in skills:
-                        if self.world.component_for_entity(ent, JobComponent).job in skill.job_req:
-                            bestowed_list.append(skill.name)
+            elif skill_activate and skill_slot:
+                print(f"Attempting to activate {skill_activate}")
+                
 
-            menu = PopupMenu(title=f'Choose a {slot}-skill to equip.')
-
-            
-            for _list in (mastered_list, unmastered_list, bestowed_list):
-                for skill in _list:
-                    _name = skill
-                    _key = skill[0]
-                    _processor = self # Just for an initial test...
-                    _results = ( PopupChoiceResult(result={'ent': ent}, processor=_processor),)
-                    menu.contents.append(PopupChoice(name=_name, key=_key, results=_results))
-
-            self.world.get_processor(StateProcessor).queue.put({'popup': menu})
-
+                # Activate the named skill
+                # Deactive the active skill for the slot, if there is one.
+                ### How do I look up which skills are active?
