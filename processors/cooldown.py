@@ -19,7 +19,7 @@ class CooldownProcessor(esper.Processor):
 
             if register_item:
                 for skill in self.world.component_for_entity(register_item, SkillPoolComponent).skill_pool:
-                    if skill.active:
+                    if skill.is_active:
                         skill.cooldown_remaining = skill.cooldown
                 self.registered_items.append(register_item)
             
@@ -29,7 +29,7 @@ class CooldownProcessor(esper.Processor):
             if tick:
                 for item in self.registered_items:
                     for skill in self.world.component_for_entity(register_item, SkillPoolComponent).skill_pool:
-                        if skill.active:
+                        if skill.is_active:
                             skill.cooldown_remaining -= 1
                     
                         if skill.cooldown_remaining <= 0:

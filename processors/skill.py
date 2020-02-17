@@ -82,7 +82,7 @@ class SkillProcessor(esper.Processor):
             if slot == self.world.component_for_entity(item, SlotComponent).slot:
                 name = self.world.component_for_entity(item, NameComponent).original_name
                 for skill in self.world.component_for_entity(item, SkillPoolComponent).skill_pool:
-                    if skill.active:
+                    if skill.is_active:
                         if skill.cooldown_remaining == 0:
                             return item
                         else:
@@ -121,7 +121,7 @@ class SkillProcessor(esper.Processor):
     def get_tiles(self, ent):
         skill_comp = None
         for skill in self.world.component_for_entity(self._item, SkillPoolComponent).skill_pool:
-            if skill.active:
+            if skill.is_active:
                 skill_comp = skill
                 
         array_of_effect = skill_comp.__dict__[self.get_direction_name(self._direction)]
@@ -222,7 +222,7 @@ class SkillProcessor(esper.Processor):
         # Check to see if the costs can be paid.
         skill_comp = None
         for skill in self.world.component_for_entity(self._item, SkillPoolComponent).skill_pool:
-            if skill.active:
+            if skill.is_active:
                 skill_comp = skill
 
         ent_stats = generate_stats(ent, self.world)

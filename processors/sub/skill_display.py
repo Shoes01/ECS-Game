@@ -9,7 +9,7 @@ def render_skill_display(console_object, item, world):
     item_name = world.component_for_entity(item, NameComponent).original_name
     skill = None
     for temp_skill in world.component_for_entity(item, SkillPoolComponent).skill_pool:
-        if temp_skill.active:
+        if temp_skill.is_active:
             skill = temp_skill
     
     cost_turn_string = f"Turn Cost: {skill.cost_energy}"

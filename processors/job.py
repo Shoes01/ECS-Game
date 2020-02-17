@@ -94,10 +94,9 @@ def check_validity(ent, JOB, world):
     for required_job, required_number in job.skills.items():
         # Determine how many skills from the given job have been mastered.
         mastery_number = 0
-        if required_job in sd_comp.skill_directory:
-            for _name, ap in sd_comp.skill_directory[required_job.name].items():
-                if ap[0] == ap[1]:
-                    mastery_number += 1
+        for skill in sd_comp.skill_directory:
+            if skill.job_req == required_job and skill.is_mastered:
+                mastery_number += 1
             
         if mastery_number < required_number: 
             condition.valid = False

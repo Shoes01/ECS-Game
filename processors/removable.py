@@ -41,7 +41,7 @@ class RemovableProcessor(esper.Processor):
 
                 # Go through the skills of the item and deactivate those that don't meet the job_requirement. TODO: This will likely become moot...
                 for skill in self.world.component_for_entity(item, SkillPoolComponent).skill_pool:
-                    skill.active = False
+                    skill.is_active = False
 
             elif job:
                 # The player switched jobs; go through the equipped items to see if the player is still the correct job.

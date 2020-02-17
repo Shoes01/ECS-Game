@@ -53,7 +53,7 @@ def render_stats(console_object, world):
             char_color = color_fg
             render_comp = world.component_for_entity(item, RenderComponent)
             for skill in world.component_for_entity(item, SkillPoolComponent).skill_pool:
-                if skill.active and skill.cooldown_remaining > 0:
+                if skill.is_active and skill.cooldown_remaining > 0:
                     char_color = UI_COLORS['cooldown']
                     cooldown = skill.cooldown_remaining
         

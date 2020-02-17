@@ -37,13 +37,11 @@ class SkillMenuProcessor(esper.Processor):
                 bestowed_list = [] # This should just be the one skill bestowed by the equipped item.
 
                 # Populate mastered and unmastered lists.
-                for _job, skill in skill_directory.items():
-                    for name, AP in skill.items():
-                        if name in entire_skill_list:
-                            if AP[0] == AP[1]:
-                                mastered_list.append(name)
-                            else:
-                                unmastered_list.append(name)
+                for skill in skill_directory:
+                    if skill.is_mastered:
+                        mastered_list.append(skill.name)
+                    else:
+                        unmastered_list.append(skill.name)
                 
                 # "Populate" the bestowed skill list.
                 for item in equipped_items:

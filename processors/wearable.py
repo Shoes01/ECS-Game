@@ -102,6 +102,6 @@ def wear_item(ent, eqp, item, name_component, world):
     job = world.component_for_entity(ent, JobComponent).job
     for skill in world.component_for_entity(item, SkillPoolComponent).skill_pool:
         if job.name in skill.job_req:
-            skill.active = True
+            skill.is_active = True
         else:
-            skill.active = False
+            skill.is_active = False
