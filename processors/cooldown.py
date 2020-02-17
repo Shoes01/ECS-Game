@@ -1,6 +1,6 @@
 import esper
 
-from components.item.skills import SkillPoolComponent
+from components.item.skill_pool import SkillPoolComponent
 from queue import Queue
 
 class CooldownProcessor(esper.Processor):

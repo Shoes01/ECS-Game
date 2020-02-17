@@ -1,6 +1,6 @@
 from _data import map, UI_COLORS
 
-from components.item.skills import SkillPoolComponent
+from components.item.skill_pool import SkillPoolComponent
 from components.name import NameComponent
 
 def render_popup_menu(console_object, world):

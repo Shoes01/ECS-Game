@@ -3,7 +3,7 @@ import esper
 from components.actor.equipment import EquipmentComponent
 from components.item.jobreq import JobReqComponent
 from components.name import NameComponent
-from components.item.skills import SkillPoolComponent
+from components.item.skill_pool import SkillPoolComponent
 from processors.energy import EnergyProcessor
 from processors.skill import SkillProcessor
 

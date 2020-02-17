@@ -4,7 +4,7 @@ from _data import KEY_TO_SLOTS
 from components.actor.equipment import EquipmentComponent
 from components.actor.job import JobComponent
 from components.actor.skill_directory import SkillDirectoryComponent
-from components.item.skills import SkillPoolComponent, SkillComponent
+from components.item.skill_pool import SkillPoolComponent
 from components.item.slot import SlotComponent
 from processors.state import StateProcessor
 from menu import PopupMenu, PopupChoice, PopupChoiceResult, PopupChoiceCondition

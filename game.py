@@ -26,7 +26,7 @@ from components.actor.race import RaceComponent
 from components.item.consumable import ConsumableComponent
 from components.item.item import ItemComponent
 from components.item.jobreq import JobReqComponent
-from components.item.skill_pool import skill_pool
+from components.item.skill_pool import SkillPoolComponent
 from components.item.slot import SlotComponent
 from components.item.wearable import WearableComponent
 from components.furniture import FurnitureComponent
@@ -35,6 +35,7 @@ from components.persist import PersistComponent
 from components.position import PositionComponent
 from components.rarity import RarityComponent
 from components.render import RenderComponent
+from components.skill import SkillComponent
 from components.soul import SoulComponent
 from components.stairs import StairsComponent
 from components.stats import StatsComponent
@@ -379,7 +380,7 @@ class GameWorld(esper.World):
                     skill_component = SkillComponent(ap_max=ap_max, cooldown=cooldown, cost_energy=cost_energy, cost_soul=cost_soul, damage_type=damage_type, description=description, job_req=job_req, name=name, east=east, north_east=north_east)
 
                     # If this causes a crash, it's because the entity doesn't have a SkillPoolComponent. Somehow.
-                    self.component_for_entity(ent, SkillPoolComponent).skills.append(skill_component)
+                    self.component_for_entity(ent, SkillPoolComponent).skill_pool.append(skill_component)
                     
                     # TODO: At this point, should the job of the skill be added to the job_req of the item? 
                     if self.has_component(ent, ItemComponent):

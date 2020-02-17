@@ -5,7 +5,7 @@ from _helper_functions import generate_stats
 from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.job import JobComponent
-from components.item.skills import SkillPoolComponent
+from components.item.skill_pool import SkillPoolComponent
 from components.item.slot import SlotComponent
 from components.name import NameComponent
 from components.position import PositionComponent

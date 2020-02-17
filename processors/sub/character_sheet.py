@@ -3,7 +3,7 @@ from _helper_functions import as_decimal, as_integer, generate_stats
 from components.actor.equipment import EquipmentComponent
 from components.actor.job import JobComponent
 from components.actor.skill_directory import SkillDirectoryComponent
-from components.item.skills import SkillPoolComponent
+from components.item.skill_pool import SkillPoolComponent
 from components.item.slot import SlotComponent 
 from components.name import NameComponent
 from components.soul import SoulComponent
@@ -106,7 +106,7 @@ def render_character_sheet(console_object, world):
     console.print(x - 1, y - 1, 'Skill Directory:', color_fg)
     i = 0
     for skill in skill_directory:
-        console.print(x, y + i, f"{skill.name.capitalize()}: {skill.ap}/{skill.max_ap}")
+        console.print(x, y + i, f"{skill.name.capitalize()}: {skill.ap}/{skill.ap_max}")
         i += 1
 
 def generate_equipped_items(titles, world):

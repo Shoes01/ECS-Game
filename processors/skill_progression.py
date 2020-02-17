@@ -2,7 +2,7 @@ import esper
 
 from components.actor.job import JobComponent
 from components.actor.skill_directory import SkillDirectoryComponent
-from components.item.skills import SkillPoolComponent
+from components.item.skill_pool import SkillPoolComponent
 from queue import Queue
 
 class SkillProgressionProcessor(esper.Processor):

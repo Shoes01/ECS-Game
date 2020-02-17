@@ -4,7 +4,7 @@ from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
 from components.actor.job import JobComponent
 from components.item.jobreq import JobReqComponent
-from components.item.skills import SkillPoolComponent
+from components.item.skill_pool import SkillPoolComponent
 from components.item.slot import SlotComponent
 from components.item.wearable import WearableComponent
 from components.name import NameComponent

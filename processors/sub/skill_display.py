@@ -1,6 +1,6 @@
 from _data import LOG_COLORS
 from _helper_functions import as_decimal
-from components.item.skills import SkillPoolComponent
+from components.item.skill_pool import SkillPoolComponent
 from components.name import NameComponent
 
 

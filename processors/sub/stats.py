@@ -1,7 +1,7 @@
 from _data import SingleLineBox, UI_COLORS
 from _helper_functions import as_decimal, generate_stats
 from components.actor.equipment import EquipmentComponent
-from components.item.skills import SkillPoolComponent
+from components.item.skill_pool import SkillPoolComponent
 from components.item.slot import SlotComponent
 from components.render import RenderComponent
 
