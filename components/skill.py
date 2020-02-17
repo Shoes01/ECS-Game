@@ -13,7 +13,7 @@ class SkillComponent:
         self.cost_soul = cost_soul # Type: dict{'stat': int}
         self.damage_type = damage_type
         self.description = description
-        self.job_req = job_req if type(job_req) == list else [job_req,]
+        self.job_req = job_req # Type: str. Should only ever be one job req per skill.
         self.name = name
 
         ' Skill directions. '
@@ -25,9 +25,3 @@ class SkillComponent:
         self.north_west = np.rot90(self.north_east)
         self.south_west = np.rot90(self.north_west)
         self.south_east = np.rot90(self.south_west)
-
-import attr
-
-@attr.s(slots=True, auto_attribs=True)
-class SkillsComponent:
-    skills: list = attr.Factory(list) # list of SkillComponents.

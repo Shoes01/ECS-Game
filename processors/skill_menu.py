@@ -4,7 +4,7 @@ from _data import KEY_TO_SLOTS
 from components.actor.equipment import EquipmentComponent
 from components.actor.job import JobComponent
 from components.actor.skill_directory import SkillDirectoryComponent
-from components.item.skills import SkillsComponent, SkillComponent
+from components.item.skills import SkillPoolComponent, SkillComponent
 from components.item.slot import SlotComponent
 from processors.state import StateProcessor
 from menu import PopupMenu, PopupChoice, PopupChoiceResult, PopupChoiceCondition
@@ -47,9 +47,8 @@ class SkillMenuProcessor(esper.Processor):
                 
                 # "Populate" the bestowed skill list.
                 for item in equipped_items:
-                    if self.world.has_component(item, SkillsComponent) and self.world.component_for_entity(item, SlotComponent).slot == slot:
-                        skills = self.world.component_for_entity(item, SkillsComponent).skills
-                        for skill in skills:
+                    if self.world.has_component(item, SkillPoolComponent) and self.world.component_for_entity(item, SlotComponent).slot == slot:
+                        for skill in self.world.component_for_entity(item, SkillPoolComponent).skill_pool:
                             if self.world.component_for_entity(ent, JobComponent).job in skill.job_req:
                                 bestowed_list.append(skill.name)
 

@@ -1,6 +1,6 @@
 from _data import map, UI_COLORS
 
-from components.item.skills import SkillsComponent
+from components.item.skills import SkillPoolComponent
 from components.name import NameComponent
 
 def render_popup_menu(console_object, world):
@@ -57,8 +57,7 @@ def render_popup_menu(console_object, world):
         console.print(menu.w // 2, menu.y + dy, f"Name: {name.capitalize()}", UI_COLORS['text'])
 
         # Print the available skills of the item.
-        skills = world.component_for_entity(item, SkillsComponent).skills
-        for skill in skills:
+        for skill in world.component_for_entity(item, SkillPoolComponent).skill_pool:
             dy += 1
 
             # Turn the list of jobs into a human readable format.

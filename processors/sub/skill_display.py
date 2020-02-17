@@ -1,6 +1,6 @@
 from _data import LOG_COLORS
 from _helper_functions import as_decimal
-from components.item.skills import SkillsComponent
+from components.item.skills import SkillPoolComponent
 from components.name import NameComponent
 
 
@@ -8,7 +8,7 @@ def render_skill_display(console_object, item, world):
     console, _, _, w, h = console_object
     item_name = world.component_for_entity(item, NameComponent).original_name
     skill = None
-    for temp_skill in world.component_for_entity(item, SkillsComponent).skills:
+    for temp_skill in world.component_for_entity(item, SkillPoolComponent).skill_pool:
         if temp_skill.active:
             skill = temp_skill
     

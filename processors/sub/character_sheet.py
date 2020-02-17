@@ -3,7 +3,7 @@ from _helper_functions import as_decimal, as_integer, generate_stats
 from components.actor.equipment import EquipmentComponent
 from components.actor.job import JobComponent
 from components.actor.skill_directory import SkillDirectoryComponent
-from components.item.skills import SkillsComponent
+from components.item.skills import SkillPoolComponent
 from components.item.slot import SlotComponent 
 from components.name import NameComponent
 from components.soul import SoulComponent
@@ -120,7 +120,7 @@ def generate_equipped_items(titles, world):
         name = world.component_for_entity(item, NameComponent).original_name
         skill_comp = None
         
-        for temp_skill in world.component_for_entity(item, SkillsComponent).skills:
+        for temp_skill in world.component_for_entity(item, SkillPoolComponent).skill_pool:
             if temp_skill.active:
                 skill_comp = temp_skill
 

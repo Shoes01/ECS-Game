@@ -5,7 +5,7 @@ from _helper_functions import generate_stats
 from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.job import JobComponent
-from components.item.skills import SkillsComponent
+from components.item.skills import SkillPoolComponent
 from components.item.slot import SlotComponent
 from components.name import NameComponent
 from components.position import PositionComponent
@@ -81,7 +81,7 @@ class SkillProcessor(esper.Processor):
         for item in eqp.equipment:
             if slot == self.world.component_for_entity(item, SlotComponent).slot:
                 name = self.world.component_for_entity(item, NameComponent).original_name
-                for skill in self.world.component_for_entity(item, SkillsComponent).skills:
+                for skill in self.world.component_for_entity(item, SkillPoolComponent).skill_pool:
                     if skill.active:
                         if skill.cooldown_remaining == 0:
                             return item
@@ -120,7 +120,7 @@ class SkillProcessor(esper.Processor):
 
     def get_tiles(self, ent):
         skill_comp = None
-        for skill in self.world.component_for_entity(self._item, SkillsComponent).skills:
+        for skill in self.world.component_for_entity(self._item, SkillPoolComponent).skill_pool:
             if skill.active:
                 skill_comp = skill
                 
@@ -221,7 +221,7 @@ class SkillProcessor(esper.Processor):
 
         # Check to see if the costs can be paid.
         skill_comp = None
-        for skill in self.world.component_for_entity(self._item, SkillsComponent).skills:
+        for skill in self.world.component_for_entity(self._item, SkillPoolComponent).skill_pool:
             if skill.active:
                 skill_comp = skill
 

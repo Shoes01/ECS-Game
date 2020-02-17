@@ -4,7 +4,7 @@ from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
 from components.actor.job import JobComponent
 from components.item.jobreq import JobReqComponent
-from components.item.skills import SkillsComponent
+from components.item.skills import SkillPoolComponent
 from components.item.slot import SlotComponent
 from components.item.wearable import WearableComponent
 from components.name import NameComponent
@@ -100,7 +100,7 @@ def wear_item(ent, eqp, item, name_component, world):
     
     # Go through the skills of the item and deactivate those that don't meet the job_requirement.
     job = world.component_for_entity(ent, JobComponent).job
-    for skill in world.component_for_entity(item, SkillsComponent).skills:
+    for skill in world.component_for_entity(item, SkillPoolComponent).skill_pool:
         if job.name in skill.job_req:
             skill.active = True
         else:

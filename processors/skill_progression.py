@@ -3,7 +3,7 @@ import esper
 from components.actor.equipment import EquipmentComponent
 from components.actor.job import JobComponent
 from components.actor.skill_directory import SkillDirectoryComponent
-from components.item.skills import SkillsComponent
+from components.item.skills import SkillPoolComponent
 from queue import Queue
 
 class SkillProgressionProcessor(esper.Processor):
@@ -36,7 +36,7 @@ class SkillProgressionProcessor(esper.Processor):
             elif item and new_skill:
                 # Add this item's skill to the directory, if it is not already present.
                 skill = None
-                for s in self.world.component_for_entity(item, SkillsComponent).skills:
+                for s in self.world.component_for_entity(item, SkillPoolComponent).skill_pool:
                     if s.active:
                         skill = s
                         break
@@ -55,7 +55,7 @@ class SkillProgressionProcessor(esper.Processor):
                     other_skill = None 
 
                     # Get the skill, if there is one.
-                    for s in self.world.component_for_entity(other_item, SkillsComponent).skills:
+                    for s in self.world.component_for_entity(other_item, SkillPoolComponent).skill_pool:
                         if s.active:
                             other_skill = s.name
                             break

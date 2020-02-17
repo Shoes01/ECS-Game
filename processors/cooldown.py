@@ -1,6 +1,6 @@
 import esper
 
-from components.item.skills import SkillsComponent
+from components.item.skills import SkillPoolComponent
 from queue import Queue
 
 class CooldownProcessor(esper.Processor):
@@ -18,7 +18,7 @@ class CooldownProcessor(esper.Processor):
             tick = event.get('tick')
 
             if register_item:
-                for skill in self.world.component_for_entity(register_item, SkillsComponent).skills:
+                for skill in self.world.component_for_entity(register_item, SkillPoolComponent).skill_pool:
                     if skill.active:
                         skill.cooldown_remaining = skill.cooldown
                 self.registered_items.append(register_item)
@@ -28,7 +28,7 @@ class CooldownProcessor(esper.Processor):
 
             if tick:
                 for item in self.registered_items:
-                    for skill in self.world.component_for_entity(register_item, SkillsComponent).skills:
+                    for skill in self.world.component_for_entity(register_item, SkillPoolComponent).skill_pool:
                         if skill.active:
                             skill.cooldown_remaining -= 1
                     
