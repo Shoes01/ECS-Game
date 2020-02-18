@@ -95,11 +95,3 @@ def wear_item(ent, eqp, item, name_component, world):
     name_component.name += ' (worn)'
     eqp.equipment.append(item)
     world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'item': True})
-    
-    # Go through the skills of the item and deactivate those that don't meet the job_requirement.
-    job = world.component_for_entity(ent, JobComponent).job
-    for skill in world.component_for_entity(item, SkillPoolComponent).skill_pool:
-        if job.name in skill.job_req:
-            skill.is_active = True
-        else:
-            skill.is_active = False
