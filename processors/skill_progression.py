@@ -16,12 +16,16 @@ class SkillProgressionProcessor(esper.Processor):
 
             ap_gain = event.get('ap_gain')
             ent = event['ent']
+            skill_used = event.get('skill') # Use this? Maybe?
 
             if ap_gain:
                 # Go through each active skill and give them some AP.
                 for skill in self.world.component_for_entity(ent, SkillDirectoryComponent).skill_directory:
-                    if skill.is_active and not skill.is_mastered:
-                        skill.ap += ap_gain
+                    if skill.is_active and not skill.is_mastered:                        
+                        skill.ap += ap_gain                        
+                        if skill == skill_used:
+                            skill.ap += ap_gain # Double ap gain for the skill you actually used.
+
                         if skill.ap >= skill.ap_max:
                             skill.ap = skill.ap_max
 
