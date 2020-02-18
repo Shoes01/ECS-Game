@@ -6,7 +6,6 @@ from components.actor.job import JobComponent
 from components.actor.race import RaceComponent
 from components.actor.skill_directory import SkillDirectoryComponent
 from processors.removable import RemovableProcessor
-from processors.skill_progression import SkillProgressionProcessor 
 from processors.state import StateProcessor
 from menu import PopupMenu, PopupChoice, PopupChoiceCondition, PopupChoiceResult
 from queue import Queue
@@ -59,7 +58,6 @@ class JobProcessor(esper.Processor):
                     # Switch jobs!
                     ent_job = self.world.component_for_entity(ent, JobComponent)
                     ent_job.update_job(JOB)
-                    self.world.get_processor(SkillProgressionProcessor).queue.put({'new_job': JOB, 'ent': ent})
                     self.world.get_processor(RemovableProcessor).queue.put({'new_job': JOB, 'ent': ent})
                 
                 self.world.messages.append({'job_switch': message_data})

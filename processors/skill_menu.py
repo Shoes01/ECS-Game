@@ -22,7 +22,6 @@ class SkillMenuProcessor(esper.Processor):
             ent = event['ent']
             skill_activate = event.get('skill_activate')
             skill_letter = event.get('skill_menu')
-            skill_slot = event.get('skill_slot')
 
             equipped_items = self.world.component_for_entity(ent, EquipmentComponent).equipment
             sd_comp = self.world.component_for_entity(ent, SkillDirectoryComponent)
@@ -44,7 +43,7 @@ class SkillMenuProcessor(esper.Processor):
                 
                 # "Populate" the bestowed skill list.
                 for item in equipped_items:
-                    if self.world.has_component(item, SkillPoolComponent) and self.world.component_for_entity(item, SlotComponent).slot == slot:
+                    if self.world.component_for_entity(item, SlotComponent).slot == slot:
                         for skill in self.world.component_for_entity(item, SkillPoolComponent).skill_pool:
                             if self.world.component_for_entity(ent, JobComponent).job in skill.job_req:
                                 bestowed_list.append(skill.name)
@@ -56,21 +55,21 @@ class SkillMenuProcessor(esper.Processor):
                         _name = skill.name
                         _key = skill.name[0]
                         _processor = SkillMenuProcessor
-                        _results = ( PopupChoiceResult(result={'ent': ent, 'skill_activate': skill, 'skill_slot': slot}, processor=_processor),)
+                        _results = ( PopupChoiceResult(result={'ent': ent, 'skill_activate': skill}, processor=_processor),)
                         menu.contents.append(PopupChoice(name=_name, key=_key, results=_results))
 
                 self.world.get_processor(StateProcessor).queue.put({'popup': menu})
             
             # Activate the chosen skill.
-            elif skill_activate and skill_slot:
+            elif skill_activate:
                 new_skill = True
 
                 for skill in sd_comp.skill_directory:
                     # Deactivate all skills for this slot.
-                    if skill.slot == skill_slot:
+                    if skill.slot == skill_activate.slot:
                         skill.is_active = False
                         # Except the chosen skill.
-                        if skill.name = skill_activate:
+                        if skill.name == skill_activate.name:
                             skill.is_active = True
                             new_skill = False
                 
