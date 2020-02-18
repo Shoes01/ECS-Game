@@ -146,18 +146,8 @@ class InputProcessor(esper.Processor):
             self.world.get_processor(SkillProcessor).queue.put({'ent': 1, 'skill_move': result['move']})
         elif key_scancode == libtcod.event.SCANCODE_ESCAPE:
             self.world.get_processor(SkillProcessor).queue.put({'ent': 1, 'skill_clear': True})
-        elif key_char == 'q':
-            self.world.get_processor(SkillProcessor).queue.put({'ent': 1, 'skill_prepare': 'mainhand'})
-        elif key_char == 'w':
-            self.world.get_processor(SkillProcessor).queue.put({'ent': 1, 'skill_prepare': 'head'})
-        elif key_char == 'e':
-            self.world.get_processor(SkillProcessor).queue.put({'ent': 1, 'skill_prepare': 'accessory'})
-        elif key_char == 'a':
-            self.world.get_processor(SkillProcessor).queue.put({'ent': 1, 'skill_prepare': 'offhand'})
-        elif key_char == 's':
-            self.world.get_processor(SkillProcessor).queue.put({'ent': 1, 'skill_prepare': 'torso'})
-        elif key_char == 'd':
-            self.world.get_processor(SkillProcessor).queue.put({'ent': 1, 'skill_prepare': 'feet'})
+        elif key_char in ['q', 'w', 'e', 'a', 's', 'd']:
+            self.world.get_processor(SkillProcessor).queue.put({'skill_prepare': key_char, 'ent': 1})
         elif key_scancode == libtcod.event.SCANCODE_SPACE:
             self.world.get_processor(SkillProcessor).queue.put({'ent': 1, 'skill_confirm': True})
 
