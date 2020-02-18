@@ -5,6 +5,7 @@ import shelve
 import tcod as libtcod
 
 from _data import con, eqp, log, map, AI, ENTITY_COLORS, JOBS, MULTIPLIER, RACES, RARITIES, SLOTS, SPRITES
+from _helper_functions import create_skill
 from camera import Camera
 from cursor import Cursor
 from load_tileset import load_tileset
@@ -274,7 +275,7 @@ class GameWorld(esper.World):
                 RaceComponent(race=RACES.HUMAN),
                 PositionComponent(),
                 RenderComponent(color_bg=None, char='@', codepoint=SPRITES['player'], color_fg=ENTITY_COLORS['player'], color_explored=None),
-                SkillDirectoryComponent(),
+                SkillDirectoryComponent([create_skill(self._json_data, 'heal', SLOTS.MAINHAND)]),
                 SoulComponent(eccentricity=5, max_rarity=10, new_game=True),
                 StatsComponent(hp=500, attack=10)
             )
@@ -360,36 +361,25 @@ class GameWorld(esper.World):
                 self.add_component(ent, RenderComponent(color_bg=ENTITY_COLORS.get(color_bg), char=char, codepoint=SPRITES[codepoint], color_fg=ENTITY_COLORS[color_fg], color_explored=ENTITY_COLORS.get(color_explored)))
 
             elif key == 'skill':
+                ' SkillComponents never exist in a vacuum. If they are invoked here, it is because an item entity will hold the skill. '
                 names = value
+                
+                jr_comp = self.component_for_entity(ent, JobReqComponent) # Samsies.
+                sp_comp = self.component_for_entity(ent, SkillPoolComponent) # Samsies.
+                s_comp = self.component_for_entity(ent, SlotComponent) # Hopefully SlotComponent exists before this is invoked...
 
                 if type(names) is not list: 
                     names = [names,]
                 
-                for name in names:
-                    ap_max = self._json_data[name].get('ap_max')
-                    cooldown = self._json_data[name].get('cooldown')
-                    cost_energy = self._json_data[name].get('cost_energy')
-                    cost_soul = self._json_data[name].get('cost_soul')
-                    damage_type = self._json_data[name].get('damage_type')
-                    description = self._json_data[name].get('description')
-                    east = self._json_data[name].get('east')
-                    if self._json_data[name].get('job_requirement') is None: print(f"Item {name} has no job_requirement.")
-                    job_req = self._json_data[name].get('job_requirement')
-                    north_east = self._json_data[name].get('north_east')
+                for name in names:                    
+                    skill_component = create_skill(self._json_data, name, s_comp.slot)
 
-                    skill_component = SkillComponent(ap_max=ap_max, cooldown=cooldown, cost_energy=cost_energy, cost_soul=cost_soul, damage_type=damage_type, description=description, job_req=job_req, name=name, east=east, north_east=north_east)
-
-                    # If this causes a crash, it's because the entity doesn't have a SkillPoolComponent. Somehow.
-                    self.component_for_entity(ent, SkillPoolComponent).skill_pool.append(skill_component)
+                    # Add the job required for this skill to the item's job requirements, if it's not already there.
+                    if skill_component.job_req not in jr_comp.job_req:
+                        jr_comp.job_req.append(skill_component.job_req)
                     
-                    # TODO: At this point, should the job of the skill be added to the job_req of the item? 
-                    if self.has_component(ent, ItemComponent):
-                        for _, job in JOBS.__dict__.items():
-                            if job.name in job_req:
-                                if self.has_component(ent, JobReqComponent):
-                                    self.component_for_entity(ent, JobReqComponent).job_req.append(job)
-                                else:
-                                    self.add_component(ent, JobReqComponent(job_req=[job,]))
+                    # Add this skill to the item's pool of masterable skills.
+                    sp_comp.skill_pool.append(skill_component)
 
             elif key == 'slot':
                 for _, slot in SLOTS.__dict__.items():

@@ -1,7 +1,7 @@
 import numpy as np
 
 class SkillComponent:
-    def __init__(self, ap_max, cooldown, cost_energy, cost_soul, damage_type, description, job_req, name, east, north_east):
+    def __init__(self, ap_max, cooldown, cost_energy, cost_soul, damage_type, description, job_req, name, east, north_east, slot=""):
         ' Skill flags. '
         self.is_active = False
         
@@ -16,6 +16,7 @@ class SkillComponent:
         self.description = description
         self.job_req = job_req # Type: str. Should only ever be one job req per skill.
         self.name = name
+        self.slot = slot
 
         ' Skill directions. '
         self.east = np.array(east)

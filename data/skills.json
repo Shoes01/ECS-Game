@@ -95,12 +95,37 @@
             [0, 0, 0, 4, 3],
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0]
-        ],        
+        ],
         "north_east":
         [
             [0, 0, 0, 0, 3],
             [0, 0, 0, 4, 0],
             [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0]
+        ]
+    },
+    "heal":{
+        "ap_max": 0,
+        "cooldown": 3,
+        "cost_energy": 0,
+        "cost_soul": {"speed": 2, "hp": -10, "magic": 2, "defense": 2, "resistance": 2, "attack": 2},
+        "damage_type": "heal",
+        "description": "First aid for your soul.",
+        "job_requirement": ["soldier"],
+        "east":
+        [
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0]
+        ],        
+        "north_east":
+        [
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0],
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0]
         ]

@@ -45,6 +45,8 @@ class CombatProcessor(esper.Processor):
                     damage = att_stats['attack'] - def_stats['defense']
                 elif damage_type == 'magical':
                     damage = att_stats['magic'] - def_stats['resistance']
+                elif damage_type == 'heal':
+                    damage = 0
                 
                 if double_attack and not skill:
                     damage += damage # Deal double damage
