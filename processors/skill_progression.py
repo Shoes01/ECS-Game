@@ -36,16 +36,12 @@ class SkillProgressionProcessor(esper.Processor):
                     sd_comp.skill_directory.append(skill)
 
             elif ap_gain:
-                # Go through each item that is equipped, and add AP to its skill.
-                newly_maxed = False
-
+                # Go through each active skill and give them some AP.
                 for skill in sd_comp.skill_directory:
                     if skill.is_active and not skill.is_mastered:
                         skill.ap += ap_gain
                         if skill.ap >= skill.ap_max:
-                            newly_maxed = True
                             skill.ap = skill.ap_max
 
-                if newly_maxed:
-                    message_data = {'name': other_skill}
-                    self.world.messages.append({'skill_mastered': message_data})
+                            self.world.messages.append({'skill_mastered': {'name': skill.name}})
+                    
