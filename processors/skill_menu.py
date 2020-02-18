@@ -25,8 +25,9 @@ class SkillMenuProcessor(esper.Processor):
             skill_slot = event.get('skill_slot')
 
             equipped_items = self.world.component_for_entity(ent, EquipmentComponent).equipment
-            skill_directory = self.world.component_for_entity(ent, SkillDirectoryComponent).skill_directory
+            sd_comp = self.world.component_for_entity(ent, SkillDirectoryComponent)
 
+            # Create and display a menu of possible skills that may be activated.
             if skill_letter:
                 slot = KEY_TO_SLOTS[skill_letter]
 
@@ -35,7 +36,7 @@ class SkillMenuProcessor(esper.Processor):
                 bestowed_list = [] # This should just be the one skill bestowed by the equipped item.
 
                 # Populate mastered and unmastered lists.
-                for skill in skill_directory:
+                for skill in sd_comp.skill_directory:
                     if skill.is_mastered:
                         mastered_list.append(skill.name)
                     else:
@@ -52,17 +53,27 @@ class SkillMenuProcessor(esper.Processor):
                 
                 for _list in (mastered_list, unmastered_list, bestowed_list):
                     for skill in _list:
-                        _name = skill
-                        _key = skill[0]
+                        _name = skill.name
+                        _key = skill.name[0]
                         _processor = SkillMenuProcessor
                         _results = ( PopupChoiceResult(result={'ent': ent, 'skill_activate': skill, 'skill_slot': slot}, processor=_processor),)
                         menu.contents.append(PopupChoice(name=_name, key=_key, results=_results))
 
                 self.world.get_processor(StateProcessor).queue.put({'popup': menu})
             
+            # Activate the chosen skill.
             elif skill_activate and skill_slot:
-                for skill in skill_directory:
+                new_skill = True
+
+                for skill in sd_comp.skill_directory:
+                    # Deactivate all skills for this slot.
                     if skill.slot == skill_slot:
                         skill.is_active = False
+                        # Except the chosen skill.
                         if skill.name = skill_activate:
                             skill.is_active = True
+                            new_skill = False
+                
+                if new_skill:
+                    skill_activate.is_active = True
+                    sd_comp.skill_directory.append(skill_activate)

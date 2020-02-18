@@ -16,28 +16,10 @@ class SkillProgressionProcessor(esper.Processor):
 
             ap_gain = event.get('ap_gain')
             ent = event['ent']
-            item = event.get('item')
-            new_job = event.get('new_job')
-            new_skill = event.get('new_skill')
 
-            job = self.world.component_for_entity(ent, JobComponent).job
-            sd_comp = self.world.component_for_entity(ent, SkillDirectoryComponent)                
-
-            if item and new_skill:
-                # Add this item's skill to the directory, if it is not already present.
-                skill = None
-                # TODO: This will change soon.
-                for s in self.world.component_for_entity(item, SkillPoolComponent).skill_pool:
-                    if s.is_active:
-                        skill = s
-                        break
-                
-                if skill and job.name in skill.job_req and skill not in sd_comp.skill_directory:
-                    sd_comp.skill_directory.append(skill)
-
-            elif ap_gain:
+            if ap_gain:
                 # Go through each active skill and give them some AP.
-                for skill in sd_comp.skill_directory:
+                for skill in self.world.component_for_entity(ent, SkillDirectoryComponent).skill_directory:
                     if skill.is_active and not skill.is_mastered:
                         skill.ap += ap_gain
                         if skill.ap >= skill.ap_max:
