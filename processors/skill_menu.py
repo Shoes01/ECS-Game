@@ -21,6 +21,7 @@ class SkillMenuProcessor(esper.Processor):
 
             ent = event['ent']
             skill_activate = event.get('skill_activate')
+            skill_deactivate = event.get('skill_deactivate')
             skill_letter = event.get('skill_menu')
 
             equipped_items = self.world.component_for_entity(ent, EquipmentComponent).equipment
@@ -76,3 +77,10 @@ class SkillMenuProcessor(esper.Processor):
                 if new_skill:
                     skill_activate.is_active = True
                     sd_comp.skill_directory.append(skill_activate)
+
+            elif skill_deactivate:
+                # Deactivating all skills that belong to a slot is overkill, but this makes sure that one slot only ever has one skill active...
+                for skill in sd_comp.skill_directory:
+                    # Deactivate all skills for this slot.
+                    if skill.slot == skill_deactivate.slot:
+                        skill.is_active = False
