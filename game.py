@@ -96,7 +96,7 @@ class GameWorld(esper.World):
         self._json_data = self.load_data()
 
         ' Tables. '
-        self.table_item, self.table_job_skill, self.table_monster, self.table_slot_skill = self.load_tables()
+        self.table_item, self.table_job_skill, self.table_monster = self.load_tables()
 
         ' Objects. '
         self.camera = Camera(x=0, y=0, w=map.w // MULTIPLIER, h=map.h // MULTIPLIER, leash=3) # TODO: The map values from _data might need to be renamed...
@@ -246,7 +246,7 @@ class GameWorld(esper.World):
                 else:
                     print(f"WARNING: There are two skills in the slot {slot} that start with the letter {skill[0]}. {skill} is one of them.")
         
-        return table_item, table_job_skill, table_monster, table_slot_skill
+        return table_item, table_job_skill, table_monster
 
     def save_game(self):
         with shelve.open('savegame', 'n') as data_file:

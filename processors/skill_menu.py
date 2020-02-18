@@ -30,8 +30,6 @@ class SkillMenuProcessor(esper.Processor):
             if skill_letter:
                 slot = KEY_TO_SLOTS[skill_letter]
 
-                entire_skill_list = self.world.table_slot_skill[slot] # This is the full list of possible skills for this slot.
-
                 mastered_list = []
                 unmastered_list = []
                 bestowed_list = [] # This should just be the one skill bestowed by the equipped item.
@@ -63,13 +61,8 @@ class SkillMenuProcessor(esper.Processor):
                 self.world.get_processor(StateProcessor).queue.put({'popup': menu})
             
             elif skill_activate and skill_slot:
-                # Infer slot. Oof, this got ugly.
-                for slot, skills in self.world.table_slot_skill.items():
-                    if slot == skill_slot:
-                        for skill in skill_directory:
-                            if skill.name in skills:
-                                skill.is_active = False
-                                if skill_activate == skill.name:
-                                    skill.is_active = True
-                    elif skill_activate not in skills:
-                        print("ERROR Skill slots are not lining up with jsons and data tables.")
+                for skill in skill_directory:
+                    if skill.slot == skill_slot:
+                        skill.is_active = False
+                        if skill.name = skill_activate:
+                            skill.is_active = True
