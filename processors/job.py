@@ -6,6 +6,7 @@ from components.actor.job import JobComponent
 from components.actor.race import RaceComponent
 from components.actor.skill_directory import SkillDirectoryComponent
 from processors.removable import RemovableProcessor
+from processors.skill_menu import SkillMenuProcessor
 from processors.state import StateProcessor
 from menu import PopupMenu, PopupChoice, PopupChoiceCondition, PopupChoiceResult
 from queue import Queue
@@ -20,19 +21,18 @@ class JobProcessor(esper.Processor):
             event = self.queue.get()
 
             ent = event['ent']
-            JOB = event.get('JOB')
+            job = event.get('job')
 
-            if not JOB:
+            if not job:
                 menu = PopupMenu(title='Which job would you like to adopt?', reveal_all=False)
 
-                for _, JOB in JOBS.__dict__.items():
-                    job = JOB
+                for _, job in JOBS.__dict__.items():
                     _description = job.description
                     _name = job.name
                     _key = job.name[0]
-                    _result = {'ent': ent, 'JOB': JOB}
+                    _result = {'ent': ent, 'job': job}
                     _processor = JobProcessor
-                    _validity, _, _conditions = check_validity(ent, JOB, self.world)
+                    _validity, _, _conditions = check_validity(ent, job, self.world)
                     
                     menu.contents.append(
                         PopupChoice(
@@ -52,19 +52,19 @@ class JobProcessor(esper.Processor):
                 self.world.get_processor(StateProcessor).queue.put({'popup': menu})
 
             else:
-                valid, message_data, _ = check_validity(ent, JOB, self.world)
+                valid, message_data, _ = check_validity(ent, job, self.world)
                 
                 if valid:
                     # Switch jobs!
                     ent_job = self.world.component_for_entity(ent, JobComponent)
-                    ent_job.update_job(JOB)
-                    self.world.get_processor(RemovableProcessor).queue.put({'new_job': JOB, 'ent': ent})
+                    ent_job.update_job(job)
+                    self.world.get_processor(RemovableProcessor).queue.put({'ent': ent, 'new_job': job})
+                    self.world.get_processor(SkillMenuProcessor).queue.put({'ent': ent, 'new_job': job})
                 
                 self.world.messages.append({'job_switch': message_data})
 
-def check_validity(ent, JOB, world):
+def check_validity(ent, job, world):
     conditions = []
-    job = JOB
     message_data = {}
     
     # Race validity.

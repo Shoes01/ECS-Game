@@ -20,6 +20,7 @@ class SkillMenuProcessor(esper.Processor):
             event = self.queue.get()
 
             ent = event['ent']
+            new_job = event.get('new_job')
             skill_activate = event.get('skill_activate')
             skill_deactivate = event.get('skill_deactivate')
             skill_letter = event.get('skill_menu')
@@ -81,6 +82,11 @@ class SkillMenuProcessor(esper.Processor):
             elif skill_deactivate:
                 # Deactivating all skills that belong to a slot is overkill, but this makes sure that one slot only ever has one skill active...
                 for skill in sd_comp.skill_directory:
-                    # Deactivate all skills for this slot.
                     if skill.slot == skill_deactivate.slot:
+                        skill.is_active = False
+            
+            elif new_job:
+                # Jobs don't share skills, so it's safe to simply deactivate all unmastered jobs.
+                for skill in sd_comp.skill_directory:
+                    if not skill.is_mastered:
                         skill.is_active = False
