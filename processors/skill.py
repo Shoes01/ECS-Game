@@ -189,7 +189,7 @@ class SkillProcessor(esper.Processor):
 
     def do_skill(self, ent, direction, item, results):
         error = 'no_error'
-        name = self.world.component_for_entity(item, NameComponent).original_name
+        name = self._skill.name
         turn = self.world.turn
 
         # These are conditions under which the skill does not fire.
@@ -203,16 +203,14 @@ class SkillProcessor(esper.Processor):
             return 0
 
         # Check to see if the costs can be paid.
-        skill_comp = None
-        for skill in self.world.component_for_entity(self._item, SkillPoolComponent).skill_pool:
-            if skill.is_active:
-                skill_comp = skill
-
         ent_stats = generate_stats(ent, self.world)
         insufficient_stats = []
+        skill_comp = self._skill
+
         for stat, cost in skill_comp.cost_soul.items():
             if ent_stats[stat] < cost:
                 insufficient_stats.append(stat)
+        
         if insufficient_stats:
             error_message = ''
             for stat in insufficient_stats:
@@ -222,7 +220,7 @@ class SkillProcessor(esper.Processor):
             return 0
         
         # Pay the costs.
-        self.world.get_processor(CooldownProcessor).queue.put({'register_item': item, 'register_skill_component': skill_comp})
+        self.world.get_processor(CooldownProcessor).queue.put({'register_skill_component': skill_comp})
         self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'skill': skill_comp.cost_energy})
         ent_stats_comp = self.world.component_for_entity(ent, StatsComponent)
         for stat, cost in skill_comp.cost_soul.items():
