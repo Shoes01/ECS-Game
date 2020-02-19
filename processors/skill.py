@@ -5,6 +5,7 @@ from _helper_functions import generate_stats
 from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.job import JobComponent
+from components.actor.skill_directory import SkillDirectoryComponent
 from components.item.skill_pool import SkillPoolComponent
 from components.item.slot import SlotComponent
 from components.name import NameComponent
@@ -24,8 +25,8 @@ class SkillProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
         self.queue = Queue()
-        self._item = None
         self._direction = None
+        self._skill = None
         
     def process(self):
         while not self.queue.empty():
@@ -40,9 +41,10 @@ class SkillProcessor(esper.Processor):
 
             if skill_letter:
                 slot = KEY_TO_SLOTS[skill_letter]
-                self._item = self.find_item(ent, slot)
+                self._skill = self.find_skill(ent, slot)
                 self._direction = (1, 0)
-                if self._item:
+
+                if self._skill:
                     results = self.get_tiles(ent)
                     self.highlight_tiles(results['tiles'])
                     self.world.get_processor(StateProcessor).queue.put({'skill_targeting': True})
@@ -71,36 +73,23 @@ class SkillProcessor(esper.Processor):
                 self.world.get_processor(StateProcessor).queue.put({'exit': True})
                 self.world.get_processor(RenderProcessor).queue.put({'item': False, 'redraw': True})
 
-    def find_item(self, ent, slot):
-        eqp = self.world.component_for_entity(ent, EquipmentComponent)
-        has_item = False
-        name = None
-        on_cooldown = False
-        turn = self.world.turn
+    def find_skill(self, ent, slot):
+        error = ''
+        skill = None
 
-        for item in eqp.equipment:
-            if slot == self.world.component_for_entity(item, SlotComponent).slot:
-                name = self.world.component_for_entity(item, NameComponent).original_name
-                for skill in self.world.component_for_entity(item, SkillPoolComponent).skill_pool:
-                    if skill.is_active:
-                        if skill.cooldown_remaining == 0:
-                            return item
-                        else:
-                            on_cooldown = True
+        for s in self.world.component_for_entity(ent, SkillDirectoryComponent).skill_directory:
+            if s.slot == slot and s.is_active:
+                if s.cooldown_remaining == 0:
+                    skill = s
                 else:
-                    has_item = True
-                    legal_item = False                    
-            else:
-                has_item = False
-                
-        if on_cooldown:
-            error = 'on_cooldown'
-        elif has_item:
-            error = 'no_legal_item'
+                    error = 'on_cooldown'
+                break
         else:
-            error = 'no_item'
+            error = 'no_skill_active'
+        
+        self.world.messages.append({'skill': (error, skill, turn = self.world.turn)})
 
-        self.world.messages.append({'skill': (error, name, turn)})
+        return skill
 
     def get_direction_name(self, direction):
         x, y = direction
@@ -118,21 +107,15 @@ class SkillProcessor(esper.Processor):
         
         return direction
 
-    def get_tiles(self, ent):
-        skill_comp = None
-        for skill in self.world.component_for_entity(self._item, SkillPoolComponent).skill_pool:
-            if skill.is_active:
-                skill_comp = skill
-                
-        array_of_effect = skill_comp.__dict__[self.get_direction_name(self._direction)]
+    def get_tiles(self, ent):                
+        array_of_effect = self._skill.__dict__[self.get_direction_name(self._direction)]
         pos = self.world.component_for_entity(ent, PositionComponent)
         xc, yc = pos.x, pos.y
 
         destination = None # ID
         targets = [] # [ID]
         tiles = {} # {ID: color_fg}
-        legal_target = True
-        
+        legal_target = True        
 
         for y in range(0, array_of_effect.shape[1]):
             for x in range(0, array_of_effect.shape[0]):
