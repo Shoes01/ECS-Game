@@ -48,7 +48,7 @@ class SkillProcessor(esper.Processor):
                     results = self.get_tiles(ent)
                     self.highlight_tiles(results['tiles'])
                     self.world.get_processor(StateProcessor).queue.put({'skill_targeting': True})
-                    self.world.get_processor(RenderProcessor).queue.put({'item': self._item, 'redraw': True})
+                    self.world.get_processor(RenderProcessor).queue.put({'skill': self._skill, 'redraw': True})
 
             elif move:
                 (dx, dy) = move
@@ -60,18 +60,18 @@ class SkillProcessor(esper.Processor):
                 self.queue.put({'ent': ent, 'skill_clear': True})
                 if ent == 1:
                     results = self.get_tiles(ent)
-                    self.do_skill(ent, self._direction, self._item, results)
+                    self.do_skill(ent, self._direction, self._skill, results)
                 else:
-                    self.do_skill(ent, event['direction'], event['item'], results)
+                    self.do_skill(ent, event['direction'], event['skill'], results) # This piece of code will never be used until monster AI understands skills.
 
             elif clear:
                 if ent == 1:
                     results = self.get_tiles(ent)
                     self.unhighlight_tiles(results['tiles'])                    
-                self._item = None
+                self._skill = None
                 self._direction = None
                 self.world.get_processor(StateProcessor).queue.put({'exit': True})
-                self.world.get_processor(RenderProcessor).queue.put({'item': False, 'redraw': True})
+                self.world.get_processor(RenderProcessor).queue.put({'skill': False, 'redraw': True})
 
     def find_skill(self, ent, slot):
         error = ''
@@ -187,25 +187,18 @@ class SkillProcessor(esper.Processor):
         for tile, color_fg in tiles.items():
             self.world.component_for_entity(tile, RenderComponent).highlight_color = color_fg
 
-    def do_skill(self, ent, direction, item, results):
-        error = 'no_error'
-        name = self._skill.name
-        turn = self.world.turn
-
+    def do_skill(self, ent, direction, skill_comp, results):
         # These are conditions under which the skill does not fire.
         if not results['legal_target']:
-            error = 'no_legal_target'
-            self.world.messages.append({'skill': (error, name, turn)})
+            self.world.messages.append({'skill': ('no_legal_target', skill_comp.name, self.world.turn)})
             return 0
         elif not results['targets'] and not results['destination']:
-            error = 'no_legal_tile'
-            self.world.messages.append({'skill': (error, name, turn)})
+            self.world.messages.append({'skill': ('no_legal_tile', skill_comp.name, self.world.turn)})
             return 0
 
         # Check to see if the costs can be paid.
         ent_stats = generate_stats(ent, self.world)
         insufficient_stats = []
-        skill_comp = self._skill
 
         for stat, cost in skill_comp.cost_soul.items():
             if ent_stats[stat] < cost:

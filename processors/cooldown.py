@@ -13,7 +13,7 @@ class CooldownProcessor(esper.Processor):
         while not self.queue.empty():
             event = self.queue.get()
 
-            register_item = event.get('register')
+            register_item = event.get('register') # TODO: Remove item reference
             remove_item = event.get('remove')
             tick = event.get('tick')
 

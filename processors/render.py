@@ -19,7 +19,7 @@ from queue import Queue
 class RenderProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
-        self.item = None
+        self.skill = None
         self.queue = Queue()
         
         self.queue.put({'redraw': True})
@@ -34,10 +34,10 @@ class RenderProcessor(esper.Processor):
             # Every event is read and remembered, and then all done on the same tick.
             event = self.queue.get()
 
-            if event.get('item'):
-                self.item = event['item']
-            if event.get('item') is False:
-                self.item = None
+            if event.get('skill'):
+                self.skill = event['skill']
+            if event.get('skill') is False:
+                self.skill = None
             if event.get('new_turn'):
                 _new_turn = event.get('new_turn')
             if event.get('redraw'):
@@ -54,7 +54,7 @@ class RenderProcessor(esper.Processor):
         # Draw each console.
         self.draw_map(console=self.world.consoles['map'], state=self.world.state, soul=_soul, world=self.world)
         self.draw_stats(console=self.world.consoles['stats'], state=self.world.state, world=self.world)
-        self.draw_log(console=self.world.consoles['log'], item=self.item, new_turn=_new_turn, state=self.world.state, world=self.world)
+        self.draw_log(console=self.world.consoles['log'], skill=self.skill, new_turn=_new_turn, state=self.world.state, world=self.world)
 
         # Blit the consoles.
         for key, value in self.world.consoles.items():
@@ -74,9 +74,9 @@ class RenderProcessor(esper.Processor):
         if state != MainMenu and state != NewGame:
             render_stats(console, world)
     
-    def draw_log(self, console, item, new_turn, state, world):
+    def draw_log(self, console, skill, new_turn, state, world):
         if state == SkillTargeting:
-            render_skill_display(console, item, world)
+            render_skill_display(console, skill, world)
         elif state != MainMenu and state != NewGame:
             render_message_log(console, new_turn, world)
 
