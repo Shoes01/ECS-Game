@@ -1,7 +1,7 @@
 import esper
 import numpy as np
 
-from _data import JOBS, RACES
+from _data import Jobs, Races
 
 from components.actor.job import JobComponent
 from components.actor.race import RaceComponent
@@ -25,7 +25,7 @@ class NewGameProcessor(esper.Processor):
 
             if new_game:
                 ########
-                # JOBS #
+                # Jobs #
                 ########
 
                 ###### Human Jobs! ########################
@@ -34,7 +34,7 @@ class NewGameProcessor(esper.Processor):
                 ## Soldier
                 _name = 'Soldier'
                 _key = 's'
-                _result = {'select_race': RACES.HUMAN, 'select_job': JOBS.SOLDIER}
+                _result = {'select_race': Races.HUMAN, 'select_job': Jobs.SOLDIER}
                 _description = 'A regular soldier.'
                 _results = (PopupChoiceResult(result=_result, processor=_processor),)
 
@@ -43,7 +43,7 @@ class NewGameProcessor(esper.Processor):
                 ## Thief
                 _name = 'Thief'
                 _key = 't'
-                _result = {'select_race': RACES.HUMAN, 'select_job': JOBS.THIEF}
+                _result = {'select_race': Races.HUMAN, 'select_job': Jobs.THIEF}
                 _description = 'A regular thief.'
                 _results = (PopupChoiceResult(result=_result, processor=_processor),)
 
@@ -55,14 +55,14 @@ class NewGameProcessor(esper.Processor):
                 ## Rogue
                 _name = 'Rogue'
                 _key = 'r'
-                _result = {'select_race': RACES.ELF, 'select_job': JOBS.ROGUE}
+                _result = {'select_race': Races.ELF, 'select_job': Jobs.ROGUE}
                 _description = 'A dashing rogue.'
                 _results = (PopupChoiceResult(result=_result, processor=_processor),)
 
                 menu_elf_jobs.contents.append(PopupChoice(name=_name, key=_key, results=_results, description=_description))                
 
                 #########
-                # RACES #
+                # Races #
                 #########
 
                 menu_race = PopupMenu(title='Choose a Race.', include_esc=False, auto_close=False)

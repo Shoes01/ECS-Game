@@ -4,7 +4,7 @@ import os
 import shelve
 import tcod as libtcod
 
-from _data import con, eqp, log, map, AI, ENTITY_COLORS, JOBS, MULTIPLIER, RACES, RARITIES, SLOTS, SPRITES
+from _data import con, eqp, log, map, AI, ENTITY_COLORS, Jobs, MULTIPLIER, Races, Rarities, Slots, SPRITES
 from _helper_functions import create_skill
 from camera import Camera
 from cursor import Cursor
@@ -206,12 +206,12 @@ class GameWorld(esper.World):
         table_monster = [[] for i in range(8)]
         table_job_skill = {}
         table_slot_skill = {
-            SLOTS.MAINHAND: [],
-            SLOTS.OFFHAND: [],
-            SLOTS.TORSO: [],
-            SLOTS.FEET: [],
-            SLOTS.HEAD: [],
-            SLOTS.ACCESSORY: []
+            Slots.MAINHAND: [],
+            Slots.OFFHAND: [],
+            Slots.TORSO: [],
+            Slots.FEET: [],
+            Slots.HEAD: [],
+            Slots.ACCESSORY: []
         }
         
         for ent, components in self._json_data.items():
@@ -268,14 +268,14 @@ class GameWorld(esper.World):
                 EnergyComponent(energy=0),
                 EquipmentComponent(),
                 InventoryComponent(),
-                JobComponent(job=JOBS.SOLDIER, upkeep={}),
+                JobComponent(job=Jobs.SOLDIER, upkeep={}),
                 NameComponent(name='Player'),
                 PersistComponent(),
                 PlayerComponent(),
-                RaceComponent(race=RACES.HUMAN),
+                RaceComponent(race=Races.HUMAN),
                 PositionComponent(),
                 RenderComponent(color_bg=None, char='@', codepoint=SPRITES['player'], color_fg=ENTITY_COLORS['player'], color_explored=None),
-                SkillDirectoryComponent([create_skill(self._json_data, 'heal', SLOTS.MAINHAND)]),
+                SkillDirectoryComponent([create_skill(self._json_data, 'heal', Slots.MAINHAND)]),
                 SoulComponent(eccentricity=5, max_rarity=10, new_game=True),
                 StatsComponent(hp=500, attack=10)
             )
@@ -290,10 +290,10 @@ class GameWorld(esper.World):
                     self.add_component(ent, EnergyComponent())
                     self.add_component(ent, EquipmentComponent())
                     self.add_component(ent, InventoryComponent())
-                    self.add_component(ent, JobComponent(job=JOBS.MONSTER, upkeep={}))
+                    self.add_component(ent, JobComponent(job=Jobs.MONSTER, upkeep={}))
                     self.add_component(ent, SkillDirectoryComponent())
                     self.add_component(ent, PositionComponent())
-                    self.add_component(ent, RaceComponent(race=RACES.MONSTER))
+                    self.add_component(ent, RaceComponent(race=Races.MONSTER))
                 elif value == 'item':
                     self.add_component(ent, ItemComponent())
                     self.add_component(ent, PositionComponent())
@@ -330,7 +330,7 @@ class GameWorld(esper.World):
 
             elif key == 'job_requirement':
                 job_list = value
-                for _, job in JOBS.__dict__.items():
+                for _, job in Jobs.__dict__.items():
                     if job.name in job_list:
                         if self.has_component(ent, JobReqComponent):
                             self.component_for_entity(ent, JobReqComponent).job_req.append(job)
@@ -345,7 +345,7 @@ class GameWorld(esper.World):
                 self.add_component(ent, PositionComponent())
             
             elif key == 'rarity':
-                for _, rarity in RARITIES.__dict__.items():
+                for _, rarity in Rarities.__dict__.items():
                     if rarity.rank == value:
                         self.add_component(ent, RarityComponent(rarity=rarity))
                         break
@@ -382,7 +382,7 @@ class GameWorld(esper.World):
                     sp_comp.skill_pool.append(skill_component)
 
             elif key == 'slot':
-                for _, slot in SLOTS.__dict__.items():
+                for _, slot in Slots.__dict__.items():
                     if slot == value:
                         self.add_component(ent, SlotComponent(slot=slot))
                         break

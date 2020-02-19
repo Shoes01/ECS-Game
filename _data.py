@@ -265,24 +265,24 @@ class Slots():
     FEET: str = 'feet'          # d
     ACCESSORY: str = 'accessory' # e
 
-SLOTS = Slots()
+Slots = Slots()
 
 SLOTS_TO_KEY = {
-    SLOTS.HEAD: 'w',
-    SLOTS.TORSO: 's',
-    SLOTS.MAINHAND: 'q',
-    SLOTS.OFFHAND: 'a',
-    SLOTS.FEET: 'd',
-    SLOTS.ACCESSORY: 'e'
+    Slots.HEAD: 'w',
+    Slots.TORSO: 's',
+    Slots.MAINHAND: 'q',
+    Slots.OFFHAND: 'a',
+    Slots.FEET: 'd',
+    Slots.ACCESSORY: 'e'
 }
 
 KEY_TO_SLOTS = {
-    'w': SLOTS.HEAD,
-    's': SLOTS.TORSO,
-    'q': SLOTS.MAINHAND,
-    'a': SLOTS.OFFHAND,
-    'd': SLOTS.FEET,
-    'e': SLOTS.ACCESSORY
+    'w': Slots.HEAD,
+    's': Slots.TORSO,
+    'q': Slots.MAINHAND,
+    'a': Slots.OFFHAND,
+    'd': Slots.FEET,
+    'e': Slots.ACCESSORY
 }
 
 # Races
@@ -295,7 +295,7 @@ class Races():
     ORC: str = 'orc'
     GOBLIN: str = 'goblin'
 
-RACES = Races()
+Races = Races()
 
 # AIs
 @attr.s(auto_attribs=True)
@@ -320,47 +320,47 @@ class Jobs:
     MONSTER: Job = Job(
         description="Placeholder job for monsters.",
         name='monster job',
-        races=(RACES.MONSTER,),
+        races=(Races.MONSTER,),
         skills={},
         upkeep={}
     )
     SOLDIER: Job = Job(
         description="Baby's first job.",
         name='soldier', 
-        races=(RACES.HUMAN,),
+        races=(Races.HUMAN,),
         skills={},
         upkeep={}
     )
     WARRIOR: Job = Job(
         description='Has access to more devastating skills.', # Not rly.
         name='warrior',
-        races=(RACES.HUMAN,),
+        races=(Races.HUMAN,),
         skills={},
         upkeep={'magic': 1, 'speed': 2}
     )
     BERSERKER: Job = Job(
         description='Classic orc.',
         name='berserker',
-        races=(RACES.ORC,),
+        races=(Races.ORC,),
         skills={},
         upkeep={'speed': 1, 'hp': 1}
     )
     ROGUE: Job = Job(
         description='A job for seasoned fighters.',
         name='rogue',
-        races=(RACES.HUMAN, RACES.GOBLIN, RACES.ELF),
+        races=(Races.HUMAN, Races.GOBLIN, Races.ELF),
         skills={'soldier': 1},
         upkeep={'speed': 1, 'hp': 15}
     )
     THIEF: Job = Job(
         description='A stealer.',
         name='thief',
-        races=(RACES.HUMAN,),
+        races=(Races.HUMAN,),
         skills={},
         upkeep={}
     )
 
-JOBS = Jobs()
+Jobs = Jobs()
 
 # Rarities
 @attr.s(slots=True, auto_attribs=True)
@@ -379,4 +379,4 @@ class Rarities:
     RARE: Rarity        = Rarity(eccentricity= 5, name="superbolic", rank=5)
     MYTHIC: Rarity      = Rarity(eccentricity= 9, name="hyperbolic", rank=6)
 
-RARITIES = Rarities()
+Rarities = Rarities()

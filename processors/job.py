@@ -1,6 +1,6 @@
 import esper
 
-from _data import JOBS, Job
+from _data import Jobs, Job
 from _helper_functions import generate_stats
 from components.actor.job import JobComponent
 from components.actor.race import RaceComponent
@@ -26,7 +26,7 @@ class JobProcessor(esper.Processor):
             if not job:
                 menu = PopupMenu(title='Which job would you like to adopt?', reveal_all=False)
 
-                for _, job in JOBS.__dict__.items():
+                for _, job in Jobs.__dict__.items():
                     _description = job.description
                     _name = job.name
                     _key = job.name[0]
