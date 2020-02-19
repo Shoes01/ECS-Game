@@ -4,7 +4,7 @@ import esper
 from _data import map
 from typing import Any, Dict, List
 
-@attr.s(slots=True, auto_attribs=True)
+@attr.s(auto_attribs=True, slots=True)
 class PopupChoiceCondition:
     ' This is a single condition to a popup menu choice. '
     description: str = ""

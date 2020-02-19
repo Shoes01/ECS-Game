@@ -1,6 +1,6 @@
 import attr
 
-@attr.s(slots=True, auto_attribs=True)
+@attr.s(auto_attribs=True, slots=True)
 class Camera:
     ' The camera represents the area that is rendered to the screen. '
     w: int

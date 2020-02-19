@@ -305,7 +305,7 @@ class AI_:
 AI = AI_()
 
 # Jobs
-@attr.s(slots=True, auto_attribs=True)
+@attr.s(auto_attribs=True, slots=True)
 class Job:
     ' Data '
     description: str
@@ -363,7 +363,7 @@ class Jobs:
 Jobs = Jobs()
 
 # Rarities
-@attr.s(slots=True, auto_attribs=True)
+@attr.s(auto_attribs=True, slots=True)
 class Rarity:
     eccentricity: int # The greater the eccentricity, the greater the variation in base stats.
     name: str         # The name of this type of eccentricity.

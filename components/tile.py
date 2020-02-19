@@ -1,6 +1,6 @@
 import attr
 
-@attr.s(slots=True, auto_attribs=True)
+@attr.s(auto_attribs=True, slots=True)
 class TileComponent:
     ' Component that holds the pathing/fov information of a tile entity. '
     blocks_path: bool = True

@@ -1,6 +1,6 @@
 import attr
 
-@attr.s(slots=True, auto_attribs=True)
+@attr.s(auto_attribs=True, slots=True)
 class NameComponent:
     ' Component that holds the name of the entity. '
     name: str
