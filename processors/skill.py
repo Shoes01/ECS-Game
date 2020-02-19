@@ -213,7 +213,7 @@ class SkillProcessor(esper.Processor):
             return 0
         
         # Pay the costs.
-        self.world.get_processor(CooldownProcessor).queue.put({'register_skill_component': skill_comp})
+        self.world.get_processor(CooldownProcessor).queue.put({'ent': ent, 'register_skill': skill_comp})
         self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'skill': skill_comp.cost_energy})
         ent_stats_comp = self.world.component_for_entity(ent, StatsComponent)
         for stat, cost in skill_comp.cost_soul.items():
