@@ -395,12 +395,12 @@ Stats = Stats()
 
 # Damage Types
 @attr.s(auto_attribs=True, slots=True)
-class DamageType:
+class DamageTypes:
     NONE: str = "none"
     PHYSICAL: str = "physical"
     MAGICAL: str = "magical"
 
-DamageType = DamageTypes()
+DamageTypes = DamageTypes()
 
 # Skills
 @attr.s(auto_attribs=True, slots=True)
@@ -411,10 +411,10 @@ class Skill:
     cost_soul: dict # How much this skill takes from stats.
     description: str
     job_requriement: list # List of Jobs.
-    east: Any # A numpy array.. oof
-    north_east: Any # Another numpy array.
+    east: list # A numpy array.. oof
+    north_east: list # Another numpy array.
 
-@attr.s(auto_attribs=True, slots=True)
+@attr.s(auto_attribs=True)
 class Skills:
     """
     The way skills interact with tiles are defined here.
@@ -431,7 +431,8 @@ class Skills:
         cost_soul={Stats.SPD: 2},
         damage_type=DamageType.NONE,
         description="Sprint to a safer location.",
-        job_requirement=Jobs.ROGUE
+        job_requirement=Jobs.ROGUE,
+        name='sprint',
         east=
         [
             [0, 0, 0, 0, 0],
@@ -453,10 +454,11 @@ class Skills:
         ap_max=0,
         cooldown=3,
         cost_energy=0,
-        cost_soul={Stats.SPD: 2, Stats.HP: -10, Stats.MAG: 2, Stats.DEF: 2, Stats.ATK: 2, Stats.DEF: 2}
+        cost_soul={Stats.SPD: 2, Stats.HP: -10, Stats.MAG: 2, Stats.DEF: 2, Stats.ATK: 2, Stats.DEF: 2},
         damage_type=DamageType.NONE,
         description='First aid, for your soul.',
         job_requirement=Jobs.SOLDIER,
+        name='first aid',
         east=[
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
@@ -476,10 +478,11 @@ class Skills:
         ap_max=100,
         cooldown=5,
         cost_energy=2,
-        cost_soul={Stats.MAG: 2}
+        cost_soul={Stats.MAG: 2},
         damage_type=DamageType.PHYSICAL,
         description='Lunge forward to strike a foe.',
         job_requirement=Jobs.SOLDIER,
+        name='lunge',
         east=[
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
@@ -499,10 +502,11 @@ class Skills:
         ap_max=100,
         cooldown=4,
         cost_energy=2,
-        cost_soul={Stats.DEF: 5}
+        cost_soul={Stats.DEF: 5},
         damage_type=DamageType.PHYSICAL,
         description='A swinging strike.',
         job_requirement=Jobs.WARRIOR,
+        name='cleave',
         east=[
             [0, 0, 0, 0, 0],
             [0, 0, 0, 2, 0],
@@ -522,10 +526,11 @@ class Skills:
         ap_max=100,
         cooldown=3,
         cost_energy=1,
-        cost_soul={Stats.HP: 1, Stats.RES: 4}
+        cost_soul={Stats.HP: 1, Stats.RES: 4},
         damage_type=DamageType.PHYSICAL,
         description='Use your head for something.',
         job_requirement=Jobs.WARRIOR,
+        name='headbutt',
         east=[
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
@@ -542,4 +547,4 @@ class Skills:
         ]
     )
 
-    Skills = Skills()
+Skills = Skills()

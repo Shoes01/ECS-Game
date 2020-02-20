@@ -4,7 +4,7 @@ import os
 import shelve
 import tcod as libtcod
 
-from _data import con, eqp, log, map, AI, ENTITY_COLORS, Jobs, MULTIPLIER, Races, Rarities, Slots, SPRITES
+from _data import con, eqp, log, map, AI, ENTITY_COLORS, Jobs, MULTIPLIER, Races, Rarities, Slots, Skills, SPRITES
 from _helper_functions import create_skill
 from camera import Camera
 from cursor import Cursor
@@ -112,6 +112,18 @@ class GameWorld(esper.World):
         self.consoles['stats'] = libtcod.console.Console(eqp.w, eqp.h, order='F'), eqp.x, eqp.y, eqp.w, eqp.h
         self.consoles['log'] = libtcod.console.Console(log.w, log.h, order='F'), log.x, log.y, log.w, log.h
         self.consoles['map'] = libtcod.console.Console(map.w, map.h, order='F'), map.x, map.y, map.w, map.h
+
+        # Skills need to inherit the slot from their parent item.
+        self.inherit_slot()
+
+    def inherit_slot(self):
+        for ent, components in self._json_data.items():
+            if components.get('archtype') == "item":
+                for item_skill in components.get('skill'):
+                    for skill, skill_data in Skills.__dict__.items():
+                        if skill_data.name == item_skill:
+                            skill_data.slot = components.get('slot')
+
 
     def build_world(self):
         ' Upkeep. '
@@ -361,25 +373,17 @@ class GameWorld(esper.World):
                 self.add_component(ent, RenderComponent(color_bg=ENTITY_COLORS.get(color_bg), char=char, codepoint=SPRITES[codepoint], color_fg=ENTITY_COLORS[color_fg], color_explored=ENTITY_COLORS.get(color_explored)))
 
             elif key == 'skill':
-                ' SkillComponents never exist in a vacuum. If they are invoked here, it is because an item entity will hold the skill. '
                 names = value
                 
-                jr_comp = self.component_for_entity(ent, JobReqComponent) # Samsies.
-                sp_comp = self.component_for_entity(ent, SkillPoolComponent) # Samsies.
-                s_comp = self.component_for_entity(ent, SlotComponent) # Hopefully SlotComponent exists before this is invoked...
+                sp_comp = self.component_for_entity(ent, SkillPoolComponent)
 
                 if type(names) is not list: 
                     names = [names,]
                 
                 for name in names:                    
-                    skill_component = create_skill(self._json_data, name, s_comp.slot)
-
-                    # Add the job required for this skill to the item's job requirements, if it's not already there.
-                    if skill_component.job_req not in jr_comp.job_req:
-                        jr_comp.job_req.append(skill_component.job_req)
-                    
-                    # Add this skill to the item's pool of masterable skills.
-                    sp_comp.skill_pool.append(skill_component)
+                    for skill, skill_data in Skills.__dict__.items():
+                        if skill_data.name == name:
+                            sp_comp.skill_pool.append(skill)
 
             elif key == 'slot':
                 for _, slot in Slots.__dict__.items():
