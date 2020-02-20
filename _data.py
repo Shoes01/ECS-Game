@@ -287,7 +287,7 @@ KEY_TO_SLOTS = {
 
 # Races
 @attr.s(auto_attribs=True)
-class Races():
+class Races:
     MONSTER: str = 'monster'
     HUMAN: str = 'human'
     ELF: str = 'elf'
@@ -380,3 +380,164 @@ class Rarities:
     MYTHIC: Rarity      = Rarity(eccentricity= 9, name="hyperbolic", rank=6)
 
 Rarities = Rarities()
+
+# Stats
+@attr.s(auto_attribs=True)
+class Stats:
+    HP: str = 'hp'
+    ATK: str = 'attack'
+    DEF: str = 'defense'
+    MAG: str = 'magic'
+    RES: str = 'resistance'
+    SPD: str = 'speed'
+
+Stats = Stats()
+
+# Damage Types
+@attr.s(auto_attribs=True, slots=True)
+class DamageType:
+    NONE: str = "none"
+    PHYSICAL: str = "physical"
+    MAGICAL: str = "magical"
+
+DamageType = DamageTypes()
+
+# Skills
+@attr.s(auto_attribs=True, slots=True)
+class Skill:
+    ap_max: int
+    cooldown: int
+    cost_energy: int # How many turns it takes to use the skill.
+    cost_soul: dict # How much this skill takes from stats.
+    description: str
+    job_requriement: list # List of Jobs.
+    east: Any # A numpy array.. oof
+    north_east: Any # Another numpy array.
+
+@attr.s(auto_attribs=True, slots=True)
+class Skills:
+    """
+    The way skills interact with tiles are defined here.
+
+    1: Deal damage to this tile.",
+    2: Deal damage to this tile, BUT the skill will fail if there is a wall here.
+    3: Player ends in this tile, BUT the skill will fail if there is an actor here.
+    4: Nothing, BUT the skill will fail if there is an entity here.
+    """
+    SPRINT: Skill = Skill(
+        ap_max=100,
+        cooldown=2,
+        cost_energy=1,
+        cost_soul={Stats.SPD: 2},
+        damage_type=DamageType.NONE,
+        description="Sprint to a safer location.",
+        job_requirement=Jobs.ROGUE
+        east=
+        [
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 4, 3],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0]
+        ],
+        north_east=
+        [
+            [0, 0, 0, 0, 3],
+            [0, 0, 0, 4, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0]
+        ]
+    )
+    FIRST_AID: Skill = Skill(
+        ap_max=0,
+        cooldown=3,
+        cost_energy=0,
+        cost_soul={Stats.SPD: 2, Stats.HP: -10, Stats.MAG: 2, Stats.DEF: 2, Stats.ATK: 2, Stats.DEF: 2}
+        damage_type=DamageType.NONE,
+        description='First aid, for your soul.',
+        job_requirement=Jobs.SOLDIER,
+        east=[
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0]
+        ],        
+        north_east=[
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0]
+        ]
+    )
+    LUNGE: Skill = Skill(
+        ap_max=100,
+        cooldown=5,
+        cost_energy=2,
+        cost_soul={Stats.MAG: 2}
+        damage_type=DamageType.PHYSICAL,
+        description='Lunge forward to strike a foe.',
+        job_requirement=Jobs.SOLDIER,
+        east=[
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 2, 2],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0]
+        ],        
+        north_east=[
+            [0, 0, 0, 0, 2],
+            [0, 0, 0, 2, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0]
+        ]
+    )
+    CLEAVE: Skill = Skill(
+        ap_max=100,
+        cooldown=4,
+        cost_energy=2,
+        cost_soul={Stats.DEF: 5}
+        damage_type=DamageType.PHYSICAL,
+        description='A swinging strike.',
+        job_requirement=Jobs.WARRIOR,
+        east=[
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 2, 0],
+            [0, 0, 0, 2, 0],
+            [0, 0, 0, 2, 0],
+            [0, 0, 0, 0, 0]
+        ],        
+        north_east=[
+            [0, 0, 0, 0, 0],
+            [0, 0, 2, 2, 0],
+            [0, 0, 0, 2, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0]
+        ]
+    )
+    HEADBUTT: Skill = Skill(
+        ap_max=100,
+        cooldown=3,
+        cost_energy=1,
+        cost_soul={Stats.HP: 1, Stats.RES: 4}
+        damage_type=DamageType.PHYSICAL,
+        description='Use your head for something.',
+        job_requirement=Jobs.WARRIOR,
+        east=[
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0]
+        ],        
+        north_east=[
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0]
+        ]
+    )
