@@ -375,6 +375,7 @@ class GameWorld(esper.World):
             elif key == 'skill':
                 names = value
                 
+                s_comp = self.component_for_entity(ent, SlotCompoennt)
                 sp_comp = self.component_for_entity(ent, SkillPoolComponent)
 
                 if type(names) is not list: 
@@ -384,6 +385,7 @@ class GameWorld(esper.World):
                     for skill, skill_data in Skills.__dict__.items():
                         if skill_data.name == name:
                             sp_comp.skill_pool.append(skill)
+                            skill_data.slot = s_comp.slot
 
             elif key == 'slot':
                 for _, slot in Slots.__dict__.items():

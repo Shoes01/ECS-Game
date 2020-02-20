@@ -411,8 +411,8 @@ class Skill:
     cost_soul: dict # How much this skill takes from stats.
     description: str
     job_requriement: list # List of Jobs.
-    east: list # A numpy array.. oof
-    north_east: list # Another numpy array.
+    east: list # A list of lists that will get changed into a numpy array...
+    north_east: list
 
 @attr.s(auto_attribs=True)
 class Skills:
@@ -429,7 +429,7 @@ class Skills:
         cooldown=2,
         cost_energy=1,
         cost_soul={Stats.SPD: 2},
-        damage_type=DamageType.NONE,
+        damage_type=DamageTypes.NONE,
         description="Sprint to a safer location.",
         job_requirement=Jobs.ROGUE,
         name='sprint',
@@ -455,7 +455,7 @@ class Skills:
         cooldown=3,
         cost_energy=0,
         cost_soul={Stats.SPD: 2, Stats.HP: -10, Stats.MAG: 2, Stats.DEF: 2, Stats.ATK: 2, Stats.DEF: 2},
-        damage_type=DamageType.NONE,
+        damage_type=DamageTypes.NONE,
         description='First aid, for your soul.',
         job_requirement=Jobs.SOLDIER,
         name='first aid',
@@ -479,7 +479,7 @@ class Skills:
         cooldown=5,
         cost_energy=2,
         cost_soul={Stats.MAG: 2},
-        damage_type=DamageType.PHYSICAL,
+        damage_type=DamageTypes.PHYSICAL,
         description='Lunge forward to strike a foe.',
         job_requirement=Jobs.SOLDIER,
         name='lunge',
@@ -503,7 +503,7 @@ class Skills:
         cooldown=4,
         cost_energy=2,
         cost_soul={Stats.DEF: 5},
-        damage_type=DamageType.PHYSICAL,
+        damage_type=DamageTypes.PHYSICAL,
         description='A swinging strike.',
         job_requirement=Jobs.WARRIOR,
         name='cleave',
@@ -527,7 +527,7 @@ class Skills:
         cooldown=3,
         cost_energy=1,
         cost_soul={Stats.HP: 1, Stats.RES: 4},
-        damage_type=DamageType.PHYSICAL,
+        damage_type=DamageTypes.PHYSICAL,
         description='Use your head for something.',
         job_requirement=Jobs.WARRIOR,
         name='headbutt',
