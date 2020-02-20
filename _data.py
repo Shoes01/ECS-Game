@@ -541,3 +541,5 @@ class Skills:
             [0, 0, 0, 0, 0]
         ]
     )
+
+    Skills = Skills()
