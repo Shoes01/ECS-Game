@@ -1,7 +1,8 @@
 import esper
 
+from _data import Skills
+from components.actor.diary import DiaryComponent
 from components.actor.equipment import EquipmentComponent
-from components.actor.skill_directory import SkillDirectoryComponent
 from components.item.jobreq import JobReqComponent
 from components.name import NameComponent
 from components.item.skill_pool import SkillPoolComponent
@@ -43,9 +44,11 @@ class RemovableProcessor(esper.Processor):
 
                 # Deactivate all skills from this item, if they are not mastered.
                 item_skills = self.world.component_for_entity(item, SkillPoolComponent).skill_pool
-                for entity_skill in self.world.component_for_entity(ent, SkillDirectoryComponent).skill_directory:
-                    if not entity_skill.is_mastered and entity_skill in item_skills:
-                        self.world.get_processor(SkillMenuProcessor).queue.put({'ent': ent, 'skill_deactivate': entity_skill})
+                diary = self.world.component_for_entity(ent, DiaryComponent)
+
+                for entry in diary.mastery:
+                    if entry.skill in item_skills and entry.ap != entry.skill.ap_max:
+                        self.world.get_processor(SkillMenuProcessor).queue.put({'ent': ent, 'skill_deactivate': entry.skill})
 
             elif job:
                 # The player switched jobs; go through the equipped items to see if the player is still the correct job.

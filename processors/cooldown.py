@@ -1,6 +1,6 @@
 import esper
 
-from components.actor.skill_directory import SkillDirectoryComponent
+from components.actor.diary import CooldownEntry, DiaryComponent
 from queue import Queue
 
 class CooldownProcessor(esper.Processor):
@@ -15,32 +15,27 @@ class CooldownProcessor(esper.Processor):
 
             ent = event.get('ent')
             register_skill = event.get('register_skill')
-            remove_entity = event.get('remove_entity')
             tick = event.get('tick')
 
             if register_skill:
-                for skill in self.world.component_for_entity(ent, SkillDirectoryComponent).skill_directory:
-                    if skill.name == register_skill.name:
-                        skill.cooldown_remaining = skill.cooldown
+                entry = CooldownEntry(remaining=register_skill.cooldown, skill=register_skill)
+                self.world.component_for_entity(ent, DiaryComponent).cooldown.append(entry)
 
-                self.registered_entities.append(ent)
-
+                if ent not in self.registered_entities:
+                    self.registered_entities.append(ent)
             
-            if remove_entity:
-                self.registered_entities.remove(remove_entity)
-                for skill in self.world.component_for_entity(remove_entity, SkillDirectoryComponent).skill_directory:
-                    skill.cooldown_remaining = 0
-
             if tick:
                 for ent in self.registered_entities:
-                    all_cooled_down = True
-                    
-                    for skill in self.world.component_for_entity(ent, SkillDirectoryComponent).skill_directory:
-                        if skill.cooldown_remaining:
-                            skill.cooldown_remaining -= 1
+                    diary = self.world.component_for_entity(ent, DiaryComponent)
+                    remove_if = []
 
-                        if not skill.cooldown_remaining <= 0:
-                            all_cooled_down = False
+                    for entry in diary.cooldown:
+                        entry.cooldown -= 1
 
-                    if all_cooled_down:
-                        self.queue.put({'remove_entity': ent})
+                        if entry.cooldown <= 0:
+                            remove_if.append(entry)
+
+                    diary.remove(remove_if)
+
+                    if not diary.cooldown:
+                        self.registered_entities.remove(ent)

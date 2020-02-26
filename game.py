@@ -17,10 +17,10 @@ from typing import Type
 from components.actor.actor import ActorComponent
 from components.actor.boss import BossComponent
 from components.actor.brain import BrainComponent
+from components.actor.diary import DiaryComponent
 from components.actor.energy import EnergyComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
-from components.actor.skill_directory import SkillDirectoryComponent
 from components.actor.job import JobComponent
 from components.actor.player import PlayerComponent
 from components.actor.race import RaceComponent
@@ -277,6 +277,7 @@ class GameWorld(esper.World):
         if entity == 'player':
             return super().create_entity(
                 ActorComponent(),
+                DiaryComponent(), # TODO: Give the player a heal
                 EnergyComponent(energy=0),
                 EquipmentComponent(),
                 InventoryComponent(),
@@ -287,7 +288,6 @@ class GameWorld(esper.World):
                 RaceComponent(race=Races.HUMAN),
                 PositionComponent(),
                 RenderComponent(color_bg=None, char='@', codepoint=SPRITES['player'], color_fg=ENTITY_COLORS['player'], color_explored=None),
-                SkillDirectoryComponent([create_skill(self._json_data, 'heal', Slots.MAINHAND)]),
                 SoulComponent(eccentricity=5, max_rarity=10, new_game=True),
                 StatsComponent(hp=500, attack=10)
             )
@@ -299,11 +299,11 @@ class GameWorld(esper.World):
             if key == 'archtype':
                 if value == 'monster':
                     self.add_component(ent, ActorComponent())
+                    self.add_component(ent, DiaryComponent())
                     self.add_component(ent, EnergyComponent())
                     self.add_component(ent, EquipmentComponent())
                     self.add_component(ent, InventoryComponent())
                     self.add_component(ent, JobComponent(job=Jobs.MONSTER, upkeep={}))
-                    self.add_component(ent, SkillDirectoryComponent())
                     self.add_component(ent, PositionComponent())
                     self.add_component(ent, RaceComponent(race=Races.MONSTER))
                 elif value == 'item':

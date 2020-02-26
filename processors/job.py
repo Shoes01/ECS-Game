@@ -1,10 +1,10 @@
 import esper
 
-from _data import Jobs, Job
+from _data import Jobs, Job, Skills
 from _helper_functions import generate_stats
+from components.actor.diary import DiaryComponent
 from components.actor.job import JobComponent
 from components.actor.race import RaceComponent
-from components.actor.skill_directory import SkillDirectoryComponent
 from processors.removable import RemovableProcessor
 from processors.skill_menu import SkillMenuProcessor
 from processors.state import StateProcessor
@@ -88,14 +88,15 @@ def check_validity(ent, job, world):
     
     # Skill validity.
     condition = PopupChoiceCondition(description=f"You need to have mastered at least skills like {job.skills}.")
-    sd_comp = world.component_for_entity(ent, SkillDirectoryComponent)
+    diary = world.component_for_entity(ent, DiaryComponent)
     for required_job, required_number in job.skills.items():
         # Determine how many skills from the given job have been mastered.
         mastery_number = 0
-        for skill in sd_comp.skill_directory:
-            if skill.job_req == required_job and skill.is_mastered:
+        
+        for entry in diary.mastery:
+            if entry.skill.job_req == required_job and entry.ap == entry.skill.ap_max:
                 mastery_number += 1
-            
+
         if mastery_number < required_number: 
             condition.valid = False
             message_data['not_enough_skills'] = True

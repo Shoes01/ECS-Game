@@ -414,7 +414,6 @@ class Skill:
     east: list # A list of lists that will get changed into a numpy array...
     north_east: list
 
-@attr.s(auto_attribs=True)
 class Skills:
     """
     The way skills interact with tiles are defined here.

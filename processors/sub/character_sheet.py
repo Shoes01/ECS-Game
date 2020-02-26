@@ -1,8 +1,8 @@
 from _data import UI_COLORS
 from _helper_functions import as_decimal, as_integer, generate_stats
+from components.actor.diary import DiaryComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.job import JobComponent
-from components.actor.skill_directory import SkillDirectoryComponent
 from components.item.skill_pool import SkillPoolComponent
 from components.item.slot import SlotComponent 
 from components.name import NameComponent
@@ -22,7 +22,7 @@ def render_character_sheet(console_object, world):
         'feet': 'Feet:',
         'accessory': 'Accessory:'
         }
-    skill_directory = world.component_for_entity(1, SkillDirectoryComponent).skill_directory
+    diary = world.component_for_entity(1, DiaryComponent)
     soul_stats = world.component_for_entity(1, SoulComponent).soul
     titles = {
         'hp': 'Health:',
@@ -101,12 +101,12 @@ def render_character_sheet(console_object, world):
         console.print_box(x, y + i, 40, 2, text_4, color_fg)
         i += 3
     
-    # Display skill directory.
+    # Display skill mastery progress.
     x, y = 77, 5
-    console.print(x - 1, y - 1, 'Skill Directory:', color_fg)
+    console.print(x - 1, y - 1, 'Skill Mastery Progress:', color_fg)
     i = 0
-    for skill in skill_directory:
-        console.print(x, y + i, f"{skill.name.capitalize()}: {skill.ap}/{skill.ap_max}")
+    for entry in diary.mastery:
+        console.print(x, y + i, f"{entry.skill.name.capitalize()}: {entry.skill.ap}/{entry.skill.ap_max}")
         i += 1
 
 def generate_equipped_items(titles, world):

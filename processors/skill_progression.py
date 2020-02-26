@@ -1,7 +1,7 @@
 import esper
 
+from components.actor.diary import DiaryComponent
 from components.actor.job import JobComponent
-from components.actor.skill_directory import SkillDirectoryComponent
 from components.item.skill_pool import SkillPoolComponent
 from queue import Queue
 
@@ -18,16 +18,18 @@ class SkillProgressionProcessor(esper.Processor):
             ent = event['ent']
             skill_used = event.get('skill') # Use this? Maybe?
 
+            diary = self.world.component_for_entity(ent, DiaryComponent)
+
             if ap_gain:
                 # Go through each active skill and give them some AP.
-                for skill in self.world.component_for_entity(ent, SkillDirectoryComponent).skill_directory:
-                    if skill.is_active and not skill.is_mastered:                        
-                        skill.ap += ap_gain                        
-                        if skill == skill_used:
-                            skill.ap += ap_gain # Double ap gain for the skill you actually used.
+                
+                for entry in diary.mastery:
+                    if entry.skill in diary.active:
+                        entry.ap += ap_gain
 
-                        if skill.ap >= skill.ap_max:
-                            skill.ap = skill.ap_max
-
-                            self.world.messages.append({'skill_mastered': {'name': skill.name}})
-                    
+                        if entry.skill == skill_used:
+                            entry.ap += ap_gain
+                        
+                        if entry.ap >= entry.skill.ap_max:
+                            entry.ap = entry.skill.ap_max
+                            self.world.messages.append({'skill_mastered': {'name': entry.skill.name}})

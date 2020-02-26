@@ -3,9 +3,9 @@ import esper
 from _data import ENTITY_COLORS, KEY_TO_SLOTS
 from _helper_functions import generate_stats
 from components.actor.actor import ActorComponent
+from components.actor.diary import DiaryComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.job import JobComponent
-from components.actor.skill_directory import SkillDirectoryComponent
 from components.item.skill_pool import SkillPoolComponent
 from components.item.slot import SlotComponent
 from components.name import NameComponent
@@ -74,12 +74,13 @@ class SkillProcessor(esper.Processor):
                 self.world.get_processor(RenderProcessor).queue.put({'skill': False, 'redraw': True})
 
     def find_skill(self, ent, slot):
+        diary = self.world.component_for_entity(ent, DiaryComponent)
         error = ''
         skill = None
 
-        for s in self.world.component_for_entity(ent, SkillDirectoryComponent).skill_directory:
-            if s.slot == slot and s.is_active:
-                if s.cooldown_remaining == 0:
+        for s in diary.active:
+            for entry in diary.cooldown:
+                if s == entry.skill and entry.remaining == 0:
                     skill = s
                 else:
                     error = 'on_cooldown'

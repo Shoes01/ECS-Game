@@ -1,9 +1,9 @@
 import esper
 
 from _data import KEY_TO_SLOTS
+from components.actor.diary import DiaryComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.job import JobComponent
-from components.actor.skill_directory import SkillDirectoryComponent
 from components.item.skill_pool import SkillPoolComponent
 from components.item.slot import SlotComponent
 from processors.state import StateProcessor
@@ -26,7 +26,7 @@ class SkillMenuProcessor(esper.Processor):
             skill_letter = event.get('skill_menu')
 
             equipped_items = self.world.component_for_entity(ent, EquipmentComponent).equipment
-            sd_comp = self.world.component_for_entity(ent, SkillDirectoryComponent)
+            diary = self.world.component_for_entity(ent, DiaryComponent)
 
             # Create and display a menu of possible skills that may be activated.
             if skill_letter:
@@ -37,8 +37,8 @@ class SkillMenuProcessor(esper.Processor):
                 bestowed_list = [] # This should just be the one skill bestowed by the equipped item.
 
                 # Populate mastered and unmastered lists.
-                for skill in sd_comp.skill_directory:
-                    if skill.is_mastered:
+                for entry in diary.mastery:
+                    if entry.skill.ap_max == entry.ap
                         mastered_list.append(skill.name)
                     else:
                         unmastered_list.append(skill.name)
@@ -62,22 +62,19 @@ class SkillMenuProcessor(esper.Processor):
 
                 self.world.get_processor(StateProcessor).queue.put({'popup': menu})
             
-            # Activate the chosen skill.
+            # Activate the chosen skill. Deactivate the skill that the chosen one is replacing.
             elif skill_activate:
-                new_skill = True
+                skill_deactivate = None
 
-                for skill in sd_comp.skill_directory:
-                    # Deactivate all skills for this slot.
+                for skill in diary.active:
                     if skill.slot == skill_activate.slot:
-                        skill.is_active = False
-                        # Except the chosen skill.
-                        if skill.name == skill_activate.name:
-                            skill.is_active = True
-                            new_skill = False
+                        skill_deactivate = skill
+                        break
+
+                if skill_deactivate:
+                    diary.active.remove(skill_deactivate)
                 
-                if new_skill:
-                    skill_activate.is_active = True
-                    sd_comp.skill_directory.append(skill_activate)
+                diary.active.append(skill_activate)
 
             elif skill_deactivate:
                 # Deactivating all skills that belong to a slot is overkill, but this makes sure that one slot only ever has one skill active...
