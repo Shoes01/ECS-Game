@@ -78,12 +78,10 @@ class SkillMenuProcessor(esper.Processor):
 
             elif skill_deactivate:
                 # Deactivating all skills that belong to a slot is overkill, but this makes sure that one slot only ever has one skill active...
-                for skill in sd_comp.skill_directory:
-                    if skill.slot == skill_deactivate.slot:
-                        skill.is_active = False
+                diary.active.remove(skill_deactivate)
             
             elif new_job:
                 # Jobs don't share skills, so it's safe to simply deactivate all unmastered jobs.
-                for skill in sd_comp.skill_directory:
-                    if not skill.is_mastered:
-                        skill.is_active = False
+                for entry in diary.mastery:
+                    if entry.skill in diary.active and entry.ap != skill.ap_max:
+                        diary.active.remove(entry.skill)

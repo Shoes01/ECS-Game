@@ -1,5 +1,6 @@
 from _data import SingleLineBox, UI_COLORS
 from _helper_functions import as_decimal, generate_stats
+from components.actor.diary import DiaryComponent
 from components.actor.equipment import EquipmentComponent
 from components.item.skill_pool import SkillPoolComponent
 from components.item.slot import SlotComponent
@@ -46,25 +47,28 @@ def render_stats(console_object, world):
     j = 0
     for slot, item in boxes.items():
         char_color = color_fg_invalid
-        render_comp = None
         cooldown = None
-        
-        if item:
-            char_color = color_fg
-            render_comp = world.component_for_entity(item, RenderComponent)
-            for skill in world.component_for_entity(item, SkillPoolComponent).skill_pool:
-                if skill.is_active and skill.cooldown_remaining > 0:
-                    char_color = UI_COLORS['cooldown']
-                    cooldown = skill.cooldown_remaining
-        
-        draw_letter_box(x + i, y + y_offset + j, 4, 4, box_char[slot], console, char_color, render_comp, cooldown)
+        diary = world.component_for_entity(1, DiaryComponent)
+
+        for skill in diary.active:
+            if skill.slot == slot:
+                char_color = color_fg
+                break
+
+        for entry in diary.cooldown:
+            if entry.skill.slot == slot and entry.skill in diary.active:
+                char_color = UI_COLORS['cooldown']
+                cooldown = skill.cooldown_remaining                    
+                break
+    
+        draw_letter_box(x + i, y + y_offset + j, 4, 4, box_char[slot], console, char_color, cooldown)
 
         i += 4
         if i == 12:
             i = 0
             j = 4
 
-def draw_letter_box(x, y, w, h, char, console, color_fg, item, cooldown):
+def draw_letter_box(x, y, w, h, char, console, color_fg, cooldown):
     # Draw the little box, and put the letter in it.
     box = SingleLineBox()
     
@@ -82,7 +86,3 @@ def draw_letter_box(x, y, w, h, char, console, color_fg, item, cooldown):
     console.print(x + w - 1, y + h -1, box.bottom_right, color_fg)
 
     console.print(x + 1, y + 1, char, color_fg)
-    if item:
-        console.print(x + 2, y + 1, item.char, item.color_fg)
-        if cooldown:
-            console.print(x + 2, y + 2, str(cooldown), color_fg)

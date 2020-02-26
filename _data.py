@@ -416,6 +416,7 @@ class Skill:
         self.job_requriement = job_requirement
         self.east = east
         self.north_east = north_east
+        self.slot = "This gets replaced by an actual slot when the item bestowing this skill is generated."
 
         ' Skill Directions. '
         self.east = np.array(east)

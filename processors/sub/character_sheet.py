@@ -116,19 +116,9 @@ def generate_equipped_items(titles, world):
     for item in equipment:
         slot = world.component_for_entity(item, SlotComponent).slot
         name = world.component_for_entity(item, NameComponent).original_name
-        skill_comp = None
-        
-        for temp_skill in world.component_for_entity(item, SkillPoolComponent).skill_pool:
-            if temp_skill.is_active:
-                skill_comp = temp_skill
 
         bonus = f""
         description = ""
-        skill = "None"
-        
-        if skill_comp:
-            description = skill_comp.description
-            skill = skill_comp.name
         
         for stat, value in world.component_for_entity(item, StatsComponent).__dict__.items():
             if value:
