@@ -402,17 +402,30 @@ class DamageTypes:
 
 DamageTypes = DamageTypes()
 
+import numpy as np
+
 # Skills
-@attr.s(auto_attribs=True, slots=True)
 class Skill:
-    ap_max: int
-    cooldown: int
-    cost_energy: int # How many turns it takes to use the skill.
-    cost_soul: dict # How much this skill takes from stats.
-    description: str
-    job_requriement: list # List of Jobs.
-    east: list # A list of lists that will get changed into a numpy array...
-    north_east: list
+    def __init__(self, ap_max, cooldown, cost_energy, cost_sould, description, job_requirement, east, north_east)
+        ' Skill Data. '
+        self.ap_max = ap_max
+        self.cooldown = cooldown
+        self.cost_energy = cost_energy
+        self.cost_soul = cost_soul
+        self.description = description
+        self.job_requriement = job_requirement
+        self.east = east
+        self.north_east = north_east
+
+        ' Skill Directions. '
+        self.east = np.array(east)
+        self.north = np.rot90(self.east)
+        self.west = np.rot90(self.north)
+        self.south = np.rot90(self.west)
+        self.north_east = np.array(north_east)
+        self.north_west = np.rot90(self.north_east)
+        self.south_west = np.rot90(self.north_west)
+        self.south_east = np.rot90(self.south_west)
 
 class Skills:
     """
