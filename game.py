@@ -36,7 +36,6 @@ from components.persist import PersistComponent
 from components.position import PositionComponent
 from components.rarity import RarityComponent
 from components.render import RenderComponent
-from components.skill import SkillComponent
 from components.soul import SoulComponent
 from components.stairs import StairsComponent
 from components.stats import StatsComponent

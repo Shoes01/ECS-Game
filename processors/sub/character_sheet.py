@@ -127,6 +127,6 @@ def generate_equipped_items(titles, world):
         if not bonus:
             bonus = "None"
         
-        equipped_items[slot] = (name, skill, bonus, description)
+        equipped_items[slot] = (name, bonus, description)
     
     return equipped_items

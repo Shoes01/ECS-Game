@@ -1,7 +1,6 @@
 from collections import Counter
 from components.actor.equipment import EquipmentComponent
 from components.actor.job import JobComponent
-from components.skill import SkillComponent
 from components.soul import SoulComponent
 from components.stats import StatsComponent
 
@@ -58,17 +57,3 @@ def as_integer(number, signed=False):
             string = '+' + string
     
     return string
-
-def create_skill(_json_data, name, slot=""):
-    ap_max = _json_data[name].get('ap_max')
-    cooldown = _json_data[name].get('cooldown')
-    cost_energy = _json_data[name].get('cost_energy')
-    cost_soul = _json_data[name].get('cost_soul')
-    damage_type = _json_data[name].get('damage_type')
-    description = _json_data[name].get('description')
-    east = _json_data[name].get('east')
-    if _json_data[name].get('job_requirement') is None: print(f"Item {name} has no job_requirement.")
-    job_req = _json_data[name].get('job_requirement')
-    north_east = _json_data[name].get('north_east')
-
-    return SkillComponent(ap_max=ap_max, cooldown=cooldown, cost_energy=cost_energy, cost_soul=cost_soul, damage_type=damage_type, description=description, job_req=job_req, name=name, east=east, north_east=north_east, slot=slot)
