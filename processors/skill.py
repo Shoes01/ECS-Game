@@ -88,7 +88,7 @@ class SkillProcessor(esper.Processor):
         else:
             error = 'no_skill_active'
         
-        self.world.messages.append({'skill': (error, skill, turn = self.world.turn)})
+        self.world.messages.append({'skill': (error, skill, self.world.turn)})
 
         return skill
 

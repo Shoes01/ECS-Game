@@ -115,13 +115,13 @@ class GameWorld(esper.World):
         self.inherit_slot()
 
     def inherit_slot(self):
-        for ent, components in self._json_data.items():
-            if components.get('archtype') == "item":
-                for item_skill in components.get('skill'):
-                    for skill, skill_data in Skills.__dict__.items():
-                        if skill_data.name == item_skill:
-                            skill_data.slot = components.get('slot')
-
+        # Go through all items.
+        # Find the skill.
+        # Add the slot to the skill.
+        for item in self.table_item:
+            for skill, skill_data in Skills.__dict__.items():
+                if skill in item.skill_pool:
+                    skill_data.slot = item.slot
 
     def build_world(self):
         ' Upkeep. '
@@ -373,7 +373,7 @@ class GameWorld(esper.World):
             elif key == 'skill':
                 names = value
                 
-                s_comp = self.component_for_entity(ent, SlotCompoennt)
+                s_comp = self.component_for_entity(ent, SlotComponent)
                 sp_comp = self.component_for_entity(ent, SkillPoolComponent)
 
                 if type(names) is not list: 

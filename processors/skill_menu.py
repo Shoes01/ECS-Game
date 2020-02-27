@@ -38,7 +38,7 @@ class SkillMenuProcessor(esper.Processor):
 
                 # Populate mastered and unmastered lists.
                 for entry in diary.mastery:
-                    if entry.skill.ap_max == entry.ap
+                    if entry.skill.ap_max == entry.ap:
                         mastered_list.append(skill.name)
                     else:
                         unmastered_list.append(skill.name)

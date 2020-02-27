@@ -10,12 +10,12 @@ class CooldownEntry:
 
 @attr.s(auto_attribs=True, slots=True)
 class MasteryEntry:
-    ap: int = 0
     skill: Skill
+    ap: int = 0
 
 @attr.s(auto_attribs=True, slots=True)
 class DiaryComponent:
     ' Component that holds information about the relationship between this entity and its skills. '
-    cooldown: List[CooldownEntry]
-    mastery: List[MasteryEntry]
-    active: List[Skill]
+    cooldown: List[CooldownEntry] = attr.Factory(list)
+    mastery: List[MasteryEntry] = attr.Factory(list)
+    active: List[Skill] = attr.Factory(list)

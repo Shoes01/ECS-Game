@@ -406,16 +406,16 @@ import numpy as np
 
 # Skills
 class Skill:
-    def __init__(self, ap_max, cooldown, cost_energy, cost_sould, description, job_requirement, east, north_east)
+    def __init__(self, ap_max, cooldown, cost_energy, cost_soul, damage_type, description, east, job_requirement, name, north_east):
         ' Skill Data. '
         self.ap_max = ap_max
         self.cooldown = cooldown
         self.cost_energy = cost_energy
         self.cost_soul = cost_soul
+        self.damage_type = damage_type
         self.description = description
         self.job_requriement = job_requirement
-        self.east = east
-        self.north_east = north_east
+        self.name = name
         self.slot = "This gets replaced by an actual slot when the item bestowing this skill is generated."
 
         ' Skill Directions. '
