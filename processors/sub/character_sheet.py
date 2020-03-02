@@ -82,19 +82,16 @@ def render_character_sheet(console_object, world):
     console.print(x - 1, y - 1, 'Equipped Items:', color_fg)
     i = 0
     for key in slots:
-        item_name, item_skill, item_bonus, item_skill_description = None, None, None, None
+        item_name, item_bonus, item_description = None, None, None
 
         if equipped_items.get(key):
-            item_name, item_skill, item_bonus, item_skill_description = equipped_items[key]
+            item_name, item_bonus, item_description = equipped_items[key]
 
         text_1 = f"{slots[key]} {item_name}"
-        text_2 = f"  Skill: {str(item_skill).capitalize()}"
         text_3 = f"  Bonus: {item_bonus}"
-        text_4 = f"  Description: {item_skill_description}"
+        text_4 = f"  Description: {item_description}"
                 
         console.print(x, y + i, text_1, color_fg)
-        i += 1
-        console.print(x, y + i, text_2, color_fg)
         i += 1
         console.print(x, y + i, text_3, color_fg)
         i += 1
@@ -118,7 +115,7 @@ def generate_equipped_items(titles, world):
         name = world.component_for_entity(item, NameComponent).original_name
 
         bonus = f""
-        description = ""
+        description = "" # TODO: Items don't have descriptions, apparently?
         
         for stat, value in world.component_for_entity(item, StatsComponent).__dict__.items():
             if value:

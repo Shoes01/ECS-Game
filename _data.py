@@ -258,11 +258,11 @@ from typing import List, Dict
 # Slots
 @attr.s(auto_attribs=True)
 class Slots():
-    HEAD: str = 'head'          # w
-    TORSO: str = 'torso'        # s
-    MAINHAND: str = 'mainhand'  # q
-    OFFHAND: str = 'offhand'    # a
-    FEET: str = 'feet'          # d
+    HEAD: str = 'head'           # w
+    TORSO: str = 'torso'         # s
+    MAINHAND: str = 'mainhand'   # q
+    OFFHAND: str = 'offhand'     # a
+    FEET: str = 'feet'           # d
     ACCESSORY: str = 'accessory' # e
 
 Slots = Slots()

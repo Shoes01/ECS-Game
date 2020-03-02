@@ -39,9 +39,9 @@ class SkillMenuProcessor(esper.Processor):
                 # Populate mastered and unmastered lists.
                 for entry in diary.mastery:
                     if entry.skill.ap_max == entry.ap:
-                        mastered_list.append(skill.name)
+                        mastered_list.append(entry.skill.name)
                     else:
-                        unmastered_list.append(skill.name)
+                        unmastered_list.append(entry.skill.name)
                 
                 # "Populate" the bestowed skill list.
                 for item in equipped_items:

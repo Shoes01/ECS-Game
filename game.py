@@ -4,7 +4,7 @@ import os
 import shelve
 import tcod as libtcod
 
-from _data import con, eqp, log, map, AI, ENTITY_COLORS, Jobs, MULTIPLIER, Races, Rarities, Slots, Skills, SPRITES
+from _data import con, eqp, log, map, AI, ENTITY_COLORS, Jobs, MULTIPLIER, Races, Rarities, Slots, Skill, Skills, SPRITES
 from camera import Camera
 from cursor import Cursor
 from load_tileset import load_tileset
