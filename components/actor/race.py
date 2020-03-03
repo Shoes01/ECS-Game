@@ -1,6 +1,5 @@
 import attr
-
-from _data import Races
+import data.races as Races
 
 @attr.s(auto_attribs=True, slots=True)
 class RaceComponent:

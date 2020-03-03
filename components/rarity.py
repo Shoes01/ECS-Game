@@ -1,6 +1,5 @@
 import attr
-
-from _data import Rarities
+import data.rarities as Rarities
 
 @attr.s(auto_attribs=True, slots=True)
 class RarityComponent:

@@ -1,7 +1,7 @@
+import data.jobs as Jobs
+import data.races as Races
 import esper
 import numpy as np
-
-from _data import Jobs, Races
 
 from components.actor.job import JobComponent
 from components.actor.race import RaceComponent

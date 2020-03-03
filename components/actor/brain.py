@@ -1,6 +1,5 @@
 import attr
-
-from _data import AI
+import data.ai as AI
 
 @attr.s(auto_attribs=True, slots=True)
 class BrainComponent:

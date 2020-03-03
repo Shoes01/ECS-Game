@@ -1,6 +1,6 @@
 import attr
+import data.skills as Skill
 
-from _data import Skill
 from typing import List
 
 @attr.s(auto_attribs=True, slots=True)

@@ -1,12 +1,19 @@
+import data.ai as AI
+import data.jobs as Jobs
+import data.races as Races
+import data.rarities as Rarities
+import data.slots as Slots
+import data.skills as Skills
 import esper
 import json
 import os
 import shelve
 import tcod as libtcod
 
-from _data import con, eqp, log, map, AI, ENTITY_COLORS, Jobs, MULTIPLIER, Races, Rarities, Slots, Skill, Skills, SPRITES
+from _data import con, eqp, log, map, ENTITY_COLORS, MULTIPLIER, SPRITES
 from camera import Camera
 from cursor import Cursor
+from data.skills import Skill
 from load_tileset import load_tileset
 from fsm import MainMenu
 from map import Map
@@ -119,7 +126,7 @@ class GameWorld(esper.World):
         # Find the skill.
         # Add the slot to the skill.
         for item in self.table_item:
-            for skill, skill_data in Skills.__dict__.items():
+            for skill, skill_data in Skills.all.items():
                 if skill in item.skill_pool:
                     skill_data.slot = item.slot
 
@@ -340,7 +347,7 @@ class GameWorld(esper.World):
 
             elif key == 'job_requirement':
                 job_list = value
-                for _, job in Jobs.__dict__.items():
+                for _, job in Jobs.all.items():
                     if job.name in job_list:
                         if self.has_component(ent, JobReqComponent):
                             self.component_for_entity(ent, JobReqComponent).job_req.append(job)
@@ -355,7 +362,7 @@ class GameWorld(esper.World):
                 self.add_component(ent, PositionComponent())
             
             elif key == 'rarity':
-                for _, rarity in Rarities.__dict__.items():
+                for _, rarity in Rarities.all.items():
                     if rarity.rank == value:
                         self.add_component(ent, RarityComponent(rarity=rarity))
                         break
@@ -380,13 +387,13 @@ class GameWorld(esper.World):
                     names = [names,]
                 
                 for name in names:                    
-                    for skill, skill_data in Skills.__dict__.items():
+                    for skill, skill_data in Skills.all.items():
                         if skill_data.name == name:
                             sp_comp.skill_pool.append(skill)
                             skill_data.slot = s_comp.slot
 
             elif key == 'slot':
-                for _, slot in Slots.__dict__.items():
+                for _, slot in Slots.all.items():
                     if slot == value:
                         self.add_component(ent, SlotComponent(slot=slot))
                         break

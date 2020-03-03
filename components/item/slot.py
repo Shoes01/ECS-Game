@@ -1,6 +1,5 @@
 import attr
-
-from _data import Slots
+import data.slots as Slots
 
 @attr.s(auto_attribs=True, slots=True)
 class SlotComponent:

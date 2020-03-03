@@ -1,7 +1,7 @@
+import data.ai as AI
 import esper
 import random
 
-from _data import AI
 from components.actor.actor import ActorComponent
 from components.actor.brain import BrainComponent
 from components.actor.energy import EnergyComponent

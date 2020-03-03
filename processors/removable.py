@@ -1,6 +1,5 @@
 import esper
 
-from _data import Skills
 from components.actor.diary import DiaryComponent
 from components.actor.equipment import EquipmentComponent
 from components.item.jobreq import JobReqComponent

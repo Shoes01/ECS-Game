@@ -1,4 +1,4 @@
-from _data import Jobs
+import data.jobs as Jobs
 
 class JobComponent:
     ' Component that stores the job of the entity, and its upkeep cost. '
