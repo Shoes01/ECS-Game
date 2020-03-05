@@ -10,8 +10,8 @@ import os
 import shelve
 import tcod as libtcod
 
-from _data import con, eqp, log, map, ENTITY_COLORS, MULTIPLIER
-from data.render import SPRITES
+from _data import con, eqp, log, map, MULTIPLIER
+from data.render import ENTITY_COLORS, SPRITES
 from camera import Camera
 from cursor import Cursor
 from data.skills import Skill

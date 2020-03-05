@@ -1,6 +1,6 @@
 import tcod as libtcod
 
-from _data import COLOR_THEME, UI_COLORS
+from data.render import COLOR_THEME, UI_COLORS
 
 def render_game_over(console_object):
     libtcod.console_set_color_control(libtcod.COLCTRL_1, COLOR_THEME['BrightRed'], COLOR_THEME['Red'])

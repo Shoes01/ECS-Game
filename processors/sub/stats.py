@@ -1,10 +1,11 @@
-from _data import SingleLineBox, UI_COLORS
+from _data import SingleLineBox
 from _helper_functions import as_decimal, generate_stats
 from components.actor.diary import DiaryComponent
 from components.actor.equipment import EquipmentComponent
 from components.item.skill_pool import SkillPoolComponent
 from components.item.slot import SlotComponent
 from components.render import RenderComponent
+from data.render import UI_COLORS
 
 def render_stats(console_object, world):
     console = console_object[0]

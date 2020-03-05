@@ -1,4 +1,4 @@
-from _data import ENTITY_COLORS, MULTIPLIER
+from _data import MULTIPLIER
 from components.actor.actor import ActorComponent
 from components.actor.corpse import CorpseComponent
 from components.item.item import ItemComponent
@@ -6,7 +6,7 @@ from components.position import PositionComponent
 from components.render import RenderComponent
 from components.stairs import StairsComponent
 from components.tile import TileComponent
-from data.render import SPRITES
+from data.render import ENTITY_COLORS, SPRITES
 from fsm import Look, SkillTargeting
 
 def render_entities(console_object, world):

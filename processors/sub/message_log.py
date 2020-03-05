@@ -1,6 +1,6 @@
 import tcod as libtcod
 
-from _data import LOG_COLORS
+from data.render import LOG_COLORS
 from fsm import ViewLog
 
 def render_message_log(console_object, new_turn, world):        

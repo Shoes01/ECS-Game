@@ -1,4 +1,4 @@
-from _data import UI_COLORS
+from data.render import UI_COLORS
 
 def render_victory_screen(console_object):
     _string = 'You have won! Press ESC to return to the Main Menu.'

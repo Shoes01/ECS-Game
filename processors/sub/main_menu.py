@@ -1,4 +1,4 @@
-from _data import UI_COLORS
+from data.render import UI_COLORS
 
 def render_main_menu(console_object):
     _string = 'Welcome to the Main Menu.\n\nPress ENTER to begin.\nPress L to load the last save.\n\nPress ESC to quit.'

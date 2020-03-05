@@ -1,8 +1,8 @@
 import numpy as np
 
-from _data import UI_COLORS
 from _helper_functions import as_integer
 from components.soul import SoulComponent
+from data.render import UI_COLORS
 
 def render_soul_sheet(console_object, soul, world):
     console, _, _, w, h = console_object

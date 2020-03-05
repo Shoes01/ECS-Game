@@ -1,6 +1,6 @@
 import colorsys
 
-from _data import ENTITY_COLORS
+from data.render import ENTITY_COLORS
 
 class RenderComponent:
     ' Component that holds the graphical information of the entity. '

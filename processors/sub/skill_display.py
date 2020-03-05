@@ -1,5 +1,5 @@
-from _data import LOG_COLORS
 from _helper_functions import as_decimal
+from data.render import LOG_COLORS
 
 def render_skill_display(console_object, skill, world):
     console, _, _, w, h = console_object

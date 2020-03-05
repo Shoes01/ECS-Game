@@ -1,7 +1,8 @@
 import esper
 import tcod as libtcod
 
-from _data import DoubleLineBox, UI_COLORS
+from _data import DoubleLineBox
+from data.render import UI_COLORS
 from fsm import GameOver, MainMenu, NewGame, PopupMenu, SkillTargeting, SoulState, VictoryScreen, ViewCharacterSheet
 from processors.sub.character_sheet import render_character_sheet
 from processors.sub.entities import render_entities

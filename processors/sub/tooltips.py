@@ -1,9 +1,10 @@
-from _data import MULTIPLIER, UI_COLORS
+from _data import MULTIPLIER
 from components.actor.actor import ActorComponent
 from components.item.item import ItemComponent
 from components.name import NameComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
+from data.render import UI_COLORS
 from fsm import Look
 
 def render_tooltips(camera_pos, console_object, world):

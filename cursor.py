@@ -1,6 +1,6 @@
 import attr
 
-from _data import UI_COLORS
+from data.render import UI_COLORS
 
 @attr.s(auto_attribs=True, slots=True)
 class Cursor:
