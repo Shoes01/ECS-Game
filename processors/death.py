@@ -1,6 +1,6 @@
 import esper
 
-from _data import ENTITY_COLORS, SPRITES
+from _data import ENTITY_COLORS
 from components.actor.actor import ActorComponent
 from components.actor.boss import BossComponent
 from components.actor.brain import BrainComponent
@@ -14,6 +14,7 @@ from components.persist import PersistComponent
 from components.position import PositionComponent
 from components.render import RenderComponent
 from components.soul import SoulComponent
+from data.render import SPRITES
 from processors.state import StateProcessor
 from queue import Queue
 

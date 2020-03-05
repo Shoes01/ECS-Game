@@ -1,8 +1,7 @@
 import data.damage_types as DamageTypes
-import data.damage_types as Jobs
+import data.jobs as Jobs
 import data.races as Races
 import data.stats as Stats
-
 import numpy as np
 
 class Skill:

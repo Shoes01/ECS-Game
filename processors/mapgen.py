@@ -3,7 +3,7 @@ import numpy as np
 import random
 import tcod as libtcod
 
-from _data import FINAL_FLOOR, SPRITES
+from _data import FINAL_FLOOR
 from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
@@ -15,6 +15,7 @@ from components.rarity import RarityComponent
 from components.render import RenderComponent
 from components.stairs import StairsComponent
 from components.tile import TileComponent
+from data.render import SPRITES
 from processors.camera import CameraProcessor
 from processors.dijkstra import DijkstraProcessor
 from processors.fov import FOVProcessor

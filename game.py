@@ -10,7 +10,8 @@ import os
 import shelve
 import tcod as libtcod
 
-from _data import con, eqp, log, map, ENTITY_COLORS, MULTIPLIER, SPRITES
+from _data import con, eqp, log, map, ENTITY_COLORS, MULTIPLIER
+from data.render import SPRITES
 from camera import Camera
 from cursor import Cursor
 from data.skills import Skill
@@ -125,10 +126,11 @@ class GameWorld(esper.World):
         # Go through all items.
         # Find the skill.
         # Add the slot to the skill.
-        for item in self.table_item:
-            for skill, skill_data in Skills.all.items():
-                if skill in item.skill_pool:
-                    skill_data.slot = item.slot
+        for list_of_items in self.table_item:
+            for item in list_of_items: ### Problem: I only have the name of the item... 
+                for _, skill in Skills.all.items():
+                    if skill.name in item.skill_pool:
+                        skill.slot = item.slot
 
     def build_world(self):
         ' Upkeep. '
