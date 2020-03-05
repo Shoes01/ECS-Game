@@ -1,4 +1,3 @@
-from _data import UI_COLORS
 from _helper_functions import as_decimal, as_integer, generate_stats
 from components.actor.diary import DiaryComponent
 from components.actor.equipment import EquipmentComponent
@@ -8,6 +7,7 @@ from components.item.slot import SlotComponent
 from components.name import NameComponent
 from components.soul import SoulComponent
 from components.stats import StatsComponent
+from data.render import UI_COLORS
 
 def render_character_sheet(console_object, world):
     console, _, _, w, h = console_object

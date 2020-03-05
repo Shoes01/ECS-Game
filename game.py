@@ -1,4 +1,5 @@
 import data.ai as AI
+import data.equipment as Equipment
 import data.jobs as Jobs
 import data.races as Races
 import data.rarities as Rarities
@@ -123,13 +124,10 @@ class GameWorld(esper.World):
         self.inherit_slot()
 
     def inherit_slot(self):
-        # Go through all items.
-        # Find the skill.
-        # Add the slot to the skill.
-        for list_of_items in self.table_item:
-            for item in list_of_items: ### Problem: I only have the name of the item... 
+        for _, item in Equipment.all.items():
+            for item_skill in item.skills:
                 for _, skill in Skills.all.items():
-                    if skill.name in item.skill_pool:
+                    if skill == item_skill:
                         skill.slot = item.slot
 
     def build_world(self):

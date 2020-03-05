@@ -1,6 +1,5 @@
 import esper
 
-from _data import ENTITY_COLORS
 from _helper_functions import generate_stats
 from components.actor.actor import ActorComponent
 from components.actor.diary import DiaryComponent
@@ -13,6 +12,7 @@ from components.position import PositionComponent
 from components.render import RenderComponent
 from components.stats import StatsComponent
 from components.tile import TileComponent
+from data.render import ENTITY_COLORS
 from data.slots import _key_to_slots
 from processors.combat import CombatProcessor
 from processors.cooldown import CooldownProcessor
