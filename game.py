@@ -1,4 +1,5 @@
 import data.ai as AI
+import data.archtypes as Archtypes
 import data.equipment as Equipment
 import data.jobs as Jobs
 import data.races as Races
@@ -185,8 +186,6 @@ class GameWorld(esper.World):
 
         with open("data/consumables.json", "r") as read_file:
             data = json.load(read_file)
-        with open("data/equipment.json", "r") as read_file:
-            data.update(json.load(read_file))
         with open("data/monsters.json", "r") as read_file:
             data.update(json.load(read_file))
         with open("data/other.json", "r") as read_file:
@@ -232,6 +231,7 @@ class GameWorld(esper.World):
         }
         
         for ent, components in self._json_data.items():
+            # TODO: This will be changed when the jsons are phased out.
             if ent == 'comment': continue
             rarity = components.get('rarity')
             archtype = components.get('archtype')
@@ -299,6 +299,12 @@ class GameWorld(esper.World):
         
         ent = super().create_entity()
 
+        ## Create entity via *.py files
+        if entity.archtype == 'item': # booo, strings???
+
+
+
+        ## Create entity via json
         for key, value in self._json_data[entity].items():
             # Check for archtypes. This makes JSONing the data easier.
             if key == 'archtype':

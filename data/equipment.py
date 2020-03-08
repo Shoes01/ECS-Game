@@ -1,4 +1,5 @@
 import attr
+import data.archtypes as Archtypes
 import data.jobs as Jobs
 import data.rarities as Rarities
 import data.skills as Skills
@@ -18,7 +19,7 @@ class Item:
     stats: dict
     wearable: bool
     skills: list
-    archtype: str = 'item'
+    archtype: str = Archtypes.EQUIPMENT
     # The 'item' archtype bestows a lot of blank components: Item, Position.
 
 ################
