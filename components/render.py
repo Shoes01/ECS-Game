@@ -1,18 +1,16 @@
 import colorsys
 
-from data.render import ENTITY_COLORS
-
 class RenderComponent:
     ' Component that holds the graphical information of the entity. '
-    def __init__(self, color_bg, char, codepoint, color_fg, color_explored, explored=False, visible=False):
-        self.char = "#" if char is None else char
-        self.codepoint = 923 if codepoint is None else codepoint
-        self.color_fg = ENTITY_COLORS['floor'] if color_fg is None else color_fg
-        self.color_bg = ENTITY_COLORS['floor_bg'] if color_bg is None else color_bg
-        self.color_explored = ENTITY_COLORS['floor_explored'] if color_explored is None else color_explored
-        self.explored = explored
-        self.visible = visible
-        self.highlight_color = False
+    def __init__(self, render_data):
+        self.char = render_data.char
+        self.codepoint = render_data.codepoint
+        self.color_bg = render_data.color_bg
+        self.color_explored = render_data.color_explored
+        self.color_fg = render_data.color_fg
+        self.explored = render_data.explored
+        self.visible = render_data.visible
+        self.color_highlight = render_data.color_highlight
 
         ' Convert colors from hsv to rgb, if applicable. '
         self.color_fg = convert_color(self.color_fg)

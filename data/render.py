@@ -1,11 +1,3 @@
-import attr
-
-@attr.s(auto_attribs=True, slots=True)
-class Render:
-    char: str
-    color_fg: str
-    codepoint: str
-
 ##################
 ### CHARACTERS ###
 ##################
@@ -124,9 +116,9 @@ SPRITES = {
     'blank': 0,
     'corpse': 480,
     'player': 126,
-    # Entities defined in consumables.json
+    # Consumables
     'con_soul_jar': 818,
-    # Used in data/equipment.py
+    # Equipment
     'eqp_boots': 744,
     'eqp_dagger': 896,
     'eqp_hammer': 933,
@@ -136,16 +128,14 @@ SPRITES = {
     'eqp_sword': 898,
     'eqp_sword_great': 964,
     'eqp_sword_long': 928,
-    # Entities defined in monsters.json
+    # Monsters
     'mon_demon': 191,
     'mon_goblin': 89,
     'mon_kobold': 314,
     'mon_orc': 91,
     'mon_rat': 287,
     'mon_zombie': 25,
-    # Entities defined in other.json
-    'other_chest': 388,
-    # Entities defined in tiles.json
+    # Tiles
     'floor_stone': 51,
     'stairs': 195,
     'wall_stone': 554,
@@ -160,6 +150,47 @@ SPRITES = {
     'wall_stone_bottomleft': 82,
     'wall_stone_bottom': 83,
     'wall_stone_bottomright': 84,
-    # None json defined entities
-    'loot_plural': 200
+    # Special
+    'loot_plural': 200,
+    'other_chest': 388
 }
+
+############
+# ENTITIES #
+############
+import attr
+
+@attr.s(auto_attribs=True, slots=True)
+class Render:
+    char: str = '#'
+    color_bg: str = ENTITY_COLORS['floor_bg']
+    color_explored: str = ENTITY_COLORS['floor_explored']
+    color_fg: str = ENTITY_COLORS['floor']
+    color_highlight: bool = False
+    codepoint: int = 923
+    explored: bool = False
+    visible: bool = False
+
+# ITEMS #######################################################################
+
+HAMMER = Render(
+    char=')',
+    color_fg=ENTITY_COLORS['weapon'],
+    codepoint=SPRITES['eqp_sword']
+)
+
+SWORD = HAMMER
+
+# ACTORS ######################################################################
+
+PLAYER = Render(
+    char='@',
+    color_fg=ENTITY_COLORS['player'],
+    codepoint=SPRITES['player']
+)
+
+ZOMBIE = Render(
+    char='Z',
+    color_fg=ENTITY_COLORS['mon_zombie'],
+    codepoint=SPRITES['mon_zombie']
+)

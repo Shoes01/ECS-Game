@@ -1,21 +1,15 @@
 import data.jobs as Jobs
+import data.stats as Stats
 
 class JobComponent:
     ' Component that stores the job of the entity, and its upkeep cost. '
     __slots__ = 'job', 'upkeep'
-    def __init__(self, job=Jobs.SOLDIER, upkeep=None):
+    def __init__(self, job=Jobs.SOLDIER):
         # TODO: Streamline this with  the new _job.py file.
         self.job = job
-        self.upkeep = {
-            'hp': 0,
-            'attack': 0,
-            'magic': 0,
-            'speed': 0,
-            'defense': 0,
-            'resistance': 0
-        }
+        self.upkeep = job.upkeep
         
-        self.update_upkeep(upkeep)
+        self.update_upkeep(self.upkeep)
     
     def update_job(self, JOB):
         self.job = JOB
@@ -23,12 +17,12 @@ class JobComponent:
 
     def update_upkeep(self, upkeep):
         new_upkeep = {
-            'hp': 0,
-            'attack': 0,
-            'magic': 0,
-            'speed': 0,
-            'defense': 0,
-            'resistance': 0
+            Stats.HP:  0,
+            Stats.ATK: 0,
+            Stats.MAG: 0,
+            Stats.SPD: 0,
+            Stats.DEF: 0,
+            Stats.RES: 0
         }
         
         for stat, value in upkeep.items():

@@ -1,5 +1,4 @@
 import data.ai as AI
-import data.archtypes as Archtypes
 import data.entities as Entities
 import data.jobs as Jobs
 import data.races as Races
@@ -271,6 +270,7 @@ class GameWorld(esper.World):
         ent = super().create_entity()
         
         for key, value in entity.items():
+            print(f"Key:{key}, Value:{value}")
             self.add_component(ent, key(value))
         
         return ent
@@ -279,15 +279,15 @@ class GameWorld(esper.World):
         # TODO: Fix this somehow? Move the game entity to JSON as well?
         if entity == 'player':
             return super().create_entity(
-                ActorComponent(),
+                #ActorComponent(),
                 DiaryComponent(), # TODO: Give the player a heal
                 EnergyComponent(energy=0),
                 EquipmentComponent(),
                 InventoryComponent(),
-                JobComponent(job=Jobs.SOLDIER, upkeep={}),
+                JobComponent(job=Jobs.SOLDIER),
                 NameComponent(name='Player'),
                 PersistComponent(),
-                PlayerComponent(),
+                #PlayerComponent(),
                 RaceComponent(race=Races.HUMAN),
                 PositionComponent(),
                 RenderComponent(color_bg=None, char='@', codepoint=SPRITES['player'], color_fg=ENTITY_COLORS['player'], color_explored=None),
@@ -309,7 +309,7 @@ class GameWorld(esper.World):
                         self.add_component(ent, EnergyComponent())
                         self.add_component(ent, EquipmentComponent())
                         self.add_component(ent, InventoryComponent())
-                        self.add_component(ent, JobComponent(job=Jobs.MONSTER, upkeep={}))
+                        self.add_component(ent, JobComponent(job=Jobs.MONSTER))
                         self.add_component(ent, PositionComponent())
                         self.add_component(ent, RaceComponent(race=Races.MONSTER))
                     elif value == 'item':

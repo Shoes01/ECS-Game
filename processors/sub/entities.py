@@ -38,7 +38,7 @@ def render_entities(console_object, world):
         if world.has_component(ent, StairsComponent):
             _sorted_list['stairs'].append((pos, ren))
         elif world.has_component(ent, TileComponent):
-            if world.state is SkillTargeting and ren.highlight_color:
+            if world.state is SkillTargeting and ren.color_highlight:
                 _sorted_list['highlighted'].append((pos, ren))
             _sorted_list['tile'].append((pos, ren))
         elif world.has_component(ent, CorpseComponent):
@@ -76,7 +76,7 @@ def render_entities(console_object, world):
     
     # Print the highlight cursors.
     for (pos, ren) in _sorted_list.get('highlighted') or []:
-        print_cursor(ren.highlight_color, console, pos.x, pos.y, world)
+        print_cursor(ren.color_highlight, console, pos.x, pos.y, world)
 
     # Print cursor.
     cursor = world.cursor
@@ -110,14 +110,14 @@ def print_tile(console, pos, ren, _entity_directory, world, corpse=False, floor=
     bg = ren.color_bg + (255,)
     
     if world.state is not SkillTargeting:
-        ren.highlight_color = None
+        ren.color_highlight = None
     
     if ren.visible or ren.explored:
         if ren.explored and not ren.visible:
             bg = ren.color_explored + (255,)
         
-        if floor and ren.highlight_color:
-            fg = ren.highlight_color + (255,)
+        if floor and ren.color_highlight:
+            fg = ren.color_highlight + (255,)
             bg = (0, 0, 0, 0)
             codepoint = 790
 

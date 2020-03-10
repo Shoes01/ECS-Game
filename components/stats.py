@@ -1,20 +1,12 @@
-import attr
+import data.stats as Stats
 
-@attr.s(auto_attribs=True)
 class StatsComponent:
     ' Component that holds the stats of the entity. '
-    hp: int = 0
-    attack: int = 0
-    defense: int = 0
-    magic: int = 0
-    resistance: int = 0
-    speed: int = 0
-
-    def __attrs_post_init__(self):
-        ' Everything is multiplied by 10 in order to use pseudo decimals. '
-        self.hp *= 10
-        self.attack *= 10
-        self.defense *= 10
-        self.magic *= 10
-        self.resistance *= 10
-        self.speed *= 10
+    ' Everything is multiplied by 10 in order to use pseudo decimals. ' # TODO: I should change this. Pseudo-decimals should only be used to _display_
+    def __init__(self, stats_data):
+        self.hp = stats_data[Stats.HP] * 10
+        self.attack = stats_data[Stats.ATK] * 10
+        self.defense = stats_data[Stats.DEF] * 10
+        self.magic = stats_data[Stats.MAG] * 10
+        self.resistance = stats_data[Stats.RES] * 10
+        self.speed = stats_data[Stats.SPD] * 10
