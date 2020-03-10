@@ -1,6 +1,6 @@
 import data.ai as AI
 import data.archtypes as Archtypes
-import data.equipment as Equipment
+import data.entities as Entities
 import data.jobs as Jobs
 import data.races as Races
 import data.rarities as Rarities
@@ -120,16 +120,6 @@ class GameWorld(esper.World):
         self.consoles['stats'] = libtcod.console.Console(eqp.w, eqp.h, order='F'), eqp.x, eqp.y, eqp.w, eqp.h
         self.consoles['log'] = libtcod.console.Console(log.w, log.h, order='F'), log.x, log.y, log.w, log.h
         self.consoles['map'] = libtcod.console.Console(map.w, map.h, order='F'), map.x, map.y, map.w, map.h
-
-        # Skills need to inherit the slot from their parent item.
-        self.inherit_slot()
-
-    def inherit_slot(self):
-        for _, item in Equipment.all.items():
-            for item_skill in item.skills:
-                for _, skill in Skills.all.items():
-                    if skill == item_skill:
-                        skill.slot = item.slot
 
     def build_world(self):
         ' Upkeep. '
@@ -277,6 +267,14 @@ class GameWorld(esper.World):
             data_file['entities'] = self._entities
             data_file['next_entity_id'] = self._next_entity_id
 
+    def IMPROVED_create_entity(self, entity):
+        ent = super().create_entity()
+        
+        for key, value in entity.items():
+            self.add_component(ent, key(value))
+        
+        return ent
+    
     def create_entity(self, entity):
         # TODO: Fix this somehow? Move the game entity to JSON as well?
         if entity == 'player':
@@ -301,134 +299,131 @@ class GameWorld(esper.World):
 
         ## Create entity via *.py files
         if entity.archtype == 'item': # booo, strings???
+            ## Create entity via json
+            for key, value in self._json_data[entity].items():
+                # Check for archtypes. This makes JSONing the data easier.
+                if key == 'archtype':
+                    if value == 'monster':
+                        self.add_component(ent, ActorComponent())
+                        self.add_component(ent, DiaryComponent())
+                        self.add_component(ent, EnergyComponent())
+                        self.add_component(ent, EquipmentComponent())
+                        self.add_component(ent, InventoryComponent())
+                        self.add_component(ent, JobComponent(job=Jobs.MONSTER, upkeep={}))
+                        self.add_component(ent, PositionComponent())
+                        self.add_component(ent, RaceComponent(race=Races.MONSTER))
+                    elif value == 'item':
+                        self.add_component(ent, ItemComponent())
+                        self.add_component(ent, PositionComponent())
+                        self.add_component(ent, SkillPoolComponent())
+            
+        # Now just look for each and every component possible...
+        elif key == 'actor':
+            self.add_component(ent, ActorComponent())
+        
+        elif key == 'boss':
+            self.add_component(ent, BossComponent())
+        
+        elif key == 'brain':
+            self.add_component(ent, BrainComponent())
+        
+        elif key == 'consumable':
+            effects = value
+            self.add_component(ent, ConsumableComponent(effects=effects))
 
+        elif key == 'energy':
+            self.add_component(ent, EnergyComponent())
+        
+        elif key == 'equipment':
+            self.add_component(ent, EquipmentComponent())
+        
+        elif key == 'furniture':
+            self.add_component(ent, FurnitureComponent())
+        
+        elif key == 'item':
+            self.add_component(ent, ItemComponent())
+        
+        elif key == 'inventory':
+            self.add_component(ent, InventoryComponent())
 
+        elif key == 'job_requirement':
+            job_list = value
+            for _, job in Jobs.all.items():
+                if job.name in job_list:
+                    if self.has_component(ent, JobReqComponent):
+                        self.component_for_entity(ent, JobReqComponent).job_req.append(job)
+                    else:
+                        self.add_component(ent, JobReqComponent(job_req=[job,]))
+        
+        elif key == 'name':
+            name = value
+            self.add_component(ent, NameComponent(name=name))
+        
+        elif key == 'position':
+            self.add_component(ent, PositionComponent())
+        
+        elif key == 'rarity':
+            for _, rarity in Rarities.all.items():
+                if rarity.rank == value:
+                    self.add_component(ent, RarityComponent(rarity=rarity))
+                    break
+            else:
+                print(f"The item with entity ID {ent} has failed to create a RarityComponent with rarity {value}.")
 
-        ## Create entity via json
-        for key, value in self._json_data[entity].items():
-            # Check for archtypes. This makes JSONing the data easier.
-            if key == 'archtype':
-                if value == 'monster':
-                    self.add_component(ent, ActorComponent())
-                    self.add_component(ent, DiaryComponent())
-                    self.add_component(ent, EnergyComponent())
-                    self.add_component(ent, EquipmentComponent())
-                    self.add_component(ent, InventoryComponent())
-                    self.add_component(ent, JobComponent(job=Jobs.MONSTER, upkeep={}))
-                    self.add_component(ent, PositionComponent())
-                    self.add_component(ent, RaceComponent(race=Races.MONSTER))
-                elif value == 'item':
-                    self.add_component(ent, ItemComponent())
-                    self.add_component(ent, PositionComponent())
-                    self.add_component(ent, SkillPoolComponent())
-            
-            # Now just look for each and every component possible...
-            elif key == 'actor':
-                self.add_component(ent, ActorComponent())
-            
-            elif key == 'boss':
-                self.add_component(ent, BossComponent())
-            
-            elif key == 'brain':
-                self.add_component(ent, BrainComponent())
-            
-            elif key == 'consumable':
-                effects = value
-                self.add_component(ent, ConsumableComponent(effects=effects))
+        elif key == 'render':
+            color_bg = value.get('color_bg')
+            char = value.get('char')
+            codepoint = value.get('codepoint')
+            color_fg = value.get('color_fg')
+            color_explored = value.get('color_explored')
+            self.add_component(ent, RenderComponent(color_bg=ENTITY_COLORS.get(color_bg), char=char, codepoint=SPRITES[codepoint], color_fg=ENTITY_COLORS[color_fg], color_explored=ENTITY_COLORS.get(color_explored)))
 
-            elif key == 'energy':
-                self.add_component(ent, EnergyComponent())
+        elif key == 'skill':
+            names = value
             
-            elif key == 'equipment':
-                self.add_component(ent, EquipmentComponent())
-            
-            elif key == 'furniture':
-                self.add_component(ent, FurnitureComponent())
-            
-            elif key == 'item':
-                self.add_component(ent, ItemComponent())
-            
-            elif key == 'inventory':
-                self.add_component(ent, InventoryComponent())
+            s_comp = self.component_for_entity(ent, SlotComponent)
+            sp_comp = self.component_for_entity(ent, SkillPoolComponent)
 
-            elif key == 'job_requirement':
-                job_list = value
-                for _, job in Jobs.all.items():
-                    if job.name in job_list:
-                        if self.has_component(ent, JobReqComponent):
-                            self.component_for_entity(ent, JobReqComponent).job_req.append(job)
-                        else:
-                            self.add_component(ent, JobReqComponent(job_req=[job,]))
+            if type(names) is not list: 
+                names = [names,]
             
-            elif key == 'name':
-                name = value
-                self.add_component(ent, NameComponent(name=name))
-            
-            elif key == 'position':
-                self.add_component(ent, PositionComponent())
-            
-            elif key == 'rarity':
-                for _, rarity in Rarities.all.items():
-                    if rarity.rank == value:
-                        self.add_component(ent, RarityComponent(rarity=rarity))
-                        break
-                else:
-                    print(f"The item with entity ID {ent} has failed to create a RarityComponent with rarity {value}.")
+            for name in names:                    
+                for skill, skill_data in Skills.all.items():
+                    if skill_data.name == name:
+                        sp_comp.skill_pool.append(skill)
+                        skill_data.slot = s_comp.slot
 
-            elif key == 'render':
-                color_bg = value.get('color_bg')
-                char = value.get('char')
-                codepoint = value.get('codepoint')
-                color_fg = value.get('color_fg')
-                color_explored = value.get('color_explored')
-                self.add_component(ent, RenderComponent(color_bg=ENTITY_COLORS.get(color_bg), char=char, codepoint=SPRITES[codepoint], color_fg=ENTITY_COLORS[color_fg], color_explored=ENTITY_COLORS.get(color_explored)))
+        elif key == 'slot':
+            for _, slot in Slots.all.items():
+                if slot == value:
+                    self.add_component(ent, SlotComponent(slot=slot))
+                    break
+            else:
+                print(f"The item with entity ID {ent} has failed to create a SlotComponent with slot {value}.")
+        
+        elif key == 'soul':
+            eccentricity = value.get('eccentricity')
+            max_rarity = value.get('max_rarity')
+            self.add_component(ent, SoulComponent(eccentricity=eccentricity, max_rarity=max_rarity))
 
-            elif key == 'skill':
-                names = value
-                
-                s_comp = self.component_for_entity(ent, SlotComponent)
-                sp_comp = self.component_for_entity(ent, SkillPoolComponent)
+        elif key == 'stairs':
+            self.add_component(ent, StairsComponent())
+        
+        elif key == 'stats':
+            hp = value.get('hp') if value.get('hp') else 0
+            attack = value.get('attack') if value.get('attack') else 0
+            defense = value.get('defense') if value.get('defense') else 0
+            magic = value.get('magic') if value.get('magic') else 0
+            resistance = value.get('resistance') if value.get('resistance') else 0
+            speed = value.get('speed') if value.get('speed') else 0
+            self.add_component(ent, StatsComponent(hp=hp, attack=attack, defense=defense, magic=magic, resistance=resistance, speed=speed))
 
-                if type(names) is not list: 
-                    names = [names,]
-                
-                for name in names:                    
-                    for skill, skill_data in Skills.all.items():
-                        if skill_data.name == name:
-                            sp_comp.skill_pool.append(skill)
-                            skill_data.slot = s_comp.slot
-
-            elif key == 'slot':
-                for _, slot in Slots.all.items():
-                    if slot == value:
-                        self.add_component(ent, SlotComponent(slot=slot))
-                        break
-                else:
-                    print(f"The item with entity ID {ent} has failed to create a SlotComponent with slot {value}.")
-            
-            elif key == 'soul':
-                eccentricity = value.get('eccentricity')
-                max_rarity = value.get('max_rarity')
-                self.add_component(ent, SoulComponent(eccentricity=eccentricity, max_rarity=max_rarity))
-
-            elif key == 'stairs':
-                self.add_component(ent, StairsComponent())
-            
-            elif key == 'stats':
-                hp = value.get('hp') if value.get('hp') else 0
-                attack = value.get('attack') if value.get('attack') else 0
-                defense = value.get('defense') if value.get('defense') else 0
-                magic = value.get('magic') if value.get('magic') else 0
-                resistance = value.get('resistance') if value.get('resistance') else 0
-                speed = value.get('speed') if value.get('speed') else 0
-                self.add_component(ent, StatsComponent(hp=hp, attack=attack, defense=defense, magic=magic, resistance=resistance, speed=speed))
-
-            elif key == 'tile':
-                blocks_path = value.get('blocks_path')
-                blocks_sight = value.get('blocks_sight')
-                self.add_component(ent, TileComponent(blocks_path=blocks_path, blocks_sight=blocks_sight))
-            
-            elif key == 'wearable':
-                self.add_component(ent, WearableComponent())
+        elif key == 'tile':
+            blocks_path = value.get('blocks_path')
+            blocks_sight = value.get('blocks_sight')
+            self.add_component(ent, TileComponent(blocks_path=blocks_path, blocks_sight=blocks_sight))
+        
+        elif key == 'wearable':
+            self.add_component(ent, WearableComponent())
         
         return ent

@@ -1,3 +1,4 @@
+import data.entities as Entities
 import esper
 
 class InitialProcessor(esper.Processor):
@@ -7,4 +8,4 @@ class InitialProcessor(esper.Processor):
     def process(self):
         if not self.world._entities:
             # Create the player entity. It is ID 1.
-            self.world.create_entity('player')
+            self.world.IMPROVED_create_entity(Entities.PLAYER)
