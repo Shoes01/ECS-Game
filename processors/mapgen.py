@@ -1,3 +1,5 @@
+import data.components_master as Components
+import data.entities as Entities
 import esper
 import numpy as np
 import random
@@ -137,7 +139,7 @@ class MapgenProcessor(esper.Processor):
     def place_tiles(self, tiles):
         for (x, y), value in np.ndenumerate(tiles):
             if value == 0:
-                new_ent = self.world.create_entity('floor')
+                new_ent = self.world.create_entity(Entities.FLOOR)
                 new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                 new_ent_pos.x = x
                 new_ent_pos.y = y
@@ -147,7 +149,7 @@ class MapgenProcessor(esper.Processor):
                 new_ent_ren.codepoint = SPRITES[random.choice(decorations)]
 
             if value == 1:
-                new_ent = self.world.create_entity('wall')
+                new_ent = self.world.create_entity(Entities.WALL)
                 new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                 new_ent_pos.x = x
                 new_ent_pos.y = y
@@ -169,14 +171,14 @@ class MapgenProcessor(esper.Processor):
 
         # Spawn a starting item for the player.
         if floor == 0:
-            starting_item = self.world.create_entity('sword')
+            starting_item = self.world.create_entity(Entities.SWORD)
             starting_item_pos = self.world.component_for_entity(starting_item, PositionComponent)
             starting_item_pos.x = random.randint(room.x + 1, room.x + room.w - 2)
             starting_item_pos.y = random.randint(room.y + 1, room.y + room.h - 2)
 
         ### DEBUG 
         """
-        new_ent = self.world.create_entity('stairs')
+        new_ent = self.world.create_entity(Entities.STAIRS)
         
         new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
         new_ent_pos.x = player_pos.x
@@ -187,7 +189,7 @@ class MapgenProcessor(esper.Processor):
         if floor == FINAL_FLOOR:
             return 0
 
-        new_ent = self.world.create_entity('stairs')
+        new_ent = self.world.create_entity(Entities.STAIRS)
         
         new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
         room = self._leaf_rooms.pop(random.randint(0, len(self._leaf_rooms) - 1))
@@ -203,7 +205,7 @@ class MapgenProcessor(esper.Processor):
             y = random.randint(boss_room.y, boss_room.y + boss_room.h - 1)
 
             if not tiles[x, y] and not self.world.get_entities_at(x, y, ActorComponent):
-                new_ent = self.world.create_entity('demon')
+                new_ent = self.world.create_entity(Entities.DEMON)
                 new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                 new_ent_pos.x = x
                 new_ent_pos.y = y
@@ -234,12 +236,13 @@ class MapgenProcessor(esper.Processor):
                 number_of_monsters -= 1
 
     def gen_random_monster(self, floor):
+        ' Generate monsters of rarity less than or equal to the floor number. '
         list_of_monsters = []
-        table_monster = self.world.table_monster
-        for i in range(0, floor + 1):
-            list_ = table_monster[i]
-            list_of_monsters.extend(list_)
-        
+
+        for _, monster in Entities.all.items():
+            if monster.get(Components.ACTOR) and not monster.get(Components.PLAYER) and monster.get(Components.RARITY).rank <= floor+1:
+                list_of_monsters.append(monster)
+
         monster = random.choice(list_of_monsters)
         
         return self.world.create_entity(monster)
@@ -256,7 +259,7 @@ class MapgenProcessor(esper.Processor):
                 if not tiles[x, y] and not self.world.get_entities_at(x, y, ActorComponent):
                     chance = random.randint(0, 100)
                     if chance > 50:
-                        new_ent = self.world.create_entity('chest')
+                        new_ent = self.world.create_entity(Entities.CHEST)
                         new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                         new_ent_pos.x = x
                         new_ent_pos.y = y
@@ -264,8 +267,8 @@ class MapgenProcessor(esper.Processor):
                 number_of_items -= 1
 
     def distribute_items(self, floor):
-        # Move this section into the monster gen itself.
-        for ent, (actor, inv, rar) in self.world.get_components(ActorComponent, InventoryComponent, RarityComponent):
+        # TODO: Move this section into the monster gen itself. I want a monster to have an inventory with loot upon creation.
+        for ent, (_, inv, rar) in self.world.get_components(ActorComponent, InventoryComponent, RarityComponent):
             rarity_rank = rar.rarity.rank
             loot = self.generate_loot(floor, rarity_rank)
             if loot:
@@ -276,11 +279,13 @@ class MapgenProcessor(esper.Processor):
                     self.world.component_for_entity(ent, EquipmentComponent).equipment.append(new_ent)
     
     def generate_loot(self, floor, ent_rarity):
-        table_item = self.world.table_item
-        for x in reversed(range(0, len(table_item))):
-            chance = random.randint(0, 100)
-            if table_item[x] and self.loot_algorithm(chance=chance, monster=ent_rarity, item=x, floor=floor):
-                return random.choice(table_item[x])
+        ' Loop through every item possible, and roll a chance to drop it. '
+        # TODO: This is flawed; after refactoring things, the algo should be revisited.
+        chance = random.randint(0, 100)
+        for _, item in Entities._all_items.items():
+            item_rarity = item[Components.RARITY].rank
+            if self.loot_algorithm(chance=chance, monster=ent_rarity, item=item_rarity, floor=floor):
+                return item
 
     def loot_algorithm(self, chance, monster, item, floor):
         net_rarity = (1 + (monster)*5 - (item - 3)*5 + (floor)*5)
@@ -302,4 +307,3 @@ class MapgenProcessor(esper.Processor):
             directory[(x, y)] = results
         
         return directory
-

@@ -1,18 +1,10 @@
-import attr
-
-@attr.s(auto_attribs=True, slots=True)
-class Eccentricity:
-    ' The eccentricity of an entity determines the variation of its base stats. '
-    eccentricity: int
-    name: str
-
-DECAYED =       Eccentricity(eccentricity=-2, name="decayed")
-HYPOBOLIC =     Eccentricity(eccentricity=-1, name="hypobolic")
-CIRCULAR =      Eccentricity(eccentricity= 0, name="circular")
-ELLIPTIC =      Eccentricity(eccentricity= 1, name="elliptic")
-PARABOLIC =     Eccentricity(eccentricity= 3, name="parabolic")
-SUPERBOLIC =    Eccentricity(eccentricity= 5, name="superbolic")
-HYPERBOLIC =    Eccentricity(eccentricity= 9, name="hyperbolic")
+DECAYED =       {'rank': 0, 'name': "decayed"}
+HYPOBOLIC =     {'rank': 1, 'name': "hypobolic"}
+CIRCULAR =      {'rank': 2, 'name': "circular"}
+ELLIPTIC =      {'rank': 3, 'name': "elliptic"}
+PARABOLIC =     {'rank': 4, 'name': "parabolic"}
+SUPERBOLIC =    {'rank': 5, 'name': "superbolic"}
+HYPERBOLIC =    {'rank': 6, 'name': "hyperbolic"}
 
 all = {
     'DECAYED': DECAYED,

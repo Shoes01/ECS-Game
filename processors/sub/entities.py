@@ -21,7 +21,7 @@ def render_entities(console_object, world):
         'highlighted': []
     }
 
-    console, x, y, w, h = console_object
+    console, _, _, _, _ = console_object
 
     # Sort them into lists.
     for ent, (pos, ren) in world.get_components(PositionComponent, RenderComponent):

@@ -1,9 +1,9 @@
-HEAD = 'head'
-TORSO = 'torso'
-MAINHAND = 'mainhand'
-OFFHAND = 'offhand'
-FEET = 'feet'
-ACCESSORY = 'accessory'
+HEAD =      {'name': 'head',        'key': 'w'}
+TORSO =     {'name': 'torso',       'key': 's'}
+MAINHAND =  {'name': 'mainhand',    'key': 'q'}
+OFFHAND =   {'name': 'offhand',     'key': 'a'}
+FEET =      {'name': 'feet',        'key': 'd'}
+ACCESSORY = {'name': 'accessory',   'key': 'e'}
 
 all = {
     'HEAD': HEAD,
@@ -12,15 +12,6 @@ all = {
     'OFFHAND': OFFHAND,
     'FEET': FEET,
     'ACCESSORY': ACCESSORY
-}
-
-_slots_to_key = {
-    HEAD: 'w',
-    TORSO: 's',
-    MAINHAND: 'q',
-    OFFHAND: 'a',
-    FEET: 'd',
-    ACCESSORY: 'e'
 }
 
 _key_to_slots = {

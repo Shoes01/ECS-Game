@@ -8,4 +8,4 @@ class InitialProcessor(esper.Processor):
     def process(self):
         if not self.world._entities:
             # Create the player entity. It is ID 1.
-            self.world.IMPROVED_create_entity(Entities.PLAYER)
+            self.world.create_entity(Entities.PLAYER)

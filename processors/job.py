@@ -6,7 +6,6 @@ from _helper_functions import generate_stats
 from components.actor.diary import DiaryComponent
 from components.actor.job import JobComponent
 from components.actor.race import RaceComponent
-from data.jobs import Job
 from processors.removable import RemovableProcessor
 from processors.skill_menu import SkillMenuProcessor
 from processors.state import StateProcessor

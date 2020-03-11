@@ -211,7 +211,7 @@ class SkillProcessor(esper.Processor):
             for stat in insufficient_stats:
                 error_message = error_message + str(stat) + ', '
             error_message = error_message[:-2]
-            self.world.messages.append({'skill': (error_message, name, turn)})
+            self.world.messages.append({'skill': (error_message, skill_comp.name, self.world.turn)})
             return 0
         
         # Pay the costs.

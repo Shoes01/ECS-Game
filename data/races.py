@@ -1,9 +1,9 @@
-MONSTER = 'monster'
-HUMAN = 'human'
-ELF = 'elf'
-KOBOLD = 'kobold'
-ORC = 'orc'
-GOBLIN = 'goblin'
+MONSTER = {'name': 'monster'}
+HUMAN = {'name': 'human'}
+ELF = {'name': 'elf'}
+KOBOLD = {'name': 'kobold'}
+ORC = {'name': 'orc'}
+GOBLIN = {'name': 'goblin'}
 
 all = {
     'MONSTER': MONSTER,

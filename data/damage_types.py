@@ -1,6 +1,6 @@
-NONE = 'none'
-PHYSICAL = 'physical'
-MAGICAL = 'magical'
+NONE = {'name': 'none'}
+PHYSICAL = {'name': 'physical'}
+MAGICAL = {'name': 'magical'}
 
 all = {
     'NONE': NONE, 

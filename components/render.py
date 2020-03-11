@@ -8,9 +8,10 @@ class RenderComponent:
         self.color_bg = render_data.color_bg
         self.color_explored = render_data.color_explored
         self.color_fg = render_data.color_fg
-        self.explored = render_data.explored
-        self.visible = render_data.visible
         self.color_highlight = render_data.color_highlight
+        self.explored = render_data.explored
+        self.stairs = render_data.stairs
+        self.visible = render_data.visible
 
         ' Convert colors from hsv to rgb, if applicable. '
         self.color_fg = convert_color(self.color_fg)

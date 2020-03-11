@@ -33,8 +33,8 @@ class SoulComponent:
 
     def generate_soul(self):
         attempts = 0
-        eccentricity = self.eccentricity
-        rarity = random.randint(-2, self.max_rarity) * 10 # -2 is the floor for max_rarity: it represents Zombie
+        eccentricity = self.eccentricity.rank
+        rarity = random.randint(-2, self.max_rarity.rank) * 10 # -2 is the floor for max_rarity: it represents Zombie
         soul_attempt = np.zeros((2, 3), dtype=int, order='F')
 
         if eccentricity * 6 < rarity:
