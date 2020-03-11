@@ -1,52 +1,16 @@
-import data.ai as AI
-import data.entities as Entities
-import data.jobs as Jobs
-import data.races as Races
-import data.rarities as Rarities
-import data.slots as Slots
-import data.skills as Skills
 import esper
-import json
 import os
 import shelve
 import tcod as libtcod
 
 from _data import con, eqp, log, map, MULTIPLIER
-from data.render import ENTITY_COLORS, SPRITES
 from camera import Camera
+from components.position import PositionComponent
 from cursor import Cursor
 from load_tileset import load_tileset
 from fsm import MainMenu
 from map import Map
 from typing import Type
-
-' Components. '
-from components.actor.actor import ActorComponent
-from components.actor.boss import BossComponent
-from components.actor.brain import BrainComponent
-from components.actor.diary import DiaryComponent
-from components.actor.energy import EnergyComponent
-from components.actor.equipment import EquipmentComponent
-from components.actor.inventory import InventoryComponent
-from components.actor.job import JobComponent
-from components.actor.player import PlayerComponent
-from components.actor.race import RaceComponent
-from components.item.consumable import ConsumableComponent
-from components.item.item import ItemComponent
-from components.item.jobreq import JobReqComponent
-from components.item.skill_pool import SkillPoolComponent
-from components.item.slot import SlotComponent
-from components.item.wearable import WearableComponent
-from components.furniture import FurnitureComponent
-from components.name import NameComponent
-from components.persist import PersistComponent
-from components.position import PositionComponent
-from components.rarity import RarityComponent
-from components.render import RenderComponent
-from components.soul import SoulComponent
-from components.stairs import StairsComponent
-from components.stats import StatsComponent
-from components.tile import TileComponent
 
 ' Processors. '
 from processors.ai_input import AiInputProcessor
@@ -99,7 +63,6 @@ class GameWorld(esper.World):
         self.ticker = 0
         self.turn = 0
         self.toggle_debug_mode = False
-        self._json_data = self.load_data()
 
         ' Objects. '
         self.camera = Camera(x=0, y=0, w=map.w // MULTIPLIER, h=map.h // MULTIPLIER, leash=3) # TODO: The map values from _data might need to be renamed...
@@ -165,22 +128,6 @@ class GameWorld(esper.World):
                 if pos.x == x and pos.y == y:
                     ents.append(ent)
             return ents
-
-    def load_data(self):
-        data = None
-
-        with open("data/consumables.json", "r") as read_file:
-            data = json.load(read_file)
-        with open("data/monsters.json", "r") as read_file:
-            data.update(json.load(read_file))
-        with open("data/other.json", "r") as read_file:
-            data.update(json.load(read_file))
-        with open("data/skills.json", "r") as read_file:
-            data.update(json.load(read_file))
-        with open("data/tiles.json", "r") as read_file:
-            data.update(json.load(read_file))
-        
-        return data
     
     def load_game(self):
         if not os.path.isfile('savegame.dat'):

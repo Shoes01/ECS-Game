@@ -1,11 +1,25 @@
+import attr
+
+@attr.s(auto_attribs=True, slots=True)
+class JobComponent:
+    description: str
+    name: str
+    races: list
+    skills: dict # Skills required to have to switch to this job ...
+    upkeep: dict
+
+
+
+# TODO: The logic here should be moved into the processor...
+
 import data.jobs as Jobs
 import data.stats as Stats
 
 class JobComponent:
     ' Component that stores the job of the entity, and its upkeep cost. '
     __slots__ = 'job', 'upkeep'
-    def __init__(self, job=Jobs.SOLDIER):
-        # TODO: Streamline this with  the new _job.py file.
+    def __init__(self, description, name, races, skills, upkeep):
+        
         self.job = job
         self.upkeep = job.upkeep
         
