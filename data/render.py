@@ -238,4 +238,4 @@ WALL = Render(
     color_explored=ENTITY_COLORS['wall_explored'],
     color_fg=ENTITY_COLORS['wall'],
     codepoint=SPRITES['wall_stone']
-}
+)

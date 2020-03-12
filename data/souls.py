@@ -3,7 +3,7 @@ from collections import namedtuple
 import data.eccentricities as Eccentricities
 import data.rarities as Rarities
 
-Soul = namedtuple('soul', 'eccentricity, rarity, new_game', defaults=(False))
+Soul = namedtuple('soul', 'eccentricity rarity new_game', defaults=(False))
 
 DEMON = Soul(
     eccentricity=Eccentricities.SUPERBOLIC,

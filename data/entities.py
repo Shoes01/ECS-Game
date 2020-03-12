@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 import attr
 import data.brain as Brain
 import data.components_master as Components
@@ -13,14 +15,14 @@ import data.stats as Stats
 
 ' Base components that are the same to all Items. '
 ITEM = {
-    Components.ITEM: {},
-    Components.POSITION: {},
-    Components.WEARABLE: {},
+    Components.ITEM: (),
+    Components.POSITION: (),
+    Components.WEARABLE: (),
 }
 
 HAMMER = {**ITEM,
     Components.JOB_REQ: [Jobs.SOLDIER, Jobs.WARRIOR],
-    Components.NAME: {'name': 'Hammer'},
+    Components.NAME: ('Hammer',),
     Components.RARITY: Rarities.AWFUL,
     Components.RENDER: Render.HAMMER,
     Components.SLOT: Slots.MAINHAND,
@@ -30,7 +32,7 @@ HAMMER = {**ITEM,
 
 SWORD = {**ITEM,
     Components.JOB_REQ: [Jobs.SOLDIER, Jobs.WARRIOR],
-    Components.NAME: {'name': 'Sword'},
+    Components.NAME: ('Sword',),
     Components.RARITY: Rarities.AWFUL,
     Components.RENDER: Render.SWORD,
     Components.SLOT: Slots.MAINHAND,
@@ -49,18 +51,18 @@ for _, item in _all_items.items():
 
 ' Base components that are the same to all Actors. '
 ACTOR = {
-    Components.ACTOR: {},
+    Components.ACTOR: (),
     Components.BRAIN: Brain.ZOMBIE,
-    Components.DIARY: {},
-    Components.ENERGY: {},
-    Components.EQUIPMENT: {},
-    Components.INVENTORY: {},
+    Components.DIARY: (),
+    Components.ENERGY: (),
+    Components.EQUIPMENT: (),
+    Components.INVENTORY: (),
     Components.JOB: Jobs.MONSTER,
-    Components.POSITION: {},
+    Components.POSITION: (),
 }
 
 DEMON = {**ACTOR,
-    Components.NAME: {'name': 'Demon'},
+    Components.NAME: ('Demon',),
     Components.RARITY: Rarities.MYTHIC,
     Components.RENDER: Render.DEMON,
     Components.SOUL: Souls.DEMON,
@@ -70,30 +72,30 @@ DEMON = {**ACTOR,
 PLAYER = {**ACTOR,
     Components.BRAIN: Brain.NONE,
     Components.JOB: Jobs.SOLDIER,
-    Components.NAME: {'name': 'Player'},
-    Components.PLAYER: {},
+    Components.NAME: ('Player',),
+    Components.PLAYER: (),
     Components.RENDER: Render.PLAYER,
     Components.SOUL: Souls.PLAYER,
     Components.STATS: Stats.PLAYER
 }
 
 ZOMBIE = {**ACTOR,
-    Components.NAME: {'name': 'Zombie'},
+    Components.NAME: ('Zombie',),
     Components.RARITY: Rarities.AWFUL,
     Components.RENDER: Render.ZOMBIE,
     Components.SOUL: Souls.ZOMBIE,
     Components.STATS: Stats.ZOMBIE
 }
 
-_all_actors = {'PLAYER': PLAYER, 'ZOMBIE': ZOMBIE}
+_all_actors = {'DEMON': DEMON, 'PLAYER': PLAYER, 'ZOMBIE': ZOMBIE}
 
 # CONSUMABLES #################################################################
 
 ' Base components that are the same to all Consumables. '
 CONSUMABLE = {
-    Components.CONSUMABLE: {},
-    Components.ITEM: {},
-    Components.POSITION: {}
+    Components.CONSUMABLE: (),
+    Components.ITEM: (),
+    Components.POSITION: ()
 }
 
 SOUL_JAR = {
@@ -107,14 +109,14 @@ _all_consumables = {'SOUL_JAR': SOUL_JAR}
 
 ' Base components that are the same to all Furniture. '
 FURNITURE = {
-    Components.ACTOR: {},
-    Components.FURNITURE: {},
-    Components.POSITION: {}
+    Components.ACTOR: (),
+    Components.FURNITURE: (),
+    Components.POSITION: ()
 }
 
 CHEST = {**FURNITURE,
-    Components.INVENTORY: {},
-    Components.NAME: {'name': 'Chest'},
+    Components.INVENTORY: (),
+    Components.NAME: ('Chest',),
     Components.RARITY: Rarities.UNCOMMON,
     Components.RENDER: Render.CHEST,
     Components.STATS: Stats.CHEST
@@ -124,10 +126,12 @@ _all_furniture = {'CHEST': CHEST}
 
 # TILES #######################################################################
 
+Tile = namedtuple('Tile', 'blocks_path blocks_sight', defaults=(False, False))
+
 ' Base components that are the same to all Tiles. '
 TILE = {
-    Components.POSITION: {},
-    Components.TILE: {'blocks_path': False, 'blocks_sight': False}
+    Components.POSITION: (),
+    Components.TILE: Tile(blocks_path=False, blocks_sight=False)
 }
 
 FLOOR = {**TILE,
@@ -140,7 +144,7 @@ STAIRS = {**TILE,
 
 WALL = {**TILE,
     Components.RENDER: Render.WALL,
-    Components.TILE: {'blocks_path': True, 'blocks_sight': True}
+    Components.TILE: Tile(blocks_path=True, blocks_sight=True)
 }
 
 _all_tiles = {'FLOOR': FLOOR, 'STAIRS': STAIRS, 'WALL': WALL}
