@@ -18,7 +18,7 @@ import data.stats as Stats
 class JobComponent:
     ' Component that stores the job of the entity, and its upkeep cost. '
     __slots__ = 'job', 'upkeep'
-    def __init__(self, description, name, races, skills, upkeep):
+    def __init__(self, job):
         
         self.job = job
         self.upkeep = job.upkeep

@@ -1,24 +1,24 @@
+from collections import namedtuple
+
 import data.eccentricities as Eccentricities
 import data.rarities as Rarities
 
-SOUL = {
-    'new_game': False
-}
+Soul = namedtuple('soul', 'eccentricity, rarity, new_game', defaults=(False))
 
-DEMON = {**SOUL,
-    'eccentricity': Eccentricities.SUPERBOLIC,
-    'rarity': Rarities.MYTHIC
-}
+DEMON = Soul(
+    eccentricity=Eccentricities.SUPERBOLIC,
+    rarity=Rarities.MYTHIC
+)
 
-PLAYER = {**SOUL,
-    'eccentricity': Eccentricities.CIRCULAR,
-    'new_game': True,
-    'rarity': Rarities.MYTHIC
-}
+PLAYER = Soul(
+    eccentricity=Eccentricities.CIRCULAR,
+    rarity=Rarities.MYTHIC,
+    new_game=True
+)
 
-ZOMBIE = {**SOUL,
-    'eccentricity': Eccentricities.HYPOBOLIC,
-    'rarity': Rarities.AWFUL
-}
+ZOMBIE = Soul(
+    eccentricity=Eccentricities.HYPOBOLIC,
+    rarity=Rarities.AWFUL
+)
 
 all = {'DEMON': DEMON, 'PLAYER': PLAYER, 'ZOMBIE': ZOMBIE}

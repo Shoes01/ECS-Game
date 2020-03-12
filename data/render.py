@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 ##################
 ### CHARACTERS ###
 ##################
@@ -159,87 +161,81 @@ SPRITES = {
 # ENTITIES #
 ############
 
-RENDER = {
-    'char:': '#',
-    'color_bg:': ENTITY_COLORS['floor_bg'],
-    'color_explored:': ENTITY_COLORS['floor_explored'],
-    'color_fg:': ENTITY_COLORS['floor'],
-    'color_highlight:': False,
-    'codepoint:':  923,
-    'explored:':  False,
-    'stairs:':  False,
-    'visible:':  False
-}
+Render = namedtuple(
+    'Render', 
+    'char color_bg color_explored color_fg color_highlight codepoint explored stairs visible',
+    defaults=('#', ENTITY_COLORS['floor_bg'], ENTITY_COLORS['floor_explored'], ENTITY_COLORS['floor'], False, 923, False, False)
+)
 
 # ITEMS #######################################################################
 
-HAMMER = {**RENDER,
-    'char=': ')',
-    'color_fg=': ENTITY_COLORS['weapon'],
-    'codepoint=': SPRITES['eqp_sword']
-}
+HAMMER = Render(
+    char=')',
+    color_fg=ENTITY_COLORS['weapon'],
+    codepoint=SPRITES['eqp_sword']
+)
 
 SWORD = HAMMER
 
 # ACTORS ######################################################################
 
-DEMON = {**RENDER,
-    'char=': '&',
-    'color_fg=': ENTITY_COLORS['mon_demon'],
-    'codepoint=': SPRITES['mon_demon']
-}
+DEMON = Render(
+    char='&',
+    color_fg=ENTITY_COLORS['mon_demon'],
+    codepoint=SPRITES['mon_demon']
+)
 
-PLAYER = {**RENDER,
-    'char=': '@',
-    'color_fg=': ENTITY_COLORS['player'],
-    'codepoint=': SPRITES['player']
-}
+PLAYER = Render(
+    char='@',
+    color_fg=ENTITY_COLORS['player'],
+    codepoint=SPRITES['player']
+)
 
-ZOMBIE = {**RENDER,
-    'char=': 'Z',
-    'color_fg=': ENTITY_COLORS['mon_zombie'],
-    'codepoint=': SPRITES['mon_zombie']
-}
+ZOMBIE = Render(
+    char='Z',
+    color_fg=ENTITY_COLORS['mon_zombie'],
+    codepoint=SPRITES['mon_zombie']
+)
 
 # CONSUMABLES #################################################################
 
-SOUL_JAR = {**RENDER,
-    'char=': '!',
-    'color_fg=': ENTITY_COLORS['con_jar'],
-    'codepoint=': SPRITES['con_soul_jar']
-}
+SOUL_JAR = Render(
+    char='!',
+    color_fg=ENTITY_COLORS['con_jar'],
+    codepoint=SPRITES['con_soul_jar']
+)
 
 # FURNITURE ###################################################################
 
-CHEST = {**RENDER,
-    'char=': '(',
-    'color_fg=': ENTITY_COLORS['chest'],
-    'codepoint=': SPRITES['other_chest']
-}
+CHEST = Render(
+    char='(',
+    color_fg=ENTITY_COLORS['chest'],
+    codepoint=SPRITES['other_chest']
+)
 
 # TILES #######################################################################
 
-FLOOR = {**RENDER,
-    'char=': '.',
-    'color_bg=': ENTITY_COLORS['floor_bg'],
-    'color_explored=': ENTITY_COLORS['floor_explored'],
-    'color_fg=': ENTITY_COLORS['floor'],
-    'codepoint=': SPRITES['floor_stone']
-}
+FLOOR = Render(
+    char='.',
+    color_bg=ENTITY_COLORS['floor_bg'],
+    color_explored=ENTITY_COLORS['floor_explored'],
+    color_fg=ENTITY_COLORS['floor'],
+    codepoint=SPRITES['floor_stone']
+)
 
-STAIRS = {**RENDER,
-    'char=': '>',
-    'color_bg=': ENTITY_COLORS['stairs_bg'],
-    'color_explored=': ENTITY_COLORS['stairs_explored'],
-    'color_fg=': ENTITY_COLORS['stairs'],
-    'codepoint=': SPRITES['stairs'],
-    'stairs=': True
-}
+STAIRS = Render(
+    char='>',
+    color_bg=ENTITY_COLORS['stairs_bg'],
+    color_explored=ENTITY_COLORS['stairs_explored'],
+    color_fg=ENTITY_COLORS['stairs'],
+    codepoint=SPRITES['stairs'],
+    stairs=True
+)
 
-WALL = {**RENDER,
-    'char=': '#',
-    'color_bg=': ENTITY_COLORS['wall_bg'],
-    'color_explored=': ENTITY_COLORS['wall_explored'],
-    'color_fg=': ENTITY_COLORS['wall'],
-    'codepoint=': SPRITES['wall_stone']
+WALL = Render(
+    char='#',
+    color_bg=ENTITY_COLORS['wall_bg'],
+    color_explored=ENTITY_COLORS['wall_explored'],
+    color_fg=ENTITY_COLORS['wall'],
+    codepoint=SPRITES['wall_stone']
 }

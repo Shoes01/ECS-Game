@@ -165,6 +165,6 @@ class GameWorld(esper.World):
         ent = super().create_entity()
         
         for key, value in entity.items():
-            self.add_component(ent, key(**value))
+            self.add_component(ent, key(*value))
         
         return ent
