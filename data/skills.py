@@ -6,7 +6,12 @@ import data.races as Races
 import data.stats as Stats
 import numpy as np
 
-Skill = namedtuple('Skill', 'ap_max cooldown cost_energy cost_soul damage_type description job_requirement name east north_east south west north nort_west south_east south_west')
+# TODO: namedtuples are immutable, which means I have to define the caridnal directions when creating the skill _or_ I don't at all and infer them elsewhere.
+### I think it's only the skill_processor who needs it, so maybe that's not so bad.
+
+Skill = namedtuple('Skill', 
+    'ap_max cooldown cost_energy cost_soul damage_type description job_requirement name east north_east south west north nort_west south_east south_west'
+)
 
 """
 The way skills interact with tiles are defined here.
@@ -16,7 +21,7 @@ The way skills interact with tiles are defined here.
 3: Player ends in this tile, BUT the skill will fail if there is an actor here.
 4: Nothing, BUT the skill will fail if there is an entity here.
 """
-SPRINT = Slot(
+SPRINT = Skill(
     ap_max=100,
     cooldown=2,
     cost_energy=1,
@@ -42,7 +47,7 @@ SPRINT = Slot(
         [0, 0, 0, 0, 0]
     ]
 )
-FIRST_AID = Slot(
+FIRST_AID = Skill(
     ap_max=0,
     cooldown=3,
     cost_energy=0,
@@ -66,7 +71,7 @@ FIRST_AID = Slot(
         [0, 0, 0, 0, 0]
     ]
 )
-LUNGE = Slot(
+LUNGE = Skill(
     ap_max=100,
     cooldown=5,
     cost_energy=2,
@@ -90,7 +95,7 @@ LUNGE = Slot(
         [0, 0, 0, 0, 0]
     ]
 )
-CLEAVE = Slot(
+CLEAVE = Skill(
     ap_max=100,
     cooldown=4,
     cost_energy=2,
@@ -114,7 +119,7 @@ CLEAVE = Slot(
         [0, 0, 0, 0, 0]
     ]
 )
-HEADBUTT = Slot(
+HEADBUTT = Skill(
     ap_max=100,
     cooldown=3,
     cost_energy=1,
