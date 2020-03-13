@@ -2,15 +2,11 @@ from collections import namedtuple
 
 import data.damage_types as DamageTypes
 import data.jobs as Jobs
-import data.races as Races
+import data.slots as Slots
 import data.stats as Stats
-import numpy as np
-
-# TODO: namedtuples are immutable, which means I have to define the caridnal directions when creating the skill _or_ I don't at all and infer them elsewhere.
-### I think it's only the skill_processor who needs it, so maybe that's not so bad.
 
 Skill = namedtuple('Skill', 
-    'ap_max cooldown cost_energy cost_soul damage_type description job_requirement name east north_east south west north nort_west south_east south_west'
+    'ap_max cooldown cost_energy cost_soul damage_type description job_requirement name slot east north_east'
 )
 
 """
@@ -30,6 +26,7 @@ SPRINT = Skill(
     description="Sprint to a safer location.",
     job_requirement=Jobs.ROGUE,
     name='sprint',
+    slot=Slots.MAINHAND,
     east=
     [
         [0, 0, 0, 0, 0],
@@ -56,6 +53,7 @@ FIRST_AID = Skill(
     description='First aid, for your soul.',
     job_requirement=Jobs.SOLDIER,
     name='first aid',
+    slot=Slots.MAINHAND,
     east=[
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
@@ -80,6 +78,7 @@ LUNGE = Skill(
     description='Lunge forward to strike a foe.',
     job_requirement=Jobs.SOLDIER,
     name='lunge',
+    slot=Slots.MAINHAND,
     east=[
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
@@ -104,6 +103,7 @@ CLEAVE = Skill(
     description='A swinging strike.',
     job_requirement=Jobs.WARRIOR,
     name='cleave',
+    slot=Slots.MAINHAND,
     east=[
         [0, 0, 0, 0, 0],
         [0, 0, 0, 2, 0],
@@ -128,6 +128,7 @@ HEADBUTT = Skill(
     description='Use your head for something.',
     job_requirement=Jobs.WARRIOR,
     name='headbutt',
+    slot=Slots.MAINHAND,
     east=[
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
@@ -150,14 +151,3 @@ all = {
     'LUNGE': LUNGE, 
     'HEADBUTT': HEADBUTT
 }
-
-# Add the other cardinal directions to the dict.
-for _, skill in all.items():
-    skill.east = np.array(skill.east)
-    skill.north = np.rot90(skill.east)
-    skill.west = np.rot90(skill.north)
-    skill.south = np.rot90(skill.west)
-    skill.north_east = np.array(skill.north_east)
-    skill.north_west = np.rot90(skill.north_east)
-    skill.south_west = np.rot90(skill.north_west)
-    skill.south_east = np.rot90(skill.south_west)

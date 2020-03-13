@@ -45,7 +45,8 @@ _all_items = {'HAMMER': HAMMER, 'SWORD': SWORD}
 ' The items will now bestow their slot onto their skills. '
 for _, item in _all_items.items():
     for skill in item[Components.SKILL_POOL]:
-        skill['slot'] = item[Components.SLOT]
+        if skill.slot is not item[Components.SLOT]:
+            print(f"Skill slot is {skill.slot}, but the item slot is {item[Components.SLOT]}. These should be the same.")
 
 # ACTORS ######################################################################
 

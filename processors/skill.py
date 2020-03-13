@@ -1,4 +1,5 @@
 import esper
+import numpy as np
 
 from _helper_functions import generate_stats
 from components.actor.actor import ActorComponent
@@ -93,8 +94,8 @@ class SkillProcessor(esper.Processor):
 
         return skill
 
-    def get_direction_name(self, direction):
-        x, y = direction
+    def get_effect_array(self):
+        x, y = self._direction
         hor, ver, direction = (None,)*3
 
         if   x ==  1: hor = 'east'
@@ -106,11 +107,29 @@ class SkillProcessor(esper.Processor):
         if hor and ver: direction = ver + '_' + hor
         elif hor:       direction = hor
         elif ver:       direction = ver
-        
-        return direction
 
+        array_east = np.array(self._skill.east)
+        array_north_east = np.array(self._skill.north_east)
+
+        if direction == 'east':
+            return array_east
+        elif direction == 'north':
+            return np.rot90(array_east)
+        elif direction == 'west':
+            return np.rot90(np.rot90(array_east))
+        elif direction == 'south':
+            return np.rot90(np.rot90(np.rot90(array_east)))
+        elif direction == 'north_east':
+            return array_north_east
+        elif direction == 'north_west':
+            return np.rot90(array_north_east)
+        elif direction == 'south_west':
+            return np.rot90(np.rot90(array_north_east))
+        elif direction == 'south_east':
+            return np.rot90(np.rot90(np.rot90(array_north_east)))
+    
     def get_tiles(self, ent):                
-        array_of_effect = self._skill.__dict__[self.get_direction_name(self._direction)]
+        array_of_effect = self.get_effect_array()
         pos = self.world.component_for_entity(ent, PositionComponent)
         xc, yc = pos.x, pos.y
 
