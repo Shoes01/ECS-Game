@@ -1,9 +1,9 @@
 from collections import namedtuple
 
-Brain = namedtuple('Brain', 'name')
+Brain = namedtuple('Brain', 'awake name')
 
-NONE = Brain(name='none')
-ZOMBIE = Brain(name='zombie')
+NONE = Brain(awake=False, name='none')
+ZOMBIE = Brain(awake=False, name='zombie')
 
 all = {
     'NONE': NONE, 
