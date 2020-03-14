@@ -164,7 +164,7 @@ SPRITES = {
 Render = namedtuple(
     'Render', 
     'char color_bg color_explored color_fg color_highlight codepoint explored stairs visible',
-    defaults=('#', ENTITY_COLORS['floor_bg'], ENTITY_COLORS['floor_explored'], ENTITY_COLORS['floor'], False, 923, False, False)
+    defaults=('#', ENTITY_COLORS['floor_bg'], ENTITY_COLORS['floor_explored'], ENTITY_COLORS['floor'], False, 923, False, False, False)
 )
 
 # ITEMS #######################################################################

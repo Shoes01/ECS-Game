@@ -1,14 +1,14 @@
+import data.stats as Stats
 import numpy as np
 import random
 
 class SoulComponent:
-    """
+    """An entity's soul.
+
     The soul is a 2x3 matrix whose values are added to the stats of the unit.
     The stats are decided in this way:
     [[  HP, ATK, MAG],
      [ SPD, DEF, RES]]
-
-    Values get * 10'd in order to use pseudo decimals.
     """
     def __init__(self, eccentricity, rarity, new_game):
         self.eccentricity = eccentricity # Provides variation to the soul.
@@ -21,20 +21,19 @@ class SoulComponent:
 
     @property
     def soul(self):
-        soul = {}
-        soul['hp'] = self.np_soul[0][0]
-        soul['speed'] = self.np_soul[1][0]
-        soul['attack'] = self.np_soul[0][1]
-        soul['defense'] = self.np_soul[1][1]
-        soul['magic'] = self.np_soul[0][2]
-        soul['resistance'] = self.np_soul[1][2]
-
-        return soul
+        return {
+            Stats.HP:  self.np_soul[0][0],
+            Stats.ATK: self.np_soul[1][0],
+            Stats.DEF: self.np_soul[0][1],
+            Stats.MAG: self.np_soul[1][1],
+            Stats.RES: self.np_soul[0][2],
+            Stats.SPD: self.np_soul[1][2]
+        }
 
     def generate_soul(self):
         attempts = 0
         eccentricity = self.eccentricity.rank
-        rarity = random.randint(-2, self.max_rarity.rank) * 10 # -2 is the floor for max_rarity: it represents Zombie
+        rarity = random.randint(-2, self.max_rarity.rank) # -2 is the floor for max_rarity: it represents Zombie
         soul_attempt = np.zeros((2, 3), dtype=int, order='F')
 
         if eccentricity * 6 < rarity:
@@ -44,7 +43,7 @@ class SoulComponent:
         while attempts < 400:
             with np.nditer(soul_attempt, op_flags=['readwrite']) as it:
                 for x in it:
-                    x[...] = random.randint(-eccentricity, eccentricity) * 10
+                    x[...] = random.randint(-eccentricity, eccentricity)
             
             if soul_attempt.sum() == rarity:
                 return soul_attempt

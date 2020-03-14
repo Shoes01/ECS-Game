@@ -82,11 +82,10 @@ def check_validity(ent, job, world):
     # Upkeep validity.
     ### The player may not switch to a job if it can't pay the upkeep. 
     ### However, other stats unrelated to the job may be negative.
-    ### Note: _upkeep does not include the * -10.
     condition = PopupChoiceCondition(description=f"Your stats need to be at least {job.upkeep}.")
     bare_stats = generate_stats(ent, world, include_upkeep=False)
     for key, value in job.upkeep.items():
-        if bare_stats[key] - value * 10 < 0:
+        if bare_stats[key] - value < 0:
             condition.valid = False
             message_data['not_enough_stats'] = True
     conditions.append(condition)

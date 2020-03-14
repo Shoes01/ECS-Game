@@ -87,14 +87,15 @@ class NewGameProcessor(esper.Processor):
                 self.world.get_processor(StateProcessor).queue.put({'popup': menu_race})
             
             if select_race:
-                self.world.component_for_entity(1, RaceComponent).race = select_race
+                race_comp = self.world.component_for_entity(1, RaceComponent)
+                race_comp.update(select_race)
                 # Add base values to the soul based on race.
                 np_soul = np.zeros((2, 3), dtype=int, order='F')
                 np_soul.fill(10)
                 self.world.component_for_entity(1, SoulComponent).np_soul += np_soul
 
             if select_job:
-                self.world.component_for_entity(1, JobComponent).job = select_job
+                self.world.component_for_entity(1, JobComponent).update(select_job)
                 # # Add varied values to the soul based on job.
                 self.world.component_for_entity(1, SoulComponent).np_soul += np.array([[50, 5, 5], [1, -5, 0]], dtype=int, order='F')
                 # Now that a job has been selected, the game may begin.

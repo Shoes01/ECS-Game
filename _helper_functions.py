@@ -4,29 +4,39 @@ from components.actor.job import JobComponent
 from components.soul import SoulComponent
 from components.stats import StatsComponent
 
-def generate_stats(ent, world, include_upkeep=True):    
-    ent_stats = Counter(world.component_for_entity(ent, StatsComponent).__dict__)
-    
-    if ent is not 1: # This is maybe temporary...
-        return ent_stats
+import data.stats as Stats
+
+# TODO: Things have changed big time. I should probably check that this still works.
+# It should be easy though... ATK = stats[Stats.ATK] + item[Stats.ATK] - job.upkeep[Stats.ATK] + soul[Stats.ATK]
+
+def generate_stats(ent, world, include_upkeep=True):
+    blank = {stat: 0 for stat in Stats.all.values()}
+    stats = world.component_for_entity(ent, StatsComponent).as_dict
+
+    # At the moment, only the player entity gains stats from items, soul, etc.
+    if ent is not 1:
+        return stats
 
     # Stat changes based on equipment.
-    if world.has_component(ent, EquipmentComponent):
-        for item_id in world.component_for_entity(ent, EquipmentComponent).equipment:
-            if world.has_component(item_id, StatsComponent):
-                item_stats = Counter(world.component_for_entity(item_id, StatsComponent).__dict__)
-                ent_stats.update(item_stats)
-
-    # Stat changes based on job.
+    item_stats = blank.copy()
+    for item_id in world.component_for_entity(ent, EquipmentComponent).equipment:
+        single_item_stats = world.component_for_entity(item_id, StatsComponent).as_dict
+        for stat in Stats.all.values():
+            if single_item_stats.get(stat):
+                item_stats[stat] += single_item_stats[stat]
+    
+    # Stat changes based on job upkeep.
+    job_upkeep = world.component_for_entity(ent, JobComponent).upkeep
     if include_upkeep:
-        ent_stats.update(Counter(world.component_for_entity(ent, JobComponent).upkeep))
-        
+        job_upkeep = blank.copy()
+    
     # Stat changes based on soul.
-    if world.has_component(ent, SoulComponent):
-        ent_soul = Counter(world.component_for_entity(ent, SoulComponent).soul)
-        ent_stats.update(ent_soul)
+    soul = world.component_for_entity(ent, SoulComponent).soul
 
-    return dict(ent_stats)
+    for stat in Stats.all.values():
+        stats[stat] = stats[stat] + item_stats.get(stat) - job_upkeep.get(stat) + soul.get(stat)
+    
+    return stats
 
 def as_decimal(number, signed=False):
     string = str(number)

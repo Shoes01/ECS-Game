@@ -4,6 +4,7 @@ import attr
 import data.brain as Brain
 import data.components_master as Components
 import data.jobs as Jobs
+import data.races as Races
 import data.rarities as Rarities
 import data.render as Render
 import data.skills as Skills
@@ -26,7 +27,7 @@ HAMMER = {**ITEM,
     Components.RARITY: Rarities.AWFUL,
     Components.RENDER: Render.HAMMER,
     Components.SLOT: Slots.MAINHAND,
-    Components.STATS: {Stats.ATK: 7},
+    Components.STATS: Stats.HAMMER,
     Components.SKILL_POOL: [Skills.HEADBUTT, Skills.SPRINT]
 }
 
@@ -36,7 +37,7 @@ SWORD = {**ITEM,
     Components.RARITY: Rarities.AWFUL,
     Components.RENDER: Render.SWORD,
     Components.SLOT: Slots.MAINHAND,
-    Components.STATS: {Stats.ATK: 5},
+    Components.STATS: Stats.SWORD,
     Components.SKILL_POOL: [Skills.LUNGE, Skills.CLEAVE]
 }
 
@@ -60,6 +61,7 @@ ACTOR = {
     Components.INVENTORY: (),
     Components.JOB: Jobs.MONSTER,
     Components.POSITION: (),
+    Components.RACE: Races.MONSTER
 }
 
 DEMON = {**ACTOR,
@@ -74,7 +76,9 @@ PLAYER = {**ACTOR,
     Components.BRAIN: Brain.NONE,
     Components.JOB: Jobs.SOLDIER,
     Components.NAME: ('Player',),
+    Components.PERSIST: (),
     Components.PLAYER: (),
+    Components.RACE: Races.HUMAN,
     Components.RENDER: Render.PLAYER,
     Components.SOUL: Souls.PLAYER,
     Components.STATS: Stats.PLAYER

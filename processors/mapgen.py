@@ -239,8 +239,8 @@ class MapgenProcessor(esper.Processor):
         ' Generate monsters of rarity less than or equal to the floor number. '
         list_of_monsters = []
 
-        for _, monster in Entities.all.items():
-            if monster.get(Components.ACTOR) and not monster.get(Components.PLAYER) and monster.get(Components.RARITY).rank <= floor+1:
+        for _, monster in Entities._all_actors.items():
+            if monster.get(Components.PLAYER) is None and monster[Components.RARITY].rank <= floor+1:
                 list_of_monsters.append(monster)
 
         monster = random.choice(list_of_monsters)
@@ -269,7 +269,7 @@ class MapgenProcessor(esper.Processor):
     def distribute_items(self, floor):
         # TODO: Move this section into the monster gen itself. I want a monster to have an inventory with loot upon creation.
         for ent, (_, inv, rar) in self.world.get_components(ActorComponent, InventoryComponent, RarityComponent):
-            rarity_rank = rar.rarity.rank
+            rarity_rank = rar.rank
             loot = self.generate_loot(floor, rarity_rank)
             if loot:
                 new_ent = self.world.create_entity(loot)
