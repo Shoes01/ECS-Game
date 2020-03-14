@@ -22,7 +22,7 @@ ITEM = {
 }
 
 HAMMER = {**ITEM,
-    Components.JOB_REQ: [Jobs.SOLDIER, Jobs.WARRIOR],
+    Components.JOB_REQ: (Jobs.SOLDIER, Jobs.WARRIOR),
     Components.NAME: ('Hammer',),
     Components.RARITY: Rarities.AWFUL,
     Components.RENDER: Render.HAMMER,
@@ -32,7 +32,7 @@ HAMMER = {**ITEM,
 }
 
 SWORD = {**ITEM,
-    Components.JOB_REQ: [Jobs.SOLDIER, Jobs.WARRIOR],
+    Components.JOB_REQ: (Jobs.SOLDIER, Jobs.WARRIOR),
     Components.NAME: ('Sword',),
     Components.RARITY: Rarities.AWFUL,
     Components.RENDER: Render.SWORD,
@@ -43,7 +43,7 @@ SWORD = {**ITEM,
 
 _all_items = {'HAMMER': HAMMER, 'SWORD': SWORD}
 
-' The items will now bestow their slot onto their skills. '
+' The items will now bestow their slot onto their skills. ' # TODO: Is this still necessary?
 for _, item in _all_items.items():
     for skill in item[Components.SKILL_POOL]:
         if skill.slot is not item[Components.SLOT]:
@@ -103,7 +103,7 @@ CONSUMABLE = {
     Components.POSITION: ()
 }
 
-SOUL_JAR = {
+SOUL_JAR = {**CONSUMABLE,
     Components.NAME: {'name': 'Soul Jar'},
     Components.RENDER: Render.SOUL_JAR
 }

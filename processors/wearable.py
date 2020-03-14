@@ -59,9 +59,9 @@ class WearableProcessor(esper.Processor):
                 slot_filled = False
                 slot_filled_item = None
                 if self.world.has_component(item, SlotComponent):
-                    message_data['slot'] = self.world.component_for_entity(item, SlotComponent).slot
+                    message_data['slot'] = self.world.component_for_entity(item, SlotComponent).name
                     for worn_item in eqp.equipment:
-                        if self.world.component_for_entity(worn_item, SlotComponent).slot == self.world.component_for_entity(item, SlotComponent).slot:
+                        if self.world.component_for_entity(worn_item, SlotComponent).name == self.world.component_for_entity(item, SlotComponent).name:
                             slot_filled = True
                             slot_filled_item = worn_item
                             break
