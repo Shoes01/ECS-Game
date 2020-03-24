@@ -1,4 +1,4 @@
-import data.jobs as Jobs
+import data.components_master as Components
 import data.skills as Skills
 import esper
 
@@ -27,7 +27,7 @@ class JobProcessor(esper.Processor):
             if not job:
                 menu = PopupMenu(title='Which job would you like to adopt?', reveal_all=False)
 
-                for _, job in Jobs.all.items():
+                for job in Components.JOBS.__dict__.values():
                     _description = job.description
                     _name = job.name
                     _key = job.name[0]

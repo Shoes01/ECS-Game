@@ -1,8 +1,7 @@
 from collections import namedtuple
 
+import data.components_master as Components
 import data.damage_types as DamageTypes
-import data.jobs as Jobs
-import data.slots as Slots
 import data.stats as Stats
 
 Skill = namedtuple('Skill', 
@@ -24,9 +23,9 @@ SPRINT = Skill(
     cost_soul={Stats.SPD: 2},
     damage_type=DamageTypes.NONE,
     description="Sprint to a safer location.",
-    job_requirement=Jobs.ROGUE,
+    job_requirement=Components.JOBS.ROGUE,
     name='sprint',
-    slot=Slots.MAINHAND,
+    slot=Components.SLOTS.MAINHAND,
     east=
     [
         [0, 0, 0, 0, 0],
@@ -51,9 +50,9 @@ FIRST_AID = Skill(
     cost_soul={Stats.SPD: 2, Stats.HP: -10, Stats.MAG: 2, Stats.DEF: 2, Stats.ATK: 2, Stats.DEF: 2},
     damage_type=DamageTypes.NONE,
     description='First aid, for your soul.',
-    job_requirement=Jobs.SOLDIER,
+    job_requirement=Components.JOBS.SOLDIER,
     name='first aid',
-    slot=Slots.MAINHAND,
+    slot=Components.SLOTS.MAINHAND,
     east=[
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
@@ -76,9 +75,9 @@ LUNGE = Skill(
     cost_soul={Stats.MAG: 2},
     damage_type=DamageTypes.PHYSICAL,
     description='Lunge forward to strike a foe.',
-    job_requirement=Jobs.SOLDIER,
+    job_requirement=Components.JOBS.SOLDIER,
     name='lunge',
-    slot=Slots.MAINHAND,
+    slot=Components.SLOTS.MAINHAND,
     east=[
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
@@ -101,9 +100,9 @@ CLEAVE = Skill(
     cost_soul={Stats.DEF: 5},
     damage_type=DamageTypes.PHYSICAL,
     description='A swinging strike.',
-    job_requirement=Jobs.WARRIOR,
+    job_requirement=Components.JOBS.WARRIOR,
     name='cleave',
-    slot=Slots.MAINHAND,
+    slot=Components.SLOTS.MAINHAND,
     east=[
         [0, 0, 0, 0, 0],
         [0, 0, 0, 2, 0],
@@ -126,9 +125,9 @@ HEADBUTT = Skill(
     cost_soul={Stats.HP: 1, Stats.RES: 4},
     damage_type=DamageTypes.PHYSICAL,
     description='Use your head for something.',
-    job_requirement=Jobs.WARRIOR,
+    job_requirement=Components.JOBS.WARRIOR,
     name='headbutt',
-    slot=Slots.MAINHAND,
+    slot=Components.SLOTS.MAINHAND,
     east=[
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],

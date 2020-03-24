@@ -1,3 +1,4 @@
+import data.components_master as Components
 import esper
 import os
 import shelve
@@ -165,6 +166,11 @@ class GameWorld(esper.World):
         ent = super().create_entity()
         
         for key, value in entity.items():
-            self.add_component(ent, key(*value))
+            if key in Components._fluid_components.values():
+                # The entity should receive its own instance of this component.
+                self.add_component(ent, key(*value))
+            else:
+                # All entities can share this component.
+                self.add_component(ent, value)
         
         return ent

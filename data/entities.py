@@ -3,12 +3,8 @@ from collections import namedtuple
 import attr
 import data.brain as Brain
 import data.components_master as Components
-import data.jobs as Jobs
-import data.races as Races
-import data.rarities as Rarities
 import data.render as Render
 import data.skills as Skills
-import data.slots as Slots
 import data.souls as Souls
 import data.stats as Stats
 
@@ -16,57 +12,51 @@ import data.stats as Stats
 
 ' Base components that are the same to all Items. '
 ITEM = {
-    Components.ITEM: (),
+    Components.ITEM: Components.ITEM(),
     Components.POSITION: (),
-    Components.WEARABLE: (),
+    Components.WEARABLE: Components.WEARABLE(),
 }
 
 HAMMER = {**ITEM,
-    Components.JOB_REQ: (Jobs.SOLDIER, Jobs.WARRIOR),
+    Components.JOB_REQ: (Components.JOBS.SOLDIER, Components.JOBS.WARRIOR),
     Components.NAME: ('Hammer',),
-    Components.RARITY: Rarities.AWFUL,
+    Components.RARITIES: Components.RARITIES.AWFUL,
     Components.RENDER: Render.HAMMER,
-    Components.SLOT: Slots.MAINHAND,
+    Components.SLOTS: Components.SLOTS.MAINHAND,
     Components.STATS: Stats.HAMMER,
     Components.SKILL_POOL: [Skills.HEADBUTT, Skills.SPRINT]
 }
 
 SWORD = {**ITEM,
-    Components.JOB_REQ: (Jobs.SOLDIER, Jobs.WARRIOR),
+    Components.JOB_REQ: (Components.JOBS.SOLDIER, Components.JOBS.WARRIOR),
     Components.NAME: ('Sword',),
-    Components.RARITY: Rarities.AWFUL,
+    Components.RARITIES: Components.RARITIES.AWFUL,
     Components.RENDER: Render.SWORD,
-    Components.SLOT: Slots.MAINHAND,
+    Components.SLOTS: Components.SLOTS.MAINHAND,
     Components.STATS: Stats.SWORD,
     Components.SKILL_POOL: [Skills.LUNGE, Skills.CLEAVE]
 }
 
 _all_items = {'HAMMER': HAMMER, 'SWORD': SWORD}
 
-' The items will now bestow their slot onto their skills. ' # TODO: Is this still necessary?
-for _, item in _all_items.items():
-    for skill in item[Components.SKILL_POOL]:
-        if skill.slot is not item[Components.SLOT]:
-            print(f"Skill slot is {skill.slot}, but the item slot is {item[Components.SLOT]}. These should be the same.")
-
 # ACTORS ######################################################################
 
 ' Base components that are the same to all Actors. '
 ACTOR = {
-    Components.ACTOR: (),
+    Components.ACTOR: Components.ACTOR(),
     Components.BRAIN: Brain.ZOMBIE,
     Components.DIARY: (),
     Components.ENERGY: (),
     Components.EQUIPMENT: (),
     Components.INVENTORY: (),
-    Components.JOB: Jobs.MONSTER,
+    Components.JOBS: Components.JOBS.MONSTER,
     Components.POSITION: (),
-    Components.RACE: Races.MONSTER
+    Components.RACES: Components.RACES.MONSTER
 }
 
 DEMON = {**ACTOR,
     Components.NAME: ('Demon',),
-    Components.RARITY: Rarities.MYTHIC,
+    Components.RARITIES: Components.RARITIES.MYTHIC,
     Components.RENDER: Render.DEMON,
     Components.SOUL: Souls.DEMON,
     Components.STATS: Stats.DEMON
@@ -74,11 +64,11 @@ DEMON = {**ACTOR,
 
 PLAYER = {**ACTOR,
     Components.BRAIN: Brain.NONE,
-    Components.JOB: Jobs.SOLDIER,
+    Components.JOBS: Components.JOBS.SOLDIER,
     Components.NAME: ('Player',),
     Components.PERSIST: (),
     Components.PLAYER: (),
-    Components.RACE: Races.HUMAN,
+    Components.RACES: Components.RACES.HUMAN,
     Components.RENDER: Render.PLAYER,
     Components.SOUL: Souls.PLAYER,
     Components.STATS: Stats.PLAYER
@@ -86,7 +76,7 @@ PLAYER = {**ACTOR,
 
 ZOMBIE = {**ACTOR,
     Components.NAME: ('Zombie',),
-    Components.RARITY: Rarities.AWFUL,
+    Components.RARITIES: Components.RARITIES.AWFUL,
     Components.RENDER: Render.ZOMBIE,
     Components.SOUL: Souls.ZOMBIE,
     Components.STATS: Stats.ZOMBIE
@@ -98,8 +88,8 @@ _all_actors = {'DEMON': DEMON, 'PLAYER': PLAYER, 'ZOMBIE': ZOMBIE}
 
 ' Base components that are the same to all Consumables. '
 CONSUMABLE = {
-    Components.CONSUMABLE: (),
-    Components.ITEM: (),
+    Components.CONSUMABLE: Components.CONSUMABLE(),
+    Components.ITEM: Components.ITEM(),
     Components.POSITION: ()
 }
 
@@ -114,15 +104,15 @@ _all_consumables = {'SOUL_JAR': SOUL_JAR}
 
 ' Base components that are the same to all Furniture. '
 FURNITURE = {
-    Components.ACTOR: (),
-    Components.FURNITURE: (),
+    Components.ACTOR: Components.ACTOR(),
+    Components.FURNITURE: Components.FURNITURE(),
     Components.POSITION: ()
 }
 
 CHEST = {**FURNITURE,
     Components.INVENTORY: (),
     Components.NAME: ('Chest',),
-    Components.RARITY: Rarities.UNCOMMON,
+    Components.RARITIES: Components.RARITIES.UNCOMMON,
     Components.RENDER: Render.CHEST,
     Components.STATS: Stats.CHEST
 }
@@ -131,12 +121,10 @@ _all_furniture = {'CHEST': CHEST}
 
 # TILES #######################################################################
 
-Tile = namedtuple('Tile', 'blocks_path blocks_sight', defaults=(False, False))
-
 ' Base components that are the same to all Tiles. '
 TILE = {
     Components.POSITION: (),
-    Components.TILE: Tile(blocks_path=False, blocks_sight=False)
+    Components.TILES: Components.TILES.FLOOR
 }
 
 FLOOR = {**TILE,
@@ -149,7 +137,7 @@ STAIRS = {**TILE,
 
 WALL = {**TILE,
     Components.RENDER: Render.WALL,
-    Components.TILE: Tile(blocks_path=True, blocks_sight=True)
+    Components.TILES: Components.TILES.WALL
 }
 
 _all_tiles = {'FLOOR': FLOOR, 'STAIRS': STAIRS, 'WALL': WALL}

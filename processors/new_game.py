@@ -1,5 +1,4 @@
-import data.jobs as Jobs
-import data.races as Races
+import data.components_master as Components
 import esper
 import numpy as np
 
@@ -34,7 +33,7 @@ class NewGameProcessor(esper.Processor):
                 ## Soldier
                 _name = 'Soldier'
                 _key = 's'
-                _result = {'select_race': Races.HUMAN, 'select_job': Jobs.SOLDIER}
+                _result = {'select_race': Components.RACES.HUMAN, 'select_job': Components.JOBS.SOLDIER}
                 _description = 'A regular soldier.'
                 _results = (PopupChoiceResult(result=_result, processor=_processor),)
 
@@ -43,7 +42,7 @@ class NewGameProcessor(esper.Processor):
                 ## Thief
                 _name = 'Thief'
                 _key = 't'
-                _result = {'select_race': Races.HUMAN, 'select_job': Jobs.THIEF}
+                _result = {'select_race': Components.RACES.HUMAN, 'select_job': Components.JOBS.THIEF}
                 _description = 'A regular thief.'
                 _results = (PopupChoiceResult(result=_result, processor=_processor),)
 
@@ -55,14 +54,14 @@ class NewGameProcessor(esper.Processor):
                 ## Rogue
                 _name = 'Rogue'
                 _key = 'r'
-                _result = {'select_race': Races.ELF, 'select_job': Jobs.ROGUE}
+                _result = {'select_race': Components.RACES.ELF, 'select_job': Components.JOBS.ROGUE}
                 _description = 'A dashing rogue.'
                 _results = (PopupChoiceResult(result=_result, processor=_processor),)
 
                 menu_elf_jobs.contents.append(PopupChoice(name=_name, key=_key, results=_results, description=_description))                
 
                 #########
-                # Races #
+                # Components.RACES. #
                 #########
 
                 menu_race = PopupMenu(title='Choose a Race.', include_esc=False, auto_close=False)
@@ -87,16 +86,16 @@ class NewGameProcessor(esper.Processor):
                 self.world.get_processor(StateProcessor).queue.put({'popup': menu_race})
             
             if select_race:
-                race_comp = self.world.component_for_entity(1, RaceComponent)
-                race_comp.update(select_race)
+                self.world.add_component(1, select_race) # I assume that components are replaced...
                 # Add base values to the soul based on race.
                 np_soul = np.zeros((2, 3), dtype=int, order='F')
                 np_soul.fill(10)
                 self.world.component_for_entity(1, SoulComponent).np_soul += np_soul
 
             if select_job:
-                self.world.component_for_entity(1, JobComponent).update(select_job)
-                # # Add varied values to the soul based on job.
+                self.world.add_component(1, select_job) # I assume that components are replaced...
+                # Add varied values to the soul based on job.
+                ## This is place holder atm.
                 self.world.component_for_entity(1, SoulComponent).np_soul += np.array([[50, 5, 5], [1, -5, 0]], dtype=int, order='F')
                 # Now that a job has been selected, the game may begin.
                 self.world.get_processor(StateProcessor).queue.put({'start_game': True})

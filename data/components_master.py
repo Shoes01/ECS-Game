@@ -1,3 +1,5 @@
+import data.stats as Stats
+
 from components.actor.actor import ActorComponent
 from components.actor.boss import BossComponent
 from components.actor.brain import BrainComponent
@@ -35,34 +37,104 @@ DIARY = DiaryComponent
 ENERGY = EnergyComponent
 EQUIPMENT = EquipmentComponent
 INVENTORY = InventoryComponent
-JOB = JobComponent
 PLAYER = PlayerComponent
-RACE = RaceComponent
+class RACES:
+    MONSTER =   RaceComponent(name='monster')
+    HUMAN =     RaceComponent(name='human')
+    ELF =       RaceComponent(name='elf')
+    KOBOLD =    RaceComponent(name='kobold')
+    ORC =       RaceComponent(name='orc')
+    GOBLIN =    RaceComponent(name='goblin')
+class JOBS:
+    # TIER 0 ###################################################################
+    MONSTER = JobComponent(
+        description="Placeholder job for monsters.",
+        name='monster job',
+        races=(RACES.MONSTER,)
+    )
+    BERSERKER = JobComponent(
+        description='Classic orc.',
+        name='berserker',
+        races=(RACES.ORC,),
+        skills={},
+        upkeep={Stats.SPD: 1, Stats.HP: 1}
+    )
+    SOLDIER = JobComponent(
+        description="Baby's first job.",
+        name='soldier', 
+        races=(RACES.HUMAN,)
+    )
+    THIEF = JobComponent(
+        description='A stealer.',
+        name='thief',
+        races=(RACES.HUMAN,)
+    )
+    WARRIOR = JobComponent(
+        description='Has access to more devastating skills.', # Not rly.
+        name='warrior',
+        races=(RACES.HUMAN,),
+        skills={},
+        upkeep={Stats.MAG: 1, Stats.SPD: 2}
+    )
+    # TIER 1 ###################################################################
+    ROGUE = JobComponent(
+        description='A job for seasoned fighters.',
+        name='rogue',
+        races=(RACES.HUMAN, RACES.GOBLIN, RACES.ELF),
+        skills={SOLDIER.name: 1},
+        upkeep={Stats.ATK: 1, Stats.HP: 15}
+    )
 
-_actor_components = {'ACTOR': ACTOR, 'BOSS': BOSS, 'BRAIN': BRAIN, 'CORPSE': CORPSE, 'DIARY': DIARY, 'ENERGY': ENERGY, 'EQUIPMENT': EQUIPMENT, 'INVENTORY': INVENTORY, 'JOB': JOB, 'PLAYER': PLAYER, 'RACE': RACE}
+_actor_components = {'ACTOR': ACTOR, 'BOSS': BOSS, 'BRAIN': BRAIN, 'CORPSE': CORPSE, 'DIARY': DIARY, 'ENERGY': ENERGY, 'EQUIPMENT': EQUIPMENT, 'INVENTORY': INVENTORY, 'JOBS': JOBS, 'PLAYER': PLAYER, 'RACES': RACES}
 
 # Item Components
 CONSUMABLE = ConsumableComponent
 ITEM = ItemComponent
 JOB_REQ = JobReqComponent
 SKILL_POOL = SkillPoolComponent
-SLOT = SlotComponent
+class SLOTS:
+    HEAD =      SlotComponent(name='head',        key='w')
+    TORSO =     SlotComponent(name='torso',       key='s')
+    MAINHAND =  SlotComponent(name='mainhand',    key='q')
+    OFFHAND =   SlotComponent(name='offhand',     key='a')
+    FEET =      SlotComponent(name='feet',        key='d')
+    ACCESSORY = SlotComponent(name='accessory',   key='e')
+    _key_to_slots = {
+        'w': HEAD,
+        's': TORSO,
+        'q': MAINHAND,
+        'a': OFFHAND,
+        'd': FEET,
+        'e': ACCESSORY
+    }
 WEARABLE = WearableComponent
 
-_item_components = {'CONSUMABLE': CONSUMABLE, 'ITEM': ITEM, 'JOB_REQ': JOB_REQ, 'SKILL_POOL': SKILL_POOL, 'SLOT': SLOT, 'WEARABLE': WEARABLE}
+_item_components = {'CONSUMABLE': CONSUMABLE, 'ITEM': ITEM, 'JOB_REQ': JOB_REQ, 'SKILL_POOL': SKILL_POOL, 'SLOTS': SLOTS, 'WEARABLE': WEARABLE}
 
 # Other Components
 FURNITURE = FurnitureComponent
 NAME = NameComponent
 PERSIST = PersistComponent
 POSITION = PositionComponent
-RARITY = RarityComponent
+class RARITIES:
+    AWFUL =     RarityComponent(name='awful',    rank=0)
+    POOR =      RarityComponent(name='poor',     rank=1)
+    COMMON =    RarityComponent(name='common',   rank=2)
+    UNCOMMON =  RarityComponent(name='uncommon', rank=3)
+    EPIC =      RarityComponent(name='epic',     rank=4)
+    RARE =      RarityComponent(name='rare',     rank=5)
+    MYTHIC =    RarityComponent(name='mythic',   rank=6)
 RENDER = RenderComponent
 SOUL = SoulComponent
 STAIRS = StairsComponent
 STATS = StatsComponent
-TILE = TileComponent
+class TILES:
+    FLOOR = TileComponent(blocks_path=False,    blocks_sight=False)
+    WALL =  TileComponent(blocks_path=True,     blocks_sight=True)
 
-_other_components = {'FURNITURE': FURNITURE, 'NAME': NAME, 'PERSIST': PERSIST, 'POSITION': POSITION, 'RARITY': RARITY, 'RENDER': RENDER, 'SOUL': SOUL, 'STAIRS': STAIRS, 'STATS': STATS, 'TILE': TILE}
+_other_components = {'FURNITURE': FURNITURE, 'NAME': NAME, 'PERSIST': PERSIST, 'POSITION': POSITION, 'RARITIES': RARITIES, 'RENDER': RENDER, 'SOUL': SOUL, 'STAIRS': STAIRS, 'STATS': STATS, 'TILES': TILES}
 
 all = {**_actor_components, **_item_components, **_other_components}
+
+# Entities should have their own instance of these components.
+_fluid_components = {'BRAIN': BRAIN, 'DIARY': DIARY, 'ENERGY': ENERGY, 'EQUIPMENT': EQUIPMENT, 'INVENTORY': INVENTORY, 'JOB_REQ': JOB_REQ, 'NAME': NAME, 'POSITION': POSITION, 'RENDER': RENDER, 'SKILL_POOL': SKILL_POOL, 'SOUL': SOUL, 'STATS': STATS}

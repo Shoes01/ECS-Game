@@ -13,8 +13,8 @@ from components.position import PositionComponent
 from components.render import RenderComponent
 from components.stats import StatsComponent
 from components.tile import TileComponent
+from data.components_master import SLOTS
 from data.render import ENTITY_COLORS
-from data.slots import _key_to_slots
 from processors.combat import CombatProcessor
 from processors.cooldown import CooldownProcessor
 from processors.energy import EnergyProcessor
@@ -42,7 +42,7 @@ class SkillProcessor(esper.Processor):
             skill_letter = event.get('skill_prepare')           
 
             if skill_letter:
-                slot = _key_to_slots[skill_letter]
+                slot = SLOTS._key_to_slots[skill_letter]
                 self._skill = self.find_skill(ent, slot)
                 self._direction = (1, 0)
 

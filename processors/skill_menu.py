@@ -5,7 +5,7 @@ from components.actor.equipment import EquipmentComponent
 from components.actor.job import JobComponent
 from components.item.skill_pool import SkillPoolComponent
 from components.item.slot import SlotComponent
-from data.slots import _key_to_slots
+from data.components_master import SLOTS
 from processors.state import StateProcessor
 from menu import PopupMenu, PopupChoice, PopupChoiceResult, PopupChoiceCondition
 from queue import Queue
@@ -30,7 +30,7 @@ class SkillMenuProcessor(esper.Processor):
 
             # Create and display a menu of possible skills that may be activated.
             if skill_letter:
-                slot = _key_to_slots[skill_letter]
+                slot = SLOTS._key_to_slots[skill_letter]
 
                 mastered_list = []
                 unmastered_list = []

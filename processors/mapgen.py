@@ -240,7 +240,7 @@ class MapgenProcessor(esper.Processor):
         list_of_monsters = []
 
         for _, monster in Entities._all_actors.items():
-            if monster.get(Components.PLAYER) is None and monster[Components.RARITY].rank <= floor+1:
+            if monster.get(Components.PLAYER) is None and monster[Components.RARITIES].rank <= floor+1:
                 list_of_monsters.append(monster)
 
         monster = random.choice(list_of_monsters)
@@ -283,7 +283,7 @@ class MapgenProcessor(esper.Processor):
         # TODO: This is flawed; after refactoring things, the algo should be revisited.
         chance = random.randint(0, 100)
         for _, item in Entities._all_items.items():
-            item_rarity = item[Components.RARITY].rank
+            item_rarity = item[Components.RARITIES].rank
             if self.loot_algorithm(chance=chance, monster=ent_rarity, item=item_rarity, floor=floor):
                 return item
 
