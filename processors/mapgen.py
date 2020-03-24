@@ -6,7 +6,6 @@ import random
 import tcod as libtcod
 
 from _data import FINAL_FLOOR
-from components.actor.actor import ActorComponent
 from components.actor.equipment import EquipmentComponent
 from components.actor.inventory import InventoryComponent
 from components.item.wearable import WearableComponent
@@ -204,7 +203,7 @@ class MapgenProcessor(esper.Processor):
             x = random.randint(boss_room.x, boss_room.x + boss_room.w - 1)
             y = random.randint(boss_room.y, boss_room.y + boss_room.h - 1)
 
-            if not tiles[x, y] and not self.world.get_entities_at(x, y, ActorComponent):
+            if not tiles[x, y] and not self.world.get_entities_at(x, y, Components.ACTOR):
                 new_ent = self.world.create_entity(Entities.DEMON)
                 new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                 new_ent_pos.x = x
@@ -225,7 +224,7 @@ class MapgenProcessor(esper.Processor):
                 x = random.randint(room.x, room.x + room.w - 1)
                 y = random.randint(room.y, room.y + room.h - 1)
                 
-                if not tiles[x, y] and not self.world.get_entities_at(x, y, ActorComponent):
+                if not tiles[x, y] and not self.world.get_entities_at(x, y, Components.ACTOR):
                     new_ent = self.gen_random_monster(floor)
                     new_ent_pos = self.world.component_for_entity(new_ent, PositionComponent)
                     new_ent_pos.x = x
@@ -256,7 +255,7 @@ class MapgenProcessor(esper.Processor):
                 x = random.randint(room.x, room.x + room.w - 1)
                 y = random.randint(room.y, room.y + room.h - 1)
                 
-                if not tiles[x, y] and not self.world.get_entities_at(x, y, ActorComponent):
+                if not tiles[x, y] and not self.world.get_entities_at(x, y, Components.ACTOR):
                     chance = random.randint(0, 100)
                     if chance > 50:
                         new_ent = self.world.create_entity(Entities.CHEST)
@@ -268,7 +267,7 @@ class MapgenProcessor(esper.Processor):
 
     def distribute_items(self, floor):
         # TODO: Move this section into the monster gen itself. I want a monster to have an inventory with loot upon creation.
-        for ent, (_, inv, rar) in self.world.get_components(ActorComponent, InventoryComponent, RarityComponent):
+        for ent, (_, inv, rar) in self.world.get_components(Components.ACTOR, InventoryComponent, RarityComponent):
             rarity_rank = rar.rank
             loot = self.generate_loot(floor, rarity_rank)
             if loot:

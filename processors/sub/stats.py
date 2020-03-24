@@ -38,8 +38,7 @@ def render_stats(console_object, world):
 
     # Figure out which items are in which slots.
     for item in world.component_for_entity(1, EquipmentComponent).equipment:
-        slot = world.component_for_entity(item, SlotComponent).slot
-        boxes[slot] = item
+        boxes[world.component_for_entity(item, SlotComponent).name] = item
 
     # Render the item boxes.
     x, y = 4, 0

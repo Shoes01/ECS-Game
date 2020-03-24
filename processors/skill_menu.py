@@ -47,7 +47,7 @@ class SkillMenuProcessor(esper.Processor):
                 for item in equipped_items:
                     if self.world.component_for_entity(item, SlotComponent).slot == slot:
                         for skill in self.world.component_for_entity(item, SkillPoolComponent).skill_pool:
-                            if self.world.component_for_entity(ent, JobComponent).job in skill.job_req:
+                            if self.world.component_for_entity(ent, JobComponent) in skill.job_req:
                                 bestowed_list.append(skill.name)
 
                 menu = PopupMenu(title=f'Choose a {slot}-skill to equip.')
