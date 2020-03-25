@@ -46,12 +46,13 @@ class RACES:
     ORC =       RaceComponent(name='orc')
     GOBLIN =    RaceComponent(name='goblin')
 class JOBS:
-    # TIER 0 ###################################################################
+    # GENERIC #################################################################
     MONSTER = JobComponent(
         description="Placeholder job for monsters.",
         name='monster job',
         races=(RACES.MONSTER,)
     )
+    # TIER 0 ###################################################################
     BERSERKER = JobComponent(
         description='Classic orc.',
         name='berserker',
@@ -76,6 +77,7 @@ class JOBS:
         skills={},
         upkeep={Stats.MAG: 1, Stats.SPD: 2}
     )
+    _tier0 = {'BERSERKER': BERSERKER, 'SOLDIER': SOLDIER, 'THIEF': THIEF, 'WARRIOR': WARRIOR}
     # TIER 1 ###################################################################
     ROGUE = JobComponent(
         description='A job for seasoned fighters.',
@@ -84,6 +86,9 @@ class JOBS:
         skills={SOLDIER.name: 1},
         upkeep={Stats.ATK: 1, Stats.HP: 15}
     )
+    _tier1 = {'ROGUE': ROGUE}
+    # ALL #####################################################################
+    all = {'MONSTER': MONSTER, **_tier0, **_tier1}
 
 _actor_components = {'ACTOR': ACTOR, 'BOSS': BOSS, 'BRAIN': BRAIN, 'CORPSE': CORPSE, 'DIARY': DIARY, 'ENERGY': ENERGY, 'EQUIPMENT': EQUIPMENT, 'INVENTORY': INVENTORY, 'JOBS': JOBS, 'PLAYER': PLAYER, 'RACES': RACES}
 

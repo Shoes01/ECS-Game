@@ -27,14 +27,17 @@ def generate_stats(ent, world, include_upkeep=True):
     
     # Stat changes based on job upkeep.
     job_upkeep = world.component_for_entity(ent, JobComponent).upkeep
-    if include_upkeep:
+    for stat in Stats.all.values():
+        if job_upkeep.get(stat) is None:
+            job_upkeep[stat] = 0
+    if not include_upkeep:
         job_upkeep = blank.copy()
     
     # Stat changes based on soul.
     soul = world.component_for_entity(ent, SoulComponent).soul
 
     for stat in Stats.all.values():
-        stats[stat] = stats[stat] + item_stats.get(stat) - job_upkeep.get(stat) + soul.get(stat)
+        stats[stat] = stats[stat] + item_stats[stat] - job_upkeep[stat] + soul[stat]
     
     return stats
 

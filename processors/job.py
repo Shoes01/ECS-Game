@@ -27,7 +27,7 @@ class JobProcessor(esper.Processor):
             if not job:
                 menu = PopupMenu(title='Which job would you like to adopt?', reveal_all=False)
 
-                for job in Components.JOBS.__dict__.values():
+                for job in Components.JOBS.all.values():
                     _description = job.description
                     _name = job.name
                     _key = job.name[0]
@@ -74,7 +74,7 @@ def check_validity(ent, job, world):
     
     # Race validity.
     condition = PopupChoiceCondition(description=f"Your race needs to be one from {job.races}.")
-    if world.component_for_entity(ent, RaceComponent).race not in job.races:
+    if world.component_for_entity(ent, RaceComponent) not in job.races:
         condition.valid = False
         message_data['wrong_race'] = True
     conditions.append(condition)
