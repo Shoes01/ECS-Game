@@ -168,6 +168,8 @@ class GameWorld(esper.World):
         for key, value in entity.items():
             if key in Components._fluid_components.values():
                 # The entity should receive its own instance of this component.
+                if type(value) is str:
+                    value = (value,)
                 self.add_component(ent, key(*value))
             else:
                 # All entities can share this component.

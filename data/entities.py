@@ -19,7 +19,7 @@ ITEM = {
 
 HAMMER = {**ITEM,
     Components.JOB_REQ: (Components.JOBS.SOLDIER, Components.JOBS.WARRIOR),
-    Components.NAME: ('Hammer',),
+    Components.NAME: 'Hammer',
     Components.RARITIES: Components.RARITIES.AWFUL,
     Components.RENDER: Render.HAMMER,
     Components.SLOTS: Components.SLOTS.MAINHAND,
@@ -29,7 +29,7 @@ HAMMER = {**ITEM,
 
 SWORD = {**ITEM,
     Components.JOB_REQ: (Components.JOBS.SOLDIER, Components.JOBS.WARRIOR),
-    Components.NAME: ('Sword',),
+    Components.NAME: 'Sword',
     Components.RARITIES: Components.RARITIES.AWFUL,
     Components.RENDER: Render.SWORD,
     Components.SLOTS: Components.SLOTS.MAINHAND,
@@ -55,7 +55,7 @@ ACTOR = {
 }
 
 DEMON = {**ACTOR,
-    Components.NAME: ('Demon',),
+    Components.NAME: 'Demon',
     Components.RARITIES: Components.RARITIES.MYTHIC,
     Components.RENDER: Render.DEMON,
     Components.SOUL: Souls.DEMON,
@@ -65,9 +65,9 @@ DEMON = {**ACTOR,
 PLAYER = {**ACTOR,
     Components.BRAIN: Brain.NONE,
     Components.JOBS: Components.JOBS.SOLDIER,
-    Components.NAME: ('Player',),
+    Components.NAME: 'Player',
     Components.PERSIST: Components.PERSIST(),
-    Components.PLAYER: (),
+    Components.PLAYER: Components.PLAYER(),
     Components.RACES: Components.RACES.HUMAN,
     Components.RENDER: Render.PLAYER,
     Components.SOUL: Souls.PLAYER,
@@ -75,7 +75,7 @@ PLAYER = {**ACTOR,
 }
 
 ZOMBIE = {**ACTOR,
-    Components.NAME: ('Zombie',),
+    Components.NAME: 'Zombie',
     Components.RARITIES: Components.RARITIES.AWFUL,
     Components.RENDER: Render.ZOMBIE,
     Components.SOUL: Souls.ZOMBIE,
@@ -94,7 +94,7 @@ CONSUMABLE = {
 }
 
 SOUL_JAR = {**CONSUMABLE,
-    Components.NAME: {'name': 'Soul Jar'},
+    Components.NAME: 'Soul Jar',
     Components.RENDER: Render.SOUL_JAR
 }
 
@@ -111,7 +111,7 @@ FURNITURE = {
 
 CHEST = {**FURNITURE,
     Components.INVENTORY: (),
-    Components.NAME: ('Chest',),
+    Components.NAME: 'Chest',
     Components.RARITIES: Components.RARITIES.UNCOMMON,
     Components.RENDER: Render.CHEST,
     Components.STATS: Stats.CHEST
