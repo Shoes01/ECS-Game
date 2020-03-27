@@ -39,18 +39,18 @@ class SkillMenuProcessor(esper.Processor):
                 # Populate mastered and unmastered lists.
                 for entry in diary.mastery:
                     if entry.skill.ap_max == entry.ap:
-                        mastered_list.append(entry.skill.name)
+                        mastered_list.append(entry.skill)
                     else:
-                        unmastered_list.append(entry.skill.name)
+                        unmastered_list.append(entry.skill)
                 
                 # "Populate" the bestowed skill list.
                 for item in equipped_items:
-                    if self.world.component_for_entity(item, SlotComponent).slot == slot:
+                    if self.world.component_for_entity(item, SlotComponent) == slot:
                         for skill in self.world.component_for_entity(item, SkillPoolComponent).skill_pool:
-                            if self.world.component_for_entity(ent, JobComponent) in skill.job_req:
-                                bestowed_list.append(skill.name)
+                            if self.world.component_for_entity(ent, JobComponent) == skill.job_req:
+                                bestowed_list.append(skill)
 
-                menu = PopupMenu(title=f'Choose a {slot}-skill to equip.')
+                menu = PopupMenu(title=f'Choose a {slot.name}-skill to equip.')
                 
                 for _list in (mastered_list, unmastered_list, bestowed_list):
                     for skill in _list:

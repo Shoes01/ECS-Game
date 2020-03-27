@@ -58,15 +58,20 @@ def as_decimal(number, signed=False):
     return string
 
 def as_integer(number, signed=False):
+    
     string = str(number)
-
+    # BUG: This is commented out, as I find a way to change how pseudo-decimals work.
+    """
     if string != '0':
         string = string[:-1]
     elif string[-1] != '0':
         print('HOLD UP: This digit should be 0, not {}'.format(string[-1]))
+    """
         
     if signed:
         if number >= 0:
             string = '+' + string
+        else:
+            string = '-' + string
     
     return string

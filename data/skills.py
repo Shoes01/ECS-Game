@@ -5,7 +5,7 @@ import data.damage_types as DamageTypes
 import data.stats as Stats
 
 Skill = namedtuple('Skill', 
-    'ap_max cooldown cost_energy cost_soul damage_type description job_requirement name slot east north_east'
+    'ap_max cooldown cost_energy cost_soul damage_type description job_req name slot east north_east'
 )
 
 """
@@ -23,7 +23,7 @@ SPRINT = Skill(
     cost_soul={Stats.SPD: 2},
     damage_type=DamageTypes.NONE,
     description="Sprint to a safer location.",
-    job_requirement=Components.JOBS.ROGUE,
+    job_req=Components.JOBS.ROGUE,
     name='sprint',
     slot=Components.SLOTS.MAINHAND,
     east=
@@ -50,7 +50,7 @@ FIRST_AID = Skill(
     cost_soul={Stats.SPD: 2, Stats.HP: -10, Stats.MAG: 2, Stats.DEF: 2, Stats.ATK: 2, Stats.DEF: 2},
     damage_type=DamageTypes.NONE,
     description='First aid, for your soul.',
-    job_requirement=Components.JOBS.SOLDIER,
+    job_req=Components.JOBS.SOLDIER,
     name='first aid',
     slot=Components.SLOTS.MAINHAND,
     east=[
@@ -75,7 +75,7 @@ LUNGE = Skill(
     cost_soul={Stats.MAG: 2},
     damage_type=DamageTypes.PHYSICAL,
     description='Lunge forward to strike a foe.',
-    job_requirement=Components.JOBS.SOLDIER,
+    job_req=Components.JOBS.SOLDIER,
     name='lunge',
     slot=Components.SLOTS.MAINHAND,
     east=[
@@ -100,7 +100,7 @@ CLEAVE = Skill(
     cost_soul={Stats.DEF: 5},
     damage_type=DamageTypes.PHYSICAL,
     description='A swinging strike.',
-    job_requirement=Components.JOBS.WARRIOR,
+    job_req=Components.JOBS.WARRIOR,
     name='cleave',
     slot=Components.SLOTS.MAINHAND,
     east=[
@@ -125,7 +125,7 @@ HEADBUTT = Skill(
     cost_soul={Stats.HP: 1, Stats.RES: 4},
     damage_type=DamageTypes.PHYSICAL,
     description='Use your head for something.',
-    job_requirement=Components.JOBS.WARRIOR,
+    job_req=Components.JOBS.WARRIOR,
     name='headbutt',
     slot=Components.SLOTS.MAINHAND,
     east=[

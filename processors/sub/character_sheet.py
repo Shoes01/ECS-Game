@@ -111,14 +111,15 @@ def generate_equipped_items(titles, world):
     equipped_items = {}
 
     for item in equipment:
-        slot = world.component_for_entity(item, SlotComponent).slot
+        slot = world.component_for_entity(item, SlotComponent).name
         name = world.component_for_entity(item, NameComponent).original_name
 
         bonus = f""
         description = "" # TODO: Items don't have descriptions, apparently?
         
-        for stat, value in world.component_for_entity(item, StatsComponent).__dict__.items():
+        for stat, value in world.component_for_entity(item, StatsComponent).__dict__.items(): # BUG: The bonus isn't listed properly.
             if value:
+                print(f"{value}")
                 bonus += f"{titles[stat][:-1]} {as_integer(value, signed=True)}, "
         bonus = bonus[:-2]
         if not bonus:
