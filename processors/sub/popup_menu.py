@@ -57,15 +57,16 @@ def render_popup_menu(console_object, world):
         console.print(menu.w // 2, menu.y + dy, f"Name: {name.capitalize()}", UI_COLORS['text'])
 
         # Print the available skills of the item.
-        for skill in world.component_for_entity(item, SkillPoolComponent).skill_pool:
-            dy += 1
+        if world.has_component(item, SkillPoolComponent):
+            for skill in world.component_for_entity(item, SkillPoolComponent).skill_pool:
+                dy += 1
 
-            # Turn the list of jobs into a human readable format.
-            jobs_list = list(dict.fromkeys(skill.job_req))
-            jobs = ""
-            for j in jobs_list:
-                jobs += j + ", "
-            jobs = jobs[:-2]
+                # Turn the list of jobs into a human readable format.
+                jobs_list = list(dict.fromkeys(skill.job_req))
+                jobs = ""
+                for j in jobs_list:
+                    jobs += j + ", "
+                jobs = jobs[:-2]
 
-            console.print(menu.w // 2 + 2, menu.y + dy, f"Skill: {skill.name} ({jobs})", UI_COLORS['text'])
-        
+                console.print(menu.w // 2 + 2, menu.y + dy, f"Skill: {skill.name} ({jobs})", UI_COLORS['text'])
+            

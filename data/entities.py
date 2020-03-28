@@ -132,7 +132,8 @@ FLOOR = {**TILE,
 }
 
 STAIRS = {**TILE,
-    Components.RENDER: Render.STAIRS
+    Components.RENDER: Render.STAIRS,
+    Components.STAIRS: Components.STAIRS()
 }
 
 WALL = {**TILE,

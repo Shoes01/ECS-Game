@@ -43,24 +43,24 @@ def generate_stats(ent, world, include_upkeep=True):
 
 def as_decimal(number, signed=False):
     string = str(number)
-
+    # TODO: This is commented out, as I find a way to change how pseudo-decimals work.
+    """
     if string == '0':
         string = '0.0'
     elif len(string) == 1:
         string = "0." + string
     else:
         string = string[:-1] + '.' + string[-1]
-
+    """
     if signed:
         if number >= 0:
             string = '+' + string
     
     return string
 
-def as_integer(number, signed=False):
-    
+def as_integer(number, signed=False):    
     string = str(number)
-    # BUG: This is commented out, as I find a way to change how pseudo-decimals work.
+    # TODO: This is commented out, as I find a way to change how pseudo-decimals work.
     """
     if string != '0':
         string = string[:-1]
@@ -71,7 +71,5 @@ def as_integer(number, signed=False):
     if signed:
         if number >= 0:
             string = '+' + string
-        else:
-            string = '-' + string
     
     return string

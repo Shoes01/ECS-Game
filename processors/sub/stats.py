@@ -51,14 +51,14 @@ def render_stats(console_object, world):
         diary = world.component_for_entity(1, DiaryComponent)
 
         for skill in diary.active:
-            if skill.slot == slot:
+            if skill.slot.name == slot:
                 char_color = color_fg
                 break
 
         for entry in diary.cooldown:
-            if entry.skill.slot == slot and entry.skill in diary.active:
+            if entry.skill.slot.name == slot and entry.skill in diary.active:
                 char_color = UI_COLORS['cooldown']
-                cooldown = skill.cooldown_remaining                    
+                cooldown = entry.remaining                    
                 break
     
         draw_letter_box(x + i, y + y_offset + j, 4, 4, box_char[slot], console, char_color, cooldown)

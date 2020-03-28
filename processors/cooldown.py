@@ -27,15 +27,12 @@ class CooldownProcessor(esper.Processor):
             if tick:
                 for ent in self.registered_entities:
                     diary = self.world.component_for_entity(ent, DiaryComponent)
-                    remove_if = []
 
                     for entry in diary.cooldown:
-                        entry.cooldown -= 1
+                        entry.remaining -= 1
 
-                        if entry.cooldown <= 0:
-                            remove_if.append(entry)
+                        if entry.remaining <= 0:
+                            diary.cooldown.remove(entry)
 
-                    diary.remove(remove_if)
-
-                    if not diary.cooldown:
+                    if len(diary.cooldown) == 0:
                         self.registered_entities.remove(ent)

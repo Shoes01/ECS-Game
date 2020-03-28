@@ -5,7 +5,7 @@ from typing import List
 @attr.s(auto_attribs=True, slots=True)
 class CooldownEntry:
     remaining: int
-    skill: dict
+    skill: dict # not a dict, but a namedtuple of a skill
 
 @attr.s(auto_attribs=True, slots=True)
 class MasteryEntry:

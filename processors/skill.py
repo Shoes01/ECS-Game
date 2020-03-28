@@ -82,13 +82,15 @@ class SkillProcessor(esper.Processor):
 
         for s in diary.active:
             for entry in diary.cooldown:
-                if s == entry.skill and entry.remaining == 0:
-                    skill = s
-                else:
+                if s == entry.skill and entry.remaining > 0:
                     error = 'on_cooldown'
+                    break
+            else:
+                skill = s
                 break
         else:
-            error = 'no_skill_active'
+            if error == '':
+                error = 'no_skill_active'
         
         self.world.messages.append({'skill': (error, skill, self.world.turn)})
 
@@ -251,7 +253,7 @@ class SkillProcessor(esper.Processor):
             self.world.get_processor(MovementProcessor).queue.put({'ent': ent, 'move': (dx, dy), 'skill': skill_comp})
             self.world.get_processor(EnergyProcessor).queue.put({'ent': ent, 'skill': skill_comp.cost_energy})
         
-        self.world.messages.append({'skill': (error, name, turn)})
+        self.world.messages.append({'skill': (None, skill_comp.name, self.world.turn)})
 
     def unhighlight_tiles(self, tiles):
         for tile, _ in tiles.items():
