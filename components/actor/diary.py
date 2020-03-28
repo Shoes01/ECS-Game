@@ -17,4 +17,4 @@ class DiaryComponent:
     ' Component that holds information about the relationship between this entity and its skills. '
     cooldown: List[CooldownEntry] = attr.Factory(list)
     mastery: List[MasteryEntry] = attr.Factory(list)
-    active: List[dict] = attr.Factory(list)
+    active: List[dict] = attr.Factory(list) # list of skills

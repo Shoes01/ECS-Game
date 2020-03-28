@@ -42,8 +42,7 @@ class SkillProcessor(esper.Processor):
             skill_letter = event.get('skill_prepare')           
 
             if skill_letter:
-                slot = SLOTS._key_to_slots[skill_letter]
-                self._skill = self.find_skill(ent, slot)
+                self._skill = self.find_skill(ent, skill_letter)
                 self._direction = (1, 0)
 
                 if self._skill:
@@ -75,24 +74,25 @@ class SkillProcessor(esper.Processor):
                 self.world.get_processor(StateProcessor).queue.put({'exit': True})
                 self.world.get_processor(RenderProcessor).queue.put({'skill': False, 'redraw': True})
 
-    def find_skill(self, ent, slot):
+    def find_skill(self, ent, skill_letter):
+        slot = SLOTS._key_to_slots[skill_letter]
         diary = self.world.component_for_entity(ent, DiaryComponent)
-        error = ''
         skill = None
 
+        # Check to see if the slot has an active skill.
         for s in diary.active:
-            for entry in diary.cooldown:
-                if s == entry.skill and entry.remaining > 0:
-                    error = 'on_cooldown'
-                    break
-            else:
+            if s.slot == slot:
                 skill = s
                 break
         else:
-            if error == '':
-                error = 'no_skill_active'
-        
-        self.world.messages.append({'skill': (error, skill, self.world.turn)})
+            self.world.messages.append({'skill': ('no_skill_active', skill_letter, self.world.turn)})
+            return 0
+
+        # Check to see if the active skill is on cooldown.
+        for entry in diary.cooldown:
+            if skill == entry.skill and entry.remaining > 0:
+                self.world.messages.append({'skill': ('on_cooldown', skill.name, self.world.turn)})
+                return 0
 
         return skill
 
@@ -138,7 +138,7 @@ class SkillProcessor(esper.Processor):
         destination = None # ID
         targets = [] # [ID]
         tiles = {} # {ID: color_fg}
-        legal_target = True        
+        blocked_tile = False     
 
         for y in range(0, array_of_effect.shape[1]):
             for x in range(0, array_of_effect.shape[0]):
@@ -156,7 +156,6 @@ class SkillProcessor(esper.Processor):
                     
                     if self.world.has_component(entity, ActorComponent):
                         actor = True
-
                     elif self.world.has_component(entity, TileComponent):
                         if self.world.component_for_entity(entity, TileComponent).blocks_path:
                             wall = True
@@ -187,21 +186,21 @@ class SkillProcessor(esper.Processor):
                         if actor:
                             targets.append(entity)
                         elif wall:
-                            legal_target = False
+                            blocked_tile = True
                     elif number == 3:
                         if floor:
                             destination = entity
                         elif actor or wall:
-                            legal_target = False
+                            blocked_tile = True
                     elif number == 4:
                         if actor or wall:
-                            legal_target = False # This could be expanded to be more verbose!
+                            blocked_tile = True # This could be expanded to be more verbose!
         
         results = {
-            'destination': destination,
-            'legal_target': legal_target,
-            'targets': targets,
-            'tiles': tiles
+            'destination': destination, # Some skills, like a leap, have a final 'landing' tile.
+            'blocked_tile': blocked_tile, # If this is False, then the skill won't fire. A single non-legal target is enough to stop the skill.
+            'targets': targets, # List of entities being targeted by the skill.
+            'tiles': tiles # List of tiles being targeted by the skill.
             }
 
         return results
@@ -212,8 +211,8 @@ class SkillProcessor(esper.Processor):
 
     def do_skill(self, ent, direction, skill_comp, results):
         # These are conditions under which the skill does not fire.
-        if not results['legal_target']:
-            self.world.messages.append({'skill': ('no_legal_target', skill_comp.name, self.world.turn)})
+        if results['blocked_tile']:
+            self.world.messages.append({'skill': ('blocked_tile', skill_comp.name, self.world.turn)})
             return 0
         elif not results['targets'] and not results['destination']:
             self.world.messages.append({'skill': ('no_legal_tile', skill_comp.name, self.world.turn)})

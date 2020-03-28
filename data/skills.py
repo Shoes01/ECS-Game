@@ -11,10 +11,10 @@ Skill = namedtuple('Skill',
 """
 The way skills interact with tiles are defined here.
 
-1: Deal damage to this tile.",
+1: Deal damage to this tile.,
 2: Deal damage to this tile, BUT the skill will fail if there is a wall here.
-3: Player ends in this tile, BUT the skill will fail if there is an actor here.
-4: Nothing, BUT the skill will fail if there is an entity here.
+3: Player ends in this tile, BUT the skill will fail if there is an actor/wall here.
+4: Nothing, BUT the skill will fail if there is an actor/wall here.
 """
 SPRINT = Skill(
     ap_max=100,

@@ -159,18 +159,16 @@ def render_message_log(console_object, new_turn, world):
             error, name, turn = _skill
 
             if error == 'on_cooldown':
-                console.print(0, 0 + dy, "(Turn %s) The %s's skill is on cooldown!" % (turn, name), LOG_COLORS['failure'])
-            elif error == 'no_item':
-                console.print(0, 0 + dy, '(Turn %s) No valid item found.' % (turn), LOG_COLORS['failure'])
-            elif error == 'no_legal_item':
-                console.print(0, 0 + dy, '(Turn %s) The %s has no skill.' % (turn, name), LOG_COLORS['failure'])
+                console.print(0, 0 + dy, "(Turn %s) The %s skill is on cooldown!" % (turn, name), LOG_COLORS['failure'])
+            elif error == 'no_skill_active': # Name is special here. It is the slot key.
+                console.print(0, 0 + dy, '(Turn %s) No active skill found. Activate one in the skill menu (Shift+%s).' % (turn, name), LOG_COLORS['failure'])
             elif error == 'no_legal_tile':
-                console.print(0, 0 + dy, '(Turn %s) There is something in your way.' % (turn), LOG_COLORS['failure'])
-            elif error == 'no_legal_target':
                 console.print(0, 0 + dy, '(Turn %s) No valid target found.' % (turn), LOG_COLORS['failure'])
+            elif error == 'blocked_tile':
+                console.print(0, 0 + dy, '(Turn %s) There is something in your way.' % (turn), LOG_COLORS['failure'])
             elif error == 'no_error':
                 console.print(0, 0 + dy, '(Turn %s) You use your %s skill!' % (turn, name), LOG_COLORS['success'])
-            else:
+            elif error: # Error is special here. It holds a list of stats the player is short on.
                 console.print(0, 0 + dy, '(Turn %s) You do not have enough %s points to use %s!' % (turn, error, name), LOG_COLORS['failure'])
 
         elif _skill_mastered:
