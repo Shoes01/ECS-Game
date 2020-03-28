@@ -86,3 +86,5 @@ def draw_letter_box(x, y, w, h, char, console, color_fg, cooldown):
     console.print(x + w - 1, y + h -1, box.bottom_right, color_fg)
 
     console.print(x + 1, y + 1, char, color_fg)
+    if cooldown:
+        console.print(x + 2, y + 2, str(cooldown), color_fg)
