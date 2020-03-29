@@ -1,6 +1,6 @@
 import esper
 
-from components.actor.diary import DiaryComponent
+from components.actor.diary import DiaryComponent, MasteryEntry
 from components.actor.equipment import EquipmentComponent
 from components.actor.job import JobComponent
 from components.item.skill_pool import SkillPoolComponent
@@ -47,7 +47,7 @@ class SkillMenuProcessor(esper.Processor):
                 for item in equipped_items:
                     if self.world.component_for_entity(item, SlotComponent) == slot:
                         for skill in self.world.component_for_entity(item, SkillPoolComponent).skill_pool:
-                            if self.world.component_for_entity(ent, JobComponent) == skill.job_req:
+                            if self.world.component_for_entity(ent, JobComponent) == skill.job_req and skill not in mastered_list:
                                 bestowed_list.append(skill)
 
                 menu = PopupMenu(title=f'Choose a {slot.name}-skill to equip.')
@@ -75,6 +75,13 @@ class SkillMenuProcessor(esper.Processor):
                     diary.active.remove(skill_deactivate)
                 
                 diary.active.append(skill_activate)
+
+                # Track the mastery of the skill, if we're not already doing that.
+                for entry in diary.mastery:
+                    if entry.skill == skill_activate:
+                        break
+                else:
+                    diary.mastery.append(MasteryEntry(skill=skill_activate, ap=0))
 
             elif skill_deactivate:
                 # Deactivating all skills that belong to a slot is overkill, but this makes sure that one slot only ever has one skill active...

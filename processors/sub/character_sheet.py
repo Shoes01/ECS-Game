@@ -103,7 +103,7 @@ def render_character_sheet(console_object, world):
     console.print(x - 1, y - 1, 'Skill Mastery Progress:', color_fg)
     i = 0
     for entry in diary.mastery:
-        console.print(x, y + i, f"{entry.skill.name.capitalize()}: {entry.skill.ap}/{entry.skill.ap_max}")
+        console.print(x, y + i, f"{entry.skill.name.capitalize()}: {entry.ap}/{entry.skill.ap_max}")
         i += 1
 
 def generate_equipped_items(titles, world):
@@ -119,7 +119,6 @@ def generate_equipped_items(titles, world):
         
         for stat, value in world.component_for_entity(item, StatsComponent).__dict__.items(): # BUG: The bonus isn't listed properly.
             if value:
-                print(f"{value}")
                 bonus += f"{titles[stat][:-1]} {as_integer(value, signed=True)}, "
         bonus = bonus[:-2]
         if not bonus:
