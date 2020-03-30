@@ -47,6 +47,7 @@ class SkillMenuProcessor(esper.Processor):
                 for item in equipped_items:
                     if self.world.component_for_entity(item, SlotComponent) == slot:
                         for skill in self.world.component_for_entity(item, SkillPoolComponent).skill_pool:
+                            print(f"Skill: {skill.name}.\nFirst: {self.world.component_for_entity(ent, JobComponent) == skill.job_req}. Second: {skill not in mastered_list}")
                             if self.world.component_for_entity(ent, JobComponent) == skill.job_req and skill not in mastered_list:
                                 bestowed_list.append(skill)
 
@@ -90,5 +91,5 @@ class SkillMenuProcessor(esper.Processor):
             elif new_job:
                 # Jobs don't share skills, so it's safe to simply deactivate all unmastered jobs.
                 for entry in diary.mastery:
-                    if entry.skill in diary.active and entry.ap != skill.ap_max:
+                    if entry.skill in diary.active and entry.ap != entry.skill.ap_max:
                         diary.active.remove(entry.skill)

@@ -57,12 +57,7 @@ class JobProcessor(esper.Processor):
                 
                 if valid:
                     # Switch jobs!
-                    ent_job_comp = self.world.component_for_entity(ent, JobComponent)
-                    ent_job_comp.description = job.description
-                    ent_job_comp.name = job.name
-                    ent_job_comp.races = job.races
-                    ent_job_comp.skills = job.skills
-                    ent_job_comp.upkeep = job.upkeep
+                    self.world.add_component(ent, job)
                     self.world.get_processor(RemovableProcessor).queue.put({'ent': ent, 'new_job': job})
                     self.world.get_processor(SkillMenuProcessor).queue.put({'ent': ent, 'new_job': job})
                 

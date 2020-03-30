@@ -58,7 +58,7 @@ class JOBS:
         name='berserker',
         races=(RACES.ORC,),
         skills={},
-        upkeep={Stats.SPD: 1, Stats.HP: 1}
+        upkeep={Stats.HP: 1, Stats.ATK: 0, Stats.DEF: 0, Stats.MAG: 0, Stats.RES: 0, Stats.SPD: 1}
     )
     SOLDIER = JobComponent(
         description="Baby's first job.",
@@ -75,7 +75,7 @@ class JOBS:
         name='warrior',
         races=(RACES.HUMAN,),
         skills={},
-        upkeep={Stats.MAG: 1, Stats.SPD: 2}
+        upkeep={Stats.HP: 0, Stats.ATK: 0, Stats.DEF: 0, Stats.MAG: 1, Stats.RES: 0, Stats.SPD: 2}
     )
     _tier0 = {'BERSERKER': BERSERKER, 'SOLDIER': SOLDIER, 'THIEF': THIEF, 'WARRIOR': WARRIOR}
     # TIER 1 ###################################################################
@@ -84,7 +84,7 @@ class JOBS:
         name='rogue',
         races=(RACES.HUMAN, RACES.GOBLIN, RACES.ELF),
         skills={SOLDIER.name: 1},
-        upkeep={Stats.ATK: 1, Stats.HP: 15}
+        upkeep={Stats.HP: 15, Stats.ATK: 2, Stats.DEF: 0, Stats.MAG: 0, Stats.RES: 0, Stats.SPD: 0}
     )
     _tier1 = {'ROGUE': ROGUE}
     # ALL #####################################################################
