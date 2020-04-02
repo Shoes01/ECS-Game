@@ -3,11 +3,13 @@ from collections import namedtuple
 DamageType = namedtuple('DamageType', 'name')
 
 NONE =      DamageType(name='none')
-PHYSICAL =  DamageType(name='physical')
+HEAL =      DamageType(name='heal')
 MAGICAL =   DamageType(name='magical')
+PHYSICAL =  DamageType(name='physical')
 
 all = {
     'NONE': NONE, 
-    'PHTSICAL': PHYSICAL, 
-    'MAGICAL': MAGICAL
+    'HEAL': HEAL,
+    'MAGICAL': MAGICAL,
+    'PHTSICAL': PHYSICAL
 }

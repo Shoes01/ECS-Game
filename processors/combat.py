@@ -1,3 +1,4 @@
+import data.damage_types as DamageTypes
 import esper
 
 from _helper_functions import as_integer, generate_stats
@@ -26,7 +27,7 @@ class CombatProcessor(esper.Processor):
 
             att_ren = self.world.component_for_entity(attacker_ID, RenderComponent)
             att_stats = generate_stats(attacker_ID, self.world)
-            damage_type = 'physical'
+            damage_type = DamageTypes.PHYSICAL # Bump attacks are physical
             if skill:
                 damage_type = skill.damage_type
 
@@ -41,11 +42,11 @@ class CombatProcessor(esper.Processor):
 
                 double_attack = att_stats['speed'] - 5 > def_stats['speed']
 
-                if damage_type == 'physical':
+                if damage_type == DamageTypes.PHYSICAL:
                     damage = att_stats['attack'] - def_stats['defense']
-                elif damage_type == 'magical':
+                elif damage_type == DamageTypes.MAGICAL:
                     damage = att_stats['magic'] - def_stats['resistance']
-                elif damage_type == 'heal':
+                elif damage_type == DamageTypes.HEAL:
                     damage = 0
                 
                 if double_attack and not skill:

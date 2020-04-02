@@ -44,10 +44,10 @@ SPRINT = Skill(
     ]
 )
 FIRST_AID = Skill(
-    ap_max=0,
+    ap_max=100,
     cooldown=3,
     cost_energy=0,
-    cost_soul={Stats.SPD: 2, Stats.HP: -10, Stats.MAG: 2, Stats.DEF: 2, Stats.ATK: 2, Stats.DEF: 2},
+    cost_soul={Stats.SPD: 2, Stats.HP: -10, Stats.MAG: 2, Stats.DEF: 2, Stats.ATK: 2, Stats.RES: 2},
     damage_type=DamageTypes.NONE,
     description='First aid, for your soul.',
     job_req=Components.JOBS.SOLDIER,
