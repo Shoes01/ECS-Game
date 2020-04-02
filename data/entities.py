@@ -8,6 +8,8 @@ import data.skills as Skills
 import data.souls as Souls
 import data.stats as Stats
 
+from components.actor.diary import MasteryEntry
+
 # ITEMS #######################################################################
 
 ' Base components that are the same to all Items. '
@@ -64,6 +66,7 @@ DEMON = {**ACTOR,
 
 PLAYER = {**ACTOR,
     Components.BRAIN: Brain.NONE,
+    Components.DIARY: ([], [MasteryEntry(skill=Skills.FIRST_AID, ap=Skills.FIRST_AID.ap_max),], []),
     Components.JOBS: Components.JOBS.SOLDIER,
     Components.NAME: 'Player',
     Components.PERSIST: Components.PERSIST(),
