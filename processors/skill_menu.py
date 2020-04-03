@@ -21,12 +21,26 @@ class SkillMenuProcessor(esper.Processor):
 
             ent = event['ent']
             new_job = event.get('new_job')
+            prepare = event.get('prepare')
             skill_activate = event.get('skill_activate')
             skill_deactivate = event.get('skill_deactivate')
-            skill_letter = event.get('skill_menu')
+            skill_letter = event.get('skill_letter')
 
             equipped_items = self.world.component_for_entity(ent, EquipmentComponent).equipment
             diary = self.world.component_for_entity(ent, DiaryComponent)
+
+            if prepare:
+                # Push a menu that prompts the player to choose a letter, which then becomes 'skill_letter'.
+                menu = PopupMenu(title=f'Choose the slot from which you will activate a skill.')
+
+                for slot in SLOTS.all.values():
+                    _name = slot.name
+                    _key = slot.key
+                    _processor = SkillMenuProcessor
+                    _results = ( PopupChoiceResult(result={'ent': ent, 'skill_letter': _key}, processor=_processor),)
+                    menu.contents.append(PopupChoice(name=_name, key=_key, results=_results))
+                
+                self.world.get_processor(StateProcessor).queue.put({'popup': menu})
 
             # Create and display a menu of possible skills that may be activated.
             if skill_letter:
@@ -38,16 +52,16 @@ class SkillMenuProcessor(esper.Processor):
 
                 # Populate mastered and unmastered lists.
                 for entry in diary.mastery:
-                    if entry.skill.ap_max == entry.ap:
-                        mastered_list.append(entry.skill)
-                    else:
-                        unmastered_list.append(entry.skill)
+                    if entry.skill.slot == slot:
+                        if entry.skill.ap_max == entry.ap:
+                            mastered_list.append(entry.skill)
+                        else:
+                            unmastered_list.append(entry.skill)
                 
-                # "Populate" the bestowed skill list.
+                # Populate the bestowed skill list.
                 for item in equipped_items:
                     if self.world.component_for_entity(item, SlotComponent) == slot:
                         for skill in self.world.component_for_entity(item, SkillPoolComponent).skill_pool:
-                            print(f"Skill: {skill.name}.\nFirst: {self.world.component_for_entity(ent, JobComponent) == skill.job_req}. Second: {skill not in mastered_list}")
                             if self.world.component_for_entity(ent, JobComponent) == skill.job_req and skill not in mastered_list:
                                 bestowed_list.append(skill)
 

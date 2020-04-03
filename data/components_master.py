@@ -104,6 +104,15 @@ class SLOTS:
     OFFHAND =   SlotComponent(name='offhand',     key='a')
     FEET =      SlotComponent(name='feet',        key='d')
     ACCESSORY = SlotComponent(name='accessory',   key='e')
+    all = {
+        'HEAD': HEAD,
+        'TORSO': TORSO,
+        'MAINHAND': MAINHAND,
+        'OFFHAND': OFFHAND,
+        'FEET': FEET,
+        'ACCESSORY': ACCESSORY
+
+    }
     _key_to_slots = {
         'w': HEAD,
         's': TORSO,

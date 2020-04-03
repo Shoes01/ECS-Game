@@ -178,16 +178,14 @@ class InputProcessor(esper.Processor):
                 self.world.get_processor(PickupProcessor).queue.put({'ent': 1})
             elif key_char == 'i':
                 self.world.get_processor(InventoryProcessor).queue.put({'ent': 1})
+            elif key_char == 'j' and key.mod & libtcod.event.KMOD_SHIFT:
+                self.world.get_processor(JobProcessor).queue.put({'ent': 1})
+            elif key_char == 's' and key.mod & libtcod.event.KMOD_SHIFT:
+                self.world.get_processor(SkillMenuProcessor).queue.put({'ent': 1, 'prepare': True})
             elif (key_char == 'w' and key.mod & libtcod.event.KMOD_SHIFT) or key_char == 'r':
                 self.world.get_processor(WearableProcessor).queue.put({'ent': 1})
             elif key_char == '>' or key_char == '<':
                 self.world.get_processor(DescendProcessor).queue.put({'ent': 1})
-            elif key_char == 'j' and key.mod & libtcod.event.KMOD_SHIFT:
-                self.world.get_processor(JobProcessor).queue.put({'ent': 1})
-
-            # Skill menu keys.
-            elif key_char in ['q', 'w', 'e', 'a', 's', 'd'] and key.mod & libtcod.event.KMOD_SHIFT:
-                self.world.get_processor(SkillMenuProcessor).queue.put({'skill_menu': key_char, 'ent': 1})
 
             # Skill keys.
             elif key_char in ['q', 'w', 'e', 'a', 's', 'd']:
