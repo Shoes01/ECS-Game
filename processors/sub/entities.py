@@ -76,17 +76,19 @@ def render_entities(console_object, world):
     
     # Print the highlight cursors.
     for (pos, ren) in _sorted_list.get('highlighted') or []:
-        print_cursor(ren.color_highlight, console, pos.x, pos.y, world)
+        print_cursor(ren.color_highlight, console, pos.x, pos.y, world, new_codepoint=ren.codepoint_highlight)
 
     # Print cursor.
     cursor = world.cursor
     if world.state == Look:
         print_cursor(cursor.color_fg, console, cursor.x, cursor.y, world)
 
-def print_cursor(color, console, x, y, world):
+def print_cursor(color, console, x, y, world, new_codepoint=False):
     cam_x, cam_y = world.camera.x, world.camera.y
     x, y = (x - cam_x)*MULTIPLIER, (y - cam_y)*MULTIPLIER
     codepoint = 790 # Reticle sprite.
+    if new_codepoint:
+        codepoint = new_codepoint
 
     console.tiles["fg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = color + (255,)
     console.tiles["bg"][x : x + MULTIPLIER, y : y + MULTIPLIER] = color + (0,)

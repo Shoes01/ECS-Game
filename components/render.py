@@ -5,6 +5,7 @@ class RenderComponent:
     def __init__(self, char, color_bg, color_explored, color_fg, color_highlight, codepoint, explored, stairs, visible):
         self.char = char
         self.codepoint = codepoint
+        self.codepoint_highlight = codepoint
         self.color_bg = color_bg
         self.color_explored = color_explored
         self.color_fg = color_fg

@@ -5,7 +5,7 @@ import data.damage_types as DamageTypes
 import data.stats as Stats
 
 Skill = namedtuple('Skill', 
-    'ap_max cooldown cost_energy cost_soul damage_type description job_req name slot east north_east'
+    'ap_max codepoint cooldown cost_energy cost_soul damage_type description job_req name slot east north_east'
 )
 
 """
@@ -18,6 +18,7 @@ The way skills interact with tiles are defined here.
 """
 SPRINT = Skill(
     ap_max=100,
+    codepoint=788,
     cooldown=2,
     cost_energy=1,
     cost_soul={Stats.SPD: 2},
@@ -45,6 +46,7 @@ SPRINT = Skill(
 )
 FIRST_AID = Skill(
     ap_max=100,
+    codepoint=728,
     cooldown=3,
     cost_energy=0,
     cost_soul={Stats.SPD: 2, Stats.HP: -10, Stats.MAG: 2, Stats.DEF: 2, Stats.ATK: 2, Stats.RES: 2},
@@ -70,6 +72,7 @@ FIRST_AID = Skill(
 )
 LUNGE = Skill(
     ap_max=100,
+    codepoint=376,
     cooldown=5,
     cost_energy=2,
     cost_soul={Stats.MAG: 2},
@@ -95,6 +98,7 @@ LUNGE = Skill(
 )
 CLEAVE = Skill(
     ap_max=100,
+    codepoint=377,
     cooldown=4,
     cost_energy=2,
     cost_soul={Stats.DEF: 5},
@@ -120,6 +124,7 @@ CLEAVE = Skill(
 )
 HEADBUTT = Skill(
     ap_max=100,
+    codepoint=757,
     cooldown=3,
     cost_energy=1,
     cost_soul={Stats.HP: 1, Stats.RES: 4},

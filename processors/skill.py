@@ -207,7 +207,9 @@ class SkillProcessor(esper.Processor):
 
     def highlight_tiles(self, tiles):
         for tile, color_fg in tiles.items():
-            self.world.component_for_entity(tile, RenderComponent).color_highlight = color_fg
+            render_comp = self.world.component_for_entity(tile, RenderComponent)
+            render_comp.color_highlight = color_fg
+            render_comp.codepoint_highlight = self._skill.codepoint
 
     def do_skill(self, ent, direction, skill_comp, results):
         # These are conditions under which the skill does not fire.
