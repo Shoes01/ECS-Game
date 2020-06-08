@@ -61,7 +61,35 @@ def load_tileset():
                     t.set_tile(cp437[iterator], nim[x_0:x_1, y_0:y_1])
                     iterator += 1
 
-    ### Prepare sprite sheet.
+    ### Prepare small sprite sheet.
+    t_w, t_h = 16, 16 # Width and height of the sprites.
+    multiplier = 1 # 1 is used because I want this to be normal sized. NOTE: Which means it's x2 the FONTSIZE at the moment...
+
+    im = Image.open('ken_monochrome.png').convert('RGBA')
+
+    nim = np.array(im)[:, :, 0] # Grab the R component.
+    tx, ty = nim.shape
+
+    small_array = []
+
+    for x in range(0, tx):
+        if x % ((t_w + 1) * multiplier) == 0: # The +1 is needed, as the ken_monochrome.png spritesheet has a pixel wide seperator between each tile.
+            for y in range(0, ty):
+                if y % ((t_h + 1) * multiplier) == 0:
+                    x_0, x_1 = x, x + t_w * multiplier
+                    y_0, y_1 = y, y + t_h * multiplier
+                    small_array.append(nim[x_0:x_1, y_0:y_1])
+
+    codepoint = ord('\U00100000')
+    for tile in small_array:
+        for x in range(0, 2):
+            for y in range(0, 2):
+                x_0, x_1 = w * x, w * (x + 1)
+                y_0, y_1 = h * y, h * (y + 1)
+                t.set_tile(codepoint, tile[x_0:x_1, y_0:y_1])
+                codepoint += 1
+
+    ### Prepare big sprite sheet.
     t_w, t_h = 16, 16 # Width and height of the sprites.
     multiplier = MULTIPLIER * w // t_w # This is needed in case the font and sprites are different sizes.
 

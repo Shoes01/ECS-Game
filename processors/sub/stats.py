@@ -49,10 +49,12 @@ def render_stats(console_object, world):
         char_color = color_fg_invalid
         cooldown = None
         diary = world.component_for_entity(1, DiaryComponent)
+        active_skill = None
 
         for skill in diary.active:
             if skill.slot.name == slot:
                 char_color = color_fg
+                active_skill = skill
                 break
 
         for entry in diary.cooldown:
@@ -61,14 +63,14 @@ def render_stats(console_object, world):
                 cooldown = entry.remaining                    
                 break
     
-        draw_letter_box(x + i, y + y_offset + j, 4, 4, box_char[slot], console, char_color, cooldown)
+        draw_letter_box(x + i, y + y_offset + j, 4, 4, active_skill, box_char[slot], console, char_color, cooldown)
 
         i += 4
         if i == 12:
             i = 0
             j = 4
 
-def draw_letter_box(x, y, w, h, char, console, color_fg, cooldown):
+def draw_letter_box(x, y, w, h, active_skill, char, console, color_fg, cooldown):
     # Draw the little box, and put the letter in it.
     box = SingleLineBox()
     
@@ -86,5 +88,16 @@ def draw_letter_box(x, y, w, h, char, console, color_fg, cooldown):
     console.print(x + w - 1, y + h -1, box.bottom_right, color_fg)
 
     console.print(x + 1, y + 1, char, color_fg)
+
+    console.tiles["fg"][x : x + 2, y : y + 2] = color_fg + (255,)
+
+    if active_skill:
+        iter = 0
+        MULTIPLIER = 2
+        for yy in range(0, MULTIPLIER):
+            for xx in range(0, MULTIPLIER):
+                console.tiles["ch"][x + xx + 1, y + yy + 1] = ord(u'\U00100000') + active_skill.codepoint*MULTIPLIER*MULTIPLIER + iter
+                iter += 1
+
     if cooldown:
         console.print(x + 2, y + 2, str(cooldown), color_fg)
